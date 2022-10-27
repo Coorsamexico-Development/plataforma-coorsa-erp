@@ -24,17 +24,25 @@ const closeModalMenu = () => {
     modalMenu.value = false;
 }
 
+console.log(props.menus.length);
+
 </script>
 
 <template>
     <Card style="padding:2rem; padding-right: 2rem; width: 24rem; margin:0.5rem" >
         <h4 style="color:#26458D; font-weight:bolder">Menú del dia</h4>
-        <h5>Fecha: {{fecha}}</h5>
-        {{menus[0].nombre}}
-        <img  :src="menus[0].image">
-        <p>
-            {{menus[0].descripcion}} 
-        </p>
+       <div v-if="menus.length > 0">
+          <h5>Fecha: {{fecha}}</h5>
+            {{menus[0].nombre}}
+             <p>
+              {{menus[0].descripcion}} 
+            </p>
+         
+       </div>
+       <div v-else>
+         <h5>Fecha: {{fecha}}</h5>
+         <h3>Aun no hay menú :C</h3>
+       </div>
         
        <ButtonModal @click="abrirModalMenu">Añadir nuevo menu</ButtonModal>
        <ModalAddMenu :show="modalMenu" @close="closeModalMenu"></ModalAddMenu>

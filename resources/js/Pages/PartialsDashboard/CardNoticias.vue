@@ -4,18 +4,33 @@ import { Inertia } from '@inertiajs/inertia'
 import Card from '../../Components/Card.vue';
 import { onMounted, reactive, ref, watch } from 'vue';
 import moment from 'moment';
-import Carrusel from './Carrusel.vue';
+import CarruselNoticias from './CarruselNoticias.vue';
+import ButtonModal from '../../Components/ButtonModal.vue';
+import ModalAddNoticia from './ModalAddNoticia.vue';
 
 var props = defineProps({
     noticias:Object
 });
 
+let modalNoticia = ref(false);
+
+const showModalNoticia = () =>
+{
+    modalNoticia.value=true;
+}
+
+const closeModalNoticia = () =>
+{
+    modalNoticia.value = false;
+}
 
 </script>
 
 <template>
     <Card style=" width: 24rem;  margin:0.5rem; padding: 1.5rem;" >
         <h4 style="color:#26458D; font-weight:bolder">Servicios y noticias</h4>
-        <Carrusel style="margin:1rem" :noticias="noticias"></Carrusel>
+        <CarruselNoticias style="margin:1rem" :noticias="noticias"></CarruselNoticias>
+        <ButtonModal @click="showModalNoticia">Añadir nueva noticia</ButtonModal>
+        <ModalAddNoticia :show="modalNoticia" @close="closeModalNoticia"></ModalAddNoticia>
     </Card>
 </template>

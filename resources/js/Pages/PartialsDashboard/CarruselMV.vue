@@ -16,17 +16,12 @@ export default {
     Swiper,
     SwiperSlide,
   },
-  
-  props:{
-    videos:Object
-  },
-
   setup() {
     const onSwiper = (swiper) => {
-      //console.log(swiper);
+     
     };
     const onSlideChange = () => {
-      //console.log('slide change');
+      
     };
     return {
       onSwiper,
@@ -51,10 +46,13 @@ export default {
     @swiper="onSwiper"
     @slideChange="onSlideChange"
   >
-    <swiper-slide v-for="video in videos" :key="video.id">
-      <video width="320" height="240" controls>
-						<source :src="'storage/videos/'+video.image">								
-			</video>
+    <swiper-slide>
+        <img src="https://blog.ida.cl/wp-content/uploads/sites/5/2020/04/tamano-redes-blog-655x470.png">
     </swiper-slide>
+    <swiper-slide> 
+        <img src="https://www.40defiebre.com/wp-content/uploads/2015/10/imagenes.png">
+    </swiper-slide>
+   
+
   </swiper>
 </template>

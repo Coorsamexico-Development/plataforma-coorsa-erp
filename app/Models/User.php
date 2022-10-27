@@ -27,6 +27,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'banco_id',
+        'escolaridad_id',
+        'cat_tipos_nomina_id',
+        'tipos_contrato_id',
+        'cat_genero_id'
     ];
 
     /**

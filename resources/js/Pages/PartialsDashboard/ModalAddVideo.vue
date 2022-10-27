@@ -8,20 +8,34 @@ import TextInput from '@/Components/TextInput.vue';
 import { usePage } from '@inertiajs/inertia-vue3'
 import ButtonModal from '../../Components/ButtonModal.vue';
 
-const emit = defineEmits(["close",])
+const emit = defineEmits(["close"])
 
 const user =  usePage().props.value.user.id;
 
-const menuForm = useForm({
-    descripcion: '',
+const fileUpload = ref(null);
+
+const videoForm = useForm({
+    video:null,
     autor: user,
     activo:1
 });
 
-const enviarNuevoMenu = () =>
+const selectNewFile = () => 
 {
-    menuForm.post(route('menu.store'),{
-       onFinish: () => menuForm.reset(),
+    fileUpload.value.click();
+};
+
+const uploadFile = () =>
+{
+  const file = fileUpload.value.files[0];
+  videoForm.video  = file;
+};
+
+
+const enviarNuevaVideo = () =>
+{
+    videoForm.post(route('video.store'),{
+       onFinish: () => videoForm.reset(),
        onSuccess: () =>  close() 
     })
 }
@@ -34,16 +48,17 @@ const close = () => {
 <template>
      <DialogModal :show="show" @close="close()">
            <template #title>
-               <h2 style="font-weight:bolder">MENU DEL DIA</h2>
+               <h2 style="font-weight:bolder">Nuevo video</h2>
             </template>
             <template #content>
-               <form v-on:submit.prevent="enviarNuevoMenu()">
+               <form v-on:submit.prevent="enviarNuevaVideo()">
                 <div style="display: flex;">
-
-                   <div style="float:left; margin: 2rem;margin-top: 0rem;">
-                     <InputLabel>Descripción de menú:</InputLabel>
-                     <TextInput style="border:solid 0.15rem #26458D" v-model="menuForm.descripcion"></TextInput>
-                   </div>
+                  <div style="float:left; margin: 2rem; margin-top: 0rem;" >
+                     <InputLabel>Noticia:</InputLabel>
+                     <input type="file" enctype="multipart/form-data"
+                         ref="fileUpload"
+                         @change="uploadFile">
+                   </div> 
                 </div>
                   <ButtonModal type="submit">Enviar</ButtonModal>
                </form>

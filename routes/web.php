@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\DocsPoliticasController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\NoticiaController;
+use App\Http\Controllers\VideoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +42,12 @@ Route::middleware([
         ->where('noticias.activo','=','1')
         ->get();
 
+
+        $videos = DB::table(DB::raw('videos'))
+        ->selectRaw('*')
+        ->where('videos.activo','=','1')
+        ->get();
+
         $menus = DB::table(DB::raw('menus'))
         ->selectRaw(
             '*'
@@ -47,13 +56,15 @@ Route::middleware([
         ->get();
         return Inertia::render('Dashboard', 
         ['menus' => $menus,
-         'noticias' => $noticias
+         'noticias' => $noticias,
+         'videos' => $videos
         ]);
     })->name('dashboard');
 });
 
 
 Route::apiResource('/menu', MenuController::class);
-
-
+Route::apiResource('/noticia', NoticiaController::class);
+Route::apiResource('/video', VideoController::class);
+Route::apiResource('/DocsPoliticas', DocsPoliticasController::class);
 

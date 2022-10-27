@@ -16,17 +16,14 @@ export default {
     Swiper,
     SwiperSlide,
   },
-  
-  props:{
-    videos:Object
-  },
-
+  props: {
+        noticias: Object,
+    },
   setup() {
     const onSwiper = (swiper) => {
-      //console.log(swiper);
     };
     const onSlideChange = () => {
-      //console.log('slide change');
+      
     };
     return {
       onSwiper,
@@ -41,9 +38,9 @@ export default {
  :modules="modules"
     :slides-per-view="1"
     :space-between="50"
-    navigation
-    :autoplay='{
-               "delay": 2500,
+     navigation
+	 :autoplay='{
+               "delay": 6000,
               "disableOnInteraction": false
      }'
     :pagination="{ clickable: true }"
@@ -51,10 +48,8 @@ export default {
     @swiper="onSwiper"
     @slideChange="onSlideChange"
   >
-    <swiper-slide v-for="video in videos" :key="video.id">
-      <video width="320" height="240" controls>
-						<source :src="'storage/videos/'+video.image">								
-			</video>
+    <swiper-slide v-for="noticia in noticias" :key="noticia.id">
+        <img style=" height:15rem;" :src="'storage/noticias/'+noticia.image">
     </swiper-slide>
   </swiper>
 </template>
