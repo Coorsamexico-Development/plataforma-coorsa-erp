@@ -21,7 +21,12 @@
         "vue": "^3.2.31"
     },
     "dependencies": {
+        "datatables.net": "^1.12.1",
+        "datatables.net-dt": "^1.12.1",
+        "datatables.net-select": "^1.4.0",
+        "datatables.net-vue3": "^1.0.0",
         "moment": "^2.29.4",
-        "swiper": "^8.4.4"
+        "swiper": "^8.4.4",
+        "vue3-easy-data-table": "^1.5.10"
     }
 }

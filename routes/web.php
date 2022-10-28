@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DocsPoliticasController;
+use App\Http\Controllers\EmpleadoControlller;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\VideoController;
@@ -67,4 +68,4 @@ Route::apiResource('/menu', MenuController::class);
 Route::apiResource('/noticia', NoticiaController::class);
 Route::apiResource('/video', VideoController::class);
 Route::apiResource('/DocsPoliticas', DocsPoliticasController::class);
-
+Route::get('empleados/{activo}', [EmpleadoControlller::class, 'index'])->name('empleado.indexmanual');
