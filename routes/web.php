@@ -69,3 +69,4 @@ Route::apiResource('/noticia', NoticiaController::class);
 Route::apiResource('/video', VideoController::class);
 Route::apiResource('/DocsPoliticas', DocsPoliticasController::class);
 Route::get('empleados/{activo}', [EmpleadoControlller::class, 'index'])->name('empleado.indexmanual');
+Route::get('empleados/create', [EmpleadoControlller::class, 'indexcreate'])->name('empleado.create');

@@ -7,6 +7,7 @@ import TableEmpleados from './Partials/TableEmpleados.vue';
 import InputSearch from '@/Components/InputSearch.vue';
 import ButtonAdd from '../../../Components/ButtonAdd.vue';
 import ButtonInfo from '@/Components/ButtonInfo.vue';
+import { Head, Link, useForm} from '@inertiajs/inertia-vue3';
 
 var props = defineProps(
     {empleados:Object,
@@ -43,9 +44,11 @@ watch(params, (newValue) =>
               Empleados inactivos
             </h2>
             <ButtonInfo style="float:right; margin-top: -1.5rem; ">REPORTE</ButtonInfo>
-            <ButtonAdd style="float:right; margin-top: -1.5rem; margin-right: 2rem; " >
-                + AGREGAR
-            </ButtonAdd>
+            <Link :href="route('empleado.create')">
+                <ButtonAdd style="float:right; margin-top: -1.5rem; margin-right: 2rem; "  >
+                  + AGREGAR
+                </ButtonAdd>
+            </Link>
             <InputSearch v-model="params.search" style="float:right; margin-top: -2rem; margin-right: 12rem;" ></InputSearch>
           
         </template>

@@ -27,31 +27,31 @@ class EmpleadoControlller extends Controller
      
         if($activo === 'activo'){
             $empleados = $empleados->where('activo', 1)->get();
+            
         }
         else if($activo === 'inactivo'){
             $empleados = $empleados->where('activo', 0)->get();
         }
 
+       /*
+          if( request('search'))
+         {
+              $busqueda = request('search');
+              return  $empleados = $empleados->where('name','LIKE','%'.$busqueda.'%')->get();
+             
+          }
+        */
 
-        if( request('search'))
-        {
-               $empleados->where(function ($query){
-                $query->orWhere('numero_empleado', 'LIKE', '%'.request('search').'%');
-                $query->orWhere('name', 'LIKE', '%'.request('search').'%');
-                $query->orWhere('apellido_paterno', 'LIKE', '%'.request('search').'%');
-                $query->orWhere('apellido_materno', 'LIKE', '%'.request('search').'%');
-                $query->orWhere('telefono', 'LIKE', '%'.request('search').'%');
-            });
-
-        }
-
-
-        return Inertia::render('RH/Empleados/EmpleadosIndex',
-        [
+         return Inertia::render('RH/Empleados/EmpleadosIndex',
+         [
             'empleados' => $empleados,
             'activo' => $activo,
             'filters' => request()->all(['search'])
-        ]);
+         ]);
     }
 
+    public function indexcreate ()
+    {
+        return Inertia::render('RH/Empleados/Create/CreateIndex');
+    }
 }
