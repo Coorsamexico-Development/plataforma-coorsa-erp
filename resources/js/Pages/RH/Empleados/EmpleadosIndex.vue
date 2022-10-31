@@ -22,9 +22,13 @@ const params = reactive({
 
 watch(params, (newValue) => 
 {
-   console.log(newValue)
-   Inertia.get(route("empleado.indexmanual",{activo:props.activo}), newValue, 
+   console.log(newValue.search);
+
+   Inertia.visit(route("empleado.indexmanual",{activo:props.activo}),
    {
+       data: {
+            search:newValue.search
+        },
         replace: true,
         preserveScroll: true,
         preserveState: true,
@@ -36,7 +40,6 @@ watch(params, (newValue) =>
 <template>
     <app-layout title="Dashboard">
         <template #header>
-            {{filters}}
             <h2 v-if="activo === 'activo'"  class="text-xl font-semibold leading-tight text-gray-800">
               Empleados activos
             </h2>

@@ -35,13 +35,13 @@ const logout = () => {
         <Banner />
 
         <div class="min-h-screen bg-gray-100">
-            <nav class="bg-white border-b border-gray-100">
+            <nav class="navMenu">
                 <!-- Primary Navigation Menu -->
                 <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
                         <div class="flex">
                             <!-- Logo -->
-                            <div class="flex items-center shrink-0">
+                            <div class="flex items-center shrink-0" style="margin-right:15rem">
                                 <Link :href="route('dashboard')">
                                     <ApplicationMark class="block w-auto h-9" />
                                 </Link>
@@ -49,19 +49,21 @@ const logout = () => {
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                                <NavLink class="navLinks" :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
                             </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink :href="route('DocsPoliticas.index')" :active="route().current('DocsPoliticas.index')">
+                                <NavLink class="navLinks"  :href="route('DocsPoliticas.index')" :active="route().current('DocsPoliticas.index')">
                                     Control Interno
                                 </NavLink>
                             </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <Dropdown align="right" width="48">
+                                <Dropdown align="right" width="48" >
                                     <template #trigger>
-                                       <button type="button" class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-white border border-transparent rounded-md hover:text-gray-700 focus:outline-none" style="margin-top:1rem">
+                                       <button type="button" 
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-white border border-transparent rounded-md buttonDropDown hover:text-white focus:outline-none" 
+                                      >
                                           Recursos Humanos
                                             <svg  class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
                                                     viewBox="0 0 20 20"

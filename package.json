@@ -21,12 +21,15 @@
         "vue": "^3.2.31"
     },
     "dependencies": {
+        "@fancyapps/ui": "^4.0.31",
         "datatables.net": "^1.12.1",
         "datatables.net-dt": "^1.12.1",
         "datatables.net-select": "^1.4.0",
         "datatables.net-vue3": "^1.0.0",
+        "mdb-vue-ui-kit": "^3.1.0",
         "moment": "^2.29.4",
         "swiper": "^8.4.4",
+        "vue-nav-tabs": "^0.5.7",
         "vue3-easy-data-table": "^1.5.10"
     }
 }

@@ -63,10 +63,9 @@ Route::middleware([
     })->name('dashboard');
 });
 
-
+Route::get('empleados/create', [EmpleadoControlller::class, 'createNewEmpleado'])->name('empleado.create');
 Route::apiResource('/menu', MenuController::class);
 Route::apiResource('/noticia', NoticiaController::class);
 Route::apiResource('/video', VideoController::class);
 Route::apiResource('/DocsPoliticas', DocsPoliticasController::class);
 Route::get('empleados/{activo}', [EmpleadoControlller::class, 'index'])->name('empleado.indexmanual');
-Route::get('empleados/create', [EmpleadoControlller::class, 'indexcreate'])->name('empleado.create');

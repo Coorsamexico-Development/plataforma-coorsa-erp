@@ -3,6 +3,41 @@
 @tailwind utilities;
 
 
+/*Nav*/
+
+.navMenu {
+    background-image: url('../img/HEADER.png');
+    height: 5rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border:gray;
+}
+
+.navLinks{
+    color: white;
+}
+
+.navLinks:hover{
+    font-weight: bolder;
+    color: white;
+}
+
+.buttonDropDown
+{
+    margin-top:1rem;
+    background-color: transparent;
+    color: white;
+
+}
+
+.buttonDropDown:hover
+{
+    margin-top:1rem;
+    background-color: transparent;
+    color: white;
+    font-weight: bolder;
+}
+
 /*Estilos carrusel*/
 .contenedor {
     position: relative;
@@ -140,4 +175,78 @@ width: 512px;
   grid-row: 2/3;
 }
 
-/*Estilos carrusel video*/
+/* */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import "@fancyapps/ui/dist/fancybox";
+
+/* CHECKBOX TOGGLE SWITCH */
+/* @apply rules for documentation, these do not work as inline style */
+.toggle-checkbox:checked {
+    @apply: right-0 border-green-400;
+    right: 0;
+    border-color: #68D391;
+  }
+  .toggle-checkbox:checked + .toggle-label {
+    @apply: bg-green-400;
+    background-color: #68D391;
+  }
+
+
+.tab {
+    overflow: hidden;
+}
+.tab-content {
+    max-height: 0;
+    transition: all 0.5s;
+}
+input:checked + .tab-label .test {
+    background-color: #000;
+}
+input:checked + .tab-label .test svg {
+    transform: rotate(180deg);
+    stroke: #fff;
+}
+input:checked + .tab-label::after {
+    transform: rotate(90deg);
+}
+input:checked ~ .tab-content {
+    max-height: 100vh;
+}
+
+.datepicker-toggle {
+    display: inline-block;
+    position: relative;
+    width: 28px;
+    height: 28px;
+}
+.datepicker-toggle-button {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 200%;
+    height: 200%;
+}
+
+
+.datepicker-input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+  .datepicker-input::-webkit-calendar-picker-indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+  }
