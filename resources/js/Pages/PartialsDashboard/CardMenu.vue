@@ -41,7 +41,7 @@ console.log(props.menus.length);
        </div>
        <div v-else>
          <h5>Fecha: {{fecha}}</h5>
-         <h3>Aun no hay menú :C</h3>
+         <h3>Aun no hay menú para el día de hoy.</h3>
        </div>
         
        <ButtonModal @click="abrirModalMenu">Añadir nuevo menu</ButtonModal>

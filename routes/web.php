@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\DocsPoliticasController;
 use App\Http\Controllers\EmpleadoControlller;
 use App\Http\Controllers\MenuController;
@@ -69,3 +70,6 @@ Route::apiResource('/noticia', NoticiaController::class);
 Route::apiResource('/video', VideoController::class);
 Route::apiResource('/DocsPoliticas', DocsPoliticasController::class);
 Route::get('empleados/{activo}', [EmpleadoControlller::class, 'index'])->name('empleado.indexmanual');
+Route::post('empleados/store', [EmpleadoControlller::class, 'store'])->name('empleado.store');
+Route::get('/catalogos/formulario/empelado', [CatalogoController::class, 'formularioEmpleado'])->name('catalogos.formularioEmpleado'); //ruta para los diferentes catalogos
+Route::get('/municipio/{estado}', [MunicipiosController::class, 'getMunicipiosEstado'])->name('municipos.estado');

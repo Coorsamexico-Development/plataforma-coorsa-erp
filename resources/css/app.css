@@ -134,7 +134,7 @@ width: 512px;
     row-gap: 1rem;
     align-items: center;
     justify-content: center;
-    margin-top: -4rem;
+    margin-top: -1rem;
 } 
 
 .card_MV
@@ -176,10 +176,7 @@ width: 512px;
 }
 
 /* */
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-@import "@fancyapps/ui/dist/fancybox";
+
 
 /* CHECKBOX TOGGLE SWITCH */
 /* @apply rules for documentation, these do not work as inline style */
@@ -249,4 +246,47 @@ input:checked ~ .tab-content {
     margin: 0;
     padding: 0;
     cursor: pointer;
+  }
+
+  /*Login styles*/
+  .login{
+    background-image: url('../img/login.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .login_title{
+    color: white;
+    font-weight: bolder;
+    font-size:2rem;
+  }
+
+  .form_login{
+    background-color: #000;
+    opacity: 85%;
+  }
+
+  /*Empleados create*/
+
+  .buttonseccion 
+  {
+    border: 0.2rem solid gray;
+    border-radius: 20% 0% 0% 2%;
+  }
+  
+  .buttonseccion:hover
+  {
+    border: 0.20rem solid red;
+   
+  }
+
+  .divseccion 
+  {
+    margin:1rem;
+    justify-content: center;
+  }
+
+  .space{
+     justify-content: center;
+     display: flex;
   }

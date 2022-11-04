@@ -66,4 +66,15 @@ class EmpleadoControlller extends Controller
             'escolaridades' => $escolaridades
          ]);
     }
+
+
+    public function store (Request $request)
+    {
+        $newEmpleado =  $request->validated();
+        try {
+            DB::beginTransaction();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
 }

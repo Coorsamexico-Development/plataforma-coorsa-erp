@@ -36,9 +36,8 @@ export default {
  :modules="modules"
     :slides-per-view="1"
     :space-between="50"
-    navigation
     :autoplay='{
-               "delay": 2500,
+               "delay": 3000,
               "disableOnInteraction": false
      }'
     :pagination="{ clickable: true }"
@@ -47,12 +46,21 @@ export default {
     @slideChange="onSlideChange"
   >
     <swiper-slide>
-        <img src="https://blog.ida.cl/wp-content/uploads/sites/5/2020/04/tamano-redes-blog-655x470.png">
+       <div style="margin:2rem; margin-top: 0rem;">
+          <h2 style="color:#26458D; font-weight:bolder; margin-bottom: 1rem;">Nuestra Misión</h2>
+          <h3 style="text-align:center;">Creación y seguimiento del cumplimiento de los procesos, políticas, manuales,
+            normas, métodos estrátegicos de la empresa todo con finalidad de llegar al plan estrátegico de esta. 
+          </h3>
+       </div>
     </swiper-slide>
     <swiper-slide> 
-        <img src="https://www.40defiebre.com/wp-content/uploads/2015/10/imagenes.png">
+      <div style="margin:2rem; margin-top: 0rem;">
+          <h2 style="color:#26458D; font-weight:bolder; margin-bottom: 1rem;">Nuestra Visión</h2>
+          <h3 style="text-align:center;">
+            Creación y seguimiento del cumplimiento de los procesos, políticas, manuales, normas y 
+            métodos estrátegicos de la empresa.
+          </h3>
+       </div>
     </swiper-slide>
-   
-
   </swiper>
 </template>
