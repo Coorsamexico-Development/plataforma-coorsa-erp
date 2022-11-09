@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Banco;
+use App\Models\catEstadosCiviles;
+use App\Models\catTipoSangre;
+use App\Models\Ceco;
 use App\Models\Escolaridad;
+use App\Models\puesto;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -61,9 +66,18 @@ class EmpleadoControlller extends Controller
     public function createNewEmpleado (Request $request)
     {
          $escolaridades = Escolaridad::all();
+         $estado_civiles = catEstadosCiviles::all();
+         $tipos_sangre = catTipoSangre::all();
+         $bancos = Banco::all(); 
+         $departamentos = Ceco::all();
+
          return Inertia::render('RH/Empleados/Create/CreateIndex',
          [
-            'escolaridades' => $escolaridades
+            'escolaridades' => $escolaridades,
+            'estados_civiles' => $estado_civiles,
+            'cat_tipo_sangre' => $tipos_sangre,
+            'bancos' => $bancos,
+            'departamentos' => $departamentos
          ]);
     }
 

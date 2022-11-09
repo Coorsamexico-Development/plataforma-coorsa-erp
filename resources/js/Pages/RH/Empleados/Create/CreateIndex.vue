@@ -16,29 +16,33 @@ import ButtonInfo from '@/Components/ButtonInfo.vue';
 import ButtonAdd from '@/Components/ButtonAdd.vue';
 import swal from 'sweetalert';
 import ListInputVue from '../../../../Components/ListInput.vue';
+import {ObtenerCurp} from '../../../../utils/index.js';
 
 var props = defineProps(
     {
         escolaridades:Object,
+        estados_civiles:Object,
+        cat_tipo_sangre:Object,
+        bancos:Object,
+        departamentos:Object
     }
 );
 
 let typeForm = ref('create');
 
 let catalogos = ref( {
-                    departamentos: [],
-                    escolaridades: [],
-                    bancos: [],
+                    departamentos: props.departamentos,
+                    escolaridades: props.escolaridades,
+                    bancos: props.bancos,
                     tiposContratos: [],
-                    tiposSangres: [],
-                    estadosCiviles: [],
-                    estadosDireccion: [],
-                    municipiosDireccion: [],
-                    localidadesDireccion: [],
+                    tiposSangres: props.cat_tipo_sangre,
                     motivosBajas: []
                 })
 
+let puestos = ref([]);
+
 const fotografia = ref(null);
+
 
 const form = useForm
 ({
@@ -121,13 +125,13 @@ const createOrUpdate = () =>
 
 }
 
-
+/*Obtener datos direcciones*/ 
 const getEstados = () => 
 {
      axios.get(route('catalogos.formularioEmpleado')).then( (response) => 
     {
       catalogos.value.estadosDireccion = response.data.estadosDireccion;
-      console.log(response.data);
+      //console.log(response.data);
               }).catch(error => {
                 if (error.response) {
                     let messageError = '';
@@ -143,11 +147,80 @@ const getEstados = () =>
     });
 }
 
-/*Obtener datos direcciones*/ 
+
+
 const getMunicipios  = () =>
 {
-   
+    if(form.direccion_estado_id !== '' && form.direccion_estado_id > 0)
+    {
+         axios.get(route('municipos.estado', form.direccion_estado_id)).
+                then((response) => {
+                        catalogos.value.municipiosDireccion = response.data;
+                    }).catch(error =>{
+                        if (error.response) {
+                            let messageError = '';
+                            const messageServer = error.response.data.message
+                            if(error.response.status != 500){
+                                messageError = messageServer;
+                            }else{
+                                messageError = 'Internal Server Error';
+                            }
+                            console.log(error.response);
+                            swal("Error get Municipios", messageError, "error");
+                        }
+                    });
+    }
 }
+
+const getLocalidades =  () => 
+{
+    if(form.direccion_municipio_id !== '' && form.direccion_municipio_id > 0)
+    {
+        axios.get(route('localidades.municipio', form.direccion_municipio_id)).
+           then((response) => {
+               catalogos.value.localidadesDireccion = response.data;
+           }).catch(error =>{
+               if (error.response) {
+                   let messageError = '';
+                   const messageServer = error.response.data.message
+                   if(error.response.status != 500){
+                       messageError = messageServer;
+                   }else{
+                       messageError = 'Internal Server Error';
+                   }
+                   console.log(error.response);
+                   swal("Error get Localidades", messageError, "error");
+               }
+           });
+    }
+}
+
+/*OBTENCION DE PUESTOS*/
+const getPuestos = () =>
+{
+    axios.get(route('departamento.puestos.list', form.departamento_id))
+            .then( (response) => 
+            {
+                puestos.value = response.data
+           }).catch(error => 
+           {
+             if (error.response) 
+             {
+                let messageError = '';
+                const messageServer = error.response.data.message
+                if(error.response.status != 500)
+                {
+                  messageError = messageServer;
+                }
+                else
+                {
+                  messageError = 'Internal Server Error';
+                }
+                 swal('Error get Puesto Departamento', messageError, 'error')
+              }
+         });
+}
+
 
 /*CAMBIAR ELEMENTO*/ 
 
@@ -157,6 +230,52 @@ const cambiar = (id) =>
 {
   buttonSelected.value = id;
 }
+
+/*Funciones calculadas*/
+const edad = computed(() => 
+{
+    let date;
+    if(form.fecha_nacimiento)
+    {
+        date = new  Date(form.fecha_nacimiento);
+        let dateNow = new Date();
+        let auxEdad = dateNow.getFullYear()-date.getFullYear();
+        if(dateNow.getMonth() < date.getMonth()) auxEdad--;
+        return auxEdad;
+     }
+     else
+     {
+        return ""
+     }
+});
+
+const generateCurp = computed(() => 
+{
+    return ObtenerCurp(form.nombre, form.apellido_paterno, form.apellido_materno, form.fecha_nacimiento);  
+});
+
+const fecha_termino = computed(() => 
+{
+    let date;
+    if(form.fecha_ingreso_real){
+        date =new Date(form.fecha_ingreso_real);
+    }else
+    {
+        date =new  Date();
+    }
+
+    date.setDate(date.getDate() + 30);
+    let month = date.getMonth()+1;
+    if(month<10){
+        month = '0'+month;
+    }
+    let day = date.getDate();
+    if(day<10)
+    {
+        day = '0'+day;
+    }
+    return date.getFullYear()  + "-" + month + "-" +day;
+});
 
 </script>
 
@@ -172,7 +291,7 @@ const cambiar = (id) =>
           <div class="pb-1 pr-1">
            <div class="grid grid-cols-4 gap-1">
                <div class="divseccion"  style="margin-right:0rem">
-                  <ButtonSeccion style="width:10rem" @click="cambiar(1)">
+                  <ButtonSeccion style="width:10rem" @click="cambiar(1)" href="1">
                     <div class="grid grid-rows-2 gap-1" style="justify-items:center;">
                       <img  :src="'/assets/img/datos_personales.png'"/>
                       <p>Datos Personales</p>
@@ -241,10 +360,10 @@ const cambiar = (id) =>
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div class="overflow-hidden bg-white shadow-xl sm:rounded-lg">
-                  <div class="pb-5 pl-8 pr-8">
+                <div class="overflow-hidden bg-white shadow-xl sm:rounded-lg" style="padding:6rem">
+                  <div class="pb-8 pl-8 pr-8">
                      <!-- Datos Personales -->
-                       <div v-if="buttonSelected == 1" v-show="true">
+                       <div v-if="buttonSelected == 1" v-show="true" id="1">
                           <div class="border-b tab">
                               <div class="relative border-l-2 border-transparent">
                                   <input class="absolute z-10 w-full h-10 opacity-0 cursor-pointer top-6"
@@ -255,7 +374,7 @@ const cambiar = (id) =>
                                       </span>           
                                   </header>
                                   <div class="tab-content">
-                                      <div class="pb-5 pl-8 pr-8">
+                                      <div class="pb-8 pl-8 pr-8">
                                           <div class="grid grid-cols-3 gap-4">
                                               <div class="mt-4">
                                                   <InputLabel for="numero_empleado" value="ID de Empleado:*" />
@@ -340,7 +459,7 @@ const cambiar = (id) =>
                                               <div class="mt-4">
                                                   <InputLabel for="cat_estados_civile_id" value="Estado Civil:*" />
                                                   <Select v-model="form.cat_estados_civile_id" class="w-full"  :disabled="editEmpleadoDisable">
-                                                      <option v-for="estados_civil in catalogos.estadosCiviles" :key="estados_civil.id" :value="estados_civil.id">
+                                                      <option v-for="estados_civil in estados_civiles" :key="estados_civil.id" :value="estados_civil.id">
                                                           {{estados_civil.nombre}}
                                                       </option>
                                                   </Select>
@@ -429,23 +548,25 @@ const cambiar = (id) =>
                                                  <ListInputVue list="listaEstados"
                                                    :disabled="editEmpleadoDisable"
                                                    v-model="form.direccion_estado_id" :options="catalogos.estadosDireccion"
-                                                   class="block w-full mt-1" @change="getEstados()" />
+                                                   class="block w-full mt-1" @click="getEstados()" />
                                                  <InputError :message="form.errors.direccion_estado_id" class="mt-2" />
                                              </div>
                                              <div class="mt-4">
                                                   <InputLabel for="direccion_municipio_id"  value="Municipio:*" />
-                                                  <ListInputVue list="listaMunicipios" 
-                                                  type="text" :disabled="editEmpleadoDisable"
-                                                  v-model="form.direccion_municipio_id"  :options="municipiosDireccion"
-                                                  class="block w-full mt-1" @change="getMunicipios()" />
+                                                  <ListInputVue v-if="form.direccion_estado_id != 0" list="listaMunicipios"  :disabled="false"
+                                                  v-model="form.direccion_municipio_id"  :options="catalogos.municipiosDireccion"
+                                                  class="block w-full mt-1" @click="getMunicipios()" />
+                                                  <ListInputVue v-if="form.direccion_estado_id == 0" list="listaMunicipios"  :disabled="true" />
                                                  <InputError :message="form.errors.direccion_municipio_id"  class="mt-2"/>
                                              </div>
                                              <div class="mt-4">
                                                  <InputLabel for="direccion_localidade_id"  value="Localidad:*" />
-                                                 <TextInput list="listaLocalidades" 
-                                                  type="text" :disabled="editEmpleadoDisable"
-                                                  v-model="form.direccion_localidade_id"  :opciones="localidadesDireccion"
-                                                  class="block w-full mt-1" @change="getLocalidades()" />
+                                                 <ListInputVue list="listaLocalidades" 
+                                                  v-if="form.direccion_municipio_id != 0"
+                                                   :disabled="false"
+                                                  v-model="form.direccion_localidade_id"  :options="catalogos.localidadesDireccion"
+                                                  class="block w-full mt-1" @click="getLocalidades()" />
+                                                  <ListInputVue v-if="form.direccion_municipio_id == 0" :disabled="true" />
                                                  <InputError :message="form.errors.direccion_localidade_id"  class="mt-2"/>
                                              </div>
                                              <!-- ----------------------------------------------------------------- -->
@@ -524,9 +645,9 @@ const cambiar = (id) =>
                                           <div class="grid grid-cols-3 gap-4">
                                               <div class="mt-4">
                                                   <InputLabel for="departamento_id"  value="Departamento:*" />
-                                                  <ListInput v-model="form.departamento_id" list="departamentos"
+                                                  <ListInputVue v-model="form.departamento_id" list="departamentos"
                                                       @change="getPuestos"
-                                                      class="w-full" :opciones="catalogos.departamentos" :disabled="editEmpleadoDisable"/>
+                                                      class="w-full" :options="catalogos.departamentos" />
               
                                                   <InputError :message="form.errors.departamento_id" class="mt-2" />
                                               </div>

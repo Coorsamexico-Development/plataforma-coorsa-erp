@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\CatalogoController;
+use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\DocsPoliticasController;
 use App\Http\Controllers\EmpleadoControlller;
+use App\Http\Controllers\LocalidadesController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\MunicipioController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Foundation\Application;
@@ -72,4 +75,6 @@ Route::apiResource('/DocsPoliticas', DocsPoliticasController::class);
 Route::get('empleados/{activo}', [EmpleadoControlller::class, 'index'])->name('empleado.indexmanual');
 Route::post('empleados/store', [EmpleadoControlller::class, 'store'])->name('empleado.store');
 Route::get('/catalogos/formulario/empelado', [CatalogoController::class, 'formularioEmpleado'])->name('catalogos.formularioEmpleado'); //ruta para los diferentes catalogos
-Route::get('/municipio/{estado}', [MunicipiosController::class, 'getMunicipiosEstado'])->name('municipos.estado');
+Route::get('/municipio/{estado}', [MunicipioController::class, 'getMunicipiosEstado'])->name('municipos.estado');
+Route::get('/localidades/{municipio}', [LocalidadesController::class, 'getLocalidades'])->name('localidades.municipio');
+Route::get('/departamentos/{departamento}/list-puestos', [DepartamentoController::class, 'listPuestoDep'])->name('departamento.puestos.list');
