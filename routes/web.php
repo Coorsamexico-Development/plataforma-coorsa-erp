@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\DepartamentoController;
+use App\Http\Controllers\DepartamentosAuditoriaController;
 use App\Http\Controllers\DocsPoliticasController;
 use App\Http\Controllers\EmpleadoControlller;
 use App\Http\Controllers\LocalidadesController;
@@ -43,28 +44,35 @@ Route::middleware([
         $fechaActual = date('Y-m-d');
 
         $noticias = DB::table(DB::raw('noticias'))
-        ->selectRaw('*')
-        ->where('noticias.activo','=','1')
-        ->get();
+            ->selectRaw('*')
+            ->where('noticias.activo', '=', '1')
+            ->get();
 
 
         $videos = DB::table(DB::raw('videos'))
-        ->selectRaw('*')
-        ->where('videos.activo','=','1')
-        ->get();
+            ->selectRaw('*')
+            ->where('videos.activo', '=', '1')
+            ->get();
 
         $menus = DB::table(DB::raw('menus'))
-        ->selectRaw(
-            '*'
-        )
-        ->where('menus.created_at','LIKE','%'.$fechaActual.'%')
-        ->get();
-        return Inertia::render('Dashboard', 
-        ['menus' => $menus,
-         'noticias' => $noticias,
-         'videos' => $videos
-        ]);
+            ->selectRaw(
+                '*'
+            )
+            ->where('menus.created_at', 'LIKE', '%' . $fechaActual . '%')
+            ->get();
+        return Inertia::render(
+            'Dashboard',
+            [
+                'menus' => $menus,
+                'noticias' => $noticias,
+                'videos' => $videos
+            ]
+        );
     })->name('dashboard');
+
+
+    Route::get('/control-interno/departamentos-aditorias', [DepartamentosAuditoriaController::class, 'index'])
+        ->name('departamentos-aditorias.index');
 });
 
 Route::get('empleados/create', [EmpleadoControlller::class, 'createNewEmpleado'])->name('empleado.create');

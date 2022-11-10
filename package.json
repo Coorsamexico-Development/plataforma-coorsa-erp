@@ -21,6 +21,7 @@
         "vue": "^3.2.41"
     },
     "dependencies": {
+        "@amcharts/amcharts5": "^5.2.31",
         "@fancyapps/ui": "^4.0.31",
         "bootstrap": "^5.2.2",
         "bootstrap-vue": "^2.23.1",
