@@ -24,7 +24,8 @@ var props = defineProps(
         estados_civiles:Object,
         cat_tipo_sangre:Object,
         bancos:Object,
-        departamentos:Object
+        departamentos:Object,
+        tipos_contrato:Object
     }
 );
 
@@ -34,7 +35,7 @@ let catalogos = ref( {
                     departamentos: props.departamentos,
                     escolaridades: props.escolaridades,
                     bancos: props.bancos,
-                    tiposContratos: [],
+                    tiposContratos: props.tipos_contrato,
                     tiposSangres: props.cat_tipo_sangre,
                     motivosBajas: []
                 })
@@ -148,7 +149,6 @@ const getEstados = () =>
 }
 
 
-
 const getMunicipios  = () =>
 {
     if(form.direccion_estado_id !== '' && form.direccion_estado_id > 0)
@@ -230,6 +230,12 @@ const cambiar = (id) =>
 {
   buttonSelected.value = id;
 }
+
+/*Calcular salario*/
+const calculoSalario = () =>
+{
+
+} 
 
 /*Funciones calculadas*/
 const edad = computed(() => 

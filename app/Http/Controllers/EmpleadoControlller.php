@@ -8,6 +8,7 @@ use App\Models\catTipoSangre;
 use App\Models\Ceco;
 use App\Models\Escolaridad;
 use App\Models\puesto;
+use App\Models\tipoContrato;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -70,6 +71,7 @@ class EmpleadoControlller extends Controller
          $tipos_sangre = catTipoSangre::all();
          $bancos = Banco::all(); 
          $departamentos = Ceco::all();
+         $tipos_contrato = tipoContrato::select('id', 'nombre','activo')->where('activo',1 )->get();
 
          return Inertia::render('RH/Empleados/Create/CreateIndex',
          [
@@ -77,7 +79,8 @@ class EmpleadoControlller extends Controller
             'estados_civiles' => $estado_civiles,
             'cat_tipo_sangre' => $tipos_sangre,
             'bancos' => $bancos,
-            'departamentos' => $departamentos
+            'departamentos' => $departamentos,
+            'tipos_contrato' => $tipos_contrato
          ]);
     }
 
