@@ -45,7 +45,8 @@ const create = async () => {
     if (document.getElementById("formCalificacion").reportValidity()) {
         form.post(route('departamentos-aditorias.calificacion.store', props.departamento.id), {
             preserveScroll: true,
-            only: ['archivos'],
+            preserveState: true,
+            only: ['calificaciones'],
             onSuccess: () => {
                 close()
             }
@@ -79,26 +80,25 @@ const create = async () => {
                         <InputLabel for="calificacion">
                             Calificaci&oacute;n:<span class="text-red-400">*</span>
                         </InputLabel>
-                        <TextInput id="calificacion" type="number" placeholder="ejemplo@coorsamexico.com"
-                            v-model="form.calificacion" class="block w-full mt-1" required min="0" />
+                        <TextInput id="calificacion" type="number" placeholder="Calificacion 0-100"
+                            v-model="form.calificacion" class="block w-full mt-1" required min="0" max="100" step="1"
+                            pattter="[0-9]+" />
                         <InputError :message="form.errors.calificacion" class="mt-2" />
                     </div>
-                    <div class="mt-2">
+                    <div class="col-span-2 mt-2">
                         <InputLabel for="documento">
                             Documento:<span class="text-red-400">*</span>
                         </InputLabel>
                         <input type="file" class="hidden" ref="file" name="file"
                             @input="form.documento = $event.target.files[0]" @change="setFileName()"
                             accept=".pdf,.jpg,.jpeg,.png">
-                        <SecondaryButton class="relative mr-1" type="button" @click="selectFile()">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 32.294 31.373">
-                                <g id="Grupo_121" data-name="Grupo 121" transform="translate(-151.33 -440.732)">
-                                    <path id="Trazado_150" data-name="Trazado 150"
-                                        d="M2821.419,472.105h-18.335a4.848,4.848,0,0,1-4.842-4.843V448.927a4.848,4.848,0,0,1,4.842-4.843h18.335a4.848,4.848,0,0,1,4.843,4.843v18.335A4.849,4.849,0,0,1,2821.419,472.105Zm-18.335-26.668a3.494,3.494,0,0,0-3.49,3.49v18.335a3.494,3.494,0,0,0,3.49,3.49h18.335a3.494,3.494,0,0,0,3.49-3.49V448.927a3.493,3.493,0,0,0-3.49-3.49Z"
-                                        transform="translate(-2642.638)" fill="#fff" />
-                                    <rect id="Rectángulo_183" data-name="Rectángulo 183" width="26.668" height="26.668"
-                                        rx="6.258" transform="translate(151.33 440.732)" fill="#fff" />
-                                </g>
+                        <SecondaryButton type="button" @click="selectFile()">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M8 6.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 .5-.5z" />
+                                <path
+                                    d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
                             </svg>
                             SELECIONA UN ARCHIVO
                         </SecondaryButton>

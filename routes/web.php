@@ -4,6 +4,7 @@ use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\DepartamentosAuditoriaController;
 use App\Http\Controllers\DocsPoliticasController;
+use App\Http\Controllers\DocumentosCalificacionMesController;
 use App\Http\Controllers\EmpleadoControlller;
 use App\Http\Controllers\LocalidadesController;
 use App\Http\Controllers\MenuController;
@@ -76,6 +77,8 @@ Route::middleware([
 
     Route::post('departamentos-aditorias/{departamentosAuditoria}/calificacion', [DepartamentosAuditoriaController::class, 'storeCalificacion'])
         ->name('departamentos-aditorias.calificacion.store');
+    Route::delete('documentos-calificacion-mes/{documentosCalificacionMes}', [DocumentosCalificacionMesController::class, 'destroy'])
+        ->name('documentos-calificacion-mes.destroy');
 });
 
 Route::get('empleados/create', [EmpleadoControlller::class, 'createNewEmpleado'])->name('empleado.create');

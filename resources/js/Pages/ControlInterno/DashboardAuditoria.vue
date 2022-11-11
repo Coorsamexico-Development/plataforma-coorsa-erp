@@ -5,6 +5,7 @@ import ButtonAdd from '../../Components/ButtonAdd.vue';
 import ButtonSeccion from '../../Components/ButtonSeccion.vue';
 import Title from '../../Components/Title.vue';
 import GraficaSection from './Partials/GraficaSection.vue';
+import DocumentosSection from './Partials/DocumentosSection.vue';
 import FormCalificacionModal from './Modals/FormCalificacionModal.vue';
 import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
@@ -14,6 +15,10 @@ let props = defineProps({
         required: true,
     },
     filters: {
+        type: Object,
+        required: true,
+    },
+    calificaciones: {
         type: Object,
         required: true,
     }
@@ -36,7 +41,7 @@ watch(params, (newParams) => {
         {
             data: newParams,
             replace: true,
-            only: ['archivos'],
+            only: ['calificaciones'],
             preserveScroll: true,
             preserveState: true,
         });
@@ -65,16 +70,16 @@ watch(params, (newParams) => {
                 </ButtonSeccion>
             </div>
             <!-- End Departamentos -->
-            <GraficaSection class="sm:px-6">
+            <GraficaSection :calificaciones="calificaciones" class="sm:px-6">
                 <ButtonAdd v-if="departamento != undefined" @click="showingFormCalificacion = true">
                     + AGREGAR
                 </ButtonAdd>
             </GraficaSection>
+            <DocumentosSection :documentos="calificaciones" class="my-3"></DocumentosSection>
         </div>
         <!-- Modal Form Calificaciones -->
         <FormCalificacionModal v-if="departamento != undefined" :departamento="departamento"
             :show="showingFormCalificacion" @close="showingFormCalificacion = false" />
-
 
     </AppLayout>
 </template>
