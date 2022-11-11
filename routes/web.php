@@ -92,4 +92,4 @@ Route::get('/catalogos/formulario/empelado', [CatalogoController::class, 'formul
 Route::get('/municipio/{estado}', [MunicipioController::class, 'getMunicipiosEstado'])->name('municipos.estado');
 Route::get('/localidades/{municipio}', [LocalidadesController::class, 'getLocalidades'])->name('localidades.municipio');
 Route::get('/departamentos/{departamento}/list-puestos', [DepartamentoController::class, 'listPuestoDep'])->name('departamento.puestos.list');
-Route::get('empleados/{id}',[EmpleadoControlller::class, 'edit'])->name('empleado.edit');
+Route::get('/empleados/edit/{id}',[EmpleadoControlller::class, 'edit'])->name('empleado.edit');
