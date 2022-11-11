@@ -234,7 +234,19 @@ const cambiar = (id) =>
 /*Calcular salario*/
 const calculoSalario = () =>
 {
+   const salarioBruto =form.salario_bruto;
+   const despensa = form.despensa;
+   const salarioImss = (salarioBruto-despensa)/1.22;
+   const salarioDiarioImss = salarioImss/30.42;
+   const salarioDiario = salarioDiarioImss/1.0452;
+   const bonoAsistencia = salarioImss*0.1;
+   const bonoPuntualidad = salarioImss *0.1;
 
+   form.salario_diario = salarioDiario.toFixed(2);
+   form.salario_imss = salarioImss.toFixed(2);
+   form.bono_puntualidad = bonoPuntualidad.toFixed(2);
+   form.bono_asistencia = bonoAsistencia.toFixed(2);
+   form.fondo_ahorro = (salarioImss*0.02).toFixed(2);
 } 
 
 /*Funciones calculadas*/
