@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount, onMounted, ref, watch } from 'vue';
 import Card from '../../../Components/Card.vue';
 import CirculeLogo from '../../../Components/CirculeLogo.vue';
 import Title from '../../../Components/Title.vue';
@@ -9,14 +9,23 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 
 const chartCalifi = ref(null)
 
-let root;
+const props = defineProps({
+    calificaciones: {
+        type: Object,
+        required: true
+    }
+})
 
+let root;
+let xAxis;
+let series1;
+let chart
 onMounted(() => {
     root = am5.Root.new(chartCalifi.value);
 
     root.setThemes([am5themes_Animated.new(root)]);
 
-    let chart = root.container.children.push(
+    chart = root.container.children.push(
         am5xy.XYChart.new(root, {
             panY: false,
             layout: root.verticalLayout
@@ -26,10 +35,12 @@ onMounted(() => {
 
 
     // Define data
-    let data = [{ date: '2022-11-01', value: 100 },
-    { date: '2022-11-01', value: 80 },
-    { date: '2022-11-02', value: 65 },
-    { date: '2022-12-02', value: 65 }];
+    let data = props.calificaciones.map(cal => {
+        return {
+            mes: cal.mes,
+            calificacion: cal.calificacion
+        }
+    });
 
     // Create Y-axis
     var yAxis = chart.yAxes.push(
@@ -41,7 +52,7 @@ onMounted(() => {
         })
     );
 
-    var xAxis = chart.xAxes.push(
+    xAxis = chart.xAxes.push(
         am5xy.DateAxis.new(root, {
             baseInterval: { timeUnit: "day", count: 1 },
             renderer: am5xy.AxisRendererX.new(root, {}),
@@ -55,13 +66,13 @@ onMounted(() => {
     xAxis.data.setAll(data);
 
     // Create series
-    let series1 = chart.series.push(
+    series1 = chart.series.push(
         am5xy.ColumnSeries.new(root, {
             name: "Mes",
             xAxis: xAxis,
             yAxis: yAxis,
-            valueYField: "value",
-            valueXField: "date",
+            valueYField: "calificacion",
+            valueXField: "mes",
             valueYGrouped: "average",
             stacked: false,
             tooltip: am5.Tooltip.new(root, {
@@ -70,19 +81,19 @@ onMounted(() => {
         })
     );
 
-    series1.columns.template.adapters.add("fill", function (fill, target) {
-        return chart.get("colors").getIndex(series1.columns.indexOf(target));
-    });
+    // series1.columns.template.adapters.add("fill", function (fill, target) {
+    //     return chart.get("colors").getIndex(series1.columns.indexOf(target));
+    // });
 
     series1.data.processor = am5.DataProcessor.new(root, {
-        dateFields: ["date"],
+        dateFields: ["mes"],
         dateFormat: "yyyy-MM-dd"
     });
 
     series1.data.setAll(data);
     // Add legend
-    let legend = chart.children.push(am5.Legend.new(root, {}));
-    legend.data.setAll(chart.series.values);
+    // let legend = chart.children.push(am5.Legend.new(root, {}));
+    // legend.data.setAll(chart.series.values);
 
     // Add cursor
     chart.set("cursor", am5xy.XYCursor.new(root, {}));
@@ -93,6 +104,21 @@ onBeforeMount(() => {
     if (root) {
         root.dispose();
     }
+});
+
+
+watch(props, () => {
+    let data = props.calificaciones.map(cal => {
+        return {
+            mes: cal.mes,
+            calificacion: cal.calificacion
+        }
+    });
+    series1.data.setAll(data);
+    xAxis.data.setAll(data);
+    // series1.columns.template.adapters.add("fill", function (fill, target) {
+    //     return chart.get("colors").getIndex(series1.columns.indexOf(target));
+    // });
 })
 
 </script>
