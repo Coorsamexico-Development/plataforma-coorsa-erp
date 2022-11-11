@@ -75,8 +75,10 @@ const logout = () => {
                                                 DASHBOARD AUDITORIAS
                                             </span>
                                         </DropdownLink>
-                                        <DropdownLink :href="route('departamentos-aditorias.index')">
-                                            DOCUMENTOS
+                                        <DropdownLink :href="route('politics.index')">
+                                            <span class="text-xs">
+                                                DOCUMENTOS
+                                            </span>
                                         </DropdownLink>
                                         <div class="border-t border-gray-100" />
                                     </template>

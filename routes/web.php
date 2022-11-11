@@ -10,6 +10,7 @@ use App\Http\Controllers\LocalidadesController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\MunicipioController;
 use App\Http\Controllers\NoticiaController;
+use App\Http\Controllers\PoliticController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
@@ -79,6 +80,8 @@ Route::middleware([
         ->name('departamentos-aditorias.calificacion.store');
     Route::delete('documentos-calificacion-mes/{documentosCalificacionMes}', [DocumentosCalificacionMesController::class, 'destroy'])
         ->name('documentos-calificacion-mes.destroy');
+
+    Route::apiResource('politics', PoliticController::class);
 });
 
 Route::get('empleados/create', [EmpleadoControlller::class, 'createNewEmpleado'])->name('empleado.create');
