@@ -73,6 +73,9 @@ Route::middleware([
 
     Route::get('/control-interno/departamentos-aditorias', [DepartamentosAuditoriaController::class, 'index'])
         ->name('departamentos-aditorias.index');
+
+    Route::post('departamentos-aditorias/{departamentosAuditoria}/calificacion', [DepartamentosAuditoriaController::class, 'storeCalificacion'])
+        ->name('departamentos-aditorias.calificacion.store');
 });
 
 Route::get('empleados/create', [EmpleadoControlller::class, 'createNewEmpleado'])->name('empleado.create');

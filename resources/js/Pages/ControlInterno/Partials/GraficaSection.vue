@@ -6,7 +6,6 @@ import Title from '../../../Components/Title.vue';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
-import ButtonAdd from '../../../Components/ButtonAdd.vue';
 
 const chartCalifi = ref(null)
 
@@ -105,9 +104,7 @@ onBeforeMount(() => {
         <div class="w-full mx-1 h-80" ref="chartCalifi">
         </div>
         <div class="flex justify-end">
-            <ButtonAdd>
-                + AGREGAR
-            </ButtonAdd>
+            <slot />
         </div>
     </Card>
 </template>

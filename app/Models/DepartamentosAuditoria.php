@@ -13,4 +13,10 @@ class DepartamentosAuditoria extends Model
         'nombre',
         'logo'
     ];
+
+
+    public function documentosCalificacionesMes()
+    {
+        return $this->hasMany(DocumentosCalificacionMes::class, 'departamento_auditoria_id');
+    }
 }
