@@ -7,6 +7,7 @@ var props = defineProps(
     {empleados:Object}
 );
 
+
 </script>
 
 <template>
@@ -59,7 +60,7 @@ var props = defineProps(
              <td class="px-2 whitespace-nowrap">{{empleado.apellido_materno}}</td>
              <td class="px-2 whitespace-nowrap">{{empleado.telefono}}</td>
              <td class="px-2 whitespace-nowrap">
-                <Link >
+                <Link :href="route('empleado.edit',empleado.id)">
                         <ButtonInfo class="w-6 h-6 px-1" style="width:3rem; align-items: center; justify-content: center;">
                             <svg xmlns="http://www.w3.org/2000/svg"
                             fill="white" class="w-4 h-4" viewBox="0 0 16 16">

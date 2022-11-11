@@ -47,11 +47,13 @@ watch(params, (newValue) =>
               Empleados inactivos
             </h2>
             <ButtonInfo style="float:right; margin-top: -1.5rem; ">REPORTE</ButtonInfo>
-            <Link :href="route('empleado.create')">
+            <div v-if="activo === 'activo'">
+                <Link :href="route('empleado.create')">
                 <ButtonAdd style="float:right; margin-top: -1.5rem; margin-right: 2rem; "  >
                   + AGREGAR
                 </ButtonAdd>
             </Link>
+            </div>
             <InputSearch v-model="params.search" style="float:right; margin-top: -2rem; margin-right: 12rem;" ></InputSearch>
           
         </template>

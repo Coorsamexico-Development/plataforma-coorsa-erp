@@ -24,14 +24,41 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
+        'numero_empleado',
         'name',
+        'apellido_paterno',
+        'apellido_materno',
         'email',
-        'password',
+        'fecha_nacimiento',
+        'fecha_ingreso',
+        'fecha_ingreso_real',
+        'nss',
+        'curp',
+        'rfc',
+        'contacto_emergencia',
+        'telefono',
+        'hijos',
+        'clave_bancaria',
+        'numero_cuenta_bancaria',
+        'salario_diario',
+        'salario_bruto',
+        'salario_imss',
+        'bono_puntualidad',
+        'bono_asistencia',
+        'despensa',
+        'fondo_ahorro',
+        'alergias',
+        'enfermedades_cronicas',
+        'direccion_id',
+        'estado_civil_id',
         'banco_id',
         'escolaridad_id',
         'cat_tipos_nomina_id',
         'tipos_contrato_id',
-        'cat_genero_id'
+        'cat_genero_id',
+        'cat_tipo_sangre_id',
+        'password',
+
     ];
 
     /**
