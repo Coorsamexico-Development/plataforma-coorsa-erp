@@ -13,10 +13,16 @@ class DepartamentosAuditoriaController extends Controller
     {
         $archivos = null;
         $departamentosAuditoria = DepartamentosAuditoria::orderBy('id', 'asc');
+
+        if (request()->has('departamento_auditoria_id')) {
+            $departamento =  DepartamentosAuditoria::find(request('departamento_auditoria_id'));
+            $calificaciones = $departamento->documentosCalificacionesMes()->orderBy('mes', 'asc');
+        }
+
         return Inertia::render('ControlInterno/DashboardAuditoria', [
             'departamentosAuditoria' => fn () => $departamentosAuditoria->get(),
             'filters' => request()->all(['departamento_auditoria_id']),
-            'archivos' => fn () => $archivos,
+            'calificaciones' => fn () => isset($calificaciones) ? $calificaciones->get() : [],
         ]);
     }
     public function storeCalificacion(DepartamentosAuditoria $departamentosAuditoria, Request $request)
