@@ -4,7 +4,7 @@ import { computed } from "vue"
 const props = defineProps({
     img: {
         type: String,
-        default: '/assets/img/logo coorsa completo.png'
+        default: '/assets/img/logo-red.jpg'
     },
     file: {
         type: String,
@@ -23,11 +23,12 @@ const isDownload = computed(() => {
 <template>
     <div class="h-48 bg-white shadow-xl hover:shadow-md rounded-3xl w-36 md:h-52 md:w-44">
         <div class="relative overflow-hidden group h-3/4">
-            <img :src="img" alt="logo-file" class="w-auto h-full m-auto" />
+            <img :src="img" alt="logo-file" class="w-auto h-full m-auto rounded-t-3xl" />
             <div
-                class="absolute top-0 bottom-0 left-0 right-0 w-full h-full transition-opacity opacity-0 group-hover:opacity-90 rounded-t-3xl bg-slate-800">
+                class="absolute top-0 bottom-0 left-0 right-0 w-full h-full transition-opacity duration-300 ease-in-out bg-gray-900 opacity-0 group-hover:opacity-80 rounded-t-3xl">
                 <div class="flex items-center justify-center w-full h-full">
-                    <div class="py-1 bg-white rounded-full w-7 h-7 hover:bg-green-500 hover:text-white">
+                    <div
+                        class="w-6 h-6 py-1 transition duration-300 bg-white rounded-full group-hover:scale-125 hover:bg-green-500 hover:text-white">
                         <a v-if="isDownload" target="_blank" :href="file" download>
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mx-auto" fill="currentColor"
                                 viewBox="0 0 16 16">

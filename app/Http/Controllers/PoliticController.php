@@ -43,15 +43,15 @@ class PoliticController extends Controller
             'imagePolitic' => ['nullable', 'mimes:png,jpeg,jpg'],
             'pdf' => ['required'],
         ]);
-        $urlImage = "/assset/img/icon 10.png";
+        $urlImage = "/assets/img/logo-red.jpg";
         if ($request->hasFile("imagePolitic")) {
             $file = $request->file('imagePolitic');
 
-            $rutaImage = $file->store('politics', 'gcs');
+            $rutaImage = $file->store('politics/img', 'gcs');
             $urlImage = Storage::disk('gcs')->url($rutaImage);
         }
         $file = $request->file('pdf');
-        $rutaPdf = $file->store('pdf', 'gcs');
+        $rutaPdf = $file->store('politics/pdf', 'gcs');
         $urlPdf = Storage::disk('gcs')->url($rutaPdf);
 
         Politic::create([
@@ -84,7 +84,7 @@ class PoliticController extends Controller
             $fileUrl = str_replace("https://storage.googleapis.com/" . env('GOOGLE_CLOUD_STORAGE_BUCKET'), "/", $politic->imagePolitic);
             Storage::disk('gcs')->delete($fileUrl);
             $fileImg = $request->file('imagePolitic');
-            $rutaImage = $fileImg->store('politics', 'gcs');
+            $rutaImage = $fileImg->store('politics/img', 'gcs');
             $urlImage = Storage::disk('gcs')->url($rutaImage);
         }
         $urlPdf =  $politic->pdf;
@@ -93,7 +93,7 @@ class PoliticController extends Controller
             Storage::disk('gcs')->delete($fileUrl);
 
             $file = $request->file('pdf');
-            $rutaPdf = $file->store('pdf', 'gcs');
+            $rutaPdf = $file->store('politics/pdf', 'gcs');
             $urlPdf = Storage::disk('gcs')->url($rutaPdf);
         }
 
