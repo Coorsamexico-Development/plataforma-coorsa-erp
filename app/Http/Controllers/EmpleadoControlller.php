@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\bajasEmpleado;
 use App\Models\Banco;
 use App\Models\catEstadosCiviles;
 use App\Models\catTipoSangre;
@@ -10,12 +11,14 @@ use App\Models\direccione;
 use App\Models\empleados_puesto;
 use App\Models\Escolaridad;
 use App\Models\expediente;
+use App\Models\finiquito;
 use App\Models\puesto;
 use App\Models\tipoContrato;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Hash;
 
 class EmpleadoControlller extends Controller
 {
@@ -137,7 +140,7 @@ class EmpleadoControlller extends Controller
             'tipos_contrato_id' => $newEmpleado['tipos_contrato_id'],
             'cat_genero_id' => $newEmpleado['cat_genero_id'],
             'cat_tipo_sangre_id' => $newEmpleado['cat_tipos_sangre_id'],
-            'password' => '12345678'
+            'password' => Hash::make('12345678')
          ]); //creamos el usuario
          
 
@@ -186,7 +189,97 @@ class EmpleadoControlller extends Controller
         
     }
 
-    
+    public function update(Request $request, User $empleado)
+    {
+        $newEmpleado =  $request;
+
+        // Guarda nueva direccion si el campo no existe
+        if(empty($request->direccion_id))
+        {
+             //creamos la direccion
+            $direccion = direccione::create([
+                'direccion_localidade_id' => $newEmpleado['direccion_localidade_id'],
+                'calle' => $newEmpleado['calle'],
+                'numero' => $newEmpleado['numero'],
+                'colonia' => $newEmpleado['colonia'],
+                'codigo_postal'=> $newEmpleado['codigo_postal'],
+                'lote' =>$newEmpleado['lote'],
+                'manzana' => $newEmpleado['manzana'],
+            ]);
+        } 
+        else //sino actualizamos el existente
+        {
+            direccione::where('id', $newEmpleado->direccion_id)->update([
+                "direccion_localidade_id" => $newEmpleado['direccion_localidade_id'],
+                "calle" => $newEmpleado['calle'],
+                "numero" => $newEmpleado['numero'],
+                "colonia" => $newEmpleado['colonia'],
+                "codigo_postal" => $newEmpleado['codigo_postal'],
+                "lote" => $newEmpleado['lote'],
+                "manzana" => $newEmpleado['manzana']
+            ]);
+        }
+        //Actualizamos el usuario
+        $newUser = User::where('id' ,'=' , $newEmpleado['id'])
+        ->update([
+            'numero_empleado' => $newEmpleado['numero_empleado'],
+            'name' => $newEmpleado['nombre'],
+            'apellido_paterno' => $newEmpleado['apellido_paterno'],
+            'apellido_materno' => $newEmpleado['apellido_materno'],
+            'email' => $newEmpleado['correo_electronico'],
+            'fecha_nacimiento' => $newEmpleado['fecha_nacimiento'],
+            'fecha_ingreso' => $newEmpleado['fecha_ingreso'],
+            'fecha_ingreso_real' => $newEmpleado['fecha_ingreso_real'],
+            'nss' => $newEmpleado['nss'],
+            'curp' =>$newEmpleado['curp'],
+            'rfc' =>$newEmpleado['rfc'],
+            'contacto_emergencia' => $newEmpleado['contacto_emergencia'],
+            'telefono' => $newEmpleado['telefono'],
+            'hijos' => $newEmpleado['hijos'],
+            'clave_bancaria' => $newEmpleado['clave_bancaria'],
+            'numero_cuenta_bancaria' => $newEmpleado['numero_cuenta_bancaria'],
+            'salario_diario' =>$newEmpleado['salario_diario'],
+            'salario_bruto' => $newEmpleado['salario_bruto'],
+            'salario_imss' => $newEmpleado['salario_imss'],
+            'bono_puntualidad' =>$newEmpleado['bono_puntualidad'],
+            'bono_asistencia' => $newEmpleado['bono_asistencia'],
+            'despensa' => $newEmpleado['despensa'],
+            'fondo_ahorro' => $newEmpleado['fondo_ahorro'],
+            'alergias' =>$newEmpleado['alergias'],
+            'enfermedades_cronicas' =>$newEmpleado['enfermedades_cronicas'],
+            'direccion_id' => $direccion->id,
+            'estado_civil_id' => $newEmpleado['cat_estados_civile_id'],
+            'banco_id' =>$newEmpleado['banco_id'],
+            'escolaridad_id'=>$newEmpleado['escolaridade_id'],
+            'cat_tipos_nomina_id' =>$newEmpleado['cat_tipos_nomina_id'],
+            'tipos_contrato_id' => $newEmpleado['tipos_contrato_id'],
+            'cat_genero_id' => $newEmpleado['cat_genero_id'],
+            'cat_tipo_sangre_id' => $newEmpleado['cat_tipos_sangre_id'],
+            'password' => Hash::make('12345678')
+         ]);
+
+       // Store docuemtos
+       //$this->storeDocumentos($request, $newUser);
+
+       //Preguntamos si el usuario se dio de baja
+       if(!empty($request->cat_bajas_empleado_id))
+       {
+           $request->validate(['fecha_baja' => 'required|after:1900-01-01']);
+           bajasEmpleado::updateOrCreate(
+            ['fecha_baja' => $request->fecha_baja,
+            'empleado_id'=> $empleado->id],
+           ['cat_bajas_empleado_id' => $request->cat_bajas_empleado_id]);
+           $empleado->activo = false;
+           $empleado->save();
+       }
+       //finiquito_pagado
+       if(!empty($request->fecha_finiquito)){
+        finiquito::updateOrCreate(
+            ['fecha_finiquito' => $request->fecha_finiquito,'empleado_id'=> $empleado->id],
+            ['monto' => $request->monto_finiquito,'pagado' => $request->finiquito_pagado]);
+        }
+        return redirect()->back();
+    }
     
 
     public function storeDocumentos (Request $request, User $empleado)
