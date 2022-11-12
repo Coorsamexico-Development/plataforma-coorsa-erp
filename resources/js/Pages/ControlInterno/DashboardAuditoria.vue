@@ -57,11 +57,9 @@ watch(params, (newParams) => {
         </template>
         <div class="py-6 max-w-7xl sm:px-6 md:px-8">
             <!-- Departamentos Section -->
-
             <div class="flex flex-wrap justify-center gap-2 py-6 lg:px-40">
-
-
                 <ButtonSeccion v-for="dep in departamentosAuditoria" :key="'dep' + dep.id" class="h-24 w-36"
+                    :class="{ 'active': params.departamento_auditoria_id == dep.id }"
                     @click="params.departamento_auditoria_id = dep.id">
                     <div class="flex flex-col items-center justify-between w-full" style="justify-items:center;">
                         <img :src="dep.logo" class="h-14" />
