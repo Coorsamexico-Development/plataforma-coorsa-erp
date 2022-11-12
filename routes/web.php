@@ -11,6 +11,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\MunicipioController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\PoliticController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
@@ -82,6 +83,7 @@ Route::middleware([
         ->name('documentos-calificacion-mes.destroy');
 
     Route::apiResource('politics', PoliticController::class);
+    Route::get('users/list', [UserController::class, 'list'])->name('users.list');
 });
 
 Route::get('empleados/create', [EmpleadoControlller::class, 'createNewEmpleado'])->name('empleado.create');
@@ -95,4 +97,4 @@ Route::get('/catalogos/formulario/empelado', [CatalogoController::class, 'formul
 Route::get('/municipio/{estado}', [MunicipioController::class, 'getMunicipiosEstado'])->name('municipos.estado');
 Route::get('/localidades/{municipio}', [LocalidadesController::class, 'getLocalidades'])->name('localidades.municipio');
 Route::get('/departamentos/{departamento}/list-puestos', [DepartamentoController::class, 'listPuestoDep'])->name('departamento.puestos.list');
-Route::get('empleados/{id}',[EmpleadoControlller::class, 'edit'])->name('empleado.edit');
+Route::get('empleados/{id}', [EmpleadoControlller::class, 'edit'])->name('empleado.edit');

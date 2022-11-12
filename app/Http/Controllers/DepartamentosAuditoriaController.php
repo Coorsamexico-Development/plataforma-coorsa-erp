@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DepartamentosAuditoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class DepartamentosAuditoriaController extends Controller
@@ -30,10 +31,14 @@ class DepartamentosAuditoriaController extends Controller
         $request->validate([
             'calificacion' =>  ['required', 'numeric'],
             'mes' => ['required', 'date'],
-            "documento" => ['nullable', 'mimes:png,jpg,pdf, jpeg'],
+            "documento" => ['required', 'mimes:png,jpg,pdf, jpeg'],
         ]);
-
+        $documentoUrl = "";
         if ($request->has('documento')) {
+            $file = $request->file('documento');
+
+            $rutaImage = $file->store('calificaciones', 'gcs');
+            $documentoUrl = Storage::disk('gcs')->url($rutaImage);
         }
         $departamentosAuditoria->documentosCalificacionesMes()->updateOrCreate([
 
@@ -42,7 +47,7 @@ class DepartamentosAuditoriaController extends Controller
         ], [
             'calificacion' => $request->calificacion,
             'user_id' => Auth::id(),
-            'documento_url' => '',
+            'documento_url' => $documentoUrl,
             'fecha_creacion' => now(),
         ]);
 
