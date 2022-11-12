@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DocumentosCalificacionMes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentosCalificacionMesController extends Controller
 {
@@ -29,6 +30,8 @@ class DocumentosCalificacionMesController extends Controller
      */
     public function destroy(DocumentosCalificacionMes $documentosCalificacionMes)
     {
+        $fileUrl = str_replace("https://storage.googleapis.com/" . env('GOOGLE_CLOUD_STORAGE_BUCKET'), "/", $documentosCalificacionMes->documento_url);
+        Storage::disk('gcs')->delete($fileUrl);
         $documentosCalificacionMes->delete();
         return redirect()->back();
     }

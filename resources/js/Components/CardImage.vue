@@ -17,14 +17,13 @@ const urlLogo = computed(() => {
 
 </script>
 <template>
-    <div
-        class="w-full px-1 pt-2 overflow-hidden bg-gray-300 shadow-xl cursor-pointer lg:px-2 lg:pt-6 hover:bg-gray-400 sm:rounded-2xl">
-        <div class=" h-3/4">
-            <img :src="urlLogo" alt="logo-file" class="w-full h-full px-1 lg:px-4" />
+    <div class="h-48 bg-white shadow-xl rounded-3xl w-36 md:h-52 md:w-44">
+        <div class="overflow-hidden h-3/4">
+            <img :src="urlLogo" alt="logo-file" class="w-full" />
         </div>
-        <div class="flex justify-center h1/4 ">
-
+        <div class="relative flex justify-center font-bold text-center text-gray-400 h-1/4">
             <slot />
         </div>
+
     </div>
 </template>

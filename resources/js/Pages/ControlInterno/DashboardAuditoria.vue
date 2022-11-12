@@ -62,6 +62,7 @@ watch(params, (newParams) => {
 
 
                 <ButtonSeccion v-for="dep in departamentosAuditoria" :key="'dep' + dep.id" class="h-24 w-36"
+                    :class="{ 'active': params.departamento_auditoria_id === dep.id }"
                     @click="params.departamento_auditoria_id = dep.id">
                     <div class="flex flex-col items-center justify-between w-full" style="justify-items:center;">
                         <img :src="dep.logo" class="h-14" />

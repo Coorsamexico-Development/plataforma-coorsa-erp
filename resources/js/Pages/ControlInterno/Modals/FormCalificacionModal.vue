@@ -46,7 +46,7 @@ const create = async () => {
         form.post(route('departamentos-aditorias.calificacion.store', props.departamento.id), {
             preserveScroll: true,
             preserveState: true,
-            only: ['calificaciones'],
+            only: ['errors', 'calificaciones'],
             onSuccess: () => {
                 close()
             }
