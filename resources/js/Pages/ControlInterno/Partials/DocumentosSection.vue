@@ -62,11 +62,10 @@ const deleteCalificaion = (docCalifacionId) => {
             <CirculeLogo url-logo="/assets/img/icono doc 7.png" /> <span>Documentos</span>
         </Title>
         <div class="h-32 px-6 py-4 md:h-48 md:px-12">
-            <swiper class="h-full" :modules="modules" :slides-per-view="6" :space-between="20" navigation
-                :pagination="{ clickable: true }" :scrollbar="{ draggable: true }">
+            <swiper class="h-full" :modules="modules" :slidesPerView="'auto'" :spaceBetween="20" :pagination="{
+                clickable: true,
+            }" navigation :scrollbar="{ draggable: true }">
                 <swiper-slide v-for="doc in documentos" :key="'doc' + doc.id">
-
-
                     <CardDocumento @click.stop="startFancy(doc.documento_url)" class="relative h-full border"
                         :scr="doc.documento_url">
                         {{ doc.mes }}
@@ -88,5 +87,13 @@ const deleteCalificaion = (docCalifacionId) => {
     </Card>
 </template>
 <style lang="css" scoped>
+.swiper-slide {
+    width: 16.6%;
+}
 
+@media (max-width: 640px) {
+    .swiper-slide {
+        width: 25%;
+    }
+}
 </style>
