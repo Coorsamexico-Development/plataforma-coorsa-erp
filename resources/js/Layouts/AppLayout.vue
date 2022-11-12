@@ -70,7 +70,8 @@ const logout = () => {
                                         </button>
                                     </template>
                                     <template #content>
-                                        <DropdownLink :href="route('departamentos-aditorias.index')">
+                                        <DropdownLink
+                                            :href="route('departamentos-aditorias.index', { 'departamento_auditoria_id': '1' })">
                                             <span class="text-xs">
                                                 DASHBOARD AUDITORIAS
                                             </span>
@@ -269,6 +270,22 @@ const logout = () => {
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
+                    </div>
+                    <div class="pt-4 pb-1 border-t border-gray-200">
+                        <div class="mt-3 space-y-1">
+                            <ResponsiveNavLink
+                                :href="route('departamentos-aditorias.index', { 'departamento_auditoria_id': '1' })"
+                                :active="route().current('departamentos-aditorias.index')">
+                                DASHBOARD AUDITORIAS
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('politics.index')"
+                                :active="route().current('politics.index')">
+                                <span class="text-xs">
+                                    DOCUMENTOS
+                                </span>
+                            </ResponsiveNavLink>
+
+                        </div>
                     </div>
 
                     <!-- Responsive Settings Options -->

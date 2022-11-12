@@ -9,6 +9,7 @@ import FormPoliticsModal from './Modals/FormPoliticsModal.vue';
 import { Inertia } from '@inertiajs/inertia';
 import { pickBy } from 'lodash';
 import AnimationCard from '../../Components/AnimationCard.vue';
+import { Fancybox } from '@fancyapps/ui/src/Fancybox/Fancybox.js';
 
 let props = defineProps({
     tipoPoliticas: {
@@ -83,7 +84,7 @@ watch(params, (newParams) => {
             </div>
         </template>
         <div class="py-6 max-w-7xl sm:px-6 md:px-8">
-            <!-- Departamentos Section -->
+            <!-- Politics Section -->
             <div class="flex flex-wrap justify-center gap-2 py-6 lg:px-24">
                 <ButtonSeccion v-for="tipoPoliticas in tipoPoliticas" :key="'poli' + tipoPoliticas.id" class="h-24 w-36"
                     :class="{ 'active': params.type_politic === tipoPoliticas.id }"
@@ -106,14 +107,13 @@ watch(params, (newParams) => {
                     </div>
                 </ButtonSeccion>
             </div>
+            <!-- End-Politics Section -->
             <div class="flex justify-center">
-
                 <InputSearch v-model="params.search" class="w-1/2"></InputSearch>
             </div>
-
-
+            <!-- Files Section -->
             <AnimationCard>
-                <CardImage v-for="politica in politicas" :key="politica.id">
+                <CardImage v-for="politica in politicas" :key="politica.id" :file="politica.pdf">
                     <span>{{ politica.namepolitica }}</span>
                     <div class="absolute z-10 w-6 h-6 py-1 bg-white rounded-full shadow -bottom-2 -right-1 hover:bg-gray-500 hover:text-white"
                         @click="showFormPolitic('update', politica)">
@@ -125,6 +125,7 @@ watch(params, (newParams) => {
                     </div>
                 </CardImage>
             </AnimationCard>
+            <!-- End Files Section -->
         </div>
         <FormPoliticsModal :show="showingFormPolitics" :tipoPoliticas="tipoPoliticas" :politic="politic"
             :typeForm="typeFormPolitic" @close="closeFormPolitics()" />
