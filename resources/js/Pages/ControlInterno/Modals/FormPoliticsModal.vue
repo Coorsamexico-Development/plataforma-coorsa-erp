@@ -36,12 +36,12 @@ const form = useForm({
     'descripcion': '',
     'type_politic': '',
     'autor': '',
-    'imagePolitic': '',
+    'imagePolitic': null,
     'pdf': null,
 });
 const fileImage = ref(null)
-const fileName = ref([]);
-const fileNameImg = ref([]);
+const fileName = ref("");
+const fileNameImg = ref("");
 const file = ref(null)
 const processingDelete = ref(false)
 const listusers = ref([]);
@@ -71,6 +71,8 @@ const getListUsers = async () => {
 
 const setFileNameImg = () => {
     fileNameImg.value = fileImage.value.files[0].name;
+
+    form.imagePolitic = fileImage.value.files[0]
 }
 const setFileName = () => {
     fileName.value = file.value.files[0].name;
@@ -84,6 +86,14 @@ const selectFileImage = () => {
 }
 
 const close = () => {
+    fileName.value = "";
+    fileNameImg.value = "";
+    if (fileImage.value?.value) {
+        fileImage.value.value = null;
+    }
+    if (file.value?.value) {
+        file.value.value = null;
+    }
     form.reset();
     emit('close');
 }
@@ -102,7 +112,11 @@ const createOrUpdate = async () => {
                 }
             });
         } else {
-            form.put(route('politics.update', props.politic.id), {
+            form.transform((data) => ({
+                ...data,
+                _method: 'put',//debido que no soporta subir archivos el method put
+            })).post(route('politics.update', props.politic.id), {
+                _method: 'put',
                 preserveScroll: true,
                 preserveState: true,
                 only: ['errors', 'politicas'],
@@ -135,6 +149,8 @@ const titleModal = computed(() => {
         form.descripcion = props.politic.descripcion
         form.type_politic = props.politic.type_politic
         form.autor = props.politic.autor
+        form.imagePolitic = null;
+        form.pdf = null;
         return 'Actualizar';
     }
     return 'Crear;'
@@ -195,9 +211,9 @@ const titleModal = computed(() => {
                         <InputLabel for="imagePolitic">
                             Imagen:
                         </InputLabel>
-                        <input type="file" class="hidden" ref="fileImage" name="imagePolitic"
-                            @input="form.imagePolitic = $event.target.files[0]" @change="setFileNameImg()"
+                        <input type="file" class="hidden" ref="fileImage" name="imagePolitic" @change="setFileNameImg()"
                             accept=".jpg,.jpeg,.png">
+                        <span class="text-xs">{{ fileNameImg }}</span>
                         <SecondaryButton type="button" @click="selectFileImage()">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor"
                                 viewBox="0 0 16 16">
@@ -216,6 +232,8 @@ const titleModal = computed(() => {
                         </InputLabel>
                         <input type="file" class="hidden" ref="file" name="pdf"
                             @input="form.pdf = $event.target.files[0]" @change="setFileName()">
+
+                        <span class="text-xs">{{ fileName }}</span>
                         <SecondaryButton type="button" @click="selectFile()">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor"
                                 viewBox="0 0 16 16">

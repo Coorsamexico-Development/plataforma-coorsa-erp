@@ -113,7 +113,8 @@ watch(params, (newParams) => {
             </div>
             <!-- Files Section -->
             <AnimationCard>
-                <CardImage v-for="politica in politicas" :key="politica.id" :file="politica.pdf">
+                <CardImage v-for="politica in politicas" :key="politica.id" :file="politica.pdf"
+                    :img="politica.imagePolitic">
                     <span>{{ politica.namepolitica }}</span>
                     <div class="absolute z-10 w-6 h-6 py-1 bg-white rounded-full shadow -bottom-2 -right-1 hover:bg-gray-500 hover:text-white"
                         @click="showFormPolitic('update', politica)">
