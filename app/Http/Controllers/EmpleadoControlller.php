@@ -121,6 +121,7 @@ class EmpleadoControlller extends Controller
             'clave_bancaria' => $newEmpleado['clave_bancaria'],
             'numero_cuenta_bancaria' => $newEmpleado['numero_cuenta_bancaria'],
             'salario_diario' =>$newEmpleado['salario_diario'],
+            'salario_bruto' => $newEmpleado['salario_bruto'],
             'salario_imss' => $newEmpleado['salario_imss'],
             'bono_puntualidad' =>$newEmpleado['bono_puntualidad'],
             'bono_asistencia' => $newEmpleado['bono_asistencia'],
@@ -160,10 +161,32 @@ class EmpleadoControlller extends Controller
 
     public function edit($id)
     {
+         $empleado = DB::table(DB::raw('users'))
+         ->selectRaw('*')
+         ->where('id','=', $id)
+         ->get();
 
-         return Inertia::render('RH/Empleados/Create/Edit.Index');
+         $escolaridades = Escolaridad::all();
+         $estado_civiles = catEstadosCiviles::all();
+         $tipos_sangre = catTipoSangre::all();
+         $bancos = Banco::all(); 
+         $departamentos = Ceco::all();
+         $tipos_contrato = tipoContrato::select('id', 'nombre','activo')->where('activo',1 )->get();
+
+         return Inertia::render('RH/Empleados/Create/Edit.Index',
+         [
+            'empleado' => $empleado,
+            'escolaridades' => $escolaridades,
+            'estados_civiles' => $estado_civiles,
+            'cat_tipo_sangre' => $tipos_sangre,
+            'bancos' => $bancos,
+            'departamentos' => $departamentos,
+            'tipos_contrato' => $tipos_contrato
+         ]);
         
     }
+
+    
     
 
     public function storeDocumentos (Request $request, User $empleado)
