@@ -30,7 +30,7 @@ var props = defineProps(
     }
 );
 
-let typeForm = ref('edit');
+let typeForm = ref('update');
 
 let catalogos = ref( {
                     departamentos: props.departamentos,
@@ -52,27 +52,28 @@ const fotografia = ref(null);
 
 const form = useForm
 ({
-    'numero_empleado': '',
-    'banco_id': '',
-    'escolaridade_id': '',
-    'nombre': '',
-    'apellido_paterno': '',
-    'apellido_materno': '',
-    'fecha_nacimiento': '',
-    'fecha_ingreso': '',
-    'fecha_ingreso_real': '',
+    'id': empleado.value.id,
+    'numero_empleado': empleado.value.numero_empleado,
+    'banco_id': empleado.value.banco_id,
+    'escolaridade_id': empleado.value.escolaridad_id,
+    'nombre': empleado.value.name,
+    'apellido_paterno': empleado.value.apellido_paterno,
+    'apellido_materno': empleado.value.apellido_materno,
+    'fecha_nacimiento': empleado.value.fecha_nacimiento,
+    'fecha_ingreso': empleado.value.fecha_ingreso,
+    'fecha_ingreso_real': empleado.value.fecha_ingreso_real,
     'fecha_baja': '',
-    'departamento_id': '',
-    'puesto_id': '',
-    'nss': 0,
-    'curp': '',
-    'rfc': '',
-    'contacto_emergencia': '',
-    'telefono': '',
-    'correo_electronico': '',
-    'hijos': 0,
-    'clave_bancaria': '',
-    'numero_cuenta_bancaria': '',
+    'departamento_id': empleado.value.departamento_id,
+    'puesto_id': empleado.puesto_id,
+    'nss': empleado.value.nss,
+    'curp': empleado.value.curp,
+    'rfc': empleado.value.rfc,
+    'contacto_emergencia': empleado.value.contacto_emergencia,
+    'telefono': empleado.value.telefono,
+    'correo_electronico': empleado.value.email,
+    'hijos': empleado.value.hijos,
+    'clave_bancaria': empleado.value.clave_bancaria,
+    'numero_cuenta_bancaria': empleado.value.numero_cuenta_bancaria,
     'direccion_estado_id': '',
     'direccion_municipio_id': '',
     'direccion_localidade_id': '',
@@ -82,9 +83,9 @@ const form = useForm
     'codigo_postal': '',
     'lote': '',
     'manzana': '',
-    'cat_tipos_nomina_id': '',
-    'tipos_contrato_id': '',
-    'salario_bruto': 0.0,
+    'cat_tipos_nomina_id': empleado.cat_tipos_nomina_id,
+    'tipos_contrato_id': empleado.value.tipos_contrato_id,
+    'salario_bruto': empleado.value.salario_bruto,
     'salario_diario': 0.0,
     'salario_imss': 0.0,
     'bono_puntualidad': 0.0,
@@ -92,14 +93,14 @@ const form = useForm
     'despensa': 1057.16,
     'fondo_ahorro': 0.0,
     'horario': '',
-    'cat_estados_civile_id': '',
+    'cat_estados_civile_id': empleado.value.estado_civil_id,
     'fotografia': '',
     'expediente': '',
-    'contrato': '',
-    'cat_tipos_sangre_id': '',
-    'alergias': '',
-    'enfermedades_cronicas': '',
-    'cat_genero_id': '',
+    'contrato': empleado.value.tipos_contrato_id,
+    'cat_tipos_sangre_id': empleado.value.cat_tipo_sangre_id,
+    'alergias': empleado.value.alergias,
+    'enfermedades_cronicas': empleado.value.enfermedades_cronicas,
+    'cat_genero_id': empleado.value.cat_genero_id,
     'cat_bajas_empleado_id': '',
     'fecha_finiquito': '',
     'monto_finiquito': 0,
@@ -109,8 +110,6 @@ const form = useForm
 
 const createOrUpdate = () => 
 {
-  if(typeForm.value  == 'create')
-  {
     console.log(form.fotografia);
     form.post(route('empleado.update'), 
     {
@@ -127,8 +126,6 @@ const createOrUpdate = () =>
             swal("Error al crear", "Favor de validar los datos", "error");
          }
     });
-  }
-
 }
 
 /*Obtener datos direcciones*/ 
@@ -403,7 +400,7 @@ const fecha_termino = computed(() =>
                                               <div class="mt-4">
                                                   <InputLabel for="numero_empleado" value="ID de Empleado:*" />
                                                   <TextInput id="numero_empleado"  type="text" v-model="form.numero_empleado"
-                                                  class="block w-full mt-1"  :placeholder="empleado.numero_empleado" :disabled="editEmpleadoDisable"/>
+                                                  class="block w-full mt-1"  :placeholder="empleado.numero_empleado"  />
                                                   <InputError :message="form.errors.numero_empleado" class="mt-2" />
                                               </div>
                                               <div class="mt-4">
@@ -427,7 +424,7 @@ const fecha_termino = computed(() =>
                                               <div class="mt-4">
                                                   <InputLabel for="fecha_nacimiento" value="Fecha de Nacimiento:*" />
                                                   <TextInput id="fecha_nacimiento" type="date" v-model="form.fecha_nacimiento"
-                                                  class="block w-full mt-1"  :value="empleado.fecha_nacimiento"  :disabled="editEmpleadoDisable"/>
+                                                  class="block w-full mt-1"  :disabled="editEmpleadoDisable"/>
                                                   <InputError :message="form.errors.fecha_nacimiento" class="mt-2" />
                                               </div>
                                               <div class="mt-4">
@@ -897,7 +894,7 @@ const fecha_termino = computed(() =>
                                                       <InputError :message="form.errors.contrato" class="mt-2" />
                                                   </div>
                                               </template>
-                                              <div v-if="typeForm == 'update'" class="mt-4">
+                                              <div class="mt-4">
                                                   <span v-if="empleado.fotografia">
                                                       <a :data-fancybox="'fotografia'+empleado.id" :data-src="empleado.fotografia+timeImage"
                                                       class="inline-flex items-center w-10 h-10 p-1 m-1 text-xs font-semibold tracking-widest text-white uppercase transition bg-green-800 border border-transparent rounded-full hover:bg-green-700 active:bg-gray-900 focus:ring-green-300 disabled:opacity-25">
@@ -941,7 +938,7 @@ const fecha_termino = computed(() =>
                    <!--Fin Expediente -->
                    <!-- Finiquitos -->
                        <div v-if="buttonSelected == 8">                              
-                           <div v-if="typeForm == 'update'" class="border-b tab" >
+                           <div class="border-b tab" >
                                <div class="relative border-l-2 border-transparent">
                                    <input checked class="absolute z-10 w-full h-10 opacity-0 cursor-pointer top-6" type="checkbox" id="datosPersonales">
                                    <header class="flex items-center justify-between p-5 pl-8 pr-8 cursor-pointer select-none tab-label" for="datosPersonales">
@@ -959,46 +956,42 @@ const fecha_termino = computed(() =>
                                        <div class="pb-5 pl-8 pr-8">
                                            <div class="grid grid-cols-3 gap-4">
                                                <div class="mt-4">
-                                                   <component-label for="cat_bajas_empleado_id"  value="Motivo de Baja:*" />
-                                                   <component-select v-model="form.cat_bajas_empleado_id" class="w-full"
-                                                       :disabled="!$page.props.can['empleados.delete']">
+                                                   <InputLabel for="cat_bajas_empleado_id"  value="Motivo de Baja:*" />
+                                                   <Select v-model="form.cat_bajas_empleado_id" class="w-full">
                                                        <option v-for="motivo in catalogos.motivosBajas" :key="motivo.id" :value="motivo.id">
                                                            {{motivo.nombre}}
                                                        </option>
-                                                   </component-select>
-                                                   <input-error :message="form.errors.cat_bajas_empleado_id" class="mt-2" />
+                                                   </Select>
+                                                   <InputError :message="form.errors.cat_bajas_empleado_id" class="mt-2" />
                                                </div>
                                                <div class="mt-4">
-                                                   <component-label for="fecha_baja" value="Fecha de Baja:" />
-                                                   <component-input id="fecha_baja" type="date"  max="2030-12-31" v-model="form.fecha_baja"
+                                                   <InputLabel for="fecha_baja" value="Fecha de Baja:" />
+                                                   <TextInput id="fecha_baja" type="date"  max="2030-12-31" v-model="form.fecha_baja"
                                                    class="block w-full mt-1"
-                                                   :disabled="!$page.props.can['empleados.delete']"/>
-                                                   <input-error :message="form.errors.fecha_baja" class="mt-2" />
+                                                   />
+                                                   <InputError :message="form.errors.fecha_baja" class="mt-2" />
                                                </div>
                                                <div class="mt-4">
-                                                   <component-label for="fecha_finiquito" value="Fecha de Finiquito:*" />
-                                                   <component-input id="fecha_finiquito" type="date" max="2030-12-31"
+                                                   <InputLabel for="fecha_finiquito" value="Fecha de Finiquito:*" />
+                                                   <TextInput id="fecha_finiquito" type="date" max="2030-12-31"
                                                    v-model="form.fecha_finiquito"
-                                                     :disabled="!$page.props.can['finiquitos.update']"
                                                    class="block w-full mt-1" />
-                                                   <input-error :message="form.errors.fecha_finiquito" class="mt-2" />
+                                                   <InputError :message="form.errors.fecha_finiquito" class="mt-2" />
                                                </div>
                                                <div class="mt-4">
-                                                   <component-label for="monto_finiquito" value="Monto de Finiquito:*" />
-                                                   <component-input id="monto_finiquito" type="text" placeholder="$0.0"
+                                                   <InputLabel for="monto_finiquito" value="Monto de Finiquito:*" />
+                                                   <TextInput id="monto_finiquito" type="text" placeholder="$0.0"
                                                      v-model="form.monto_finiquito"
-                                                     :disabled="!$page.props.can['finiquitos.update']"
                                                    class="block w-full mt-1" max="99999"/>
-                                                   <input-error :message="form.errors.monto_finiquito" class="mt-2" />
+                                                   <InputError :message="form.errors.monto_finiquito" class="mt-2" />
                                                </div>
                                                <div class="mt-4">
-                                                   <component-label for="finiquito_pagado"  value="Pagado:*" />
-                                                   <component-select v-model="form.finiquito_pagado" class="w-full"
-                                                     :disabled="!$page.props.can['finiquitos.update']">
+                                                   <InputLabel for="finiquito_pagado"  value="Pagado:*" />
+                                                   <Select v-model="form.finiquito_pagado" class="w-full">
                                                        <option value="0">NO</option>
                                                        <option value="1">SI</option>
-                                                   </component-select>
-                                                   <input-error :message="form.errors.finiquito_pagado" class="mt-2" />
+                                                   </Select>
+                                                   <InputError :message="form.errors.finiquito_pagado" class="mt-2" />
                                                </div>
                                            </div>
                                        </div>
