@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             DepartamentosAuditoriasSeeder::class,
+            TipopoliticasSeeder::class,
+            StatusPoliticasSeeder::class,
         ]);
     }
 }

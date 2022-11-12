@@ -83,6 +83,7 @@ Route::middleware([
         ->name('documentos-calificacion-mes.destroy');
 
     Route::apiResource('politics', PoliticController::class);
+    Route::get('users/list', [UserController::class, 'list'])->name('users.list');
 });
 
 Route::get('empleados/create', [EmpleadoControlller::class, 'createNewEmpleado'])->name('empleado.create');
