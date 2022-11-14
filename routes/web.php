@@ -12,6 +12,8 @@ use App\Http\Controllers\MunicipioController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\PoliticController;
 use App\Http\Controllers\PuestoController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
@@ -84,6 +86,9 @@ Route::middleware([
 
     Route::apiResource('politics', PoliticController::class);
     Route::get('users/list', [UserController::class, 'list'])->name('users.list');
+    Route::apiResource('roles', RoleController::class)->middleware('can:roles.manager');
+    Route::get('role/{role}/permissions', [RoleController::class, 'permissions'])->name('roles.permissions');
+    Route::put('role/{role}/permissions', [RoleController::class, 'setPermission'])->name('roles.permissions');
 });
 
 Route::get('empleados/create', [EmpleadoControlller::class, 'createNewEmpleado'])->name('empleado.create');
@@ -97,7 +102,7 @@ Route::get('/catalogos/formulario/empelado', [CatalogoController::class, 'formul
 Route::get('/municipio/{estado}', [MunicipioController::class, 'getMunicipiosEstado'])->name('municipos.estado');
 Route::get('/localidades/{municipio}', [LocalidadesController::class, 'getLocalidades'])->name('localidades.municipio');
 Route::get('/departamentos/{departamento}/list-puestos', [DepartamentoController::class, 'listPuestoDep'])->name('departamento.puestos.list');
-Route::get('/empleados/edit/{id}',[EmpleadoControlller::class, 'edit'])->name('empleado.edit');
+Route::get('/empleados/edit/{id}', [EmpleadoControlller::class, 'edit'])->name('empleado.edit');
 Route::post('empleados/update', [EmpleadoControlller::class, 'update'])->name('empleado.update');
 Route::get('departamentos', [DepartamentoController::class, 'index'])->name('dptos.index');
 Route::apiResource('/puestos', PuestoController::class);

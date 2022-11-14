@@ -55,6 +55,13 @@ const logout = () => {
                                     Dashboard
                                 </NavLink>
                             </div>
+
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <NavLink class="navLinks" :href="route('roles.index')"
+                                    :active="route().current('roles.index')">
+                                    Roles
+                                </NavLink>
+                            </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
@@ -263,6 +270,11 @@ const logout = () => {
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
+                        </ResponsiveNavLink>
+                    </div>
+                    <div class="pt-2 pb-3 space-y-1">
+                        <ResponsiveNavLink :href="route('roles.index')" :active="route().current('roles.index')">
+                            Roles
                         </ResponsiveNavLink>
                     </div>
                     <div class="pt-4 pb-1 border-t border-gray-200">

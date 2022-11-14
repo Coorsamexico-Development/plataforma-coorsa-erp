@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RoleRequest;
+use App\Models\Permission;
+use App\Models\Plataforma;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class RoleController extends Controller
 {
@@ -14,7 +18,33 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        request()->validate([
+            'direction' => 'in:asc,desc'
+        ]);
+        $roles = Role::select('roles.*');
+        $permissons = Permission::select('permissions.*');
+        $plataformas = Plataforma::select('plataformas.*');
+
+        if (request()->has('plataforma_id')) {
+            $permissons->where('plataforma_id', '=', request('plataforma_id'));
+        }
+        if (request()->has('search')) {
+            $search = '%' . strtr(request('search'), array("'" => "\\'", "%" => "\\%")) . '%';
+            $roles->where('roles.nombre', 'like',  $search);
+        }
+
+        if (request()->has('field')) {
+            $roles->orderBy(request('field'), request('direction'));
+        } else {
+            $roles->orderBy('roles.created_at', 'desc');
+        }
+
+        return Inertia::render('Roles/RolesIndex', [
+            'laravelRoles' => fn () =>  $roles->paginate(20),
+            'laravelPermissions' => fn () => $permissons->get(),
+            'laravelPlataformas' => fn () => $plataformas->get(),
+            'filters' => request(['search', 'field', 'direction', 'plataforma_id'])
+        ]);
     }
 
     /**
@@ -23,21 +53,14 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
-        //
+        $newRole = $request->validated();
+
+        Role::create($newRole);
+        return redirect()->back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Role $role)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -46,9 +69,38 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(RoleRequest $request, Role $role)
     {
-        //
+        $newRole = $request->validated();
+
+        $role->update($newRole);
+        return redirect()->back();
+    }
+
+    public function permissions(Role $role)
+    {
+        $permissions = $role->permissions()
+            ->select('permissions.id')
+            ->get();
+        return response()->json([
+            'permissonId' => $permissions->pluck('id')
+        ]);
+    }
+
+    public function setPermission(Role $role, Request $request)
+    {
+        $request->validate([
+            'permission_id' => ['required', 'exists:permissions,id'],
+            'checked' => ['required', 'boolean']
+        ]);
+        if ($request->checked) {
+            $role->permissions()->attach([$request->permission_id]);
+        } else {
+            $role->permissions()->detach([$request->permission_id]);
+        }
+        return response()->json([
+            'message' => 'ok'
+        ]);
     }
 
     /**
