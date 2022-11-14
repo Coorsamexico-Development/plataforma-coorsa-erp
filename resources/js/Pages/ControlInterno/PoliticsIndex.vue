@@ -95,7 +95,8 @@ watch(params, (newParams) => {
                     </div>
                 </ButtonSeccion>
 
-                <ButtonSeccion class="h-24 w-36" @click="showFormPolitic('create')">
+                <ButtonSeccion v-if="$page.props.can['politics.create']" class="h-24 w-36"
+                    @click="showFormPolitic('create')">
                     <div class="flex flex-col items-center justify-between w-full" style="justify-items:center;">
 
                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="text-gray-400 h-14"
@@ -116,7 +117,8 @@ watch(params, (newParams) => {
                 <CardImage v-for="politica in politicas" :key="politica.id" :file="politica.pdf"
                     :img="politica.imagePolitic">
                     <span>{{ politica.namepolitica }}</span>
-                    <div class="absolute z-10 w-6 h-6 py-1 bg-white rounded-full shadow -bottom-2 -right-1 hover:bg-gray-500 hover:text-white"
+                    <div v-if="$page.props.can['politics.update']"
+                        class="absolute z-10 w-6 h-6 py-1 bg-white rounded-full shadow -bottom-2 -right-1 hover:bg-gray-500 hover:text-white"
                         @click="showFormPolitic('update', politica)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 m-auto" fill="currentColor"
                             viewBox="0 0 16 16">

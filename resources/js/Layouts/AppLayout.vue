@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
-import { Head, Link } from '@inertiajs/inertia-vue3';
+import { Head, Link, usePage } from '@inertiajs/inertia-vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
 import Banner from '@/Components/Banner.vue';
 import Dropdown from '@/Components/Dropdown.vue';
@@ -53,6 +53,14 @@ const logout = () => {
                                 <NavLink class="navLinks" :href="route('dashboard')"
                                     :active="route().current('dashboard')">
                                     Dashboard
+                                </NavLink>
+                            </div>
+
+                            <div v-if="$page.props.can['roles.manager']"
+                                class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <NavLink class="navLinks" :href="route('roles.index')"
+                                    :active="route().current('roles.index')">
+                                    Roles
                                 </NavLink>
                             </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
@@ -263,6 +271,11 @@ const logout = () => {
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
+                        </ResponsiveNavLink>
+                    </div>
+                    <div v-if="$page.props.can['roles.manager']" class="pt-2 pb-3 space-y-1">
+                        <ResponsiveNavLink :href="route('roles.index')" :active="route().current('roles.index')">
+                            Roles
                         </ResponsiveNavLink>
                     </div>
                     <div class="pt-4 pb-1 border-t border-gray-200">

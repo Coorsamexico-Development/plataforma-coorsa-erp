@@ -69,7 +69,8 @@ const deleteCalificaion = (docCalifacionId) => {
                     <CardDocumento @click.stop="startFancy(doc.documento_url)" class="relative h-full border"
                         :scr="doc.documento_url">
                         {{ doc.mes }}
-                        <DangerButton class="absolute w-6 px-1 py-0 rounded-full shadow top-2 right-1"
+                        <DangerButton v-if="$page.props.can['calificacion.delete']"
+                            class="absolute w-6 px-1 py-0 rounded-full shadow top-2 right-1"
                             @click.stop="deleteCalificaion(doc)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5"
                                 viewBox="0 0 16 16">

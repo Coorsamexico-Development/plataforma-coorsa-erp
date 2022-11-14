@@ -256,8 +256,8 @@ const titleModal = computed(() => {
                 <SecondaryButton @click="close()">
                     Cancelar
                 </SecondaryButton>
-                <DangerButton v-if="typeForm !== 'create'" class="ml-4" @click="deletePolitica()"
-                    :disabled="processingDelete">
+                <DangerButton v-if="$page.props.can['politics.delete'] && typeForm !== 'create'" class="ml-4"
+                    @click="deletePolitica()" :disabled="processingDelete">
                     <SpinProgress v-if="processingDelete" :inprogress="processingDelete" /> Eliminar
                 </DangerButton>
                 <PrimaryButton class="ml-4" @click="createOrUpdate()" :disabled="form.processing">
