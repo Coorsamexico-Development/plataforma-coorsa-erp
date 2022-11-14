@@ -106,14 +106,8 @@ const logout = () => {
                                         <DropdownLink :href="route('empleado.indexmanual', { activo: 'inactivo' })">
                                             Empleados Inactivos
                                         </DropdownLink>
-                                        <DropdownLink>
+                                        <DropdownLink :href="route('dptos.index')">
                                             DPTOS. y Puestos
-                                        </DropdownLink>
-                                        <DropdownLink>
-                                            Vacantes
-                                        </DropdownLink>
-                                        <DropdownLink>
-                                            Usuarios
                                         </DropdownLink>
                                         <div class="border-t border-gray-100" />
                                     </template>
