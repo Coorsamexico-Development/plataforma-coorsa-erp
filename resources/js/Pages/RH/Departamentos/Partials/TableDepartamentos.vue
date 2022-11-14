@@ -41,8 +41,8 @@
         </template>
         <template #table-body >
           <tr class="text-gray-500" v-for='departamento in departamentos' :key="departamento.id">
-              <td class="px-6 py-4 whitespace-nowrap"   @click="selectedRow(departamento.id-1,$event)"  >{{departamento.id}}</td>
-              <td class="px-6 py-4 whitespace-nowrap">{{departamento.nombre}}</td>
+              <td class="px-2 whitespace-nowrap"   @click="selectedRow(departamento.id-1,$event)"  >{{departamento.id}}</td>
+              <td class="px-2 whitespace-nowrap">{{departamento.nombre}}</td>
           </tr>
         </template>
     </DataTable>

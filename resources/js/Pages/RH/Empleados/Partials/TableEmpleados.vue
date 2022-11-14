@@ -52,7 +52,7 @@ var props = defineProps(
             </tr>
         </template>
         <template #table-body>
-          <tr v-for="empleado in empleados" :key="empleado.id">
+            <tr v-for="empleado in empleados" :key="empleado.id">
              <td class="px-2 whitespace-nowrap"></td>
              <td class="px-2 whitespace-nowrap">{{empleado.numero_empleado}}</td>
              <td class="px-2 whitespace-nowrap">{{empleado.name}}</td>
