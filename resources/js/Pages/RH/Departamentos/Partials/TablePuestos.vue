@@ -1,8 +1,9 @@
 <template>
     <div class="m-2" >
-            <h4 class="mt-2 text-2xl font-bold text-center text-gray-500" style="float:left; margin-right: 2rem;">
-                Puestos <span class="p-1 text-sm text-white bg-blue-400 rounded-lg">{{departamento.nombre}}</span>
-            </h4>
+        <div class="overflow-hidden bg-white shadow-xl sm:rounded-lg"  style="background-color: white;padding:0.5rem">
+            <h6 class="mt-2 text-2xl font-bold text-center text-gray-500" style="float:left; margin-right: 2rem; color:#26458D;font-size:1.5rem">
+                Puestos <br><p style="font-size:1rem">({{departamento.nombre}})</p>
+            </h6>
             <InputSearch type="search" style="float:left;margin-right:2rem;"
                 v-model="filters.search"  aria-label="Search"
                 class="block w-40 max-w-xs border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
@@ -11,6 +12,7 @@
                         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                     </svg> Nuevo
             </primary-button>
+        </div>
         <data-table>
             <template #table-header>
                 <th scope="col" class="w-3/12 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase">

@@ -42,9 +42,9 @@ const logout = () => {
                     <div class="flex justify-between h-16">
                         <div class="flex">
                             <!-- Logo -->
-                            <div class="flex items-center shrink-0" style="margin-right:15rem">
+                            <div class="flex items-center shrink-0" style="margin-right:16rem;margin-left:-4rem; ">
                                 <Link :href="route('dashboard')">
-                                <ApplicationMark class="block w-auto h-9" />
+                                   <img style="width:8rem" src="../../img/logo_coorsa.png">
                                 </Link>
                             </div>
 

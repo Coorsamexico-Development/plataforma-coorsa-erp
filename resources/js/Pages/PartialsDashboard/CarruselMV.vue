@@ -45,6 +45,16 @@ export default {
     @swiper="onSwiper"
     @slideChange="onSlideChange"
   >
+  <swiper-slide> 
+      <div style="margin:2rem; margin-top: 0rem;">
+          <h2 style="color:#26458D; font-weight:bolder; margin-bottom: 1rem;">¿Quiénes Somos?</h2>
+          <h3 style="text-align:center;">
+            Somos un equipo de profesionales altamente comprometido en dar soluciones lógisticas,
+            somos reconocidos por innovar procesos en la cadena de suministros, optimizando
+            tiempos y recursos operativos de: almacenamiento, traslado y control de inventarios.
+          </h3>
+       </div>
+    </swiper-slide>
     <swiper-slide>
        <div style="margin:2rem; margin-top: 0rem;">
           <h2 style="color:#26458D; font-weight:bolder; margin-bottom: 1rem;">Nuestra Misión</h2>

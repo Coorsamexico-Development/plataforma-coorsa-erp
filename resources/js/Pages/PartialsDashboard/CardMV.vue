@@ -14,7 +14,6 @@ var props = defineProps({
 
 <template>
     <Card style=" width: 24rem;  margin:0.5rem; padding: 1.5rem;" >
-        <h4 style="color:#26458D; font-weight:bolder; margin-bottom: 1rem;">¿Quiénes Somos?</h4>
         <CarruselMV></CarruselMV>
     </Card>
 </template>

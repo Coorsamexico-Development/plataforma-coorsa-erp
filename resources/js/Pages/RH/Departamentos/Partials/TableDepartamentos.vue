@@ -8,7 +8,7 @@
             v-model="params.search"  aria-label="Search"
             class="block w-full max-w-xs border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
     </div>
-    <DataTable style="margin-top:-2rem">
+    <DataTable style="margin-top:1rem">
         <template #table-header>
             <th scope="col" class="w-3/12 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase">
                 <span class="inline-flex justify-between w-full px-6 py-3"

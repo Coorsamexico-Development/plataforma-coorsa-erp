@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class EmpleadoControlller extends Controller
 {
@@ -93,7 +94,22 @@ class EmpleadoControlller extends Controller
 
     public function store (Request $request)
     {
-        $newEmpleado =  $request;
+        $urlFoto = '';
+        $urlExpediente = '';
+        $urlContrato = '';
+
+        /*Guardado de imagnes, expedientes, contrato*/ 
+        if($request->has('fotografia'))
+        {
+           $foto =  $request['fotografia'];
+           $nombre_original = $foto->getClientOriginalName();
+           /*Guardamos*/ 
+           $rutaFoto = $foto->storeAs('fotos',$nombre_original ,'gcs');
+           $urlFoto = Storage::disk('gcs')->url($rutaFoto);
+        }
+
+         /*Fin guardado de imagnes, expedientes, contrato*/ 
+            $newEmpleado =  $request;
 
             //creamos la direccion
             $direccion = direccione::create([
@@ -140,12 +156,14 @@ class EmpleadoControlller extends Controller
             'tipos_contrato_id' => $newEmpleado['tipos_contrato_id'],
             'cat_genero_id' => $newEmpleado['cat_genero_id'],
             'cat_tipo_sangre_id' => $newEmpleado['cat_tipos_sangre_id'],
+            'fotografia' => $urlFoto,
             'password' => Hash::make('12345678')
          ]); //creamos el usuario
          
 
          $puesto_id = puesto::select('id')->where('name','LIKE','%'.$newEmpleado['puesto_id'].'%')->get();
 
+         
          //creamos el empleado_puesto
          empleados_puesto::create([
             'puesto_id' => $puesto_id[0]->id,
@@ -154,7 +172,40 @@ class EmpleadoControlller extends Controller
          ]);
 
         // Store docuemtos
-         $this->storeDocumentos($request, $empleado);
+
+        if($request->has('expediente'))
+        {   
+           $curp = $request['curp'];
+           $expediente  = $request['expediente'];
+           /*Guardamos*/
+           $rutaExpediente = $expediente->storeAs('expedientes',$curp,'gcs');
+           $urlExpediente = Storage::disk('gcs')->url($rutaExpediente);
+
+           expediente::updateOrCreate(
+            [
+                'ruta' => $urlExpediente,
+                'cat_tipos_documento_id' => 25,
+                'empleado_id' => $empleado->id
+            ]
+        );
+
+        }
+        if($request->has('contrato'))
+        {
+            $curp = $request['curp'];
+            $contrato = $request['contrato'];
+            /*Guardamos*/
+            $rutaContrato = $contrato->storeAs('contratos',$curp,'gcs');
+            $urlContrato = Storage::disk('gcs')->url($rutaContrato); 
+
+            expediente::updateOrCreate(
+                [
+                    'ruta' => $urlContrato,
+                    'cat_tipos_documento_id' => 26,
+                    'empleado_id' => $empleado->id
+                ]
+                );
+        }
 
          return redirect()->back();
 
@@ -191,6 +242,20 @@ class EmpleadoControlller extends Controller
 
     public function update(Request $request, User $empleado)
     {
+        $urlFoto = '';
+        $urlExpediente = '';
+        $urlContrato = '';
+
+        /*Guardado de imagnes, expedientes, contrato*/ 
+        if($request->has('fotografia'))
+        {
+           $foto =  $request['fotografia'];
+           $nombre_original = $foto->getClientOriginalName();
+           /*Guardamos*/ 
+           $rutaFoto = $foto->storeAs('fotos',$nombre_original ,'gcs');
+           $urlFoto = Storage::disk('gcs')->url($rutaFoto);
+        }
+
         $newEmpleado =  $request;
 
         // Guarda nueva direccion si el campo no existe
@@ -255,11 +320,46 @@ class EmpleadoControlller extends Controller
             'tipos_contrato_id' => $newEmpleado['tipos_contrato_id'],
             'cat_genero_id' => $newEmpleado['cat_genero_id'],
             'cat_tipo_sangre_id' => $newEmpleado['cat_tipos_sangre_id'],
-            'password' => Hash::make('12345678')
+            'password' => Hash::make('12345678'),
+            'fotografia' => $urlFoto 
          ]);
 
        // Store docuemtos
-       //$this->storeDocumentos($request, $newUser);
+             // Store docuemtos
+
+             if($request->has('expediente'))
+             {   
+                $curp = $request['curp'];
+                $expediente  = $request['expediente'];
+                /*Guardamos*/
+                $rutaExpediente = $expediente->storeAs('expedientes',$curp,'gcs');
+                $urlExpediente = Storage::disk('gcs')->url($rutaExpediente);
+     
+                expediente::updateOrCreate(
+                 [
+                     'ruta' => $urlExpediente,
+                     'cat_tipos_documento_id' => 25,
+                     'empleado_id' => $empleado->id
+                 ]
+             );
+     
+             }
+             if($request->has('contrato'))
+             {
+                 $curp = $request['curp'];
+                 $contrato = $request['contrato'];
+                 /*Guardamos*/
+                 $rutaContrato = $contrato->storeAs('contratos',$curp,'gcs');
+                 $urlContrato = Storage::disk('gcs')->url($rutaContrato); 
+     
+                 expediente::updateOrCreate(
+                     [
+                         'ruta' => $urlContrato,
+                         'cat_tipos_documento_id' => 26,
+                         'empleado_id' => $empleado->id
+                     ]
+                     );
+             }
 
        //Preguntamos si el usuario se dio de baja
        if(!empty($request->cat_bajas_empleado_id))
@@ -280,37 +380,5 @@ class EmpleadoControlller extends Controller
         }
         return redirect()->back();
     }
-    
 
-    public function storeDocumentos (Request $request, User $empleado)
-    {
-
-        if($empleado->hasFile('fotografia'))
-        {
-            $path  = $request->file('fotografia')->storeAs('expedientes/'. $empleado->curp,
-            'fotografia.'. $request->file('fotografia')->extension(), 'public'
-            );
-            $empleado->fotografia = asset('storage/'.$path);
-            $empleado->save();
-        }
-        if($request->hasFile('expediente')){
-            $path  = $request->file('expediente')->storeAs('expedientes/'. $empleado->curp,
-            'expediente.'. $request->file('expediente')->extension(), 'public'
-            );
-
-            expediente::updateOrCreate(
-                ['cat_tipos_documento_id' => 25,// Expediente General
-                'empleado_id' => $empleado->id],
-                ['ruta'  => asset('storage/'.$path)]);
-        }
-        if($request->hasFile('contrato')){
-            $path  = $request->file('contrato')->storeAs('expedientes/'. $empleado->curp,
-            'contrato.'. $request->file('contrato')->extension(), 'public'
-            );
-            expediente::updateOrCreate(
-                ['cat_tipos_documento_id' => 26, // Contrato
-                'empleado_id' => $empleado->id],
-                ['ruta'  => asset('storage/'.$path)]);
-        }
-    }
 }

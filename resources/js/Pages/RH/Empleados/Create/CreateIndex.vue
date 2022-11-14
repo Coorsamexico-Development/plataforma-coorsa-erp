@@ -42,8 +42,6 @@ let catalogos = ref( {
 
 let puestos = ref([]);
 
-const fotografia = ref(null);
-
 
 const form = useForm
 ({
@@ -106,7 +104,6 @@ const createOrUpdate = () =>
 {
   if(typeForm.value  == 'create')
   {
-    console.log(form.fotografia);
     form.post(route('empleado.store'), 
     {
         preserveScroll:true,
@@ -877,7 +874,8 @@ const fecha_termino = computed(() =>
                                               <template v-if="!editEmpleadoDisable">
                                                   <div class="mt-4">
                                                       <InputLabel for="fotografia" value="Foto:" />
-                                                      <DropZone id="fotografia" v-model="form.fotografia" ref="fotografia" accept="image/x-png,image/jpeg"/>
+                                                      <DropZone id="fotografia" v-model="form.fotografia" @change="setFile"
+                                                       accept="image/x-png,image/jpeg"/>
                                                       <InputError :message="form.errors.fotografia" class="mt-2" />
                                                   </div>
                                                   <div class="mt-4">
