@@ -80,9 +80,9 @@ Route::middleware([
         ->name('departamentos-aditorias.index');
 
     Route::post('departamentos-aditorias/{departamentosAuditoria}/calificacion', [DepartamentosAuditoriaController::class, 'storeCalificacion'])
-        ->name('departamentos-aditorias.calificacion.store');
+        ->name('departamentos-aditorias.calificacion.store')->middleware('can:calificacion.create');
     Route::delete('documentos-calificacion-mes/{documentosCalificacionMes}', [DocumentosCalificacionMesController::class, 'destroy'])
-        ->name('documentos-calificacion-mes.destroy');
+        ->name('documentos-calificacion-mes.destroy')->middleware('can:calificacion.delete');
 
     Route::apiResource('politics', PoliticController::class);
     Route::get('users/list', [UserController::class, 'list'])->name('users.list');

@@ -111,8 +111,8 @@ class User extends Authenticatable
     {
         $can = true;
         if (!$this->is_admin) {
-            return  Permission::where('plataforma_id', '=', 2)
-                ->where('is_acceso', 1)->exists();
+            return  $this->role->permissions()->where('permissions.plataforma_id', '=', 2)
+                ->where('permissions.is_acceso', 1)->exists();
         }
 
         return $can;
@@ -136,6 +136,6 @@ class User extends Authenticatable
 
     public function hasPermission(Int $idPermission)
     {
-        return $this->role->permissions()->where('id', $idPermission)->exists();
+        return $this->role->permissions()->where('permissions.id', $idPermission)->exists();
     }
 }

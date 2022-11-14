@@ -69,7 +69,8 @@ watch(params, (newParams) => {
             </div>
             <!-- End Departamentos -->
             <GraficaSection :calificaciones="calificaciones" class="sm:px-6">
-                <ButtonAdd v-if="departamento != undefined" @click="showingFormCalificacion = true">
+                <ButtonAdd v-if="$page.props.can['calificacion.create'] && departamento != undefined"
+                    @click="showingFormCalificacion = true">
                     + AGREGAR
                 </ButtonAdd>
             </GraficaSection>
