@@ -31,7 +31,7 @@ class DepartamentoController extends Controller
             'direction' => ['in:asc,desc']
         ]);
 
-        $departamentos = Ceco::select('id','nombre','bandera');
+        $departamentos = Ceco::select('id','nombre');
         if( request('search'))
         {
             $departamentos->orWhere('nombre', 'LIKE', '%'.request('search').'%');
