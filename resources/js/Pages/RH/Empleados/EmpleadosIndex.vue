@@ -6,13 +6,14 @@ import { throttle, pickBy } from 'lodash'
 import TableEmpleados from './Partials/TableEmpleados.vue';
 import InputSearch from '@/Components/InputSearch.vue';
 import ButtonAdd from '../../../Components/ButtonAdd.vue';
-import ButtonInfo from '@/Components/ButtonInfo.vue';
-import { Head, Link, useForm} from '@inertiajs/inertia-vue3';
+import ButtonInfo from '@/Components/Buttoninfo.vue';
+import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 
 var props = defineProps(
-    {empleados:Object,
-     activo:String,
-     filters:Object
+    {
+        empleados: Object,
+        activo: String,
+        filters: Object
     }
 );
 
@@ -20,19 +21,18 @@ const params = reactive({
     search: props.filters.search
 })
 
-watch(params, (newValue) => 
-{
-   console.log(newValue.search);
+watch(params, (newValue) => {
+    console.log(newValue.search);
 
-   Inertia.visit(route("empleado.indexmanual",{activo:props.activo}),
-   {
-       data: {
-            search:newValue.search
-        },
-        replace: true,
-        preserveScroll: true,
-        preserveState: true,
-    });
+    Inertia.visit(route("empleado.indexmanual", { activo: props.activo }),
+        {
+            data: {
+                search: newValue.search
+            },
+            replace: true,
+            preserveScroll: true,
+            preserveState: true,
+        });
 })
 
 </script>
@@ -40,28 +40,29 @@ watch(params, (newValue) =>
 <template>
     <app-layout title="Dashboard">
         <template #header>
-            <h2 v-if="activo === 'activo'"  class="text-xl font-semibold leading-tight text-gray-800">
-              Empleados activos
+            <h2 v-if="activo === 'activo'" class="text-xl font-semibold leading-tight text-gray-800">
+                Empleados activos
             </h2>
             <h2 v-if="activo === 'inactivo'" class="text-xl font-semibold leading-tight text-gray-800">
-              Empleados inactivos
+                Empleados inactivos
             </h2>
             <ButtonInfo style="float:right; margin-top: -1.5rem; ">REPORTE</ButtonInfo>
             <div v-if="activo === 'activo'">
                 <Link :href="route('empleado.create')">
-                <ButtonAdd style="float:right; margin-top: -1.5rem; margin-right: 2rem; "  >
-                  + AGREGAR
+                <ButtonAdd style="float:right; margin-top: -1.5rem; margin-right: 2rem; ">
+                    + AGREGAR
                 </ButtonAdd>
-            </Link>
+                </Link>
             </div>
-            <InputSearch v-model="params.search" style="float:right; margin-top: -2rem; margin-right: 12rem;" ></InputSearch>
-          
+            <InputSearch v-model="params.search" style="float:right; margin-top: -2rem; margin-right: 12rem;">
+            </InputSearch>
+
         </template>
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-xl sm:rounded-lg">
-                   <TableEmpleados :empleados="empleados"></TableEmpleados>
+                    <TableEmpleados :empleados="empleados"></TableEmpleados>
                 </div>
             </div>
         </div>
