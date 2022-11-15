@@ -89,12 +89,14 @@ Route::middleware([
     Route::apiResource('roles', RoleController::class)->middleware('can:roles.manager');
     Route::get('role/{role}/permissions', [RoleController::class, 'permissions'])->name('roles.permissions');
     Route::put('role/{role}/permissions', [RoleController::class, 'setPermission'])->name('roles.permissions');
+
+    Route::apiResource('/menu', MenuController::class);
+    Route::apiResource('/noticia', NoticiaController::class);
+    Route::apiResource('/video', VideoController::class);
 });
 
 Route::get('empleados/create', [EmpleadoControlller::class, 'createNewEmpleado'])->name('empleado.create');
-Route::apiResource('/menu', MenuController::class);
-Route::apiResource('/noticia', NoticiaController::class);
-Route::apiResource('/video', VideoController::class);
+
 Route::apiResource('/DocsPoliticas', DocsPoliticasController::class);
 Route::get('empleados/{activo}', [EmpleadoControlller::class, 'index'])->name('empleado.indexmanual');
 Route::post('empleados/store', [EmpleadoControlller::class, 'store'])->name('empleado.store');
