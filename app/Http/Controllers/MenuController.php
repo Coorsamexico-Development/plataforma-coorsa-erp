@@ -14,11 +14,12 @@ class MenuController extends Controller
         $descripcion = $request['descripcion'];
         $autor = $request['autor'];
         $activo = $request['activo'];
-        DB::insert('insert into menus 
-           ( descripcion, empleado_id, activo, created_at, updated_at ) 
+        DB::insert(
+            'insert into menus
+           ( descripcion, empleado_id, activo, created_at, updated_at )
            values (?, ?, ?, ?, ?)',
-           [$descripcion, $autor,$activo,$fechaActual, $fechaActual]);
-           return  redirect()->back();
-        
+            [$descripcion, $autor, $activo, $fechaActual, $fechaActual]
+        );
+        return  redirect()->back();
     }
 }

@@ -9,28 +9,27 @@ import ButtonModal from '../../Components/ButtonModal.vue';
 import ModalAddNoticia from './ModalAddNoticia.vue';
 
 var props = defineProps({
-    noticias:Object
+    noticias: Object
 });
 
 let modalNoticia = ref(false);
 
-const showModalNoticia = () =>
-{
-    modalNoticia.value=true;
+const showModalNoticia = () => {
+    modalNoticia.value = true;
 }
 
-const closeModalNoticia = () =>
-{
+const closeModalNoticia = () => {
     modalNoticia.value = false;
 }
 
 </script>
 
 <template>
-    <Card style=" width: 24rem;  margin:0.5rem; padding: 1.5rem;" >
+    <Card style=" width: 24rem;  margin:0.5rem; padding: 1.5rem;">
         <h4 style="color:#26458D; font-weight:bolder">Servicios y noticias</h4>
         <CarruselNoticias style="margin:1rem" :noticias="noticias"></CarruselNoticias>
-        <ButtonModal @click="showModalNoticia">Añadir nueva noticia</ButtonModal>
+        <ButtonModal v-if="$page.props.can['noticias.create']" @click="showModalNoticia">Añadir nueva noticia
+        </ButtonModal>
         <ModalAddNoticia :show="modalNoticia" @close="closeModalNoticia"></ModalAddNoticia>
     </Card>
 </template>
