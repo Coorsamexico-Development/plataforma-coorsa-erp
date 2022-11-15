@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ceco;
 use App\Models\departamentoPuesto;
+use App\Models\empleados_puesto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -31,7 +32,17 @@ class DepartamentoController extends Controller
             'direction' => ['in:asc,desc']
         ]);
 
-        $departamentos = Ceco::select('id','nombre');
+        $departamentos = Ceco::select(
+         'cecos.id AS id',
+         'cecos.nombre AS nombre',
+         DB::raw('COUNT(empleados_puestos.empleado_id) AS personal'))
+        ->leftjoin('departamento_puestos','cecos.id','departamento_puestos.id')
+        ->leftjoin('puestos','departamento_puestos.puesto_id','puestos.id')
+        ->leftjoin('empleados_puestos','puestos.id','empleados_puestos.departamento_id')
+        ->leftjoin('users','empleados_puestos.empleado_id','users.id')
+        ->groupby('cecos.id');
+
+
         if( request('search'))
         {
             $departamentos->orWhere('nombre', 'LIKE', '%'.request('search').'%');

@@ -58,8 +58,10 @@ export default {
     <swiper-slide>
        <div style="margin:2rem; margin-top: 0rem;">
           <h2 style="color:#26458D; font-weight:bolder; margin-bottom: 1rem;">Nuestra Misión</h2>
-          <h3 style="text-align:center;">Creación y seguimiento del cumplimiento de los procesos, políticas, manuales,
-            normas, métodos estrátegicos de la empresa todo con finalidad de llegar al plan estrátegico de esta. 
+          <h3 style="text-align:center;">Ser la empresa líder en soluciones 
+            logísticas en México y en otros países, innovando y 
+            creando procesos en la cadena de suministros, 
+            convirtiéndonos en socios estrátegicos de nuestros clientes.
           </h3>
        </div>
     </swiper-slide>
@@ -67,8 +69,9 @@ export default {
       <div style="margin:2rem; margin-top: 0rem;">
           <h2 style="color:#26458D; font-weight:bolder; margin-bottom: 1rem;">Nuestra Visión</h2>
           <h3 style="text-align:center;">
-            Creación y seguimiento del cumplimiento de los procesos, políticas, manuales, normas y 
-            métodos estrátegicos de la empresa.
+            Eficientar los procesos de la cadena de suministros, 
+            a través de servicios de alta calidad que 
+            generen ambientes de innovación logística, haciendo de lo bueno algo mejor.
           </h3>
        </div>
     </swiper-slide>

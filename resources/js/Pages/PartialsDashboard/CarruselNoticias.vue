@@ -48,8 +48,9 @@ export default {
     @swiper="onSwiper"
     @slideChange="onSlideChange"
   >
+  
     <swiper-slide v-for="noticia in noticias" :key="noticia.id">
-        <img style=" height:15rem;" :src="'storage/noticias/'+noticia.image">
+        <img style=" height:15rem;" :src="noticia.image">
     </swiper-slide>
   </swiper>
 </template>

@@ -15,13 +15,13 @@ class NoticiaController extends Controller
         //$fechaActual = date('Y-m-d H:i:s');
         if($request->has('imagen'))
         {
-           $noticia = $request['imagen'];
+           $noticia = request('imagen');
            $nombre =  $noticia->getClientOriginalName();//rescatamos el nombre original
            $ruta_noticia = $noticia->storeAs('noticias', $nombre, 'gcs'); //guardamos el archivo en el storage
            $urlNoticia = Storage::disk('gcs')->url($ruta_noticia);
 
            //Creacion de noticia
-           $newNoticia = noticia::create([
+            noticia::create([
              'image' => $urlNoticia,
              'empleado_id' => $request['autor']
            ]);

@@ -53,7 +53,7 @@ export default {
   >
     <swiper-slide v-for="video in videos" :key="video.id">
       <video width="320" height="240" controls>
-						<source :src="'storage/videos/'+video.image">								
+						<source :src="video.image">								
 			</video>
     </swiper-slide>
   </swiper>
