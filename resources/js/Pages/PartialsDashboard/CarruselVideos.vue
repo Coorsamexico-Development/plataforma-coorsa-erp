@@ -41,19 +41,16 @@ export default {
  :modules="modules"
     :slides-per-view="1"
     :space-between="50"
-    navigation
-    :autoplay='{
-               "delay": 2500,
-              "disableOnInteraction": false
-     }'
     :pagination="{ clickable: true }"
     :scrollbar="{ draggable: true }"
     @swiper="onSwiper"
     @slideChange="onSlideChange"
   >
-    <swiper-slide v-for="video in videos" :key="video.id">
-      <video width="320" height="240" controls>
-						<source :src="video.image">								
+    <swiper-slide v-for="video in videos" :key="video.id"> 
+      
+      <video width="650" height="500" controls>
+        <source :src="video.image" type="video/mp4">	
+        Your browser does not support the video tag.				
 			</video>
     </swiper-slide>
   </swiper>
