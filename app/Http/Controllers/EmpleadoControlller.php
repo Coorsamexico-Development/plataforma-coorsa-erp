@@ -215,6 +215,8 @@ class EmpleadoControlller extends Controller
          ->where('id','=', $id)
          ->get();
 
+         
+
          $escolaridades = Escolaridad::all();
          $estado_civiles = catEstadosCiviles::all();
          $tipos_sangre = catTipoSangre::all();

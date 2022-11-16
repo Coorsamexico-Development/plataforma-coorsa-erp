@@ -50,13 +50,29 @@ empleado.value = props.empleado[0];
 const fotografia = ref(null);
 
 
+if(empleado.value.apellido_paterno === null)
+{
+   empleado.value.apellido_paterno = "";
+}
+
+if(empleado.value.apellido_materno === null)
+{
+   empleado.value.apellido_materno = "";
+}
+
+if(empleado.value.fecha_nacimiento === null)
+{
+   empleado.value.fecha_nacimiento = "";
+}
+
+
 const form = useForm
     ({
         'id': empleado.value.id,
         'numero_empleado': empleado.value.numero_empleado,
         'banco_id': empleado.value.banco_id,
         'escolaridade_id': empleado.value.escolaridad_id,
-        'nombre': empleado.value.name,
+        'nombre': "",
         'apellido_paterno': empleado.value.apellido_paterno,
         'apellido_materno': empleado.value.apellido_materno,
         'fecha_nacimiento': empleado.value.fecha_nacimiento,
