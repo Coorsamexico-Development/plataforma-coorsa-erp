@@ -89,7 +89,7 @@ const deleteCalificaion = (docCalifacionId) => {
 </template>
 <style lang="css" scoped>
 .swiper-slide {
-    width: 16.6%;
+    width: 12%;
 }
 
 @media (max-width: 640px) {
