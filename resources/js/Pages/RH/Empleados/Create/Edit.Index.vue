@@ -51,7 +51,7 @@ empleado.value = props.empleado[0];
 
 let direccion = ref({});
 
-if(props.direccion)
+if(props.direccion.length<=0)
 {
     direccion.value.estado_id = '';
     direccion.value.municipio_id = '';
@@ -147,7 +147,7 @@ const form = useForm
         'monto_finiquito': 0,
         'finiquito_pagado': false,
         'password':"12345678",
-        'rol_id': ''
+        'rol_id': empleado.value.role_id
     });
 
 
