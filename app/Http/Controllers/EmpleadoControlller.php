@@ -242,7 +242,7 @@ class EmpleadoControlller extends Controller
          ->where('users.direccion_id','=', $empleado_direccion_id)
          ->get();
 
-         
+   
 
          $escolaridades = Escolaridad::all();
          $estado_civiles = catEstadosCiviles::all();

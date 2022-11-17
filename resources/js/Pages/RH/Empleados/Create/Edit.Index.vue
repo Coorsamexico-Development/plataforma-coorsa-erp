@@ -49,9 +49,29 @@ let empleado = ref({});
 empleado.value = props.empleado[0];
 
 let direccion = ref({});
-direccion.value = props.direccion[0];
+
+if(props.direccion)
+{
+    direccion.value.estado_id = '';
+    direccion.value.municipio_id = '';
+    direccion.value.localidad_id = '';
+    direccion.value.calle ='';
+    direccion.value.numero=0
+    direccion.value.colonia=0
+    direccion.value.codigo_postal=0
+    direccion.value.lote=0
+    direccion.value.manzana=0
+
+}
+else
+{
+    direccion.value = props.direccion[0];
+}
+
+
 
 const fotografia = ref(null);
+
 
 
 if(empleado.value.apellido_paterno === null)
@@ -315,8 +335,7 @@ const fecha_termino = computed(() => {
     <app-layout title="Dashboard">
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Nuevo Empleado
-                {{direccion}}
+                Actualizar Empleado
             </h2>
         </template>
 
