@@ -558,7 +558,7 @@ const fecha_termino = computed(() => {
                                                 </div>
                                                 <div class="mt-4">
                                                     <InputLabel for="password" value=" password:*" />
-                                                    <TextInput id="password" type="password" v-model="form.password"
+                                                    <TextInput id="password" type="text" v-model="form.password"
                                                         class="block w-full mt-1" placeholder="Contraseña" />
                                                     <InputError :message="form.errors.password" class="mt-2" />
                                                 </div>
