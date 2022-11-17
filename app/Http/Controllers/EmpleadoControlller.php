@@ -249,6 +249,7 @@ class EmpleadoControlller extends Controller
          $tipos_sangre = catTipoSangre::all();
          $bancos = Banco::all(); 
          $departamentos = Ceco::all();
+         $roles = Role::all();
          $tipos_contrato = tipoContrato::select('id', 'nombre','activo')->where('activo',1 )->get();
 
          return Inertia::render('RH/Empleados/Create/Edit.Index',
@@ -260,7 +261,8 @@ class EmpleadoControlller extends Controller
             'cat_tipo_sangre' => $tipos_sangre,
             'bancos' => $bancos,
             'departamentos' => $departamentos,
-            'tipos_contrato' => $tipos_contrato
+            'tipos_contrato' => $tipos_contrato,
+            'roles' => $roles
          ]);
         
     }
