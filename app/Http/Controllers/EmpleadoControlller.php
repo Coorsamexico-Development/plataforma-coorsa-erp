@@ -29,36 +29,39 @@ class EmpleadoControlller extends Controller
     {
         $empleados = DB::table(DB::raw('users'))
         ->selectRaw(
-            'id,
-            name,
-            numero_empleado,
-            apellido_paterno,
-            apellido_materno,
-            profile_photo_path,
-            telefono,
-            activo
+            'users.id AS id,
+            users.name AS name,
+            users.numero_empleado AS numero_empleado, 
+            users.apellido_paterno AS apellido_paterno,
+            users.apellido_materno AS apelliedo_materno,
+            users.fotografia AS fotografia,
+            users.telefono AS telefono,
+            users.activo,
+            expedientes.ruta,
+            cat_tipos_documento_id
                 '
-        );
+        )
+        ->leftJoin('expedientes','expedientes.empleado_id','users.id');
      
         if($activo === 'activo')
         {
-            $empleados = $empleados->where('activo', 1);
+            $empleados = $empleados->where('users.activo', 1);
             if( request('search'))
             {
                  $busqueda = request('search');
                  $empleados = $empleados->where(
-                     'name','LIKE','%'.$busqueda.'%'   
+                     'users.name','LIKE','%'.$busqueda.'%'   
                     );
              }
         }
         else if($activo === 'inactivo')
         {
-            $empleados = $empleados->where('activo', 0);
+            $empleados = $empleados->where('users.activo', 0);
             if( request('search'))
             {
                 $busqueda = request('search');
                 $empleados = $empleados->where(
-                    'name','LIKE','%'.$busqueda.'%'   
+                    'users.name','LIKE','%'.$busqueda.'%'   
                 );
             }
         }

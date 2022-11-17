@@ -2,7 +2,14 @@
 import { ref, onMounted } from 'vue';
 import DataTable from '@/Components/DataTable.vue';
 import ButtonInfo from '@/Components/Buttoninfo.vue';
+import ButtonPhoto from '@/Components/ButtonPhoto.vue';
+import ButtonPDF from '@/Components/ButtonPDF.vue';
+import ButtonContrato from '@/Components/ButtonContrato.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
+
+import { Fancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox.css";
+
 var props = defineProps(
     { empleados: Object }
 );
@@ -10,7 +17,9 @@ var props = defineProps(
 
 </script>
 
+
 <template>
+    {{props.empleados}}
     <DataTable>
         <template #table-header>
             <tr class="text-center">
@@ -53,7 +62,25 @@ var props = defineProps(
         </template>
         <template #table-body>
             <tr v-for="empleado in empleados" :key="empleado.id">
-                <td class="px-2 whitespace-nowrap"></td>
+                <td class="px-2 whitespace-nowrap">
+                  <div class="buttons_table">
+                    <ButtonPhoto style="width:3rem; justify-content: center;" :v-if="empleado.fotografia !='' || empleado.fotografia !== null " 
+                    :data-fancybox="'single'+empleado.id"  :data-src="empleado.fotografia">
+                         img
+                    </ButtonPhoto>
+                    <ButtonPhoto style="width:3rem; justify-content: center; display:none" :v-if="empleado.fotografia ==='' || empleado.fotografia === null " 
+                    :data-fancybox="'single'+empleado.id"  :data-src="empleado.fotografia">
+                         img
+                    </ButtonPhoto>
+                    <ButtonPDF style="width:3rem; justify-content: center;" >
+                        exp
+                    </ButtonPDF>
+                    <ButtonContrato style="width:3rem; justify-content: center;" >
+                       cont
+                    </ButtonContrato>
+                  </div>
+
+                </td>
                 <td class="px-2 whitespace-nowrap">{{ empleado.numero_empleado }}</td>
                 <td class="px-2 whitespace-nowrap">{{ empleado.name }}</td>
                 <td class="px-2 whitespace-nowrap">{{ empleado.apellido_paterno }}</td>

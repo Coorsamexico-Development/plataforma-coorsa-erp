@@ -146,7 +146,7 @@ const form = useForm
         'fecha_finiquito': '',
         'monto_finiquito': 0,
         'finiquito_pagado': false,
-        'password':"12345678",
+        'password':empleado.password,
         'rol_id': empleado.value.role_id
     });
 
