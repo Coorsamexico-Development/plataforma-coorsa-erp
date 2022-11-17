@@ -40,6 +40,6 @@ const closeModalNomina = () =>
             </p>
         </div>
         <ButtonModal  @click="showModalNomina">Consultar</ButtonModal>
-        <ModalNomina :show="modalNomina" @close="closeModalNomina"></ModalNomina>
+        <ModalNomina :show="modalNomina" @close="closeModalNomina" :user="user"></ModalNomina>
     </Card>
 </template>

@@ -12,20 +12,6 @@
         <template #table-header>
             <th scope="col" class="w-3/12 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase">
                 <span class="inline-flex justify-between w-full px-6 py-3"
-                    @click="sort('id')">#
-                    <svg  v-if="params.field === 'id' && params.direction === 'asc'"
-                    xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
-                    viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M3 3a1  0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z"/>
-                    </svg>
-                    <svg  v-if="params.field === 'id' && params.direction === 'desc'"
-                    xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20"  fill="currentColor">
-                        <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z"/>
-                    </svg>
-                </span>
-            </th>
-            <th scope="col" class="w-3/12 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase">
-                <span class="inline-flex justify-between w-full px-6 py-3"
                     @click="sort('nombre')">Nombre
                     <svg  v-if="params.field === 'nombre' && params.direction === 'asc'"
                     xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
@@ -38,11 +24,14 @@
                     </svg>
                 </span>
             </th>
+            <th scope="col" class="w-3/12 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase">
+                #Personal
+            </th>
         </template>
         <template #table-body >
           <tr class="text-gray-500" v-for='departamento in departamentos' :key="departamento.id">
-              <td class="px-2 whitespace-nowrap"   @click="selectedRow(departamento.id-1,$event)"  >{{departamento.id}}</td>
-              <td class="px-2 whitespace-nowrap">{{departamento.nombre}}</td>
+              <td class="px-2 whitespace-nowrap" @click="selectedRow(departamento.id-1,$event)" >{{departamento.nombre}}</td>
+              <td>{{departamento.personal}}</td>
           </tr>
         </template>
     </DataTable>

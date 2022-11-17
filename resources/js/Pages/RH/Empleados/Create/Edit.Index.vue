@@ -26,7 +26,8 @@ var props = defineProps(
         bancos: Object,
         departamentos: Object,
         tipos_contrato: Object,
-        empleado: Object
+        empleado: Object,
+        direccion:Object
     }
 );
 
@@ -47,7 +48,26 @@ let puestos = ref([]);
 let empleado = ref({});
 empleado.value = props.empleado[0];
 
+let direccion = ref({});
+direccion.value = props.direccion[0];
+
 const fotografia = ref(null);
+
+
+if(empleado.value.apellido_paterno === null)
+{
+   empleado.value.apellido_paterno = "";
+}
+
+if(empleado.value.apellido_materno === null)
+{
+   empleado.value.apellido_materno = "";
+}
+
+if(empleado.value.fecha_nacimiento === null)
+{
+   empleado.value.fecha_nacimiento = "";
+}
 
 
 const form = useForm
@@ -74,15 +94,15 @@ const form = useForm
         'hijos': empleado.value.hijos,
         'clave_bancaria': empleado.value.clave_bancaria,
         'numero_cuenta_bancaria': empleado.value.numero_cuenta_bancaria,
-        'direccion_estado_id': '',
-        'direccion_municipio_id': '',
-        'direccion_localidade_id': '',
-        'calle': '',
-        'numero': '',
-        'colonia': '',
-        'codigo_postal': '',
-        'lote': '',
-        'manzana': '',
+        'direccion_estado_id': direccion.value.estado_id,
+        'direccion_municipio_id': direccion.value.municipio_id,
+        'direccion_localidade_id': direccion.value.localidad_id,
+        'calle': direccion.value.calle,
+        'numero': direccion.value.numero,
+        'colonia': direccion.value.colonia,
+        'codigo_postal':direccion.value.codigo_postal,
+        'lote': direccion.value.lote,
+        'manzana': direccion.value.manzana,
         'cat_tipos_nomina_id': empleado.cat_tipos_nomina_id,
         'tipos_contrato_id': empleado.value.tipos_contrato_id,
         'salario_bruto': empleado.value.salario_bruto,
@@ -92,7 +112,7 @@ const form = useForm
         'bono_asistencia': 0.0,
         'despensa': 1057.16,
         'fondo_ahorro': 0.0,
-        'horario': '',
+        'horario': empleado.value.horario,
         'cat_estados_civile_id': empleado.value.estado_civil_id,
         'fotografia': '',
         'expediente': '',
@@ -104,12 +124,28 @@ const form = useForm
         'cat_bajas_empleado_id': '',
         'fecha_finiquito': '',
         'monto_finiquito': 0,
-        'finiquito_pagado': false
+        'finiquito_pagado': false,
+        'password':"12345678",
+        'rol_id': ''
     });
 
 
 const createOrUpdate = () => {
-    console.log(form.fotografia);
+    if(form.fotografia == "")
+    {
+      form.fotografia = null;
+    }
+
+    if(form.expediente == "")
+    {
+      form.expediente = null;
+    }
+
+    if(form.contrato)
+    {
+      form.contrato = null;
+    }
+    
     form.post(route('empleado.update'),
         {
             preserveScroll: true,
@@ -280,7 +316,7 @@ const fecha_termino = computed(() => {
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
                 Nuevo Empleado
-                {{empleado}}
+                {{direccion}}
             </h2>
         </template>
 
@@ -358,7 +394,7 @@ const fecha_termino = computed(() => {
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-xl sm:rounded-lg" style="padding:6rem">
-                    <div class="pb-8 pl-8 pr-8">
+                    <div class="pb-10 pl-8 pr-8">
                         <!-- Datos Personales -->
                         <div v-if="buttonSelected == 1" v-show="true" id="1">
                             <div class="border-b tab">
@@ -499,6 +535,25 @@ const fecha_termino = computed(() => {
                                                         class="block w-full mt-1" placeholder="Hijos"
                                                         :disabled="editEmpleadoDisable" />
                                                     <InputError :message="form.errors.hijos" class="mt-2" />
+                                                </div>
+                                                <div class="mt-4">
+                                                    <InputLabel for="password" value=" password:*" />
+                                                    <TextInput id="password" type="password" v-model="form.password"
+                                                        class="block w-full mt-1" placeholder="Contraseña" />
+                                                    <InputError :message="form.errors.password" class="mt-2" />
+                                                </div>
+
+                                                <div class="mt-4">
+                                                    <InputLabel for="cat_estados_civile_id" value="Rol:*" />
+                                                    <Select v-model="form.rol_id" class="w-full"
+                                                        :disabled="editEmpleadoDisable">
+                                                        <option v-for="rol in roles"
+                                                            :key="rol.id" :value="rol.id">
+                                                            {{rol.nombre}}
+                                                        </option>
+                                                    </Select>
+                                                    <InputError :message="form.errors.cat_estados_civile_id"
+                                                        class="mt-2" />
                                                 </div>
 
                                             </div>

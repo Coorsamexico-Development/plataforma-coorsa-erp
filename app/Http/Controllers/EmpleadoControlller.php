@@ -13,12 +13,14 @@ use App\Models\Escolaridad;
 use App\Models\expediente;
 use App\Models\finiquito;
 use App\Models\puesto;
+use App\Models\Role;
 use App\Models\tipoContrato;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class EmpleadoControlller extends Controller
 {
@@ -78,6 +80,7 @@ class EmpleadoControlller extends Controller
          $bancos = Banco::all(); 
          $departamentos = Ceco::all();
          $tipos_contrato = tipoContrato::select('id', 'nombre','activo')->where('activo',1 )->get();
+         $roles = Role::all();
 
          return Inertia::render('RH/Empleados/Create/CreateIndex',
          [
@@ -86,7 +89,8 @@ class EmpleadoControlller extends Controller
             'cat_tipo_sangre' => $tipos_sangre,
             'bancos' => $bancos,
             'departamentos' => $departamentos,
-            'tipos_contrato' => $tipos_contrato
+            'tipos_contrato' => $tipos_contrato,
+            'roles' => $roles
          ]);
     }
 
@@ -94,7 +98,16 @@ class EmpleadoControlller extends Controller
     public function store (Request $request)
     {
            $newEmpleado =  $request;
+           $ruta_fotografia = "";
 
+           if($request->has('fotografia'))
+           {
+             $fotografia = request('fotografia');
+             $nombre_fotografia =  $fotografia->getClientOriginalName();//rescatamos el nombre original
+             $ruta_fotografia = $fotografia->storeAs('expedientes/fotografia/',$nombre_fotografia ,'gcs'); //guardamos el archivo en el storage
+             $urlFotografia = Storage::disk('gcs')->url($ruta_fotografia); 
+           }
+           
             //creamos la direccion
             $direccion = direccione::create([
                 'direccion_localidade_id' => $newEmpleado['direccion_localidade_id'],
@@ -130,6 +143,7 @@ class EmpleadoControlller extends Controller
             'bono_asistencia' => $newEmpleado['bono_asistencia'],
             'despensa' => $newEmpleado['despensa'],
             'fondo_ahorro' => $newEmpleado['fondo_ahorro'],
+            'horario' => $newEmpleado['horario'],
             'alergias' =>$newEmpleado['alergias'],
             'enfermedades_cronicas' =>$newEmpleado['enfermedades_cronicas'],
             'direccion_id' => $direccion->id,
@@ -140,11 +154,47 @@ class EmpleadoControlller extends Controller
             'tipos_contrato_id' => $newEmpleado['tipos_contrato_id'],
             'cat_genero_id' => $newEmpleado['cat_genero_id'],
             'cat_tipo_sangre_id' => $newEmpleado['cat_tipos_sangre_id'],
-            'password' => Hash::make('12345678')
+            'fotografia' => $urlFotografia,
+            'password' => Hash::make($newEmpleado['password']),
+            'role_id' => $newEmpleado['rol_id']
          ]); //creamos el usuario
          
 
          $puesto_id = puesto::select('id')->where('name','LIKE','%'.$newEmpleado['puesto_id'].'%')->get();
+
+         if($request->has('expediente'))
+         {   
+            $curp = $request['curp'];
+            $expediente  = $request['expediente'];
+            /*Guardamos*/
+            $rutaExpediente = $expediente->storeAs('expedientes/expediente/',$curp,'gcs');
+            $urlExpediente = Storage::disk('gcs')->url($rutaExpediente);
+ 
+            expediente::updateOrCreate(
+             [
+                 'ruta' => $urlExpediente,
+                 'cat_tipos_documento_id' => 25,
+                 'empleado_id' => $empleado->id
+             ]
+         );
+ 
+         }
+         if($request->has('contrato'))
+         {
+             $curp = $request['curp'];
+             $contrato = $request['contrato'];
+             /*Guardamos*/
+             $rutaContrato = $contrato->storeAs('expedientes/contratos/',$curp,'gcs');
+             $urlContrato = Storage::disk('gcs')->url($rutaContrato); 
+ 
+             expediente::updateOrCreate(
+                 [
+                     'ruta' => $urlContrato,
+                     'cat_tipos_documento_id' => 26,
+                     'empleado_id' => $empleado->id
+                 ]
+                 );
+         }
 
          //creamos el empleado_puesto
          empleados_puesto::create([
@@ -169,6 +219,31 @@ class EmpleadoControlller extends Controller
          ->where('id','=', $id)
          ->get();
 
+         $empleado_direccion_id = $empleado[0]->direccion_id;
+
+         $direccion = DB::table(DB::raw('direcciones'))
+         ->selectRaw(
+            'direccion_localidades.id AS localidad_id,
+            direccion_municipios.nombre,
+            direccion_municipios.id AS municipio_id,
+            direccion_estados.nombre,
+            direccion_estados.id AS estado_id,
+            direcciones.calle AS calle,
+            direcciones.numero AS numero,
+            direcciones.colonia AS colonia,
+            direcciones.codigo_postal AS codigo_postal,
+            direcciones.manzana AS manzana,
+            direcciones.lote AS lote'
+            )
+         ->join('users','direcciones.id','users.direccion_id')
+         ->join('direccion_localidades','direcciones.direccion_localidade_id','direccion_localidades.id')
+         ->join('direccion_municipios', 'direccion_localidades.direccion_municipio_id','direccion_municipios.id')
+         ->join('direccion_estados', 'direccion_municipios.direccion_estado_id','direccion_estados.id')
+         ->where('users.direccion_id','=', $empleado_direccion_id)
+         ->get();
+
+         
+
          $escolaridades = Escolaridad::all();
          $estado_civiles = catEstadosCiviles::all();
          $tipos_sangre = catTipoSangre::all();
@@ -178,6 +253,7 @@ class EmpleadoControlller extends Controller
 
          return Inertia::render('RH/Empleados/Create/Edit.Index',
          [
+            'direccion' => $direccion,
             'empleado' => $empleado,
             'escolaridades' => $escolaridades,
             'estados_civiles' => $estado_civiles,
@@ -195,8 +271,10 @@ class EmpleadoControlller extends Controller
         $urlExpediente = '';
         $urlContrato = '';
 
+     
+        
         /*Guardado de imagnes, expedientes, contrato*/ 
-        if($request->has('fotografia'))
+        if($request->has('fotografia') && $request['fotografia'] !== null)
         {
            $foto =  $request['fotografia'];
            $nombre_original = $foto->getClientOriginalName();
@@ -259,6 +337,7 @@ class EmpleadoControlller extends Controller
             'bono_asistencia' => $newEmpleado['bono_asistencia'],
             'despensa' => $newEmpleado['despensa'],
             'fondo_ahorro' => $newEmpleado['fondo_ahorro'],
+            'horario' => $newEmpleado['horario'],
             'alergias' =>$newEmpleado['alergias'],
             'enfermedades_cronicas' =>$newEmpleado['enfermedades_cronicas'],
             'direccion_id' => $direccion->id,
@@ -270,13 +349,14 @@ class EmpleadoControlller extends Controller
             'cat_genero_id' => $newEmpleado['cat_genero_id'],
             'cat_tipo_sangre_id' => $newEmpleado['cat_tipos_sangre_id'],
             'password' => Hash::make('12345678'),
-            'fotografia' => $urlFoto 
+            'fotografia' => $urlFoto ,
+            'password' => Hash::make($newEmpleado['password']),
+            'role_id' => $newEmpleado['rol_id']
          ]);
 
        // Store docuemtos
-             // Store docuemtos
 
-             if($request->has('expediente'))
+             if($request->has('expediente') && $request['expediente'] !== null)
              {   
                 $curp = $request['curp'];
                 $expediente  = $request['expediente'];
@@ -293,7 +373,7 @@ class EmpleadoControlller extends Controller
              );
      
              }
-             if($request->has('contrato'))
+             if($request->has('contrato') && $request['contrato'] !== null)
              {
                  $curp = $request['curp'];
                  $contrato = $request['contrato'];
