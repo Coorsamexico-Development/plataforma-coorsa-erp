@@ -105,7 +105,6 @@ class EmpleadoControlller extends Controller
              $urlFotografia = Storage::disk('gcs')->url($ruta_fotografia); 
            }
            
-
             //creamos la direccion
             $direccion = direccione::create([
                 'direccion_localidade_id' => $newEmpleado['direccion_localidade_id'],
@@ -141,6 +140,7 @@ class EmpleadoControlller extends Controller
             'bono_asistencia' => $newEmpleado['bono_asistencia'],
             'despensa' => $newEmpleado['despensa'],
             'fondo_ahorro' => $newEmpleado['fondo_ahorro'],
+            'horario' => $newEmpleado['horario'],
             'alergias' =>$newEmpleado['alergias'],
             'enfermedades_cronicas' =>$newEmpleado['enfermedades_cronicas'],
             'direccion_id' => $direccion->id,
@@ -215,6 +215,29 @@ class EmpleadoControlller extends Controller
          ->where('id','=', $id)
          ->get();
 
+         $empleado_direccion_id = $empleado[0]->direccion_id;
+
+         $direccion = DB::table(DB::raw('direcciones'))
+         ->selectRaw(
+            'direccion_localidades.id AS localidad_id,
+            direccion_municipios.nombre,
+            direccion_municipios.id AS municipio_id,
+            direccion_estados.nombre,
+            direccion_estados.id AS estado_id,
+            direcciones.calle AS calle,
+            direcciones.numero AS numero,
+            direcciones.colonia AS colonia,
+            direcciones.codigo_postal AS codigo_postal,
+            direcciones.manzana AS manzana,
+            direcciones.lote AS lote'
+            )
+         ->join('users','direcciones.id','users.direccion_id')
+         ->join('direccion_localidades','direcciones.direccion_localidade_id','direccion_localidades.id')
+         ->join('direccion_municipios', 'direccion_localidades.direccion_municipio_id','direccion_municipios.id')
+         ->join('direccion_estados', 'direccion_municipios.direccion_estado_id','direccion_estados.id')
+         ->where('users.direccion_id','=', $empleado_direccion_id)
+         ->get();
+
          
 
          $escolaridades = Escolaridad::all();
@@ -226,6 +249,7 @@ class EmpleadoControlller extends Controller
 
          return Inertia::render('RH/Empleados/Create/Edit.Index',
          [
+            'direccion' => $direccion,
             'empleado' => $empleado,
             'escolaridades' => $escolaridades,
             'estados_civiles' => $estado_civiles,
@@ -243,8 +267,10 @@ class EmpleadoControlller extends Controller
         $urlExpediente = '';
         $urlContrato = '';
 
+     
+        
         /*Guardado de imagnes, expedientes, contrato*/ 
-        if($request->has('fotografia'))
+        if($request->has('fotografia') && $request['fotografia'] !== null)
         {
            $foto =  $request['fotografia'];
            $nombre_original = $foto->getClientOriginalName();
@@ -307,6 +333,7 @@ class EmpleadoControlller extends Controller
             'bono_asistencia' => $newEmpleado['bono_asistencia'],
             'despensa' => $newEmpleado['despensa'],
             'fondo_ahorro' => $newEmpleado['fondo_ahorro'],
+            'horario' => $newEmpleado['horario'],
             'alergias' =>$newEmpleado['alergias'],
             'enfermedades_cronicas' =>$newEmpleado['enfermedades_cronicas'],
             'direccion_id' => $direccion->id,
@@ -318,12 +345,13 @@ class EmpleadoControlller extends Controller
             'cat_genero_id' => $newEmpleado['cat_genero_id'],
             'cat_tipo_sangre_id' => $newEmpleado['cat_tipos_sangre_id'],
             'password' => Hash::make('12345678'),
-            'fotografia' => $urlFoto 
+            'fotografia' => $urlFoto ,
+            'password' => Hash::make($newEmpleado['password'])
          ]);
 
        // Store docuemtos
 
-             if($request->has('expediente'))
+             if($request->has('expediente') && $request['expediente'] !== null)
              {   
                 $curp = $request['curp'];
                 $expediente  = $request['expediente'];
@@ -340,7 +368,7 @@ class EmpleadoControlller extends Controller
              );
      
              }
-             if($request->has('contrato'))
+             if($request->has('contrato') && $request['contrato'] !== null)
              {
                  $curp = $request['curp'];
                  $contrato = $request['contrato'];
