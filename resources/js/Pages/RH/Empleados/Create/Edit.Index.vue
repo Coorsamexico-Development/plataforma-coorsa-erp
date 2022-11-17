@@ -27,7 +27,8 @@ var props = defineProps(
         departamentos: Object,
         tipos_contrato: Object,
         empleado: Object,
-        direccion:Object
+        direccion:Object,
+        roles:Object
     }
 );
 
