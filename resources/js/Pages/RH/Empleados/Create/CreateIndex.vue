@@ -25,7 +25,8 @@ var props = defineProps(
         cat_tipo_sangre: Object,
         bancos: Object,
         departamentos: Object,
-        tipos_contrato: Object
+        tipos_contrato: Object,
+        roles:Object
     }
 );
 
@@ -96,7 +97,9 @@ const form = useForm
         'cat_bajas_empleado_id': '',
         'fecha_finiquito': '',
         'monto_finiquito': 0,
-        'finiquito_pagado': false
+        'finiquito_pagado': false,
+        'password':"12345678",
+        'rol_id': ''
     });
 
 
@@ -492,6 +495,26 @@ const fecha_termino = computed(() => {
                                                         class="block w-full mt-1" placeholder="Hijos"
                                                         :disabled="editEmpleadoDisable" />
                                                     <InputError :message="form.errors.hijos" class="mt-2" />
+                                                </div>
+
+                                                <div class="mt-4">
+                                                    <InputLabel for="password" value=" password:*" />
+                                                    <TextInput id="password" type="password" v-model="form.password"
+                                                        class="block w-full mt-1" placeholder="Contraseña" />
+                                                    <InputError :message="form.errors.password" class="mt-2" />
+                                                </div>
+
+                                                <div class="mt-4">
+                                                    <InputLabel for="cat_estados_civile_id" value="Rol:*" />
+                                                    <Select v-model="form.rol_id" class="w-full"
+                                                        :disabled="editEmpleadoDisable">
+                                                        <option v-for="rol in roles"
+                                                            :key="rol.id" :value="rol.id">
+                                                            {{rol.nombre}}
+                                                        </option>
+                                                    </Select>
+                                                    <InputError :message="form.errors.cat_estados_civile_id"
+                                                        class="mt-2" />
                                                 </div>
 
                                             </div>

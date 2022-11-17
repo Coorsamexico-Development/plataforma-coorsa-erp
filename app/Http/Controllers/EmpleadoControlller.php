@@ -13,6 +13,7 @@ use App\Models\Escolaridad;
 use App\Models\expediente;
 use App\Models\finiquito;
 use App\Models\puesto;
+use App\Models\Role;
 use App\Models\tipoContrato;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -79,6 +80,7 @@ class EmpleadoControlller extends Controller
          $bancos = Banco::all(); 
          $departamentos = Ceco::all();
          $tipos_contrato = tipoContrato::select('id', 'nombre','activo')->where('activo',1 )->get();
+         $roles = Role::all();
 
          return Inertia::render('RH/Empleados/Create/CreateIndex',
          [
@@ -87,7 +89,8 @@ class EmpleadoControlller extends Controller
             'cat_tipo_sangre' => $tipos_sangre,
             'bancos' => $bancos,
             'departamentos' => $departamentos,
-            'tipos_contrato' => $tipos_contrato
+            'tipos_contrato' => $tipos_contrato,
+            'roles' => $roles
          ]);
     }
 
@@ -152,7 +155,8 @@ class EmpleadoControlller extends Controller
             'cat_genero_id' => $newEmpleado['cat_genero_id'],
             'cat_tipo_sangre_id' => $newEmpleado['cat_tipos_sangre_id'],
             'fotografia' => $urlFotografia,
-            'password' => Hash::make('12345678')
+            'password' => Hash::make($newEmpleado['password']),
+            'role_id' => $newEmpleado['rol_id']
          ]); //creamos el usuario
          
 
@@ -346,7 +350,8 @@ class EmpleadoControlller extends Controller
             'cat_tipo_sangre_id' => $newEmpleado['cat_tipos_sangre_id'],
             'password' => Hash::make('12345678'),
             'fotografia' => $urlFoto ,
-            'password' => Hash::make($newEmpleado['password'])
+            'password' => Hash::make($newEmpleado['password']),
+            'role_id' => $newEmpleado['rol_id']
          ]);
 
        // Store docuemtos
