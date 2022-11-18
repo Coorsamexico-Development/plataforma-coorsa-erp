@@ -28,7 +28,8 @@ var props = defineProps(
         tipos_contrato: Object,
         empleado: Object,
         direccion:Object,
-        roles:Object
+        roles:Object,
+        documentos: Object
     }
 );
 
@@ -91,6 +92,32 @@ if(empleado.value.fecha_nacimiento === null)
 }
 
 
+let expediente = ref('');
+
+console.log(props.documentos)
+
+if(props.documentos.length > 0 )
+{
+  if(props.documentos[0].cat_tipos_documento_id == 25)
+  {
+     expediente.value = props.documentos[0].ruta;
+  }
+}
+
+
+let contrato = ref('');
+if(props.documentos.length >0)
+{
+  if(props.documentos[1])
+  {
+    if(props.documentos[1].cat_tipos_documento_id === 26)
+  {
+    contrato.value = props.documentos[1].ruta;
+  }
+  }
+}
+
+
 const form = useForm
     ({
         'id': empleado.value.id,
@@ -135,9 +162,9 @@ const form = useForm
         'fondo_ahorro': 0.0,
         'horario': empleado.value.horario,
         'cat_estados_civile_id': empleado.value.estado_civil_id,
-        'fotografia': '',
-        'expediente': '',
-        'contrato': empleado.value.tipos_contrato_id,
+        'fotografia': empleado.value.fotografia,
+        'expediente': expediente.value,
+        'contrato': contrato.value,
         'cat_tipos_sangre_id': empleado.value.cat_tipo_sangre_id,
         'alergias': empleado.value.alergias,
         'enfermedades_cronicas': empleado.value.enfermedades_cronicas,
@@ -1061,7 +1088,7 @@ const fecha_termino = computed(() => {
                                                 <div class="mt-4">
                                                     <span v-if="empleado.fotografia">
                                                         <a :data-fancybox="'fotografia'+empleado.id"
-                                                            :data-src="empleado.fotografia+timeImage"
+                                                            :data-src="empleado.fotografia"
                                                             class="inline-flex items-center w-10 h-10 p-1 m-1 text-xs font-semibold tracking-widest text-white uppercase transition bg-green-800 border border-transparent rounded-full hover:bg-green-700 active:bg-gray-900 focus:ring-green-300 disabled:opacity-25">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                                                 class="w-10 h-10" viewBox="0 0 16 16">

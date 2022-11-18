@@ -170,7 +170,7 @@ class EmpleadoControlller extends Controller
             $curp = $request['curp'];
             $expediente  = $request['expediente'];
             /*Guardamos*/
-            $rutaExpediente = $expediente->storeAs('expedientes/expediente/',$curp,'gcs');
+            $rutaExpediente = $expediente->storeAs('expedientes',$curp.'_expediente.'.$expediente->extension(),'gcs');
             $urlExpediente = Storage::disk('gcs')->url($rutaExpediente);
  
             expediente::updateOrCreate(
@@ -246,6 +246,9 @@ class EmpleadoControlller extends Controller
          ->get();
 
    
+         $documentos = expediente::select('*')
+         ->where('empleado_id' ,'=', $id)
+         ->get();
 
          $escolaridades = Escolaridad::all();
          $estado_civiles = catEstadosCiviles::all();
@@ -265,7 +268,8 @@ class EmpleadoControlller extends Controller
             'bancos' => $bancos,
             'departamentos' => $departamentos,
             'tipos_contrato' => $tipos_contrato,
-            'roles' => $roles
+            'roles' => $roles,
+            'documentos' => $documentos
          ]);
         
     }
@@ -279,13 +283,18 @@ class EmpleadoControlller extends Controller
      
         
         /*Guardado de imagnes, expedientes, contrato*/ 
-        if($request->has('fotografia') && $request['fotografia'] !== null)
+        if($request->has('fotografia') && $request['fotografia'] !== null )
         {
-           $foto =  $request['fotografia'];
-           $nombre_original = $foto->getClientOriginalName();
-           /*Guardamos*/ 
-           $rutaFoto = $foto->storeAs('fotos',$nombre_original ,'gcs');
-           $urlFoto = Storage::disk('gcs')->url($rutaFoto);
+           $urlFoto  = $request['fotografia'];
+        }
+
+        else
+        {
+            $foto =  $request['fotografia'];
+            $nombre_original = $foto->getClientOriginalName();
+            /*Guardamos*/ 
+            $rutaFoto = $foto->storeAs('fotos',$nombre_original ,'gcs');
+            $urlFoto = Storage::disk('gcs')->url($rutaFoto);
         }
 
         $newEmpleado =  $request;
@@ -359,21 +368,21 @@ class EmpleadoControlller extends Controller
             'role_id' => $newEmpleado['rol_id']
          ]);
 
-       // Store docuemtos
+            // Store docuemtos
 
              if($request->has('expediente') && $request['expediente'] !== null)
              {   
                 $curp = $request['curp'];
                 $expediente  = $request['expediente'];
                 /*Guardamos*/
-                $rutaExpediente = $expediente->storeAs('expedientes',$curp,'gcs');
+                $rutaExpediente = $expediente->storeAs('expedientes',$curp.'_expediente.'.$expediente->extension(),'gcs');
                 $urlExpediente = Storage::disk('gcs')->url($rutaExpediente);
      
                 expediente::updateOrCreate(
                  [
                      'ruta' => $urlExpediente,
                      'cat_tipos_documento_id' => 25,
-                     'empleado_id' => $empleado->id
+                     'empleado_id' => $newEmpleado['id']
                  ]
              );
      
@@ -383,14 +392,14 @@ class EmpleadoControlller extends Controller
                  $curp = $request['curp'];
                  $contrato = $request['contrato'];
                  /*Guardamos*/
-                 $rutaContrato = $contrato->storeAs('contratos',$curp,'gcs');
+                 $rutaContrato = $contrato->storeAs('contratos',$curp.'_contrato.'.$contrato->extension(),'gcs');
                  $urlContrato = Storage::disk('gcs')->url($rutaContrato); 
      
                  expediente::updateOrCreate(
                      [
                          'ruta' => $urlContrato,
                          'cat_tipos_documento_id' => 26,
-                         'empleado_id' => $empleado->id
+                         'empleado_id' => $newEmpleado['id']
                      ]
                      );
              }
@@ -401,9 +410,9 @@ class EmpleadoControlller extends Controller
            $request->validate(['fecha_baja' => 'required|after:1900-01-01']);
            bajasEmpleado::updateOrCreate(
             ['fecha_baja' => $request->fecha_baja,
-            'empleado_id'=> $empleado->id],
+            'empleado_id'=> $newEmpleado['id']],
            ['cat_bajas_empleado_id' => $request->cat_bajas_empleado_id]);
-           $empleado->activo = false;
+           $newEmpleado['activo']= false;
            $empleado->save();
        }
        //finiquito_pagado

@@ -19,7 +19,7 @@ var props = defineProps(
 
 
 <template>
-    {{props.empleados}}
+ 
     <DataTable>
         <template #table-header>
             <tr class="text-center">
@@ -64,18 +64,17 @@ var props = defineProps(
             <tr v-for="empleado in empleados" :key="empleado.id">
                 <td class="px-2 whitespace-nowrap">
                   <div class="buttons_table">
-                    <ButtonPhoto style="width:3rem; justify-content: center;" :v-if="empleado.fotografia !='' || empleado.fotografia !== null " 
-                    :data-fancybox="'single'+empleado.id"  :data-src="empleado.fotografia">
+                    <ButtonPhoto style="width:3rem; justify-content: center;" v-if="empleado.fotografia"
+                         :data-fancybox="'single'+empleado.id"  :data-src="empleado.fotografia">
                          img
                     </ButtonPhoto>
-                    <ButtonPhoto style="width:3rem; justify-content: center; display:none" :v-if="empleado.fotografia ==='' || empleado.fotografia === null " 
-                    :data-fancybox="'single'+empleado.id"  :data-src="empleado.fotografia">
-                         img
-                    </ButtonPhoto>
-                    <ButtonPDF style="width:3rem; justify-content: center;" >
+                    <ButtonPDF v-if="empleado.cat_tipos_documento_id==25" style="width:3rem; justify-content: center;" 
+                    :data-fancybox="'expediente'+empleado.id"  :data-src="empleado.ruta" data-type="pdf" data-caption="Expediente"
+                    >
                         exp
                     </ButtonPDF>
-                    <ButtonContrato style="width:3rem; justify-content: center;" >
+                    <ButtonContrato v-if="empleado.cat_tipos_documento_id==26"  style="width:3rem; justify-content: center;" 
+                    :data-fancybox="'contrato'+empleado.id"  :data-src="empleado.ruta" data-type="pdf" data-caption="Contrato">
                        cont
                     </ButtonContrato>
                   </div>
