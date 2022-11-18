@@ -83,7 +83,7 @@ watch(params, (newParams) => {
                 </div>
             </div>
         </template>
-        <div class="py-6 max-w-7xl sm:px-6 md:px-8">
+        <div class=""  >
             <!-- Politics Section -->
             <div class="flex flex-wrap justify-center gap-2 py-6 lg:px-24">
                 <ButtonSeccion v-for="tipoPoliticas in tipoPoliticas" :key="'poli' + tipoPoliticas.id" class="h-24 w-36"
@@ -104,7 +104,7 @@ watch(params, (newParams) => {
                             <path fill-rule="evenodd"
                                 d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
                         </svg>
-                        <p class="mt-1">Agregar Plitica</p>
+                        <p class="mt-1">Agregar Politica</p>
                     </div>
                 </ButtonSeccion>
             </div>
@@ -114,10 +114,10 @@ watch(params, (newParams) => {
             </div>
             <!-- Files Section -->
             <AnimationCard>
-                <CardImage v-for="politica in politicas" :key="politica.id" :file="politica.pdf"
-                    :img="politica.imagePolitic">
-                    <span>{{ politica.namepolitica }}</span>
+                <CardImage v-for="politica in politicas" :key="politica.id" :file="politica.pdf">
+                    <span style="font-size:0.8rem">{{ politica.namepolitica }}</span>
                     <div v-if="$page.props.can['politics.update']"
+                       style="white-space: normal;"
                         class="absolute z-10 w-6 h-6 py-1 bg-white rounded-full shadow -bottom-2 -right-1 hover:bg-gray-500 hover:text-white"
                         @click="showFormPolitic('update', politica)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 m-auto" fill="currentColor"
