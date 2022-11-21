@@ -90,6 +90,8 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
         'is_admin',
+        'expedienteGeneral',
+        'contrato'
     ];
 
     public function getIsAdminAttribute()
@@ -138,4 +140,23 @@ class User extends Authenticatable
     {
         return $this->role->permissions()->where('permissions.id', $idPermission)->exists();
     }
+
+
+    public function expediente()
+    {
+        return $this->hasMany(expediente::class, 'empleado_id', 'id');
+    }
+
+    public function getExpedienteGeneralAttribute()
+    {
+        return $this->expediente()->select('id', 'ruta', 'cat_tipos_documento_id')
+        ->where('cat_tipos_documento_id', 25)->first();
+    }
+
+    public function getContratoAttribute()
+    {
+        return $this->expediente()->select('id', 'ruta', 'cat_tipos_documento_id')
+        ->where('cat_tipos_documento_id', 26)->first();
+    }
+
 }

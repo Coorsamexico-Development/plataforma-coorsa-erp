@@ -87,7 +87,7 @@ const form = useForm
         'fondo_ahorro': 0.0,
         'horario': '',
         'cat_estados_civile_id': '',
-        'fotografia': '',
+        'fotografia': null,
         'expediente': '',
         'contrato': '',
         'cat_tipos_sangre_id': '',

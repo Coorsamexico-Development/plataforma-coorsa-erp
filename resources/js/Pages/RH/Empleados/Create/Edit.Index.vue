@@ -33,6 +33,7 @@ var props = defineProps(
     }
 );
 
+
 let typeForm = ref('update');
 
 let catalogos = ref({
@@ -92,7 +93,7 @@ if(empleado.value.fecha_nacimiento === null)
 }
 
 
-let expediente = ref('');
+let expediente = ref(null);
 
 console.log(props.documentos)
 
@@ -105,17 +106,18 @@ if(props.documentos.length > 0 )
 }
 
 
-let contrato = ref('');
+let contrato = ref(null);
 if(props.documentos.length >0)
 {
   if(props.documentos[1])
   {
-    if(props.documentos[1].cat_tipos_documento_id === 26)
-  {
-    contrato.value = props.documentos[1].ruta;
-  }
+    if(props.documentos[1].cat_tipos_documento_id == 26)
+    {
+        contrato.value = props.documentos[1].ruta;
+    }
   }
 }
+
 
 
 const form = useForm
@@ -173,7 +175,7 @@ const form = useForm
         'fecha_finiquito': '',
         'monto_finiquito': 0,
         'finiquito_pagado': false,
-        'password':empleado.password,
+        'password':'',
         'rol_id': empleado.value.role_id
     });
 
@@ -189,7 +191,7 @@ const createOrUpdate = () => {
       form.expediente = null;
     }
 
-    if(form.contrato)
+    if(form.contrato == undefined)
     {
       form.contrato = null;
     }
@@ -585,7 +587,7 @@ const fecha_termino = computed(() => {
                                                 </div>
                                                 <div class="mt-4">
                                                     <InputLabel for="password" value=" password:*" />
-                                                    <TextInput id="password" type="text" v-model="form.password"
+                                                    <TextInput id="password" type="password" v-model="form.password"
                                                         class="block w-full mt-1" placeholder="Contraseña" />
                                                     <InputError :message="form.errors.password" class="mt-2" />
                                                 </div>
