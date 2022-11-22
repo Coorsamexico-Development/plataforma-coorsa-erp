@@ -95,7 +95,6 @@ const disableCheck = computed(() => {
 
 watch(props, throttle(function () {
     if (props.role.id != -1) {
-        console.log("Entra qui")
         getPermissonToRole()
     }
 }, 150))
