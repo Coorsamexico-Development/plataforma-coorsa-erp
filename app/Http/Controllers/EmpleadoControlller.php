@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\bajasEmpleado;
 use App\Models\Banco;
+use App\Models\CatBajasEmpleados;
 use App\Models\catEstadosCiviles;
 use App\Models\catTipoSangre;
 use App\Models\Ceco;
@@ -71,6 +72,7 @@ class EmpleadoControlller extends Controller
          $departamentos = Ceco::all();
          $tipos_contrato = tipoContrato::select('id', 'nombre','activo')->where('activo',1 )->get();
          $roles = Role::all();
+         
 
          return Inertia::render('RH/Empleados/Create/CreateIndex',
          [
@@ -233,6 +235,9 @@ class EmpleadoControlller extends Controller
          ->where('users.direccion_id','=', $empleado_direccion_id)
          ->get();
 
+
+
+
    
          $documentos = expediente::select('*')
          ->where('empleado_id' ,'=', $id)
@@ -245,6 +250,24 @@ class EmpleadoControlller extends Controller
          $departamentos = Ceco::all();
          $roles = Role::all();
          $tipos_contrato = tipoContrato::select('id', 'nombre','activo')->where('activo',1 )->get();
+         $cat_bajas = CatBajasEmpleados::all();
+
+         $empleado_baja = bajasEmpleado::select(
+            'cat_bajas_empleado_id',
+            'fecha_baja'
+         )
+         ->where('empleado_id','=',$id)
+         ->get();
+
+         $finiquito = finiquito::select(
+            'monto',
+            'fecha_finiquito',
+            'pagado',
+         )
+         ->where('empleado_id','=', $id)
+         ->get();
+         
+
 
          return Inertia::render('RH/Empleados/Create/Edit.Index',
          [
@@ -257,7 +280,10 @@ class EmpleadoControlller extends Controller
             'departamentos' => $departamentos,
             'tipos_contrato' => $tipos_contrato,
             'roles' => $roles,
-            'documentos' => $documentos
+            'documentos' => $documentos,
+            'cat_bajas' => $cat_bajas,
+            'empleado_baja' =>$empleado_baja,
+            'finiquito' =>$finiquito
          ]);
         
     }
@@ -439,22 +465,29 @@ class EmpleadoControlller extends Controller
 
 
 
-       //Preguntamos si el usuario se dio de baja
+       //Preguntamos si el la categoria de baja viene vacia
        if(!empty($request->cat_bajas_empleado_id))
        {
            $request->validate(['fecha_baja' => 'required|after:1900-01-01']);
            bajasEmpleado::updateOrCreate(
-            ['fecha_baja' => $request->fecha_baja,
-            'empleado_id'=> $newEmpleado['id']],
-           ['cat_bajas_empleado_id' => $request->cat_bajas_empleado_id]);
-           $newEmpleado['activo']= false;
-           $empleado->save();
+            ['cat_bajas_empleado_id' => $request['cat_bajas_empleado_id'],
+             'empleado_id' => $request['id'],
+             'fecha_baja' => $request['fecha_baja']
+            ]);
+           
+            User::where('id' ,'=' , $newEmpleado['id'])  //desactivamos el usuario
+            ->update(['activo'=>0]);
        }
        //finiquito_pagado
-       if(!empty($request->fecha_finiquito)){
-        finiquito::updateOrCreate(
-            ['fecha_finiquito' => $request->fecha_finiquito,'empleado_id'=> $empleado->id],
-            ['monto' => $request->monto_finiquito,'pagado' => $request->finiquito_pagado]);
+       if(!empty($request->fecha_finiquito))
+       {
+         finiquito::updateOrCreate(
+            ['empleado_id' => $newEmpleado['id'],
+              'monto' => $request['monto_finiquito'],
+              'fecha_finiquito' => $request['fecha_finiquito'],
+              'pagado' => $request['finiquito_pagado']
+            ]
+         );
         }
         return redirect()->back();
     }

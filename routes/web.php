@@ -110,3 +110,5 @@ Route::get('departamentos', [DepartamentoController::class, 'index'])->name('dpt
 Route::apiResource('/puestos', PuestoController::class);
 Route::get('/departamentos/{departamento}/puestos', [DepartamentoController::class, 'puestosIndex'])->name('departamento.puestos.index');
 Route::put('/departamentos/{departamento}/puesto', [DepartamentoController::class, 'puestosUpdate'])->name('departamento.puestos.update');
+
+Route::get('users/export/{activo}', [UserController::class, 'export'])->name('export.empleados');

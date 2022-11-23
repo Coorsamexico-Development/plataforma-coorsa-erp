@@ -29,7 +29,10 @@ var props = defineProps(
         empleado: Object,
         direccion:Object,
         roles:Object,
-        documentos: Object
+        documentos: Object,
+        cat_bajas: Object,
+        empleado_baja:Object,
+        finiquito:Object
     }
 );
 
@@ -42,7 +45,7 @@ let catalogos = ref({
     bancos: props.bancos,
     tiposContratos: props.tipos_contrato,
     tiposSangres: props.cat_tipo_sangre,
-    motivosBajas: []
+    motivosBajas: props.cat_bajas
 })
 
 let puestos = ref([]);
@@ -172,12 +175,28 @@ const form = useForm
         'enfermedades_cronicas': empleado.value.enfermedades_cronicas,
         'cat_genero_id': empleado.value.cat_genero_id,
         'cat_bajas_empleado_id': '',
+        'fecha_baja':'',
         'fecha_finiquito': '',
         'monto_finiquito': 0,
         'finiquito_pagado': false,
         'password':'',
         'rol_id': empleado.value.role_id
     });
+
+
+if(props.empleado_baja.length > 0)
+{
+  form.cat_bajas_empleado_id = props.empleado_baja[0].cat_bajas_empleado_id;
+  form.fecha_baja = props.empleado_baja[0].fecha_baja;
+}
+
+
+if(props.finiquito.length > 0)
+{
+  form.fecha_finiquito = props.finiquito[0].fecha_finiquito;
+  form.monto_finiquito = props.finiquito[0].monto;
+  form.finiquito_pagado = props.finiquito[0].pagado;
+}
 
 
 const createOrUpdate = () => {
@@ -366,6 +385,7 @@ const fecha_termino = computed(() => {
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
                 Actualizar Empleado
+               {{props.finiquito[0]}}
             </h2>
         </template>
 
