@@ -51,7 +51,7 @@ export default {
   
     <swiper-slide v-for="noticia in noticias" :key="noticia.id">
        <div style="display: flex; justify-content: center;">
-          <img style=" height:15rem;" :src="noticia.image">
+          <img style=" height:17rem;" :src="noticia.image">
        </div>
     </swiper-slide>
   </swiper>

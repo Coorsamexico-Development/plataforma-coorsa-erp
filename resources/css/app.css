@@ -314,8 +314,17 @@ input:checked ~ .tab-content {
 
 .card_nom
 {
-    width:60rem;  margin:0rem; padding:0.5rem;
+    width:62rem;  margin:0rem; padding:0.5rem;
     height: 16rem;
+}
+
+
+.video_source
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
 }
 
 @media  (min-width:1800px)
