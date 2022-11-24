@@ -23,7 +23,7 @@ const closeModalVideo = () => {
 </script>
 
 <template>
-    <Card style=" width: 24rem;  margin:0.5rem; padding: 1.5rem;">
+    <Card style=" width: 28rem;  margin:0.5rem; padding: 1.5rem;">
         <h4 style="color:#26458D; font-weight:bolder">Videos Coorsa</h4>
         <CarruselVideos :videos="videos"></CarruselVideos>
         <ButtonModal v-if="$page.props.can['video.create']" @click="abrirModalVideo">Añadir nuevo video</ButtonModal>
