@@ -55,7 +55,7 @@ watch(params, (newParams) => {
         <template #header>
             <Title>Control Interno</Title>
         </template>
-        <div class="py-6 max-w-7xl sm:px-6 md:px-8">
+        <div class="py-6 sm:px-6 md:px-8">
             <!-- Departamentos Section -->
             <div class="flex flex-wrap justify-center gap-2 py-6 lg:px-40">
                 <ButtonSeccion v-for="dep in departamentosAuditoria" :key="'dep' + dep.id" class="h-24 w-36"
@@ -68,7 +68,7 @@ watch(params, (newParams) => {
                 </ButtonSeccion>
             </div>
             <!-- End Departamentos -->
-            <GraficaSection :calificaciones="calificaciones" class="sm:px-6">
+            <GraficaSection :calificaciones="calificaciones" class="sm:px-6" style="align-items:center">
                 <ButtonAdd v-if="$page.props.can['calificacion.create'] && departamento != undefined"
                     @click="showingFormCalificacion = true">
                     + AGREGAR

@@ -48,8 +48,8 @@ export default {
   >
     <swiper-slide v-for="video in videos" :key="video.id"> 
       
-      <video width="650" height="500" controls>
-        <source :src="video.image" type="video/mp4">	
+      <video width="1280" height="920" controls autoplay>
+        <source :src="video.image" type="video/mp4" >	
         Your browser does not support the video tag.				
 			</video>
     </swiper-slide>

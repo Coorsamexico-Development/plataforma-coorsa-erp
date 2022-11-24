@@ -38,16 +38,15 @@ const logout = () => {
         <div class="min-h-screen bg-gray-100">
             <nav class="navMenu">
                 <!-- Primary Navigation Menu -->
-                <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div class="px-4 2xl:ml-16 max-w-7xl sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
-                        <div class="flex">
-                            <!-- Logo -->
-                            <div class="flex items-center shrink-0" style="margin-right:16rem;margin-left:-4rem; ">
+                        <!-- Logo -->
+                        <div class="items-center xl:flex shrink-0 xl:mr-60">
                                 <Link :href="route('dashboard')">
-                                   <img style="width:8rem" src="../../img/logo_coorsa.png">
+                                   <img  class="w-28" src="../../img/logo_coorsa.png">
                                 </Link>
                             </div>
-
+                        <div class="flex">
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink class="navLinks" :href="route('dashboard')"
