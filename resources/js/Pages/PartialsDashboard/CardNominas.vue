@@ -33,8 +33,10 @@ const closeModalNomina = () =>
 
 <template>
     <Card class="card_nom" >
-        <h4 style="color:#26458D; font-weight:bolder">Nuestro Colaborador.</h4>
-        <div>
+        <div >
+            <h4 style="color:#26458D; font-weight:bolder">Nuestro Colaborador.</h4>
+        </div>
+        <div style="float:left">
             <p>
                 <strong>Nombre:</strong> {{user.name}}
             </p>

@@ -39,17 +39,20 @@ console.log(props.menus.length);
                 <h5 style="color:#6e6e6e; font-weight: bolder;">Fecha: {{ fecha }}</h5>
             </div>
         </div>
-        <div v-if="menus.length > 0">
+        <div v-if="menus.length > 0" style="display:flex; justify-content: center; align-items: center;">
             {{ menus[0].nombre }}
             <p style="color:#707070;">
                 {{ menus[0].descripcion }}
             </p>
         </div>
-        <div v-else>
+        <div v-else style="display:flex; justify-content: center; align-items: center;">
             <h3 style="color:#707070; font-weight:bolder;">Aun no hay menú para el día de hoy.</h3>
         </div>
 
-        <ButtonModal v-if="$page.props.can['menu.create']" @click="abrirModalMenu">Añadir nuevo menu</ButtonModal>
+        <div style="display:flex; justify-content: center; align-items: center;">
+            <ButtonModal  v-if="$page.props.can['menu.create']" @click="abrirModalMenu">Añadir nuevo menu</ButtonModal>
+        </div>
+
         <ModalAddMenu :show="modalMenu" @close="closeModalMenu"></ModalAddMenu>
     </Card>
 </template>

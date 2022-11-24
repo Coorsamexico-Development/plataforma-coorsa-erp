@@ -314,8 +314,13 @@ input:checked ~ .tab-content {
 
 .card_nom
 {
-    width:60rem;  margin:0rem; padding:0.5rem;
+    width: 60rem;
+    margin: 0rem;
     height: 16rem;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 
@@ -349,5 +354,6 @@ input:checked ~ .tab-content {
     .card_nom
     {
        width:66.5rem;
+       
     }
 }
