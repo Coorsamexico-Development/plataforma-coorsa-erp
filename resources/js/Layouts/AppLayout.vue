@@ -38,7 +38,7 @@ const logout = () => {
         <div class="min-h-screen bg-gray-100">
             <nav class="navMenu">
                 <!-- Primary Navigation Menu -->
-                <div class="px-4 2xl:ml-16 max-w-7xl sm:px-6 lg:px-8">
+                <div class="px-4 2xl:ml-16 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
                         <!-- Logo -->
                         <div class="items-center xl:flex shrink-0 xl:mr-60">

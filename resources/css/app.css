@@ -135,6 +135,7 @@ width: 512px;
     justify-content: center;
     justify-items: center;
     margin:3rem;
+    margin-top: 0rem;
 }
 
 .card_MV
@@ -142,7 +143,10 @@ width: 512px;
     grid-column: 1/2;
     grid-row: 1/2;
     /*margin-left: 2rem;*/
+}
 
+.card_mv{
+    height:22rem;
 }
 
 .card_menu
@@ -161,6 +165,11 @@ width: 512px;
 {
  grid-column: 3/4;
  grid-row: 1/2;
+}
+
+.card_Video
+{
+    height: 22rem;
 }
 
 .card_nominas
@@ -299,12 +308,14 @@ input:checked ~ .tab-content {
 
 .card_menu{
     width: 22rem;
+    height: 16rem;
     padding:0.5rem
 }
 
 .card_nom
 {
     width:60rem;  margin:0rem; padding:0.5rem;
+    height: 16rem;
 }
 
 @media  (min-width:1800px)
@@ -312,6 +323,11 @@ input:checked ~ .tab-content {
     .card_MV
     {
       width:30rem; 
+     }
+
+     .card_mv
+     {
+        width: 30rem;
      }
 
      .card_menu
