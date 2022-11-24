@@ -29,7 +29,7 @@ console.log(props.menus.length);
 </script>
 
 <template>
-    <Card style="padding:2rem; padding-right: 2rem; width: 24rem; margin:0.5rem">
+    <Card class="card_menu">
         <div style="display:flex; justify-content: center; align-items: center;">
             <div style="background-color:#dedede; width:5rem; display:flex; justify-content:center; border-radius: 10rem;">
                 <img style="width:3rem;" src="../../../img/icono_1.png" />

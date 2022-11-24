@@ -297,10 +297,33 @@ input:checked ~ .tab-content {
     width: 24rem;  margin:0.5rem; padding: 1.5rem;
 }
 
+.card_menu{
+    width: 22rem;
+    padding:0.5rem
+}
+
+.card_nom
+{
+    width:60rem;  margin:0rem; padding:0.5rem;
+}
+
 @media  (min-width:1800px)
 {
     .card_mv
     {
-      width:30rem;   
+      width:30rem; 
+      margin-left: -3rem;  
      }
+
+     .card_menu
+     {
+        width: 30rem;
+        padding:0.5rem;
+        margin-left: 0.5rem;
+    }
+
+    .card_nom
+    {
+       width:65rem;
+    }
 }

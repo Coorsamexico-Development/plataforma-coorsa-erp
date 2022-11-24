@@ -32,7 +32,7 @@ const closeModalNomina = () =>
 </script>
 
 <template>
-    <Card style=" width:60rem;  margin:0.5rem; padding: 1.5rem;" >
+    <Card class="card_nom" >
         <h4 style="color:#26458D; font-weight:bolder">Nuestro Colaborador.</h4>
         <div>
             <p>

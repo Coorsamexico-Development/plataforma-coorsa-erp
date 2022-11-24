@@ -13,7 +13,7 @@ var props = defineProps({
 </script>
 
 <template>
-    <Card class="card_mv" style="" >
+    <Card class="card_mv" >
         <CarruselMV></CarruselMV>
     </Card>
 </template>
