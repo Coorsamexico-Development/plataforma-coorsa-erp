@@ -17,12 +17,8 @@ var props = defineProps({
 
 <template>
     <AppLayout title="Dashboard">
-        <template #header >
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Inicio
-            </h2>
-        </template>
-        <div class="cards-container">
+
+        <div class="cards-container max-2xl:m-16">
           <div class="card_MV">
             <CardMV></CardMV>
           </div>
