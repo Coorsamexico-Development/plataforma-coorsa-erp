@@ -38,7 +38,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('inicio');
 
 Route::middleware([
     'auth:sanctum',
@@ -112,3 +112,5 @@ Route::get('/departamentos/{departamento}/puestos', [DepartamentoController::cla
 Route::put('/departamentos/{departamento}/puesto', [DepartamentoController::class, 'puestosUpdate'])->name('departamento.puestos.update');
 
 Route::get('users/export/{activo}', [UserController::class, 'export'])->name('export.empleados');
+
+Route::get('card/user',[UserController::class,'viewCard'])->name('view.card');

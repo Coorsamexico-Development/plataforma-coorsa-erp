@@ -39,4 +39,10 @@ class UserController extends Controller
             return Excel::download(new UsersExport(0), 'Reporte_Empleados_Inactivos.xlsx');
         }
     }
+
+    public function viewCard ()
+    {
+        return Inertia::render('CardViewUser/IndexCard',
+        []);
+    }
 }

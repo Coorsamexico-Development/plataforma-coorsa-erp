@@ -290,3 +290,17 @@ input:checked ~ .tab-content {
 {
     display: flex;
 }
+
+
+.card_MV
+{
+    width: 24rem;  margin:0.5rem; padding: 1.5rem;
+}
+
+@media  (min-width:1800px)
+{
+    .card_mv
+    {
+      width:30rem;   
+     }
+}

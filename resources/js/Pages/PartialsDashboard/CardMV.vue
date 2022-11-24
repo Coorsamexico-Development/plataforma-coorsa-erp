@@ -13,7 +13,7 @@ var props = defineProps({
 </script>
 
 <template>
-    <Card style=" width: 24rem;  margin:0.5rem; padding: 1.5rem;" >
+    <Card class="card_mv" style="" >
         <CarruselMV></CarruselMV>
     </Card>
 </template>
