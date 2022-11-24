@@ -309,10 +309,9 @@ input:checked ~ .tab-content {
 
 @media  (min-width:1800px)
 {
-    .card_mv
+    .card_MV
     {
       width:30rem; 
-      margin-left: -3rem;  
      }
 
      .card_menu
