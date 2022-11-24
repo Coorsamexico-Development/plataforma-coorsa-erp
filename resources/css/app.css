@@ -314,7 +314,7 @@ input:checked ~ .tab-content {
 
 .card_nom
 {
-    width:62rem;  margin:0rem; padding:0.5rem;
+    width:60rem;  margin:0rem; padding:0.5rem;
     height: 16rem;
 }
 
@@ -348,6 +348,6 @@ input:checked ~ .tab-content {
 
     .card_nom
     {
-       width:65rem;
+       width:66.5rem;
     }
 }
