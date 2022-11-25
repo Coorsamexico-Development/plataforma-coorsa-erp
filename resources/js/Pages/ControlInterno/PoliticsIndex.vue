@@ -114,7 +114,7 @@ watch(params, (newParams) => {
             </div>
             <!-- Files Section -->
             <AnimationCard>
-                <CardImage style="margin:1rem;" v-for="politica in politicas" :key="politica.id" :file="politica.pdf">   
+                <CardImage style="margin:1.8rem;" v-for="politica in politicas" :key="politica.id" :file="politica.pdf">   
                     <div class="row" >
                         <div class="col-lg-3 col-md-4">
                            <img class="" :src="politica.imagePolitic"/>
