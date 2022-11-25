@@ -28,7 +28,7 @@ const isDownload = computed(() => {
     flex-direction: column;
     height: 14rem;"
     >
-        <div class="relative flex flex-col justify-center font-bold text-center text-gray-400 h-1/4">
+        <div class="relative flex flex-col justify-center font-bold text-center text-gray-400 mt-11 h-1/4">
             <slot />
         </div>
         <div class="z-40 float-left w-6 h-6 py-1 mt-8 mr-32 transition duration-300 bg-white rounded-full group-hover:scale-125 hover:bg-green-500 hover:text-white">
