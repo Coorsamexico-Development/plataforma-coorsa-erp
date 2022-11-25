@@ -160,6 +160,11 @@ width: 512px;
     margin-right: 1.5rem;
 }
 
+.card_noticia
+{
+    width: 24rem;
+}
+
 .card_videos
 {
  grid-column: 3/4;
@@ -230,6 +235,11 @@ width: 512px;
        width:58rem;
        margin-left: 2rem;
        margin-top: 0.5rem;
+    }
+
+    .card_noticia
+    {
+     width: 24rem; 
     }
 }
 
@@ -354,7 +364,6 @@ input:checked ~ .tab-content {
 {
     display: flex;
 }
-
 
 
 

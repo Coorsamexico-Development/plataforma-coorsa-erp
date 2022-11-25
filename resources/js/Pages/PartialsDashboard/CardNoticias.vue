@@ -25,7 +25,7 @@ const closeModalNoticia = () => {
 </script>
 
 <template>
-    <Card style=" width: 24rem;">
+    <Card class="card_noticia">
         <CarruselNoticias style="margin:1rem" :noticias="noticias"></CarruselNoticias>
         <ButtonModal v-if="$page.props.can['noticias.create']" @click="showModalNoticia">Añadir nueva noticia
         </ButtonModal>

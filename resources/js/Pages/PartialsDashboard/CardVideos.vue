@@ -23,7 +23,7 @@ const closeModalVideo = () => {
 </script>
 
 <template>
-    <Card style=" width: 28rem;" class="card_Video">
+    <Card class="card_Video">
         <CarruselVideos :videos="videos"></CarruselVideos>
         <!--
         <ButtonModal v-if="$page.props.can['video.create']" @click="abrirModalVideo">Añadir nuevo video</ButtonModal>

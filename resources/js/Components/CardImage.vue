@@ -25,11 +25,13 @@ const isDownload = computed(() => {
     style="display: flex;
     align-items: center;
     justify-content: space-evenly;
-    flex-direction: column;">
-        <div class="relative flex justify-center font-bold text-center text-gray-400 h-1/4">
+    flex-direction: column;
+    height: 14rem;"
+    >
+        <div class="relative flex flex-col justify-center font-bold text-center text-gray-400 h-1/4">
             <slot />
         </div>
-        <div class="w-6 h-6 py-1 transition duration-300 bg-white rounded-full group-hover:scale-125 hover:bg-green-500 hover:text-white">
+        <div class="z-40 float-left w-6 h-6 py-1 mt-8 mr-32 transition duration-300 bg-white rounded-full group-hover:scale-125 hover:bg-green-500 hover:text-white">
             <a v-if="isDownload" target="_blank" :href="file" download>
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mx-auto" fill="currentColor"
                     viewBox="0 0 16 16">
