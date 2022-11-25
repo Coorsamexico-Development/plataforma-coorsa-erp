@@ -26,7 +26,7 @@ var props = defineProps({
             <CardMenu :menus="props.menus"></CardMenu>
           </div>
           <div class="card_noticias"> 
-            <CardNoticias style="width:30rem"  :noticias="props.noticias"></CardNoticias>         
+            <CardNoticias  :noticias="props.noticias"></CardNoticias>         
           </div>
           <div  class="card_videos">
             <CardVideos :videos="videos" ></CardVideos>
