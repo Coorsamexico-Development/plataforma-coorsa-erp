@@ -6,6 +6,8 @@ import CardNoticias from './PartialsDashboard/CardNoticias.vue';
 import CardVideos from './PartialsDashboard/CardVideos.vue';
 import CardNominas from './PartialsDashboard/CardNominas.vue';
 import CardMV from './PartialsDashboard/CardMV.vue';
+import CarruselNoticias from './PartialsDashboard/CarruselNoticias.vue';
+import MenuDesplegable from './PartialsDashboard/MenuDesplegable.vue';
 
 var props = defineProps({
     menus:Object,
@@ -13,26 +15,24 @@ var props = defineProps({
     videos:Object
 });
 
+
+
 </script>
 
 <template>
     <AppLayout title="Dashboard">
-
-        <div class="cards-container max-2xl:m-16">
+        <div class="cards-container">
           <div class="card_MV">
-            <CardMV></CardMV>
+              <CardMV></CardMV>
           </div>
-          <div class="card_menu"> 
-            <CardMenu :menus="props.menus"></CardMenu>
+          <div class="card_noticias">
+             <CardNoticias :noticias="noticias"></CardNoticias>
           </div>
-          <div class="card_noticias"> 
-            <CardNoticias  :noticias="props.noticias"></CardNoticias>         
+          <div class="card_videos">
+             <CardVideos></CardVideos>
           </div>
-          <div  class="card_videos">
-            <CardVideos :videos="videos" ></CardVideos>
-          </div>
-          <div  class="card_nominas">
-            <CardNominas></CardNominas>
+          <div class="menu_desplegable">
+            <MenuDesplegable :menus="menus" ></MenuDesplegable>
           </div>
         </div>
     </AppLayout>

@@ -46,7 +46,7 @@ export default {
     @slideChange="onSlideChange"
   >
   <swiper-slide style=""> 
-      <div style="margin-top:2rem;height: 18rem;">
+      <div style="margin:2rem;">
           <h2 style="color:#26458D; font-weight:bolder; margin-bottom: 1rem;">¿Quiénes Somos?</h2>
           <h3 style="text-align:center;">
             Somos un equipo de profesionales altamente comprometido en dar soluciones lógisticas,
@@ -56,7 +56,7 @@ export default {
        </div>
     </swiper-slide>
     <swiper-slide>
-       <div style="margin:2rem; margin-top: 2rem;">
+       <div style="margin: 2rem;">
           <h2 style="color:#26458D; font-weight:bolder; margin-bottom: 1rem;">Nuestra Misión</h2>
           <h3 style="text-align:center;">Ser la empresa líder en soluciones 
             logísticas en México y en otros países, innovando y 
@@ -66,7 +66,7 @@ export default {
        </div>
     </swiper-slide>
     <swiper-slide> 
-      <div style="margin:2rem; margin-top: 2rem;">
+      <div style="margin:2rem;">
           <h2 style="color:#26458D; font-weight:bolder; margin-bottom: 1rem;">Nuestra Visión</h2>
           <h3 style="text-align:center;">
             Eficientar los procesos de la cadena de suministros, 

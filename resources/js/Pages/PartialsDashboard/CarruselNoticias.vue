@@ -17,8 +17,8 @@ export default {
     SwiperSlide,
   },
   props: {
-        noticias: Object,
-    },
+    noticias:Object
+  },
   setup() {
     const onSwiper = (swiper) => {
     };
@@ -32,6 +32,7 @@ export default {
     };
   },
 };
+
 </script>
 <template>
  <swiper
@@ -48,10 +49,9 @@ export default {
     @swiper="onSwiper"
     @slideChange="onSlideChange"
   >
-  
     <swiper-slide v-for="noticia in noticias" :key="noticia.id">
        <div style="display: flex; justify-content: center;">
-          <img style=" height:17rem;" :src="noticia.image">
+          <img style="height: 34.5rem;" :src="noticia.image">
        </div>
     </swiper-slide>
   </swiper>

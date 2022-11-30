@@ -25,10 +25,13 @@ const closeModalNoticia = () => {
 </script>
 
 <template>
-    <Card class="card_noticia">
-        <CarruselNoticias style="margin:1rem" :noticias="noticias"></CarruselNoticias>
+    <Card class="">
+       <div class="carrusel_noticias">
+           <CarruselNoticias style="margin:1rem" :noticias="noticias"></CarruselNoticias>
+       </div>
+      
         <ButtonModal v-if="$page.props.can['noticias.create']" @click="showModalNoticia">Añadir nueva noticia
         </ButtonModal>
-        <ModalAddNoticia :show="modalNoticia" @close="closeModalNoticia"></ModalAddNoticia>
+        <ModalAddNoticia  :show="modalNoticia" @close="closeModalNoticia"></ModalAddNoticia>
     </Card>
 </template>
