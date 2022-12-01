@@ -104,7 +104,7 @@ const cambiar = (id) =>
     
         }
 
-        if (window.matchMedia("(min-width: 1366px)").matches) 
+        if (window.matchMedia("(max-width: 1366px)").matches) 
         {
             /* La pantalla tiene al menos 1800 píxeles de ancho */
            if(buttonSelected.value === -1)

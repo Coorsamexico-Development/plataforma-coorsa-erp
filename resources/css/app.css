@@ -234,7 +234,7 @@ width: 512px;
 }
 
 
-@media  (min-width:1366px)
+@media  (max-width:1366px)
 {
     .carrusel_noticias
     {
