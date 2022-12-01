@@ -41,7 +41,6 @@ export default {
               "disableOnInteraction": false
      }'
     :pagination="{ clickable: true }"
-    :scrollbar="{ draggable: true }"
     @swiper="onSwiper"
     @slideChange="onSlideChange"
   >
