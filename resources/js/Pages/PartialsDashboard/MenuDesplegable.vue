@@ -34,40 +34,79 @@ const cambiar = (id) =>
 {
     buttonSelected.value = id;
 
-    if(buttonSelected.value === -1)
+    if (window.matchMedia("(min-width: 1800px)").matches) 
     {
-      let card_MV = document.getElementsByClassName('card_MV');
-      card_MV[0].style.width = "40rem";
-      
-      let card_Videos = document.getElementsByClassName('card_videos');
-      card_Videos[0].style.width = "40rem";
-
-      let card_noticias = document.getElementsByClassName('card_noticias');
-      card_noticias[0].style.width = "50rem";
-
-      let carrusel_noticias = document.getElementsByClassName('carrusel_noticias');
-      carrusel_noticias[0].style.width = "50rem";
-
+      /* La pantalla tiene al menos 1800 píxeles de ancho */
+      if(buttonSelected.value === -1)
+        {
+          let card_MV = document.getElementsByClassName('card_MV');
+          card_MV[0].style.width = "40rem";
+          
+          let card_Videos = document.getElementsByClassName('card_videos');
+          card_Videos[0].style.width = "40rem";
+    
+          let card_noticias = document.getElementsByClassName('card_noticias');
+          card_noticias[0].style.width = "60rem";
+    
+          let carrusel_noticias = document.getElementsByClassName('carrusel_noticias');
+          carrusel_noticias[0].style.width = "60rem";
+    
+        }
+        
+        if(buttonSelected.value === 1 )
+        {
+            let card_MV = document.getElementsByClassName('card_MV');
+          card_MV[0].style.width = "38rem";
+          
+          let card_Videos = document.getElementsByClassName('card_videos');
+          card_Videos[0].style.width = "38rem";
+    
+          let card_noticias = document.getElementsByClassName('card_noticias');
+          card_noticias[0].style.width = "40rem";
+    
+          let carrusel_noticias = document.getElementsByClassName('carrusel_noticias');
+          carrusel_noticias[0].style.width = "40rem";
+    
+        }
+    }
+    else
+    {
+        if(buttonSelected.value === -1)
+        {
+          let card_MV = document.getElementsByClassName('card_MV');
+          card_MV[0].style.width = "40rem";
+          
+          let card_Videos = document.getElementsByClassName('card_videos');
+          card_Videos[0].style.width = "40rem";
+    
+          let card_noticias = document.getElementsByClassName('card_noticias');
+          card_noticias[0].style.width = "50rem";
+    
+          let carrusel_noticias = document.getElementsByClassName('carrusel_noticias');
+          carrusel_noticias[0].style.width = "50rem";
+    
+    
+        }
+        
+        if(buttonSelected.value === 1 )
+        {
+            let card_MV = document.getElementsByClassName('card_MV');
+          card_MV[0].style.width = "38rem";
+          
+          let card_Videos = document.getElementsByClassName('card_videos');
+          card_Videos[0].style.width = "38rem";
+    
+          let card_noticias = document.getElementsByClassName('card_noticias');
+          card_noticias[0].style.width = "38rem";
+    
+          let carrusel_noticias = document.getElementsByClassName('carrusel_noticias');
+          carrusel_noticias[0].style.width = "38rem";
+    
+        }
 
     }
-    
-    if(buttonSelected.value === 1 )
-    {
-        let card_MV = document.getElementsByClassName('card_MV');
-      card_MV[0].style.width = "38rem";
-      
-      let card_Videos = document.getElementsByClassName('card_videos');
-      card_Videos[0].style.width = "38rem";
 
-      let card_noticias = document.getElementsByClassName('card_noticias');
-      card_noticias[0].style.width = "38rem";
-
-      let carrusel_noticias = document.getElementsByClassName('carrusel_noticias');
-      carrusel_noticias[0].style.width = "38rem";
-
-
-    }
-    
+ 
 }
 
 
@@ -77,7 +116,7 @@ const cambiar = (id) =>
    <Card style="height:40.5rem; align-content: center;display: flex; align-items: center;">
      <div class="menu_icons">
         <ButtonIcon v-if="(buttonSelected === 1 || buttonSelected ===2)" class="flecha_contract" @click="cambiar(-1)" style="margin-top:-15rem; margin-bottom:10rem;">
-            <svg style="fill:white; width:3rem; transform: rotate(180deg);" id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 17">
+            <svg style="fill:white; width:2rem; transform: rotate(180deg);" id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 17">
                 <path id="Trazado_104" data-name="Trazado 104" class="cls-1" d="M27.77,8.5c-.16,.55-.71,.91-1.28,.83-7.04-.01-14.08-.01-21.12,0h-.35c.11,.12,.18,.2,.26,.27,1.1,1.1,2.21,2.2,3.31,3.3,.29,.26,.39,.67,.28,1.04-.09,.37-.4,.65-.77,.71-.36,.08-.73-.04-.98-.32-1-1-2-2-3-2.99-.75-.74-1.49-1.48-2.24-2.23-.45-.36-.52-1.01-.16-1.46,.05-.06,.1-.11,.16-.16,1.73-1.73,3.47-3.45,5.2-5.18,.36-.44,1.01-.51,1.45-.15,.03,.02,.05,.04,.08,.07,.4,.4,.4,1.06,0,1.46-.02,.02-.05,.04-.07,.06-1.09,1.09-2.18,2.17-3.27,3.26-.07,.07-.14,.12-.22,.18l.02,.07h.28c7.05,0,14.1,0,21.15,0,.57-.08,1.12,.27,1.28,.83v.41Z"/>
             </svg>
         </ButtonIcon>
@@ -99,7 +138,7 @@ const cambiar = (id) =>
      </div>
      <!--Mostrar content-->
      <div v-if="(buttonSelected==1)" style="margin:2rem">
-            <div style="margin:1rem">
+            <div style="">
                 <h4 style="color:#26458D; font-weight:bolder;">Menú del dia</h4>
                 <h5 style="color:#6e6e6e; font-weight: bolder;">Fecha: {{ fecha }} </h5>
             </div>
@@ -112,7 +151,7 @@ const cambiar = (id) =>
             <div v-else style="display:flex; justify-content: center; align-items: center;">
                <h3 style="color:#707070; font-weight:bolder;">Aun no hay menú para el día de hoy.</h3>
            </div>
-            <div style="display:flex; justify-content: center; align-items: center;">
+            <div style="display:flex; justify-content: center; align-items: center; margin-top:2r em">
                <ButtonAdd  v-if="$page.props.can['menu.create']" @click="abrirModalMenu">Añadir nuevo menu</ButtonAdd>
                <ModalAddMenu :show="modalMenu" @close="closeModalMenu"></ModalAddMenu>
             </div>

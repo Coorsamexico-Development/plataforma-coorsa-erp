@@ -7,6 +7,8 @@ import moment from 'moment';
 import CarruselNoticias from './CarruselNoticias.vue';
 import ButtonModal from '../../Components/ButtonModal.vue';
 import ModalAddNoticia from './ModalAddNoticia.vue';
+import ButtonAdd from '@/Components/ButtonAdd.vue';
+
 
 var props = defineProps({
     noticias: Object
@@ -30,8 +32,9 @@ const closeModalNoticia = () => {
            <CarruselNoticias style="margin:1rem" :noticias="noticias"></CarruselNoticias>
        </div>
       
-        <ButtonModal v-if="$page.props.can['noticias.create']" @click="showModalNoticia">Añadir nueva noticia
-        </ButtonModal>
+        <ButtonAdd v-if="$page.props.can['noticias.create']" @click="showModalNoticia" style="width:2rem; margin:1rem; padding: 0.5rem 3rem; display: flex; align-content: center; justify-content: center;">
+            <strong style="font-size:1.5rem; font-weight:bolder">+</strong>
+        </ButtonAdd>
         <ModalAddNoticia  :show="modalNoticia" @close="closeModalNoticia"></ModalAddNoticia>
     </Card>
 </template>

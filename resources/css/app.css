@@ -171,7 +171,6 @@ width: 512px;
 {
     grid-column: 2/3;
     grid-row: 1/2;
-  
 }
 
 .menu_desplegable
@@ -190,7 +189,29 @@ width: 512px;
 /*Fin estilos Menu*/
 @media  (min-width:1800px)
 {
+    .card_MV
+    {
+        grid-column: 2/3;
+        grid-row: 2/3;
+        width: 50rem; 
+        margin-top: -15rem;
+        align-items: center;
+        height: 5rem;
+    }
 
+    .card_videos
+    {
+        grid-column: 2/3;
+        grid-row: 1/2;
+        width:50rem;
+    }
+
+    .menu_desplegable
+    {
+      grid-column: 3/4;
+      grid-row: 1/3;
+ 
+    }
 }
 
 /* */

@@ -29,7 +29,7 @@ const closeModalVideo = () => {
         <ButtonModal v-if="$page.props.can['video.create']" @click="abrirModalVideo">Añadir nuevo video</ButtonModal>
         <ModalAddVideo :show="modalVideo" @close="closeModalVideo"></ModalAddVideo>
         -->
-        <div style="margin:1rem">
+        <div style="margin:1rem; display:flex; justify-content:center;">
             <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PLjSCaE1YbE5-nRJUcFcol3CsjUEw5G8fx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </Card>
