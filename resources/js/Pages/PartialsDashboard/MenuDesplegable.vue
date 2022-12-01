@@ -80,10 +80,10 @@ const cambiar = (id) =>
           card_Videos[0].style.width = "40rem";
     
           let card_noticias = document.getElementsByClassName('card_noticias');
-          card_noticias[0].style.width = "50rem";
+          card_noticias[0].style.width = "45rem";
     
           let carrusel_noticias = document.getElementsByClassName('carrusel_noticias');
-          carrusel_noticias[0].style.width = "50rem";
+          carrusel_noticias[0].style.width = "45rem";
     
     
         }
@@ -91,25 +91,22 @@ const cambiar = (id) =>
         if(buttonSelected.value === 1 )
         {
             let card_MV = document.getElementsByClassName('card_MV');
-          card_MV[0].style.width = "38rem";
+          card_MV[0].style.width = "36rem";
           
           let card_Videos = document.getElementsByClassName('card_videos');
-          card_Videos[0].style.width = "38rem";
+          card_Videos[0].style.width = "36rem";
     
           let card_noticias = document.getElementsByClassName('card_noticias');
-          card_noticias[0].style.width = "38rem";
+          card_noticias[0].style.width = "36rem";
     
           let carrusel_noticias = document.getElementsByClassName('carrusel_noticias');
-          carrusel_noticias[0].style.width = "38rem";
+          carrusel_noticias[0].style.width = "36rem";
     
         }
 
     }
 
- 
 }
-
-
 
 </script>
 <template>

@@ -164,7 +164,7 @@ width: 512px;
 
 .carrusel_noticias
 {
-    width:50rem;
+    width:45rem;
 }
 
 .card_videos
@@ -189,6 +189,25 @@ width: 512px;
 /*Fin estilos Menu*/
 @media  (min-width:1800px)
 {
+    .navLinks
+    {
+        color: white;
+        font-size: 1rem;
+    }
+    
+  .cards-container
+   {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: repeat(2,2fr);
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    column-gap: 1rem;
+    row-gap: 1rem;
+    margin: 3rem;
+  }
+
     .card_MV
     {
         grid-column: 2/3;
