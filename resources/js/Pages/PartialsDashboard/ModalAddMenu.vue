@@ -42,7 +42,7 @@ const close = () => {
 
                    <div style="float:left; margin: 2rem;margin-top: 0rem;">
                      <InputLabel>Descripción de menú:</InputLabel>
-                     <textarea style="border:solid 0.15rem #26458D; width:30rem; height:10rem;" v-model="menuForm.descripcion"></textarea>
+                     <textarea required style="border:solid 0.15rem #26458D; width:30rem; height:10rem;" v-model="menuForm.descripcion"></textarea>
                    </div>
                 </div>
                   <ButtonModal type="submit">Enviar</ButtonModal>
