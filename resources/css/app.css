@@ -233,6 +233,15 @@ width: 512px;
     }
 }
 
+
+@media  (min-width:1366px)
+{
+    .carrusel_noticias
+    {
+        width:36rem;
+    }
+}
+
 /* */
 
 

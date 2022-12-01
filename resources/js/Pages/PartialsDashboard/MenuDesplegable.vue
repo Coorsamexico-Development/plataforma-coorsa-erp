@@ -104,6 +104,42 @@ const cambiar = (id) =>
     
         }
 
+        if (window.matchMedia("(min-width: 1366px)").matches) 
+        {
+            /* La pantalla tiene al menos 1800 píxeles de ancho */
+           if(buttonSelected.value === -1)
+             {
+               let card_MV = document.getElementsByClassName('card_MV');
+               card_MV[0].style.width = "40rem";
+               
+               let card_Videos = document.getElementsByClassName('card_videos');
+               card_Videos[0].style.width = "40rem";
+         
+               let card_noticias = document.getElementsByClassName('card_noticias');
+               card_noticias[0].style.width = "36rem";
+         
+               let carrusel_noticias = document.getElementsByClassName('carrusel_noticias');
+               carrusel_noticias[0].style.width = "36rem";
+         
+             }
+             
+             if(buttonSelected.value === 1 )
+             {
+                 let card_MV = document.getElementsByClassName('card_MV');
+               card_MV[0].style.width = "28rem";
+               
+               let card_Videos = document.getElementsByClassName('card_videos');
+               card_Videos[0].style.width = "28rem";
+         
+               let card_noticias = document.getElementsByClassName('card_noticias');
+               card_noticias[0].style.width = "33rem";
+         
+               let carrusel_noticias = document.getElementsByClassName('carrusel_noticias');
+               carrusel_noticias[0].style.width = "33rem";
+         
+             }
+        }
+
     }
 
 }
