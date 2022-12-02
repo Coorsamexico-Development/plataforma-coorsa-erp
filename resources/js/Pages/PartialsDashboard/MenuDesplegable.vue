@@ -88,7 +88,7 @@ const cambiar = (id) =>
     
         }
         
-        if(buttonSelected.value === 1 )
+        if(buttonSelected.value === 1  || buttonSelected.value == 2)
         {
             let card_MV = document.getElementsByClassName('card_MV');
           card_MV[0].style.width = "36rem";
