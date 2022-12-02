@@ -4,9 +4,11 @@
             <strong>
               <h1 style="float:left; margin-right: 5rem; margin-left: 2rem; margin-top: 1rem; font-size: 1.2rem; color:#26458D;">Departamentos</h1>
             </strong>
+            <!--
              <InputSearch type="search" style="width:10rem; float: left; margin-top: 1rem; "
             v-model="params.search"  aria-label="Search"
             class="block w-full max-w-xs border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
+            -->
     </div>
     <DataTable style="margin-top:1rem">
         <template #table-header>
