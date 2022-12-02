@@ -19,6 +19,7 @@
                      </TableDepartamentos> 
                    </div>
                    <div style="grid-column: 2/3; margin-left: 2rem; width:35rem" >
+
                      <TablePuestos  :departamento="selectDepartamento"/>
                    </div>
                    
@@ -104,7 +105,8 @@
                 })
             },
             selectRow(index){
-               this.selectDepartamento = pickBy(this.departamentos.data[index]);
+                console.log(index);
+               this.selectDepartamento = pickBy(this.departamentos.data[index-1]);
             }
             /* showUpdatelDepartamento(departamento){
                 if(typeof  departamento != undefined ||  departamento !=''){

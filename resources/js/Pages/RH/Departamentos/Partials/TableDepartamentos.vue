@@ -29,8 +29,8 @@
             </th>
         </template>
         <template #table-body >
-          <tr class="text-gray-500" v-for='departamento in departamentos' :key="departamento.id">
-              <td class="px-2 whitespace-nowrap" @click="selectedRow(departamento.id-1,$event)" >{{departamento.nombre}}</td>
+          <tr class="text-gray-500" v-for='departamento in departamentos' :key="departamento.id" @click="selectedRow(departamento.id,$event)" >
+              <td class="px-2 whitespace-nowrap" >{{departamento.nombre}}</td>
               <td>{{departamento.personal}}</td>
           </tr>
         </template>
@@ -78,11 +78,9 @@ export default {
     },
     selectedRow(index, event)
     {
-        if(elementSelect){
-            removeSelect(elementSelect);
-        }
         elementSelect = event.target.closest('tr');
         selectElement(elementSelect)
+        console.log(index);
         this.$emit('selected', index);
     },
 
@@ -91,6 +89,7 @@ export default {
     params: {
       handler: throttle(function () {
         let params = pickBy(this.params);
+        console.log(params);
         this.$inertia.get(this.route("dptos.index"), params, {
           replace: true,
           preserveState: true,

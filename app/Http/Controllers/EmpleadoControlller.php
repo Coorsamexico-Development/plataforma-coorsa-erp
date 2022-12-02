@@ -92,16 +92,23 @@ class EmpleadoControlller extends Controller
            $newEmpleado =  $request;
            $ruta_fotografia = "";
 
-           if($request->has('fotografia'))
-           {
-             $fotografia = request('fotografia');
-             $nombre_fotografia =  $fotografia->getClientOriginalName();//rescatamos el nombre original
-             $ruta_fotografia = $fotografia->storeAs('expedientes/fotografia/',$nombre_fotografia ,'gcs'); //guardamos el archivo en el storage
-             $urlFotografia = Storage::disk('gcs')->url($ruta_fotografia); 
-           }
 
+           if(empty($request['fotografia']))
+           {
+            if($request->has('fotografia'))
+            {
+              $fotografia = request('fotografia');
+              $nombre_fotografia =  $fotografia->getClientOriginalName();//rescatamos el nombre original
+              $ruta_fotografia = $fotografia->storeAs('expedientes/fotografia/',$nombre_fotografia ,'gcs'); //guardamos el archivo en el storage
+              $urlFotografia = Storage::disk('gcs')->url($ruta_fotografia); 
+            }
+           }
+           else
+           {
+             $urlFotografia ="";
+           }
            
-           
+        
             //creamos la direccion
             $direccion = direccione::create([
                 'direccion_localidade_id' => $newEmpleado['direccion_localidade_id'],
@@ -154,8 +161,6 @@ class EmpleadoControlller extends Controller
          ]); //creamos el usuario
          
 
-         $puesto_id = puesto::select('id')->where('name','LIKE','%'.$newEmpleado['puesto_id'].'%')->get();
-
          if($request->has('expediente'))
          {   
             $curp = $request['curp'];
@@ -191,11 +196,18 @@ class EmpleadoControlller extends Controller
          }
 
          //creamos el empleado_puesto
-         empleados_puesto::create([
-            'puesto_id' => $puesto_id[0]->id,
-            'departamento_id' =>$newEmpleado['departamento_id'],
-            'empleado_id' => $empleado->id,
-         ]);
+
+         if(empty($request['puesto_id']))
+         {
+            $puesto_id = puesto::select('id')->where('name','LIKE','%'.$newEmpleado['puesto_id'].'%')->get();
+
+            empleados_puesto::create([
+               'puesto_id' => $puesto_id[0]->id,
+               'departamento_id' =>$newEmpleado['departamento_id'],
+               'empleado_id' => $empleado->id,
+            ]);
+         }
+
 
         // Store docuemtos
 

@@ -38,7 +38,7 @@ class DepartamentoController extends Controller
          DB::raw('COUNT(empleados_puestos.empleado_id) AS personal'))
         ->leftjoin('departamento_puestos','cecos.id','departamento_puestos.id')
         ->leftjoin('puestos','departamento_puestos.puesto_id','puestos.id')
-        ->leftjoin('empleados_puestos','puestos.id','empleados_puestos.departamento_id')
+        ->leftjoin('empleados_puestos','puestos.id','empleados_puestos.puesto_id')
         ->leftjoin('users','empleados_puestos.empleado_id','users.id')
         ->groupby('cecos.id');
 
@@ -52,7 +52,7 @@ class DepartamentoController extends Controller
             $departamentos->orderBy(request('field'), request('direction'));
         }
         return Inertia::render('RH/Departamentos/Departamento.Index',[
-            'departamentos' => $departamentos->paginate(10),
+            'departamentos' => $departamentos->paginate(1000),
             'filters' => request()->all(['search', 'field','direction'])
         ]);
     }
