@@ -58,7 +58,7 @@ class User extends Authenticatable
         'cat_genero_id',
         'cat_tipo_sangre_id',
         'password',
-
+        'role_id'
     ];
 
     /**

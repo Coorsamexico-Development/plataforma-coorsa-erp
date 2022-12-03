@@ -554,42 +554,42 @@ const fecha_termino = computed(() => {
                                                     <InputLabel for="calle" value="Calle:*" />
                                                     <TextInput id="calle" type="text" v-model="form.calle"
                                                         class="block w-full mt-1" placeholder="Calle"
-                                                        :disabled="editEmpleadoDisable" />
+                                                        :disabled="editEmpleadoDisable" required />
                                                     <InputError :message="form.errors.calle" class="mt-2" />
                                                 </div>
                                                 <div class="mt-4">
                                                     <InputLabel for="numero" value="Colonia:*" />
                                                     <TextInput id="numero" type="text" v-model="form.numero"
                                                         class="block w-full mt-1" placeholder="Nombre"
-                                                        :disabled="editEmpleadoDisable" />
+                                                        :disabled="editEmpleadoDisable" required />
                                                     <InputError :message="form.errors.numero" class="mt-2" />
                                                 </div>
                                                 <div class="mt-4">
                                                     <InputLabel for="colonia" value="Número:*" />
                                                     <TextInput id="colonia" type="text" v-model="form.colonia"
                                                         class="block w-full mt-1" placeholder="Número"
-                                                        :disabled="editEmpleadoDisable" />
+                                                        :disabled="editEmpleadoDisable" required />
                                                     <InputError :message="form.errors.colonia" class="mt-2" />
                                                 </div>
                                                 <div class="mt-4">
                                                     <InputLabel for="codigo_postal" value="CP:*" />
                                                     <TextInput id="codigo_postal" type="number" maxlength="5"
                                                         v-model="form.codigo_postal" class="block w-full mt-1"
-                                                        placeholder="Codigo Postal" :disabled="editEmpleadoDisable" />
+                                                        placeholder="Codigo Postal" :disabled="editEmpleadoDisable" required />
                                                     <InputError :message="form.errors.codigo_postal" class="mt-2" />
                                                 </div>
                                                 <div class="mt-4">
                                                     <InputLabel for="lote" value="Lote:*" />
                                                     <TextInput id="lote" type="text" v-model="form.lote"
                                                         class="block w-full mt-1" placeholder="Lote"
-                                                        :disabled="editEmpleadoDisable" />
+                                                        :disabled="editEmpleadoDisable" required />
                                                     <InputError :message="form.errors.lote" class="mt-2" />
                                                 </div>
                                                 <div class="mt-4">
                                                     <InputLabel for="manzana" value="Manzana:*" />
                                                     <TextInput id="manzana" type="text" v-model="form.manzana"
                                                         class="block w-full mt-1" placeholder="Manzana"
-                                                        :disabled="editEmpleadoDisable" />
+                                                        :disabled="editEmpleadoDisable" required />
                                                     <InputError :message="form.errors.manzana" class="mt-2" />
                                                 </div>
 
