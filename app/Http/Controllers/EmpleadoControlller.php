@@ -504,15 +504,32 @@ class EmpleadoControlller extends Controller
              }  
 
 
+  
+      if(!empty($request->puesto_id) && !empty($request->departamento_id))
+      {
+        $exist_empleados_puesto = empleados_puesto::select('*')
+        ->where('empleado_id','=',$request['id'])
+        ->get();;
+   
+        if($exist_empleados_puesto[0]->empleado_id == $request['id'])
+        { 
+           empleados_puesto::where('empleado_id' ,'=' , $request['id'])
+           ->update([
+                'puesto_id' => $request['puesto_id'],
+                'departamento_id' => $request['departamento_id']
+           ]);
+        }
+        else
+        {
+           empleados_puesto::create([
+                'empleado_id' => $request['id'],
+                'puesto_id' => $request['puesto_id'],
+                'departamento_id' => $request['departamento_id']
+           ]);
+        }
+      }
 
-        empleados_puesto::where('empleado_id','=',$request['id'])
-        ->update(['departamento_id' => $request['departamento_id'],
-        'puesto_id' => $request['puesto_id'],
-        'empleado_id' => $request['id']]);
-      
-
-
-
+          
        //Preguntamos si el la categoria de baja viene vacia
        if(!empty($request->cat_bajas_empleado_id))
        {
