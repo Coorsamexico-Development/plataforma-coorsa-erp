@@ -17,7 +17,7 @@ class DepartamentoController extends Controller
     {
      $puestos = DB::table(DB::raw('departamento_puestos'))
      ->select(DB::raw(
-         'puestos.name'
+         'puestos.id,puestos.name'
      ))
      ->join('puestos','departamento_puestos.puesto_id','puestos.id')
      ->where('departamento_id','=', $departamento['id'])

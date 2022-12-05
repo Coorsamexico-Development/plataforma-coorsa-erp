@@ -103,7 +103,6 @@ class EmpleadoControlller extends Controller
            $newEmpleado =  $request;
            $ruta_fotografia = "";
 
-
            if(empty($request['fotografia']))
            {
             if($request->has('fotografia'))

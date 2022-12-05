@@ -731,8 +731,10 @@ const fecha_termino = computed(() => {
                                                 </div>
                                                 <div class="mt-4">
                                                     <InputLabel for="puesto_id" value="Puesto:*" />
+                                                    
                                                     <Select v-model="form.puesto_id" class="w-full"
                                                         :disabled="editEmpleadoDisable">
+                        
                                                         <option v-for="puesto in puestos" :key="puesto.id"
                                                             :value="puesto.id">
                                                             {{puesto.name}}
