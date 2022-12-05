@@ -92,8 +92,8 @@ const logout = () => {
                                     </template>
                                 </Dropdown>
                             </div>
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <Dropdown align="right" width="48">
+                            <div v-if="$page.props.can['rh.manager']" class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <Dropdown align="right" width="48" >
                                     <template #trigger>
                                         <button type="button"
                                             class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-white border border-transparent rounded-md buttonDropDown hover:text-white focus:outline-none">
