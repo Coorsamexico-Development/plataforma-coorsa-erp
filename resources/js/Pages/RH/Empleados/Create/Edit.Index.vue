@@ -400,7 +400,6 @@ const fecha_termino = computed(() => {
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
                 Actualizar Empleado
-                {{departamento_puesto}}
             </h2>
         </template>
 
