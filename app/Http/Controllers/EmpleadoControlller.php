@@ -274,7 +274,9 @@ class EmpleadoControlller extends Controller
          ->get();
 
 
-
+        $dept_puesto = empleados_puesto::select('puesto_id', 'departamento_id')
+        ->where('empleado_id','=',$id)
+        ->get();
 
    
          $documentos = expediente::select('*')
@@ -321,7 +323,8 @@ class EmpleadoControlller extends Controller
             'documentos' => $documentos,
             'cat_bajas' => $cat_bajas,
             'empleado_baja' =>$empleado_baja,
-            'finiquito' =>$finiquito
+            'finiquito' =>$finiquito,
+            'departamento_puesto' => $dept_puesto
          ]);
         
     }
@@ -500,6 +503,13 @@ class EmpleadoControlller extends Controller
                }
              }  
 
+
+
+        empleados_puesto::where('empleado_id','=',$request['id'])
+        ->update(['departamento_id' => $request['departamento_id'],
+        'puesto_id' => $request['puesto_id'],
+        'empleado_id' => $request['id']]);
+      
 
 
 

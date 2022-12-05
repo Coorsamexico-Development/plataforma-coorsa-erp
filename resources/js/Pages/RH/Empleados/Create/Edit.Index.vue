@@ -32,7 +32,8 @@ var props = defineProps(
         documentos: Object,
         cat_bajas: Object,
         empleado_baja:Object,
-        finiquito:Object
+        finiquito:Object,
+        departamento_puesto:Object
     }
 );
 
@@ -49,6 +50,20 @@ let catalogos = ref({
 })
 
 let puestos = ref([]);
+
+let puesto_empleado = ref(-1);
+let departamento_empleado = ref(-1);
+
+if(props.departamento_puesto.length <= 0 )
+{
+    puesto_empleado.value = '';
+    departamento_empleado.value = '';
+}
+else
+{
+  puesto_empleado.value = props.departamento_puesto[0].puesto_id;
+  departamento_empleado.value = props.departamento_puesto[0].departamento_id;
+}
 
 
 let empleado = ref({});
@@ -136,8 +151,8 @@ const form = useForm
         'fecha_ingreso': empleado.value.fecha_ingreso,
         'fecha_ingreso_real': empleado.value.fecha_ingreso_real,
         'fecha_baja': '',
-        'departamento_id': empleado.value.departamento_id,
-        'puesto_id': empleado.puesto_id,
+        'departamento_id': departamento_empleado.value,
+        'puesto_id': puesto_empleado.value,
         'nss': empleado.value.nss,
         'curp': empleado.value.curp,
         'rfc': empleado.value.rfc,
@@ -385,7 +400,7 @@ const fecha_termino = computed(() => {
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
                 Actualizar Empleado
-    
+                {{departamento_puesto}}
             </h2>
         </template>
 

@@ -71,7 +71,6 @@ var props = defineProps(
         </template>
         <template #table-body>
             <tr v-for="empleado in empleados"  :key="empleado.id">
-          
                 <td class="px-2 whitespace-nowrap">
                   <div class="buttons_table">
                     <ButtonPhoto style="width:3rem; justify-content: center; margin:0.5rem" v-if="empleado.fotografia"
