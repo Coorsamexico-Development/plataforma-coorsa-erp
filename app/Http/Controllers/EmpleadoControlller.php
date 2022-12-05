@@ -225,10 +225,10 @@ class EmpleadoControlller extends Controller
 
          if(!empty($request['puesto_id']))
          {
-            $puesto_id = puesto::select('id')->where('name','LIKE','%'.$newEmpleado['puesto_id'].'%')->get();
+            //$puesto_id = puesto::select('id')->where('name','LIKE','%'.$newEmpleado['puesto_id'].'%')->get();
 
             empleados_puesto::create([
-               'puesto_id' => $puesto_id[0]->id,
+               'puesto_id' => $request['puesto_id'],
                'departamento_id' =>$newEmpleado['departamento_id'],
                'empleado_id' => $empleado->id,
             ]);
