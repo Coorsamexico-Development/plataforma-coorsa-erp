@@ -159,4 +159,10 @@ class User extends Authenticatable
         ->where('cat_tipos_documento_id', 26)->first();
     }
 
+    public function empleados_puesto()
+    {
+        return $this->hasMany(empleados_puesto::class, 'empleado_id', 'id');
+    }
+
+
 }

@@ -34,6 +34,16 @@ var props = defineProps(
                 </th>
                 <th scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
                     <span class="">
+                         DEPARTAMENTO
+                    </span>
+                </th>
+                <th scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
+                    <span class="">
+                        PUESTO
+                    </span>
+                </th>
+                <th scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
+                    <span class="">
                         NOMBRE
                     </span>
                 </th>
@@ -61,6 +71,7 @@ var props = defineProps(
         </template>
         <template #table-body>
             <tr v-for="empleado in empleados"  :key="empleado.id">
+          
                 <td class="px-2 whitespace-nowrap">
                   <div class="buttons_table">
                     <ButtonPhoto style="width:3rem; justify-content: center; margin:0.5rem" v-if="empleado.fotografia"
@@ -92,7 +103,10 @@ var props = defineProps(
                   </div>
 
                 </td>
+           
                 <td class="px-2 whitespace-nowrap">{{ empleado.numero_empleado }}</td>
+                <td class="px-2 whitespace-nowrap">{{empleado.departamento}}</td>
+                <td class="px-2 whitespace-nowrap">{{empleado.puesto}}</td>
                 <td class="px-2 whitespace-nowrap">{{ empleado.name }}</td>
                 <td class="px-2 whitespace-nowrap">{{ empleado.apellido_paterno }}</td>
                 <td class="px-2 whitespace-nowrap">{{ empleado.apellido_materno }}</td>

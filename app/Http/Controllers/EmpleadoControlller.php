@@ -28,8 +28,19 @@ class EmpleadoControlller extends Controller
     //
     public function index($activo)
     {
-        $empleados = User::select('id','fotografia','numero_empleado','name',
-        'apellido_paterno','apellido_materno','telefono','activo');
+        $empleados = User::select('users.id',
+        'users.fotografia',
+        'users.numero_empleado',
+        'users.name',
+        'users.apellido_paterno',
+        'users.apellido_materno',
+        'users.telefono',
+        'users.activo',
+        'cecos.nombre AS departamento',
+        'puestos.name AS puesto')
+        ->leftjoin('empleados_puestos','empleados_puestos.empleado_id','users.id')
+        ->leftjoin('cecos', 'empleados_puestos.departamento_id','cecos.id')
+        ->leftjoin('puestos','empleados_puestos.puesto_id','puestos.id');
      
         if($activo === 'activo')
         {
@@ -213,7 +224,7 @@ class EmpleadoControlller extends Controller
 
          //creamos el empleado_puesto
 
-         if(empty($request['puesto_id']))
+         if(!empty($request['puesto_id']))
          {
             $puesto_id = puesto::select('id')->where('name','LIKE','%'.$newEmpleado['puesto_id'].'%')->get();
 

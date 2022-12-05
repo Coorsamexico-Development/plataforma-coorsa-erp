@@ -156,7 +156,7 @@ const form = useForm
         'codigo_postal':direccion.value.codigo_postal,
         'lote': direccion.value.lote,
         'manzana': direccion.value.manzana,
-        'cat_tipos_nomina_id': empleado.cat_tipos_nomina_id,
+        'cat_tipos_nomina_id': empleado.value.cat_tipos_nomina_id,
         'tipos_contrato_id': empleado.value.tipos_contrato_id,
         'salario_bruto': empleado.value.salario_bruto,
         'salario_diario': 0.0,
@@ -385,7 +385,7 @@ const fecha_termino = computed(() => {
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
                 Actualizar Empleado
-               {{props.finiquito[0]}}
+               {{empleado}}
             </h2>
         </template>
 
