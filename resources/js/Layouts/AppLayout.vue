@@ -66,7 +66,7 @@ const logout = () => {
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <button type="button"
-                                            class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-white border border-transparent rounded-md buttonDropDown hover:text-white focus:outline-none">
+                                            class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-white border border-transparent rounded-md navLinks buttonDropDown hover:text-white focus:outline-none">
                                             Control Interno
                                             <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 20 20" fill="currentColor">
@@ -96,7 +96,7 @@ const logout = () => {
                                 <Dropdown align="right" width="48" >
                                     <template #trigger>
                                         <button type="button"
-                                            class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-white border border-transparent rounded-md buttonDropDown hover:text-white focus:outline-none">
+                                            class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-white border border-transparent rounded-md navLinks buttonDropDown hover:text-white focus:outline-none">
                                             Recursos Humanos
                                             <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 20 20" fill="currentColor">
