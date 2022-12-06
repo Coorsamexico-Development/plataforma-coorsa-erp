@@ -54,7 +54,7 @@ export default {
           Your browser does not support the video tag.				
 			   </video>  
         -->
-        <iframe width="428" height="315" src="https://www.youtube.com/embed/videoseries?list=PLjSCaE1YbE5-nRJUcFcol3CsjUEw5G8fx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
       </div>
     </swiper-slide>
   </swiper>

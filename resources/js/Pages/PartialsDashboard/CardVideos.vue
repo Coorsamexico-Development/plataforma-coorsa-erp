@@ -30,7 +30,11 @@ const closeModalVideo = () => {
         <ModalAddVideo :show="modalVideo" @close="closeModalVideo"></ModalAddVideo>
         -->
         <div style="margin:1rem; display:flex; justify-content:center;">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PLjSCaE1YbE5-nRJUcFcol3CsjUEw5G8fx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            
+<iframe width="560" height="315" 
+src="https://www.youtube.com/embed/videoseries?list=PLjSCaE1YbE5-nRJUcFcol3CsjUEw5G8fx&autoplay=1" 
+title="YouTube video player" frameborder="0" 
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </Card>
 </template>
