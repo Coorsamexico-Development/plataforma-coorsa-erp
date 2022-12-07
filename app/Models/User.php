@@ -94,11 +94,13 @@ class User extends Authenticatable
         'contrato'
     ];
 
+    //Se crea el atributo is_admin donde el rol con id 1 es admin
     public function getIsAdminAttribute()
     {
         return $this->role_id === 1; // admin
     }
 
+    //Un usuario solo puede tener 1 rol
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id');
@@ -112,7 +114,9 @@ class User extends Authenticatable
     public function canAccess()
     {
         $can = true;
-        if (!$this->is_admin) {
+        
+        if (!$this->is_admin) 
+        {
             return  $this->role->permissions()->where('permissions.plataforma_id', '=', 2)
                 ->where('permissions.is_acceso', 1)->exists();
         }

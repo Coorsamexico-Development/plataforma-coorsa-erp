@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+
+:root{
+    --fuentePrincipal: 'Montserrat' !important;
+}
+
 /*Nav*/
 
 .navMenu {
@@ -320,17 +325,22 @@ input:checked ~ .tab-content {
     background-image: url('../img/login.png');
     background-repeat: no-repeat;
     background-size: cover;
+    font-family: var(--fuentePrincipal);
+  }
+
+  .texts-login{
+    font-family: var(--fuentePrincipal);
   }
 
   .login_title{
     color: white;
     font-weight: bolder;
-    font-size:2rem;
+    text-align: center;
   }
 
   .form_login{
     background-color: #000;
-    opacity: 85%;
+    opacity: 0.6;
   }
 
   /*Empleados create*/
