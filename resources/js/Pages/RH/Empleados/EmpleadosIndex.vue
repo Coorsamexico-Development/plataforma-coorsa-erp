@@ -21,18 +21,10 @@ const params = reactive({
     search: props.filters.search
 })
 
-watch(params, (newValue) => {
+watch(params, (newValue) =>
+ {
     console.log(newValue.search);
 
-    Inertia.visit(route("empleado.indexmanual", { activo: props.activo }),
-        {
-            data: {
-                search: newValue.search
-            },
-            replace: true,
-            preserveScroll: true,
-            preserveState: true,
-        });
 })
 
 const descargarReporte = () =>
