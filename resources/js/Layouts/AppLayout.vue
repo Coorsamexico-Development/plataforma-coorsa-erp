@@ -42,10 +42,10 @@ const logout = () => {
                     <div class="flex justify-between h-16">
                         <!-- Logo -->
                         <div class="items-center xl:flex shrink-0 xl:mr-60">
-                                <Link :href="route('dashboard')">
-                                   <img  class="w-28" src="../../img/logo_coorsa.png">
-                                </Link>
-                            </div>
+                            <Link :href="route('dashboard')">
+                            <img class="w-28" src="../../img/logo_coorsa.png">
+                            </Link>
+                        </div>
                         <div class="flex">
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
@@ -62,7 +62,8 @@ const logout = () => {
                                     Roles
                                 </NavLink>
                             </div>
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex"
+                                :class="{ 'border-b-2 border-indigo-400 focus:border-indigo-700 transition': route().current('control-interno*') }">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <button type="button"
@@ -78,12 +79,12 @@ const logout = () => {
                                     </template>
                                     <template #content>
                                         <DropdownLink
-                                            :href="route('departamentos-aditorias.index', { 'departamento_auditoria_id': '1' })">
+                                            :href="route('control-interno.departamentos-aditorias.index', { 'departamento_auditoria_id': '1' })">
                                             <span class="text-xs">
                                                 DASHBOARD AUDITORIAS
                                             </span>
                                         </DropdownLink>
-                                        <DropdownLink :href="route('politics.index')">
+                                        <DropdownLink :href="route('control-interno.politics.index')">
                                             <span class="text-xs">
                                                 DOCUMENTOS
                                             </span>
@@ -92,8 +93,9 @@ const logout = () => {
                                     </template>
                                 </Dropdown>
                             </div>
-                            <div v-if="$page.props.can['rh.manager']" class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <Dropdown align="right" width="48" >
+                            <div v-if="$page.props.can['rh.manager']"
+                                class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <button type="button"
                                             class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition bg-white border border-transparent rounded-md navLinks buttonDropDown hover:text-white focus:outline-none">
@@ -116,12 +118,14 @@ const logout = () => {
                                         <DropdownLink :href="route('dptos.index')">
                                             DPTOS. y Puestos
                                         </DropdownLink>
+                                        <DropdownLink :href="route('rh.plantillas-autorizadas.index')">
+                                            Plantillas Autorizadas
+                                        </DropdownLink>
                                         <div class="border-t border-gray-100" />
                                     </template>
                                 </Dropdown>
                             </div>
                         </div>
-
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
                             <div class="relative ml-3">
                                 <!-- Teams Dropdown -->
@@ -280,12 +284,12 @@ const logout = () => {
                     <div class="pt-4 pb-1 border-t border-gray-200">
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink
-                                :href="route('departamentos-aditorias.index', { 'departamento_auditoria_id': '1' })"
-                                :active="route().current('departamentos-aditorias.index')">
+                                :href="route('control-interno.departamentos-aditorias.index', { 'departamento_auditoria_id': '1' })"
+                                :active="route().current('control-interno.departamentos-aditorias.index')">
                                 DASHBOARD AUDITORIAS
                             </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('politics.index')"
-                                :active="route().current('politics.index')">
+                            <ResponsiveNavLink :href="route('control-interno.politics.index')"
+                                :active="route().current('control-interno.politics.index')">
                                 <span class="text-xs">
                                     DOCUMENTOS
                                 </span>
