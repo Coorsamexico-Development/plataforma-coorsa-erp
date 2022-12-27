@@ -86,7 +86,7 @@ const closeModalAgregarNoticia = () =>
               </div>
       </section>
       <section>
-        <div class="bg-[#1A1A22]">
+        <div class="video_section">
             <div class="pt-20 pb-48 ml-48">
               <h2 class="text-[#EC2944] font-bold text-5xl mt-16">NUESTRA</h2>
               <h1 class="font-bold text-white text-8xl">COMUNIDAD</h1>
@@ -100,8 +100,57 @@ const closeModalAgregarNoticia = () =>
         </div>
       </section>
       <section>
-        <ButtonAdd v-if="$page.props.can['noticias.create']" @click="openModalAgregarNoticia">Agregar</ButtonAdd>
+        <div class="grid grid-cols-3 m-4 gap-x-8">
+           <CardNoticias  v-for="noticia in noticias" :key="noticia.id" :noticia="noticia"></CardNoticias> 
+        </div>
+        <ButtonAdd v-if="$page.props.can['noticias.create']" style="float:right" class="mr-8"  @click="openModalAgregarNoticia">Agregar</ButtonAdd>
         <ModalAddNoticia :show="modalAddNoticia" @close="closeModalAgregarNoticia "></ModalAddNoticia>
+      </section>
+      <section class="grid grid-rows-3 mt-28">
+        <div class="ml-16 ">
+           <h2 class="text-[#EC2944] text-5xl font-semibold">ELLOS HABLAN</h2>
+           <h1 class="text-[#1A1A22] font-extrabold text-8xl">POR NOSOTROS</h1>
+        </div>
+        <div class="grid grid-cols-3" style="margin-top:-6rem">
+           <div class="flex flex-col items-center pt-9 pb-9">
+               <img class="pt-2 rounded-full h-28 w-18" src="../../img/FOTO_PAOLA.png">
+               <h2 class="text-[#1A1A22] mt-6 font-bold text-center">Paola Granados</h2>
+               <h4 class="text-[#1A1A22] text-center font-semibold">ANALISTA DE INSUMOS</h4>
+               <span class="w-16 h-1 bg-[#EC2944]"></span>
+               <p class="text-[#1A1A22] text-center mt-3 pb-" >"Durante este tiempo me he<br>
+                sentido muy agusto, son una<br>
+                empresa joven y tienen facilidad de<br>
+                crecimiento laboral y personal."</p>
+           </div>
+           <div class="bg-[#1A1A22] flex flex-col items-center pt-9 pb-9">
+            <img class="pt-2 rounded-full h-28 w-18" src="../../img/FOTO_LESLYE.png">
+               <h2 class="mt-12 font-bold text-center text-white">Leslye Gallardo</h2>
+               <h4 class="font-semibold text-center text-white">JEFA DE PATIO</h4>
+               <span class="w-16 h-1 bg-[#EC2944]"></span>
+               <p class="pb-3 mt-3 text-center text-white" >"Siempre voy a estar muy<br>
+                agradecida por la oportunidad, por<br>
+                creer y confiar en mi trabajo y en<br>
+                mí, somos como una familia."</p>
+           </div>
+           <div class="flex flex-col items-center pt-9 pb-9">
+            <img class="pt-2 rounded-full h-28 w-18" src="../../img/FOTO_IVONNE.png">
+               <h2 class="text-[#1A1A22] mt-12 font-bold text-center">Ivonne Torres</h2>
+               <h4 class="text-[#1A1A22] text-center font-semibold">PROCESS MANAGER JR</h4>
+               <span class="w-16 h-1 bg-[#EC2944]"></span>
+               <p class="text-[#1A1A22] text-center mt-3 pb-10" >
+                "Buscamos que nuestro equipo de<br>
+                trabajo tanto coorporativo como<br>
+                operativo se sientan cómodos y<br>
+                tengan un crecimiento."</p>
+           </div>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+          <h3 class="text-5xl font-bold">
+            <span class="text-[#1A1A22] ">HACIENDO DE LO BUENO, </span>
+            <span class="text-[#EC2944]">ALGO MEJOR</span>
+          </h3>
+          <h2 class="text-[#1A1A22] text-2xl mt-4"><a href="https://coorsamexico.com/">WWW.COORSAMEXICO.COM</a></h2>
+        </div>
       </section>
     </AppLayout>
 </template>

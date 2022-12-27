@@ -23,6 +23,7 @@ class NoticiaController extends Controller
 
            //Creacion de noticia
             $newNoticia = noticia::create([
+             'titulo' => $request['titulo'],
              'image' => $urlNoticia,
              'empleado_id' => $request['autor']
            ]);

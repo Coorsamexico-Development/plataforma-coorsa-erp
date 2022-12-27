@@ -7,34 +7,42 @@ import moment from 'moment';
 import CarruselNoticias from './CarruselNoticias.vue';
 import ButtonModal from '../../Components/ButtonModal.vue';
 import ModalAddNoticia from './ModalAddNoticia.vue';
+import ModalNoticiaDes from './ModalNoticiaDesc.vue';
 import ButtonAdd from '@/Components/ButtonAdd.vue';
 
 
 var props = defineProps({
-    noticias: Object
+    noticia: Object
 });
 
-let modalNoticia = ref(false);
+const abrirModalDes = ref(false); 
 
-const showModalNoticia = () => {
-    modalNoticia.value = true;
+const masInfo = ( ) => 
+{
+    abrirModalDes.value = true;
 }
 
-const closeModalNoticia = () => {
-    modalNoticia.value = false;
+const closeMasInfo = () =>
+{
+    abrirModalDes.value =false;
 }
 
 </script>
-
+<style>
+.fondo 
+{
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+</style>
 <template>
-    <Card class="">
-       <div class="carrusel_noticias">
-           <CarruselNoticias style="margin:1rem" :noticias="noticias"></CarruselNoticias>
-       </div>
-      
-        <ButtonAdd v-if="$page.props.can['noticias.create']" @click="showModalNoticia" style="width:2rem; margin:1rem; padding: 0.5rem 3rem; display: flex; align-content: center; justify-content: center;">
-            <strong style="font-size:1.5rem; font-weight:bolder">+</strong>
-        </ButtonAdd>
-        <ModalAddNoticia  :show="modalNoticia" @close="closeModalNoticia"></ModalAddNoticia>
+    <Card class="w-full h-96 fondo card"  :style="{ backgroundImage : 'url(' + encodeURI(props.noticia.image) + ')' }">  
+      <div class="flex flex-col items-center content-center justify-center mt-40">
+        <h3 class="text-xl font-bold text-white" style="z-index:3;">{{ props.noticia.titulo }}</h3>
+        <button @click="masInfo" style="z-index:3;" class="p-2 pr-11 pl-11 border-2 border-solid border-[#EC2944] text-white">
+          LEER MÁS
+        </button>
+      </div>
     </Card>
+    <ModalNoticiaDes :show="abrirModalDes" @close="closeMasInfo" :descripcion="props.noticia.descripcion"></ModalNoticiaDes>
 </template>

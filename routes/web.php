@@ -50,8 +50,15 @@ Route::middleware([
         $fechaActual = date('Y-m-d');
 
         $noticias = DB::table(DB::raw('noticias'))
-            ->selectRaw('*')
+            ->selectRaw(
+             'noticias.titulo AS titulo,
+              noticias.image AS image,
+              noticias.activo AS activo,
+              noticia_descrs.descripcion AS descripcion'
+              )
+            ->join('noticia_descrs','noticia_descrs.noticia_id','noticias.id')
             ->where('noticias.activo', '=', '1')
+            ->limit(3)
             ->get();
 
 
