@@ -100,7 +100,7 @@ const closeModalAgregarNoticia = () =>
         </div>
       </section>
       <section>
-        <ButtonAdd style="display:none" @click="openModalAgregarNoticia">Agregar</ButtonAdd>
+        <ButtonAdd  @click="openModalAgregarNoticia">Agregar</ButtonAdd>
         <ModalAddNoticia :show="modalAddNoticia" @close="closeModalAgregarNoticia "></ModalAddNoticia>
       </section>
     </AppLayout>
