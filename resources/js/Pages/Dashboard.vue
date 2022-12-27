@@ -37,7 +37,7 @@ const closeModalAgregarNoticia = () =>
     <AppLayout title="Dashboard">
       <section class="inicio">
         <div class="inicio_info">
-            <div class="inicio_info_text">
+            <div class="ml-16 inicio_info_text">
                <h1 class="m-5 text-6xl font-bold text-white">Somos más que <br> un TEAM.</h1>
                <h3 class="m-5 text-4xl text-white"><span class="underline decoration-orange-500">Conoce</span> más sobre coorsa</h3>
             </div>
@@ -88,7 +88,7 @@ const closeModalAgregarNoticia = () =>
       <section>
         <div class="bg-[#1A1A22]">
             <div class="pt-20 pb-48 ml-48">
-              <h2 class="text-[#EC2944] font-bold text-5xl">NUESTRA</h2>
+              <h2 class="text-[#EC2944] font-bold text-5xl mt-16">NUESTRA</h2>
               <h1 class="font-bold text-white text-8xl">COMUNIDAD</h1>
             </div>
         </div>
