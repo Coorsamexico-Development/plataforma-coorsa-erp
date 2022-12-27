@@ -17,7 +17,8 @@ const fileUpload = ref(null);
 const noticiaForm = useForm({
     imagen:null,
     autor: user,
-    activo:1
+    activo:1,
+    descripcion:"",
 });
 
 const selectNewFile = () => 
@@ -59,6 +60,10 @@ const close = () => {
                          ref="fileUpload"
                          @change="uploadFile">
                    </div> 
+                   <div>
+                    <InputLabel>Descripción</InputLabel>
+                    <textarea ></textarea>
+                   </div>
                 </div>
                   <ButtonModal type="submit">Enviar</ButtonModal>
                </form>

@@ -11,6 +11,7 @@
 
 .navMenu {
     background-image: url('../img/HEADER.png');
+    opacity: 0.7;
     height: 5rem;
     background-size: cover;
     background-repeat: no-repeat;
@@ -376,3 +377,76 @@ input:checked ~ .tab-content {
 
 
 
+/*Dashboard styles*/
+
+.inicio {
+ background-image: url('../img/HOME.png');
+ background-repeat: no-repeat;
+ background-size: cover;
+ font-family: var(--fuenteBold);
+
+}
+
+.inicio_info{
+   height: 40rem;
+   display: grid;
+   grid-template-columns: repeat(3,1fr);
+   grid-template-rows: repeat(3,1fr);
+}
+
+.inicio_info_text{
+    grid-column: 1/3;
+    grid-row: 2/3;
+}
+
+.inicio_quienes_somos
+{
+    height: 10rem;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    justify-items: center;
+}
+
+.inicio_quienes_somos_title{
+    grid-column: 1/2;
+    margin-top: 14rem;
+    padding-bottom: 10rem;
+}
+
+.inicio_quienes_somos_text{
+    grid-column: 2/2;
+    margin-top: 14rem;
+    padding-bottom: 10rem;
+}
+
+.inicio_mv
+{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    margin-top: 20rem;
+    height: 30rem;
+}
+
+.inicio_m
+{
+    background-image: url('../img/Mision.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.icon_m
+{
+    width: 16%;
+    height: 22%;
+}
+
+.inicio_v{
+    background-image: url('../img/Vision.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.icon_v{
+    width: 16%;
+    height: 25%;
+}
