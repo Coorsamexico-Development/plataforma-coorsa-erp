@@ -394,6 +394,18 @@ input:checked ~ .tab-content {
    grid-template-rows: repeat(3,1fr);
 }
 
+@media  (max-width:1366px)
+{
+    .inicio_info{
+        height: 53rem;
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        grid-template-rows: repeat(3,1fr);
+     }
+}
+
+
+
 .inicio_info_text{
     grid-column: 1/3;
     grid-row: 2/3;
