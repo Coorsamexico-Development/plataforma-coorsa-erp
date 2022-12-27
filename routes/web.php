@@ -10,6 +10,7 @@ use App\Http\Controllers\LocalidadesController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\MunicipioController;
 use App\Http\Controllers\NoticiaController;
+use App\Http\Controllers\PlantillasAutorizadaController;
 use App\Http\Controllers\PoliticController;
 use App\Http\Controllers\PuestoController;
 use App\Http\Controllers\RoleController;
@@ -38,7 +39,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-})->name('inicio');
+})->name('inicio')->middleware('guest');
 
 Route::middleware([
     'auth:sanctum',
@@ -77,14 +78,15 @@ Route::middleware([
 
 
     Route::get('/control-interno/departamentos-aditorias', [DepartamentosAuditoriaController::class, 'index'])
-        ->name('departamentos-aditorias.index');
+        ->name('control-interno.departamentos-aditorias.index');
 
     Route::post('departamentos-aditorias/{departamentosAuditoria}/calificacion', [DepartamentosAuditoriaController::class, 'storeCalificacion'])
         ->name('departamentos-aditorias.calificacion.store')->middleware('can:calificacion.create');
     Route::delete('documentos-calificacion-mes/{documentosCalificacionMes}', [DocumentosCalificacionMesController::class, 'destroy'])
         ->name('documentos-calificacion-mes.destroy')->middleware('can:calificacion.delete');
 
-    Route::apiResource('politics', PoliticController::class);
+    Route::apiResource('politics', PoliticController::class)->name('index', 'control-interno.politics.index');
+
     Route::get('users/list', [UserController::class, 'list'])->name('users.list');
     Route::apiResource('roles', RoleController::class)->middleware('can:roles.manager');
     Route::get('role/{role}/permissions', [RoleController::class, 'permissions'])->name('roles.permissions');
@@ -93,6 +95,8 @@ Route::middleware([
     Route::apiResource('/menu', MenuController::class);
     Route::apiResource('/noticia', NoticiaController::class);
     Route::apiResource('/video', VideoController::class);
+
+    Route::get('plantillas-autorizadas', [PlantillasAutorizadaController::class, 'index'])->name('rh.plantillas-autorizadas.index');
 });
 
 Route::get('empleados/create', [EmpleadoControlller::class, 'createNewEmpleado'])->name('empleado.create');
@@ -113,4 +117,4 @@ Route::put('/departamentos/{departamento}/puesto', [DepartamentoController::clas
 
 Route::get('users/export/{activo}', [UserController::class, 'export'])->name('export.empleados');
 
-Route::get('card/user',[UserController::class,'viewCard'])->name('view.card');
+Route::get('card/user', [UserController::class, 'viewCard'])->name('view.card');

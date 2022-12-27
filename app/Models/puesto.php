@@ -13,4 +13,9 @@ class puesto extends Model
         'name',
         'activo'
     ];
+
+    public function plantillasAutorizadas()
+    {
+        return $this->hasMany(PlantillasAutorizada::class, 'puesto_id');
+    }
 }

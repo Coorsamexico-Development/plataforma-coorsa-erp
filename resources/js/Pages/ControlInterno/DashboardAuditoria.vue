@@ -37,7 +37,7 @@ const departamento = computed(() => {
 
 watch(params, (newParams) => {
 
-    Inertia.visit(route("departamentos-aditorias.index"),
+    Inertia.visit(route("control-interno.departamentos-aditorias.index"),
         {
             data: newParams,
             replace: true,
