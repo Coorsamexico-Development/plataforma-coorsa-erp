@@ -15,9 +15,42 @@ var props = defineProps({
 });
 
 
+const storePlantilla = (data) => {
+    axios.post(route('rh.plantillas-autorizadas.store'), data)
+        .then((response) => {
+            data.id = response.data.id
+        }).catch((error) => {
+            console.log(error);
+            if (error.hasOwnProperty('response') && error.response.data) {
+                alert(error.response.data)
+            } else {
+                alert('Error CREATE PLANTILLA AUTORIZADA');
+            }
+        });
+}
+
+const updatePlantilla = (data) => {
+    axios.put(route('rh.plantillas-autorizadas.update', data.id), data)
+        .catch((error) => {
+            console.log(error);
+            if (error.hasOwnProperty('response') && error.response.data) {
+                alert(error.response.data)
+            } else {
+                alert('Error UPDATE PLANTILLA AUTORIZADA');
+            }
+        });
+}
+
+
+const savePlantillaAutorizada = (data) => {
+    if (data.id === -1) {
+        storePlantilla(data)
+    } else {
+        updatePlantilla(data)
+    }
+}
 
 </script>
-
 <template>
     <AppLayout title="Plantillas">
         <template #header>
@@ -43,7 +76,7 @@ var props = defineProps({
                         </template>
                         <template #table-body>
                             <PlantillaAutorizadaRow v-for="ubicacion in ubicaciones" :key="'u' + ubicacion.id"
-                                :ubicacion="ubicacion" :puestos="puestos" />
+                                :ubicacion="ubicacion" :puestos="puestos" @save="savePlantillaAutorizada($event)" />
                         </template>
                     </DataTable>
                 </div>

@@ -1,7 +1,8 @@
 <script setup>
-import { computed, onMounted, ref } from "vue"
+import { computed, reactive } from "vue"
 
 
+defineEmits(['save']);
 
 const props = defineProps({
     ubicacionId: {
@@ -14,7 +15,8 @@ const props = defineProps({
     }
 })
 
-const plantillaAutorizada = ref({
+const plantillaAutorizada = reactive({
+    'id': -1,
     'puesto_id': props.puesto.id,
     'ubicacione_id': props.ubicacionId,
     'cantidad': 0,
@@ -26,8 +28,9 @@ const color = computed(() => {
         return plantilla.ubicacione_id === props.ubicacionId
     });
     if (plantillaFind !== undefined) {
-        plantillaAutorizada.value.cantidad = plantillaFind.cantidad;
-        plantillaAutorizada.value.cantidad_activa = plantillaFind.cantidad_activa;
+        plantillaAutorizada.id = plantillaFind.id;
+        plantillaAutorizada.cantidad = plantillaFind.cantidad;
+        plantillaAutorizada.cantidad_activa = plantillaFind.cantidad_activa;
         if (plantillaFind.cantidad_activa > plantillaFind.cantidad) {
             return 'bg-orange-400'
         } else {
@@ -38,8 +41,6 @@ const color = computed(() => {
     return 'bg-white'
 
 })
-
-
 </script>
 <template>
     <td class="px-2 whitespace-nowrap ">
@@ -48,7 +49,7 @@ const color = computed(() => {
             /
             <input type="number"
                 class="p-0 bg-transparent border-transparent focus:ring-0 focus:border-transparent focus:border-b-gray-600"
-                min="0" max="10000" v-model="plantillaAutorizada.cantidad" />
+                @blur="$emit('save', plantillaAutorizada)" min="0" max="10000" v-model="plantillaAutorizada.cantidad" />
         </div>
     </td>
 </template>

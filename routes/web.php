@@ -96,7 +96,9 @@ Route::middleware([
     Route::apiResource('/noticia', NoticiaController::class);
     Route::apiResource('/video', VideoController::class);
 
-    Route::get('plantillas-autorizadas', [PlantillasAutorizadaController::class, 'index'])->name('rh.plantillas-autorizadas.index');
+    Route::apiResource('plantillas-autorizadas', PlantillasAutorizadaController::class, [
+        'names' => 'rh.plantillas-autorizadas'
+    ])->except('destroy');
 });
 
 Route::get('empleados/create', [EmpleadoControlller::class, 'createNewEmpleado'])->name('empleado.create');

@@ -1,6 +1,8 @@
 <script setup>
 import ColumnPlantilla from '../../../Components/ColumnPlantilla.vue';
 
+defineEmits(['save']);
+
 
 const props = defineProps({
     ubicacion: {
@@ -19,6 +21,6 @@ const props = defineProps({
     <tr>
         <td class="px-2 whitespace-nowrap">{{ ubicacion.name }}</td>
         <ColumnPlantilla v-for="puesto in puestos" :key="puesto.id" :ubicacionId="ubicacion.id" :puesto="puesto"
-            class="px-2 whitespace-nowrap" />
+            class="px-2 whitespace-nowrap" @save="$emit('save', $event)" />
     </tr>
 </template>
