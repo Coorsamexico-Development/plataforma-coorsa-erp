@@ -62,10 +62,10 @@ const close = () => {
                    </div> 
                    <div>
                     <InputLabel>Descripción</InputLabel>
-                    <textarea ></textarea>
+                    <textarea v-model="noticiaForm.descripcion"></textarea>
                    </div>
                 </div>
-                  <ButtonModal type="submit">Enviar</ButtonModal>
+                  <ButtonModal  type="submit">Enviar</ButtonModal>
                </form>
             </template>
             

@@ -100,7 +100,7 @@ const closeModalAgregarNoticia = () =>
         </div>
       </section>
       <section>
-        <ButtonAdd  @click="openModalAgregarNoticia">Agregar</ButtonAdd>
+        <ButtonAdd v-if="$page.props.can['noticias.create']" @click="openModalAgregarNoticia">Agregar</ButtonAdd>
         <ModalAddNoticia :show="modalAddNoticia" @close="closeModalAgregarNoticia "></ModalAddNoticia>
       </section>
     </AppLayout>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\noticia;
+use App\Models\noticiaDescr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -21,9 +22,14 @@ class NoticiaController extends Controller
            $urlNoticia = Storage::disk('gcs')->url($ruta_noticia);
 
            //Creacion de noticia
-            noticia::create([
+            $newNoticia = noticia::create([
              'image' => $urlNoticia,
              'empleado_id' => $request['autor']
+           ]);
+
+           noticiaDescr::create([
+             'descripcion' => $request['descripcion'],
+             'noticia_id' => $newNoticia->id
            ]);
         }
         return  redirect()->back();

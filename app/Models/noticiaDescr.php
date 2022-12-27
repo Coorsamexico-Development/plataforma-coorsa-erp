@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class noticiaDescr extends Model
 {
     use HasFactory;
+
+    
+    protected $fillable = [
+        'descripcion',
+        'noticia_id',
+    ];
 }
