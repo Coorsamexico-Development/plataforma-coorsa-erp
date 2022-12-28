@@ -322,7 +322,7 @@ input:checked ~ .tab-content {
 
   /*Login styles*/
   .login{
-    background-image: url('../img/login.png');
+    background-image: url('../img/LOGIN_BASE.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     font-family: var(--fuentePrincipal);
@@ -334,7 +334,6 @@ input:checked ~ .tab-content {
 
   .login_title{
     color: white;
-    font-weight: bolder;
     text-align: center;
   }
 

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64" height="60" viewBox="0 0 64 60">
+  <defs>
+    <clipPath id="clip-FLECHA_CIRCULO">
+      <rect width="64" height="60"/>
+    </clipPath>
+  </defs>
+  <g id="FLECHA_CIRCULO" data-name="FLECHA CIRCULO" clip-path="url(#clip-FLECHA_CIRCULO)">
+    <g id="Grupo_65" data-name="Grupo 65" transform="translate(-842 -339)">
+      <g id="Elipse_14" data-name="Elipse 14" transform="translate(848 343)" fill="none" stroke="#fff" stroke-width="3">
+        <circle cx="26.5" cy="26.5" r="26.5" stroke="none"/>
+        <circle cx="26.5" cy="26.5" r="25" fill="none"/>
+      </g>
+      <g id="Grupo_60" data-name="Grupo 60" transform="translate(-1726.321 -4522.906)">
+        <path id="Trazado_110" data-name="Trazado 110" d="M2636.814,4884.656l7.779,7.779-7.721,7.721" transform="translate(-32.452)" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="3" fill-rule="evenodd"/>
+        <line id="Línea_1" data-name="Línea 1" x1="22.642" transform="translate(2589.5 4892.436)" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="3"/>
+      </g>
+    </g>
+  </g>
+</svg>
