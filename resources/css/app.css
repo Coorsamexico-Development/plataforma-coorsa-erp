@@ -429,7 +429,7 @@ input:checked ~ .tab-content {
 
 .inicio_quienes_somos_text{
     grid-column: 2/2;
-    margin-top: 14rem;
+    margin-top: 12rem;
     padding-bottom: 10rem;
 }
 
