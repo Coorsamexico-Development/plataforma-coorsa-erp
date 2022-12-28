@@ -15,9 +15,11 @@ const user =  usePage().props.value.user.id;
 const fileUpload = ref(null);
 
 const noticiaForm = useForm({
+    titulo:"",
     imagen:null,
     autor: user,
-    activo:1
+    activo:1,
+    descripcion:"",
 });
 
 const selectNewFile = () => 
@@ -54,13 +56,19 @@ const close = () => {
                <form v-on:submit.prevent="enviarNuevaNoticia()">
                 <div style="display: flex;">
                   <div style="float:left; margin: 2rem; margin-top: 0rem;" >
+                     <InputLabel>Titulo de noticia</InputLabel>
+                     <TextInput v-model="noticiaForm.titulo" class="border-2 border-black border-solid "></TextInput>
                      <InputLabel>Noticia:</InputLabel>
                      <input type="file" enctype="multipart/form-data"
                          ref="fileUpload"
                          @change="uploadFile">
                    </div> 
+                   <div>
+                    <InputLabel>Descripción</InputLabel>
+                    <textarea v-model="noticiaForm.descripcion"></textarea>
+                   </div>
                 </div>
-                  <ButtonModal type="submit">Enviar</ButtonModal>
+                  <ButtonModal  type="submit">Enviar</ButtonModal>
                </form>
             </template>
             

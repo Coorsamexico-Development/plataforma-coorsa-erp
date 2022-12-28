@@ -1,15 +1,13 @@
 <template>
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 ">
-        <div class="texts_login" style="margin-right:40rem;margin-top:0rem; margin-bottom:4rem">
-            <h1 class="text-white font-bold text-3xl">BIENVENIDO A</h1>
-            <h1 class="text-white  text-6xl" style="letter-spacing:0.3rem; font-weight:950;">Plataforma COORSA</h1>
-            <p class="text-white font-bold">"Una gran visión sin grandes personas es irrelevante"<br>
-            -Jim Collins</p>
+    <div class="flex flex-col items-center min-h-screen pt-6 sm:justify-center sm:pt-0 ">
+        <div class="texts_login" style="margin-right:50rem;margin-top:-10rem; margin-bottom:2rem; ">
+            <h4 class="text-5xl font-light text-white" style="font-family: 'Montserrat';">Plataforma</h4>
+            <h2 class="text-5xl font-bold text-white" style="font-family: 'Montserrat';">CONTROL INTERNO</h2>
         </div>
         <div>
             <slot name="logo" />
         </div>
-        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-[#151e33] opacity-90 shadow-md overflow-hidden sm:rounded-lg">
+        <div class="w-full px-6 py-4 mt-6 overflow-hidden shadow-md sm:max-w-md opacity-90 sm:rounded-lg">
             <slot />
         </div>
     </div>
