@@ -24,7 +24,8 @@ defineProps({
                 :style="'max-height:' + maxheight">
                 <div class="inline-block min-w-full py-2 align-middle lg:px-1">
                     <div class="sm:rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200 table-fixed custom-table" style="background-color:white ;">
+                        <table class="min-w-full divide-y divide-gray-200 table-fixed custom-table"
+                            style="background-color:white ;">
                             <thead
                                 class="font-bold text-center text-gray-500 bg-transparent border-b-2 border-blue-200">
                                 <slot name="table-header"></slot>

@@ -14,27 +14,28 @@ class PuestoController extends Controller
             'direction' => ['in:asc,desc']
         ]);
 
-        $puestos = puesto::select('id','name','activo');
-        if( request('search')){
-            $puestos->orWhere('name', 'LIKE', '%'.request('search').'%');
+        $puestos = puesto::select('id', 'name', 'activo');
+        if (request('search')) {
+            $puestos->orWhere('name', 'LIKE', '%' . request('search') . '%');
         }
 
-        if(request()->has(['field', 'direction'])) {
+        if (request()->has(['field', 'direction'])) {
             $puestos->orderBy(request('field'), request('direction'));
         }
         return response()->json([
             'puestos' => $puestos->paginate(10),
-            'filters' => request()->all(['search', 'field','direction'])
+            'filters' => request()->all(['search', 'field', 'direction'])
         ]);
     }
 
     public function store(Request $request)
     {
-        $newPuesto= $request->validate([
-            'name' => ['required','max:60', 'unique:puestos,name'],
+        $newPuesto = $request->validate([
+            'name' => ['required', 'max:60', 'unique:puestos,name'],
         ]);
 
         puesto::create($newPuesto);
+
         return redirect()->back();
     }
 
@@ -48,9 +49,11 @@ class PuestoController extends Controller
      */
     public function update(Request $request, puesto $puesto)
     {
-         $request->validate([
-            'name' => ['required','max:60',
-            'unique:puestos,name,'.$puesto->id]
+        $request->validate([
+            'name' => [
+                'required', 'max:60',
+                'unique:puestos,name,' . $puesto->id
+            ]
         ]);
         $puesto->name = $request->name;
         $puesto->activo = $request->activo;

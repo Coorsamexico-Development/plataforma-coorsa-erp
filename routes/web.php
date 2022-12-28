@@ -99,6 +99,8 @@ Route::middleware([
     Route::apiResource('plantillas-autorizadas', PlantillasAutorizadaController::class, [
         'names' => 'rh.plantillas-autorizadas'
     ])->except('destroy');
+
+    Route::get('departamentos', [DepartamentoController::class, 'index'])->name('dptos.index');
 });
 
 Route::get('empleados/create', [EmpleadoControlller::class, 'createNewEmpleado'])->name('empleado.create');
@@ -112,7 +114,7 @@ Route::get('/localidades/{municipio}', [LocalidadesController::class, 'getLocali
 Route::get('/departamentos/{departamento}/list-puestos', [DepartamentoController::class, 'listPuestoDep'])->name('departamento.puestos.list');
 Route::get('/empleados/edit/{id}', [EmpleadoControlller::class, 'edit'])->name('empleado.edit');
 Route::post('empleados/update', [EmpleadoControlller::class, 'update'])->name('empleado.update');
-Route::get('departamentos', [DepartamentoController::class, 'index'])->name('dptos.index');
+
 Route::apiResource('/puestos', PuestoController::class);
 Route::get('/departamentos/{departamento}/puestos', [DepartamentoController::class, 'puestosIndex'])->name('departamento.puestos.index');
 Route::put('/departamentos/{departamento}/puesto', [DepartamentoController::class, 'puestosUpdate'])->name('departamento.puestos.update');
