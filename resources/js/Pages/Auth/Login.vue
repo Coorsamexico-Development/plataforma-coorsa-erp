@@ -40,7 +40,7 @@ const submit = () => {
 
         <div  >
            <div >
-              <h1 class="mb-10 text-3xl login_title" style="float:left; margin-left: -1rem;">Iniciar Sesión</h1>
+              <h1 class="mb-10 text-3xl login_title" style="float:left; margin-left: -1rem;font-family: 'Montserrat'; ">Iniciar Sesión</h1>
               <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
                   {{ status }}
               </div>
@@ -56,7 +56,7 @@ const submit = () => {
                           required
                           autofocus
                           placeholder="USUARIO"
-                          style="border-radius:5rem"
+                          style="border-radius:5rem; font-family: 'Montserrat'; "
                       />
                       <InputError class="" :message="form.errors.email" />
                   </div>
@@ -127,7 +127,7 @@ const submit = () => {
     </AuthenticationCard>
 
 </div>
-    <div style="margin-top:-5rem; display: flex; justify-content: center;">
+    <div style="margin-top:-5rem; display: flex; justify-content: center; font-family: 'Montserrat'; ">
      <h2 class="text-3xl text-white" >
         <a href="https://coorsamexico.com/">WWW.COORSAMEXICO.COM</a>
     </h2>
