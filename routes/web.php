@@ -51,12 +51,12 @@ Route::middleware([
 
         $noticias = DB::table(DB::raw('noticias'))
             ->selectRaw(
-             'noticias.titulo AS titulo,
+                'noticias.titulo AS titulo,
               noticias.image AS image,
               noticias.activo AS activo,
               noticia_descrs.descripcion AS descripcion'
-              )
-            ->join('noticia_descrs','noticia_descrs.noticia_id','noticias.id')
+            )
+            ->join('noticia_descrs', 'noticia_descrs.noticia_id', 'noticias.id')
             ->where('noticias.activo', '=', '1')
             ->limit(3)
             ->get();
@@ -106,8 +106,11 @@ Route::middleware([
     Route::apiResource('plantillas-autorizadas', PlantillasAutorizadaController::class, [
         'names' => 'rh.plantillas-autorizadas'
     ])->except('destroy');
-
-    Route::get('departamentos', [DepartamentoController::class, 'index'])->name('dptos.index');
+    Route::apiResource('/puestos', PuestoController::class);
+    Route::get('/departamentos/{departamento}/list-puestos', [DepartamentoController::class, 'listPuestoDep'])->name('departamento.puestos.list');
+    Route::get('/departamentos/{departamento}/puestos', [DepartamentoController::class, 'puestosIndex'])->name('departamento.puestos.index');
+    Route::put('/departamentos/{departamento}/puestos', [DepartamentoController::class, 'puestosUpdate'])->name('departamento.puestos.update');
+    Route::apiResource('/departamentos', DepartamentoController::class)->except('destroy');
 });
 
 Route::get('empleados/create', [EmpleadoControlller::class, 'createNewEmpleado'])->name('empleado.create');
@@ -118,13 +121,10 @@ Route::post('empleados/store', [EmpleadoControlller::class, 'store'])->name('emp
 Route::get('/catalogos/formulario/empelado', [CatalogoController::class, 'formularioEmpleado'])->name('catalogos.formularioEmpleado'); //ruta para los diferentes catalogos
 Route::get('/municipio/{estado}', [MunicipioController::class, 'getMunicipiosEstado'])->name('municipos.estado');
 Route::get('/localidades/{municipio}', [LocalidadesController::class, 'getLocalidades'])->name('localidades.municipio');
-Route::get('/departamentos/{departamento}/list-puestos', [DepartamentoController::class, 'listPuestoDep'])->name('departamento.puestos.list');
 Route::get('/empleados/edit/{id}', [EmpleadoControlller::class, 'edit'])->name('empleado.edit');
 Route::post('empleados/update', [EmpleadoControlller::class, 'update'])->name('empleado.update');
 
-Route::apiResource('/puestos', PuestoController::class);
-Route::get('/departamentos/{departamento}/puestos', [DepartamentoController::class, 'puestosIndex'])->name('departamento.puestos.index');
-Route::put('/departamentos/{departamento}/puesto', [DepartamentoController::class, 'puestosUpdate'])->name('departamento.puestos.update');
+
 
 Route::get('users/export/{activo}', [UserController::class, 'export'])->name('export.empleados');
 

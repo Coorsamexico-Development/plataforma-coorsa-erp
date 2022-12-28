@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CecoRequest;
 use App\Models\Ceco;
+use App\Models\Cliente;
 use App\Models\departamentoPuesto;
 use App\Models\empleados_puesto;
+use App\Models\Ubicacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -35,6 +38,8 @@ class DepartamentoController extends Controller
         $departamentos = Ceco::select(
             'cecos.id AS id',
             'cecos.nombre AS nombre',
+            'cecos.ubicacione_id',
+            'cecos.cliente_id',
             DB::raw('COUNT(empleados_puestos.empleado_id) AS personal')
         )
             ->leftjoin('departamento_puestos', 'cecos.id', 'departamento_puestos.id')
@@ -43,7 +48,8 @@ class DepartamentoController extends Controller
             ->leftjoin('users', 'empleados_puestos.empleado_id', 'users.id')
             ->groupby('cecos.id');
 
-
+        $ubicaciones = Ubicacion::select('ubicaciones.id', 'ubicaciones.name');
+        $clientes = Cliente::select('clientes.id', 'clientes.nombre');
         if (request('search')) {
             $departamentos->orWhere('nombre', 'LIKE', '%' . request('search') . '%');
         }
@@ -52,9 +58,18 @@ class DepartamentoController extends Controller
             $departamentos->orderBy(request('field'), request('direction'));
         }
         return Inertia::render('RH/Departamentos/Departamento.Index', [
-            'departamentos' => $departamentos->paginate(50),
-            'filters' => request()->all(['search', 'field', 'direction'])
+            'departamentos' => fn ()  => $departamentos->paginate(50),
+            'filters' => fn ()  => request()->all(['search', 'field', 'direction']),
+            'ubicaciones' => fn () => $ubicaciones->get(),
+            'clientes' => fn () => $clientes->get(),
         ]);
+    }
+
+    public function update(CecoRequest $request, Ceco $departamento)
+    {
+        $validated = $request->validated();
+        $departamento->update($validated);
+        return redirect()->back();
     }
 
     public function puestosIndex(Ceco $departamento)

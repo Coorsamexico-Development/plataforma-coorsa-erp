@@ -2,7 +2,7 @@
     <div>
         <data-table>
             <template #section-header>
-                <div class="flex items-center w-full gap-2 px-2 py-2 overflow-hidden bg-white shadow-xl sm:rounded-lg">
+                <div class="flex items-center w-full gap-2 px-2 py-2 overflow-hidden bg-white shadow sm:rounded-lg">
                     <Titlecomponent class="w-1/3">
                         Puestos <br>
                         <p class="text-sm">({{ departamento.nombre }})</p>
@@ -235,9 +235,7 @@ export default {
                 params: pickBy(this.filters)
             })
                 .then((response) => {
-
                     this.puestos = response.data.puestos;
-
                     this.filters = response.data.filters;
                 }).catch((error) => {
                     if (error.response) {

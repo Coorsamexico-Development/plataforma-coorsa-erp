@@ -10,7 +10,7 @@
                 <div class="grid grid-cols-5 overflow-hidden">
                     <div class="col-span-3">
                         <TableDepartamentos :departamentos="departamentos" :filters="filters"
-                            @selected="selectRow($event)">
+                            @selected="selectRow($event)" @update="showModalDepartamento($event)">
                         </TableDepartamentos>
                         <div>
                             <pagination :pagination="departamentos" />
@@ -20,6 +20,8 @@
                 </div>
             </div>
         </div>
+        <departamento-modal :show="showModalDep" :typeForm="typeForm" :ubicaciones="ubicaciones" :clientes="clientes"
+            :departamento="departamento" @close="closeModalDepartamento" />
     </app-layout>
 </template>
 
@@ -30,8 +32,9 @@ import { pickBy, throttle } from "lodash";
 import AppLayout from '@/Layouts/AppLayout.vue'
 import TableDepartamentos from './Partials/TableDepartamentos.vue'
 import TablePuestos from './Partials/TablePuestos.vue'
-import CardVue from '../../../Components/Card.vue';
+import CardVue from '@/Components/Card.vue';
 import Pagination from '@/Components/Pagination.vue';
+import DepartamentoModal from './Partials/DepartamentoModal.vue';
 
 
 export default defineComponent({
@@ -42,6 +45,14 @@ export default defineComponent({
         },
         filters: {
             type: Object
+        },
+        ubicaciones: {
+            type: Array,
+            required: true
+        },
+        clientes: {
+            type: Array,
+            required: true
         }
     },
     components: {
@@ -51,13 +62,14 @@ export default defineComponent({
         Link,
         CardVue,
         Pagination,
+        DepartamentoModal
     },
     data() {
         return {
             showModalDep: false,
             typeForm: 'create',
             selectDepartamento: { 'id': -1, 'nombre': 'Sin departamento', 'activo': true },
-            departamento: { 'id': -1, 'nombre': '', 'activo': true },
+            departamento: { 'id': -1, 'nombre': '', 'ubicacione_id': null, 'cliente_id': '', 'activo': true },
             confirmingDepDeletion: false,
         }
     },
@@ -66,13 +78,13 @@ export default defineComponent({
             this.showModalDep = false;
             this.typeForm = 'create';
         },
-        showModalDepartamento(index) {
-            if (index >= 0) {
+        showModalDepartamento(departamento) {
+            if (!!departamento) {
                 this.typeForm = 'update';
-                this.departamento = pickBy(this.departamentos.data[index]);
+                this.departamento = departamento;
             } else {
                 this.typeForm = 'create';
-                this.departamento = { 'id': -1, 'nombre': '', 'activo': true };
+                this.departamento = { 'id': -1, 'nombre': '', 'ubicacione_id': null, 'cliente_id': '', 'activo': true };
             }
             this.showModalDep = true;
         },
