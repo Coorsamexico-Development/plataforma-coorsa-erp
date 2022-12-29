@@ -31,14 +31,27 @@ class PlantillasAutorizadaController extends Controller
                         })
                         ->groupBy('plantillas_autorizadas.id');
                 }
-            ])
-            ->orderBy('puestos.name', 'asc');
+            ]);
+
+        if (request()->has('search')) {
+
+            $search = '%' . str(request('search'))->replace('%', '\\%') . '%';
+            $puestos->where('puestos.name', 'like', $search);
+        }
+
+        if (request()->has('field')) {
+            $puestos->orderBy(request('field'), request('direction'));
+        } else {
+            $puestos->orderBy('puestos.name', 'asc');
+        }
+
         $ubicaciones = Ubicacion::select('ubicaciones.id', 'ubicaciones.name')
-            ->orderBy('ubicaciones.name', 'asc');
+            ->orderBy('ubicaciones.id', 'asc');
 
         return Inertia::render('PlantillasAutorizadas/PlantillasAutorizadasIndex', [
             'puestos' => fn () => $puestos->get(),
             'ubicaciones' => fn () => $ubicaciones->get(),
+            'filters' => fn () => request()->all(['search', 'field', 'direction'])
         ]);
     }
 

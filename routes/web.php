@@ -14,6 +14,7 @@ use App\Http\Controllers\PlantillasAutorizadaController;
 use App\Http\Controllers\PoliticController;
 use App\Http\Controllers\PuestoController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Foundation\Application;
@@ -111,6 +112,9 @@ Route::middleware([
     Route::get('/departamentos/{departamento}/puestos', [DepartamentoController::class, 'puestosIndex'])->name('departamento.puestos.index');
     Route::put('/departamentos/{departamento}/puestos', [DepartamentoController::class, 'puestosUpdate'])->name('departamento.puestos.update');
     Route::apiResource('/departamentos', DepartamentoController::class)->except('destroy');
+
+    Route::post('ubicaciones', [UbicacionController::class, 'store'])->name('ubicaciones.store');
+    Route::match(['put', 'patch'], 'ubicaciones/{ubicacion}', [UbicacionController::class, 'update'])->name('ubicaciones.update');
 });
 
 Route::get('empleados/create', [EmpleadoControlller::class, 'createNewEmpleado'])->name('empleado.create');
