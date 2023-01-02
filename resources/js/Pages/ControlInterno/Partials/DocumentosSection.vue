@@ -82,7 +82,6 @@ const deleteCalificaion = (docCalifacionId) => {
                         </DangerButton>
                     </CardDocumento>
                 </swiper-slide>
-
             </swiper>
         </div>
     </Card>
