@@ -135,7 +135,7 @@ const updateHoverState = (isHover) =>
         <div class="documentos_view">
            <!-- Files Section -->
           <AnimationCard>
-                 <CardImage style="margin:1.8rem; width:16rem" v-for="politica in politicas" :key="politica.id" :file="politica.pdf">
+                 <CardImage class="" style="margin:1.8rem; width:16rem" v-for="politica in politicas" :key="politica.id" :file="politica.pdf">
                      <div class="row">
                          <div class="col-lg-3 col-md-4">
                              <img class="h-48" style="width:50rem;" :src="politica.imagePolitic" />
@@ -148,7 +148,7 @@ const updateHoverState = (isHover) =>
                  
                      </div>
 
-                     <div class="pb-6 row">
+                     <div class="pb-12 row">
                          <span class="font-light text-[#1D2B4E]" style="font-size:0.8rem;  margin-left: 2rem;  font-family: 'Montserrat';">{{ politica.nombre +' '+politica.apellido_paterno+' '+politica.apellido_materno }}</span>
                      </div>
        
