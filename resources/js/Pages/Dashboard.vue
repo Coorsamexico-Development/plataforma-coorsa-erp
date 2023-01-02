@@ -112,10 +112,9 @@ const closeModalAgregarNoticia = () =>
         <div class="grid grid-cols-3 m-4 gap-x-8">
            <CardNoticias  v-for="noticia in noticias" :key="noticia.id" :noticia="noticia"></CardNoticias> 
         </div>
-
-        <ModalAddNoticia :show="modalAddNoticia" @close="closeModalAgregarNoticia "></ModalAddNoticia>
       </section>
       <ButtonAdd v-if="$page.props.can['noticias.create']" style="float:right" class="mr-8"  @click="openModalAgregarNoticia">Agregar</ButtonAdd>
+      <ModalAddNoticia :show="modalAddNoticia" @close="closeModalAgregarNoticia "></ModalAddNoticia>
       <section class="grid grid-rows-3 mt-28">
         <div class="ml-16 ">
            <h2 class="text-[#EC2944] text-5xl font-semibold" style="font-family: 'Montserrat';">ELLOS HABLAN</h2>
