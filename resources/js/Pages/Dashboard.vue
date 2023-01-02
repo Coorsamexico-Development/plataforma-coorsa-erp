@@ -91,6 +91,7 @@ const closeModalAgregarNoticia = () =>
       <section>
         <div class="video_section">
             <div class="pt-20 pb-48 ml-48">
+              <img class="float-right mt-16 mr-16" src="../../img/VIDEO_APARTADO_icon.png">
               <h2 class="text-[#EC2944] font-500 text-5xl mt-16" style="font-family: 'Montserrat'; ">NUESTRA</h2>
               <h1 class="font-bold text-white text-8xl" style="font-family: 'Montserrat';">COMUNIDAD</h1>
             </div>
@@ -104,7 +105,7 @@ const closeModalAgregarNoticia = () =>
       </section>
       <section v-if="noticias.length > 0" style="margin-top:-2rem">
         <div class="flex flex-col items-center mb-8">
-          <h1 class="text-4xl uppercase" style="font-family: 'Montserrat';">
+          <h1 class="text-4xl font-bold uppercase" style="font-family: 'Montserrat';">
             <span class="text-[#1A1A22]">Solo, </span>
             <span class="text-[#EC2944]"> lo más reciente</span>
           </h1>

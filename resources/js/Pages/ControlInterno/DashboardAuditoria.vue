@@ -53,7 +53,7 @@ watch(params, (newParams) => {
 <template>
     <AppLayout title="Dashboard">
       <section class="objetivo "  >
-            <div class="text-center pt-14 " style="margin-right:25rem; font-family: 'Montserrat';">
+            <div class="text-center pt-14 objetivo_area" style="font-family: 'Montserrat';">
                 <h1 class="text-4xl font-semibold text-white">Objetivo del área</h1>
                 <span  class="w-16 h-1 bg-[#EC2944] mt-4" style="display:block; margin-left: 27.5rem;"></span>
             </div>

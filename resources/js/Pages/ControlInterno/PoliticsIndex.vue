@@ -96,7 +96,7 @@ const updateHoverState = (isHover) =>
 <template>
     <AppLayout title="Dashboard">
       <section class="objetivo "  >
-            <div class="text-center pt-14 " style="margin-right:16rem; font-family: 'Montserrat';">
+            <div class="text-center pt-14 objetivos" style="font-family: 'Montserrat';">
                 <h1 class="text-4xl font-semibold text-white">Objetivo de documentos</h1>
                 <span  class="w-16 h-1 bg-[#EC2944] mt-4" style="display:block; margin-left: 27.5rem;"></span>
             </div>
@@ -130,12 +130,12 @@ const updateHoverState = (isHover) =>
                </li>
                
             </ul> 
-            <ButtonAdd v-if="$page.props.can['politics.create']" @click="showFormPolitic('create')" style="margin-top:2rem;font-family: 'Montserrat'; margin-left: 1rem;">AGREGAR</ButtonAdd>
+            <ButtonAdd v-if="$page.props.can['politics.create']" @click="showFormPolitic('create')" style="margin-top:2rem;font-family: 'Montserrat'; margin-left: 2.2rem;">AGREGAR</ButtonAdd>
         </div>
         <div class="documentos_view">
            <!-- Files Section -->
-          <AnimationCard>
-                 <CardImage class="" style="margin:1.8rem; width:16rem" v-for="politica in politicas" :key="politica.id" :file="politica.pdf">
+          <AnimationCard  >
+                 <CardImage  style="margin:1.8rem; width:16rem; margin-top: 4rem;" v-for="politica in politicas" :key="politica.id" :file="politica.pdf">
                      <div class="row">
                          <div class="col-lg-3 col-md-4">
                              <img class="h-48" style="width:50rem;" :src="politica.imagePolitic" />

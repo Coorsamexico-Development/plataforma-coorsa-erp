@@ -396,17 +396,6 @@ input:checked ~ .tab-content {
    grid-template-rows: repeat(3,1fr);
 }
 
-@media (min-width:1800px)
-{
-    .inicio_info{
-        height: 53rem;
-        display: grid;
-        grid-template-columns: repeat(3,1fr);
-        grid-template-rows: repeat(3,1fr);
-     }
-}
-
-
 
 .inicio_info_text{
     grid-column: 1/3;
@@ -583,6 +572,7 @@ input:checked ~ .tab-content {
     list-style:none;
     padding-left:0;
     margin-top:0;
+    margin-left: 2.2rem;
 }
     .lateral ul li{
     display:block;
@@ -617,4 +607,36 @@ input:checked ~ .tab-content {
  flex-direction: column;
 }
 
+
+.objetivos
+{
+    margin-right:16rem; 
+}
+
+
+.objetivo_area 
+{
+    margin-right:25rem; 
+}
 /*End Documentos*/
+
+
+@media (min-width:1800px)
+{
+    .inicio_info{
+        height: 53rem;
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        grid-template-rows: repeat(3,1fr);
+     }
+
+     .objetivos
+     {
+        margin-right:28rem; 
+     }
+
+     .objetivo_area 
+     {
+       margin-right:38rem; 
+     }
+}
