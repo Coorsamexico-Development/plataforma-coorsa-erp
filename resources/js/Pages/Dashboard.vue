@@ -97,7 +97,7 @@ const closeModalAgregarNoticia = () =>
             </div>
         </div>
         <div class="flex justify-center justify-items-center" style="margin-top:-7rem">
-          <iframe width="980" height="550" src="https://www.youtube.com/embed/Vrp248tXNb0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe width="1320" height="550" src="https://www.youtube.com/embed/Vrp248tXNb0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div class="p-16 bg-white ">
           

@@ -130,7 +130,7 @@ const submit = () => {
 
 </div>
     <div style="margin-top:-5rem; display: flex; justify-content: center; font-family: 'Montserrat'; ">
-     <h2 class="text-3xl text-white" >
+     <h2 class="text-white text-1xl" style="letter-spacing:1rem;">
         <a href="https://coorsamexico.com/">WWW.COORSAMEXICO.COM</a>
     </h2>
    </div>

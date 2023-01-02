@@ -67,7 +67,7 @@ const deleteCalificaion = (docCalifacionId) => {
             }" navigation :scrollbar="{ draggable: true }">
                 <swiper-slide v-for="doc in documentos" :key="'doc' + doc.id">
                     <CardDocumento @click.stop="startFancy(doc.documento_url)" class="relative h-full border"
-                        :scr="doc.documento_url">
+                        :src="doc.documento_url">
                         {{ doc.mes }}
                         <DangerButton v-if="$page.props.can['calificacion.delete']"
                             class="absolute w-6 px-1 py-0 rounded-full shadow top-2 right-1"

@@ -165,7 +165,7 @@ const titleModal = computed(() => {
     <DialogModal :show="show" maxWidth="2xl" @close="close()">
         <template #title>
             <h2 class="font-semibold text-md">
-                {{ titleModal }} Politica
+              Crear documento
             </h2>
         </template>
         <template #content>
@@ -173,7 +173,7 @@ const titleModal = computed(() => {
                 <div class="grid grid-cols-2 gap-2 md:grid-cols-2">
                     <div class="mt-2">
                         <InputLabel for="namepolitica">
-                            Nombre de la Politica:<span class="text-red-400">*</span>
+                            Nombre del documento:<span class="text-red-400">*</span>
                         </InputLabel>
 
                         <TextInput id="namepolitica" type="text" v-model="form.namepolitica"
@@ -190,7 +190,7 @@ const titleModal = computed(() => {
                     </div>
                     <div class="mt-2">
                         <InputLabel for="type_politic">
-                            Tipo de Politica<span class="text-red-400">*</span>
+                            Tipo de documento<span class="text-red-400">*</span>
                         </InputLabel>
                         <SelectComponent v-model="form.type_politic" required>
                             <option v-for="tipoPolit in tipoPoliticas" :key="tipoPolit.id" :value="tipoPolit.id">
