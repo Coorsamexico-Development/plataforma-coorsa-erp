@@ -40,7 +40,9 @@ const submit = () => {
 
         <div  >
            <div >
+              <span style="position:absolute" class="w-16 h-1 mt-12  bg-[#EC2944]"></span>
               <h1 class="mb-10 text-3xl login_title" style="float:left; margin-left: -1rem;font-family: 'Montserrat'; ">Iniciar Sesión</h1>
+              
               <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
                   {{ status }}
               </div>

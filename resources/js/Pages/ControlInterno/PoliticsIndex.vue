@@ -144,7 +144,7 @@ const updateHoverState = (isHover) =>
        
                      <div class="pt-6 row">
                         <span class="absolute w-2 h-12" style="float: left;" :style="{backgroundColor:'#'+politica.color}"></span>
-                         <span class="text-[#1D2B4E] font-semibold" style="font-size:1rem; margin-left: 2rem; font-family: 'Montserrat';">{{ politica.namepolitica }}</span>
+                         <span class="text-[#1D2B4E] font-semibold;" style="font-size:1rem; margin-left: 2rem; font-family: 'Montserrat';display: block;">{{ politica.namepolitica }}</span>
                  
                      </div>
 
