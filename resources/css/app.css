@@ -472,17 +472,16 @@ input:checked ~ .tab-content {
 }
 
 /*Estilos de cards*/
-
-  
+/*
 .card {
     width: 100%;
-    /*border-radius: 15px;*/
     padding: 1rem;
     background: white;
     position: relative;
     transition: 0.4s ease-out;
     box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.5);
   }
+
   .card:hover {
     transform: translateY(20px);
   }
@@ -501,7 +500,7 @@ input:checked ~ .tab-content {
     display: block;
     width: 100%;
     height: 100%;
-    /*border-radius: 15px;*/
+
     background: rgba(0, 0, 0, 0.6);
     z-index: 2;
     transition: 0.5s;
@@ -515,7 +514,7 @@ input:checked ~ .tab-content {
     position: absolute;
     top: 0;
     left: 0;
-    /*border-radius: 15px;*/
+
   }
   .card .info {
     position: relative;
@@ -537,7 +536,6 @@ input:checked ~ .tab-content {
     padding: 0.6rem;
     outline: none;
     border: none;
-    /*border-radius: 3px;*/
     background: white;
     color: black;
     font-weight: bold;
@@ -548,4 +546,75 @@ input:checked ~ .tab-content {
     background: dodgerblue;
     color: white;
   }
+*/
 /*Estilos Cards fin*/
+
+
+
+/*DOCUMENTOS*/
+
+.documentos
+{
+    display: grid;
+    grid-template-columns:repeat(4,1fr) ;
+}
+
+.documentos_view
+{
+  grid-column: 2/5;
+  margin-top: 2rem;
+}
+
+.lateral
+{
+   box-sizing: border-box;
+   width: max(8%, 200px);
+   display: inline-block;
+   margin-top: 2rem;
+   margin-left: 1rem;
+}
+
+.lateral header
+{
+    text-align: center;
+
+}
+.lateral ul{
+    list-style:none;
+    padding-left:0;
+    margin-top:0;
+}
+    .lateral ul li{
+    display:block;
+    position: relative;
+    padding: 8px 10px;
+    margin-left:0;
+    }
+
+    .lateral ul li a{
+    color: #c4c8d1;
+    text-decoration:none;
+    }
+    .lateral ul li a:after{
+    content: ' ';
+    position:absolute;
+    width: 100%;
+    height: 100%;
+    top:0;
+    left:0;
+    }
+    .lateral ul li:hover, .lateral ul li:hover a{
+   
+    }
+
+.objetivo 
+{
+ background-image: url('../img/DOCUMENTOS.jpg');  
+ background-repeat: no-repeat; 
+ background-size: cover;
+ display: flex;
+ justify-content: center;
+ flex-direction: column;
+}
+
+/*End Documentos*/

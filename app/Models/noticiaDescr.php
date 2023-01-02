@@ -13,5 +13,6 @@ class noticiaDescr extends Model
     protected $fillable = [
         'descripcion',
         'noticia_id',
+        'image'
     ];
 }

@@ -51,10 +51,12 @@ Route::middleware([
 
         $noticias = DB::table(DB::raw('noticias'))
             ->selectRaw(
-             'noticias.titulo AS titulo,
+             'noticias.id AS id,
+              noticias.titulo AS titulo,
               noticias.image AS image,
               noticias.activo AS activo,
-              noticia_descrs.descripcion AS descripcion'
+              noticia_descrs.descripcion AS descripcion,
+              noticia_descrs.image AS mas'
               )
             ->join('noticia_descrs','noticia_descrs.noticia_id','noticias.id')
             ->where('noticias.activo', '=', '1')

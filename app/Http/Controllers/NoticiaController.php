@@ -28,10 +28,30 @@ class NoticiaController extends Controller
              'empleado_id' => $request['autor']
            ]);
 
-           noticiaDescr::create([
-             'descripcion' => $request['descripcion'],
-             'noticia_id' => $newNoticia->id
-           ]);
+           if($request->has('contenidoImg') &&  $request['contenidoImg'] != null)
+           {
+              $contenido = request('contenidoImg');
+              $nombreCont = $contenido->getClientOriginalName();
+              $ruta_contenido = $contenido ->storeAs('noticias/contenidos', $nombreCont, 'gcs'); 
+              $urlContenido = Storage::disk('gcs')->url($ruta_contenido);
+
+
+               
+              noticiaDescr::create([
+               'descripcion' => $request['descripcion'],
+               'noticia_id' => $newNoticia->id,
+               'image' => $urlContenido,
+              ]);
+           }
+          
+           if($request->has('contenidoVideo') &&  $request['contenidoVideo'] != null)
+           {
+               noticiaDescr::create([
+                'descripcion' => $request['descripcion'],
+                'image' => $request['contenidoVideo'],
+                'noticia_id' => $newNoticia->id
+               ]);
+           }
         }
         return  redirect()->back();
     }

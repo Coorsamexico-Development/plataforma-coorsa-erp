@@ -11,6 +11,7 @@ import MenuDesplegable from './PartialsDashboard/MenuDesplegable.vue';
 import ButtonAdd from '@/Components/ButtonAdd.vue';
 import { onMounted, reactive, ref, watch } from 'vue';
 import ModalAddNoticia from './PartialsDashboard/ModalAddNoticia.vue';
+import { Fancybox } from '@fancyapps/ui/src/Fancybox/Fancybox.js';
 
 var props = defineProps({
     menus:Object,
@@ -38,7 +39,7 @@ const closeModalAgregarNoticia = () =>
       <section class="inicio">
         <div class="inicio_info">
             <div class="ml-16 inicio_info_text">
-               <h1 class="m-5 text-6xl  text-white" style="font-family: 'Montserrat'; font-weight: 600;">Somos más que <br> un TEAM.</h1>
+               <h1 class="m-5 text-6xl text-white" style="font-family: 'Montserrat'; font-weight: 600;">Somos más que <br> un TEAM.</h1>
                <h3 class="m-5 text-4xl text-white" style="font-family: 'Montserrat';"><span>Cónoce </span> más sobre coorsa</h3>
                <span style="position:absolute" class="w-16 h-1 ml-6 bg-[#EC2944]"></span>
               
@@ -46,7 +47,7 @@ const closeModalAgregarNoticia = () =>
         </div>
         <div class="inicio_quienes_somos">
           <div class="inicio_quienes_somos_title">
-            <h3 class="text-[#EC2944] font-bold text-5xl" style="font-family: 'Montserrat';font-weight:500">QUIENES</h3>
+            <h3 class="text-[rgb(236,41,68)] font-bold text-5xl" style="font-family: 'Montserrat';font-weight:500">QUIENES</h3>
             <h3 class="text-[#1D2B4E] font-bold text-9xl" style=" font-family: 'Montserrat'; font-weight:900"><strong>SOMOS</strong></h3>
           </div>
           <div class="inicio_quienes_somos_text">
@@ -101,7 +102,13 @@ const closeModalAgregarNoticia = () =>
           
         </div>
       </section>
-      <section>
+      <section v-if="noticias.length > 0" style="margin-top:-2rem">
+        <div class="flex flex-col items-center mb-8">
+          <h1 class="text-4xl uppercase" style="font-family: 'Montserrat';">
+            <span class="text-[#1A1A22]">Solo, </span>
+            <span class="text-[#EC2944]"> lo más reciente</span>
+          </h1>
+        </div>
         <div class="grid grid-cols-3 m-4 gap-x-8">
            <CardNoticias  v-for="noticia in noticias" :key="noticia.id" :noticia="noticia"></CardNoticias> 
         </div>
