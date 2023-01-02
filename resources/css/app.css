@@ -396,7 +396,7 @@ input:checked ~ .tab-content {
    grid-template-rows: repeat(3,1fr);
 }
 
-@media (min-width:1980px)
+@media (min-width:1800px)
 {
     .inicio_info{
         height: 53rem;
