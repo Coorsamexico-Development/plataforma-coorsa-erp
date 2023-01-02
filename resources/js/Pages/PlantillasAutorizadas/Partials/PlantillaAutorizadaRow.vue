@@ -1,24 +1,25 @@
 <script setup>
 import ColumnPlantilla from '../../../Components/ColumnPlantilla.vue';
 
+defineEmits(['save']);
 
 const props = defineProps({
-    ubicacion: {
+    ubicaciones: {
         type: Object,
         required: true,
     },
-    puestos: {
+    puesto: {
         type: Object,
         required: true,
     },
-
-})
+});
 
 </script>
 <template>
     <tr>
-        <td class="px-2 whitespace-nowrap">{{ ubicacion.name }}</td>
-        <ColumnPlantilla v-for="puesto in puestos" :key="puesto.id" :ubicacionId="ubicacion.id" :puesto="puesto"
-            class="px-2 whitespace-nowrap" />
+        <td class="px-2 whitespace-nowrap">{{ puesto.name }}</td>
+        <ColumnPlantilla v-for="ubicacion in ubicaciones" :key="ubicacion.id" :ubicacionId="ubicacion.id"
+            :puesto="puesto" class="px-2 whitespace-nowrap" @save="$emit('save', $event)" />
+        <td></td>
     </tr>
 </template>

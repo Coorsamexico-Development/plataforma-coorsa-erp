@@ -14,6 +14,10 @@ class puesto extends Model
         'activo'
     ];
 
+    protected $casts = [
+        'activo' => 'boolean'
+    ];
+
     public function plantillasAutorizadas()
     {
         return $this->hasMany(PlantillasAutorizada::class, 'puesto_id');

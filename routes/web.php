@@ -14,6 +14,7 @@ use App\Http\Controllers\PlantillasAutorizadaController;
 use App\Http\Controllers\PoliticController;
 use App\Http\Controllers\PuestoController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Foundation\Application;
@@ -105,7 +106,17 @@ Route::middleware([
     Route::apiResource('/noticia', NoticiaController::class);
     Route::apiResource('/video', VideoController::class);
 
-    Route::get('plantillas-autorizadas', [PlantillasAutorizadaController::class, 'index'])->name('rh.plantillas-autorizadas.index');
+    Route::apiResource('plantillas-autorizadas', PlantillasAutorizadaController::class, [
+        'names' => 'rh.plantillas-autorizadas'
+    ])->except('destroy');
+    Route::apiResource('/puestos', PuestoController::class);
+    Route::get('/departamentos/{departamento}/list-puestos', [DepartamentoController::class, 'listPuestoDep'])->name('departamento.puestos.list');
+    Route::get('/departamentos/{departamento}/puestos', [DepartamentoController::class, 'puestosIndex'])->name('departamento.puestos.index');
+    Route::put('/departamentos/{departamento}/puestos', [DepartamentoController::class, 'puestosUpdate'])->name('departamento.puestos.update');
+    Route::apiResource('/departamentos', DepartamentoController::class)->except('destroy');
+
+    Route::post('ubicaciones', [UbicacionController::class, 'store'])->name('ubicaciones.store');
+    Route::match(['put', 'patch'], 'ubicaciones/{ubicacion}', [UbicacionController::class, 'update'])->name('ubicaciones.update');
 });
 
 Route::get('empleados/create', [EmpleadoControlller::class, 'createNewEmpleado'])->name('empleado.create');
@@ -116,13 +127,10 @@ Route::post('empleados/store', [EmpleadoControlller::class, 'store'])->name('emp
 Route::get('/catalogos/formulario/empelado', [CatalogoController::class, 'formularioEmpleado'])->name('catalogos.formularioEmpleado'); //ruta para los diferentes catalogos
 Route::get('/municipio/{estado}', [MunicipioController::class, 'getMunicipiosEstado'])->name('municipos.estado');
 Route::get('/localidades/{municipio}', [LocalidadesController::class, 'getLocalidades'])->name('localidades.municipio');
-Route::get('/departamentos/{departamento}/list-puestos', [DepartamentoController::class, 'listPuestoDep'])->name('departamento.puestos.list');
 Route::get('/empleados/edit/{id}', [EmpleadoControlller::class, 'edit'])->name('empleado.edit');
 Route::post('empleados/update', [EmpleadoControlller::class, 'update'])->name('empleado.update');
-Route::get('departamentos', [DepartamentoController::class, 'index'])->name('dptos.index');
-Route::apiResource('/puestos', PuestoController::class);
-Route::get('/departamentos/{departamento}/puestos', [DepartamentoController::class, 'puestosIndex'])->name('departamento.puestos.index');
-Route::put('/departamentos/{departamento}/puesto', [DepartamentoController::class, 'puestosUpdate'])->name('departamento.puestos.update');
+
+
 
 Route::get('users/export/{activo}', [UserController::class, 'export'])->name('export.empleados');
 
