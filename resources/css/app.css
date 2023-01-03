@@ -621,6 +621,18 @@ input:checked ~ .tab-content {
 /*End Documentos*/
 
 
+.fondo_pdf
+{
+   background-image: url('../img/portada_pdf.jpg');
+   background-size: cover;
+}
+
+.fondo_excel
+{
+    background-image: url('../img/portada_excel.jpg');
+    background-size: cover;
+}
+
 @media (min-width:1800px)
 {
     .inicio_info{
@@ -639,4 +651,5 @@ input:checked ~ .tab-content {
      {
        margin-right:38rem; 
      }
+
 }

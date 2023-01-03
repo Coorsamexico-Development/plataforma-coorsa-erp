@@ -135,3 +135,5 @@ Route::post('empleados/update', [EmpleadoControlller::class, 'update'])->name('e
 Route::get('users/export/{activo}', [UserController::class, 'export'])->name('export.empleados');
 
 Route::get('card/user', [UserController::class, 'viewCard'])->name('view.card');
+
+Route::get('user/puesto/{id}',[UserController::class, 'getPuesto'])->name('getPuesto');

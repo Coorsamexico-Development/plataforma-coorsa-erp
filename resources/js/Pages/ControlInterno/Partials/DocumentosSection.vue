@@ -61,7 +61,7 @@ const deleteCalificaion = (docCalifacionId) => {
         <Title class="flex items-center">
             <CirculeLogo url-logo="/assets/img/icono doc 7.png" /> <span>Documentos</span>
         </Title>
-        <div class="h-32 px-6 py-4 md:h-48 md:px-12">
+        <div style="height:20rem" class="h-32 px-6 py-4 md:h-48 md:px-12">
             <swiper class="h-full" :modules="modules" :slidesPerView="'auto'" :spaceBetween="20" :pagination="{
                 clickable: true,
             }" navigation :scrollbar="{ draggable: true }">
