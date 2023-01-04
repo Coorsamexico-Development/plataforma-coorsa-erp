@@ -14,7 +14,14 @@ class PoliticController extends Controller
     public function index()
     {
         $tipoPoliticas = Tipopolitica::orderBy('id', 'asc');
-        $politicas = Politic::where('id_statu', '=', 1);
+        $politicas = Politic::select('politics.*',
+        'users.name AS nombre',
+        'users.apellido_paterno AS apellido_paterno',
+        'users.apellido_materno AS apellido_materno',
+        'tipopoliticas.color')
+        ->join('users','politics.empleado_id','users.id')
+        ->join('tipopoliticas','politics.type_politic','tipopoliticas.id')
+        ->where('id_statu', '=', 1);
 
 
         if (request()->has('search')) {
@@ -104,7 +111,7 @@ class PoliticController extends Controller
             'autor' => $request->autor,
             'imagePolitic' => $urlImage,
             'pdf' => $urlPdf,
-            'empleado_id' => Auth::id(),
+            'empleado_id' => $request->autor,
         ]);
         return redirect()->back();
     }

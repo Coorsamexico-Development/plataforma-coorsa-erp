@@ -52,12 +52,14 @@ Route::middleware([
 
         $noticias = DB::table(DB::raw('noticias'))
             ->selectRaw(
-                'noticias.titulo AS titulo,
+             'noticias.id AS id,
+              noticias.titulo AS titulo,
               noticias.image AS image,
               noticias.activo AS activo,
-              noticia_descrs.descripcion AS descripcion'
-            )
-            ->join('noticia_descrs', 'noticia_descrs.noticia_id', 'noticias.id')
+              noticia_descrs.descripcion AS descripcion,
+              noticia_descrs.image AS mas'
+              )
+            ->join('noticia_descrs','noticia_descrs.noticia_id','noticias.id')
             ->where('noticias.activo', '=', '1')
             ->limit(3)
             ->get();
@@ -133,3 +135,5 @@ Route::post('empleados/update', [EmpleadoControlller::class, 'update'])->name('e
 Route::get('users/export/{activo}', [UserController::class, 'export'])->name('export.empleados');
 
 Route::get('card/user', [UserController::class, 'viewCard'])->name('view.card');
+
+Route::get('user/puesto/{id}',[UserController::class, 'getPuesto'])->name('getPuesto');

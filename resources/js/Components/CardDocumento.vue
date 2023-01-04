@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from "vue"
+import { computed, ref } from "vue"
 
 const props = defineProps({
     src: {
@@ -9,19 +9,30 @@ const props = defineProps({
 })
 
 const urlLogo = computed(() => {
-    if (props.src.endsWith('.pdf')) {
-        return
+    if (props.src.endsWith('.pdf')) 
+    {
+        return '../resources/img/portada_pdf.jpg'
     }
-    return '/assets/img/icono pdf.png'
-})
+});
+
+
+
+
 
 </script>
 <template>
-    <div
-        class="w-full px-1 pt-2 overflow-hidden bg-gray-300 shadow-xl cursor-pointer lg:px-2 lg:pt-6 hover:bg-gray-400 sm:rounded-2xl">
-        <div class="h-3/4">
-            <img :src="urlLogo" alt="logo-file" class="object-cover w-full h-full px-1 lg:px-4" />
+    <div 
+        v-if="props.src.endsWith('.pdf')"
+        style="width:10.5rem; height: 15rem;"
+        class="w-full px-1 pt-2 overflow-hidden shadow-xl cursor-pointer fondo_pdf lg:px-2 lg:pt-6 hover:bg-gray-400 sm:rounded-2xl">
+        <div class="flex justify-center h1/4 ">
+            <slot />
         </div>
+    </div>
+    <div 
+        v-if="props.src.endsWith('.xlsx')"
+        style="width:10.5rem; height: 15rem;"
+        class="w-full px-1 pt-2 overflow-hidden shadow-xl cursor-pointer fondo_excel lg:px-2 lg:pt-6 hover:bg-gray-400 sm:rounded-2xl">
         <div class="flex justify-center h1/4 ">
             <slot />
         </div>

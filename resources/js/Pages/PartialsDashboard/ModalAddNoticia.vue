@@ -7,12 +7,18 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { usePage } from '@inertiajs/inertia-vue3'
 import ButtonModal from '../../Components/ButtonModal.vue';
+import SelectComponent from '@/Components/SelectComponent.vue';
+import DropZone from '@/Components/DropZone.vue';
 
 const emit = defineEmits(["close"])
 
 const user =  usePage().props.value.user.id;
 
+let tipoContenido = ref(null);
+
 const fileUpload = ref(null);
+
+const contentUpload = ref(null);
 
 const noticiaForm = useForm({
     titulo:"",
@@ -20,11 +26,14 @@ const noticiaForm = useForm({
     autor: user,
     activo:1,
     descripcion:"",
+    contenidoImg:null,
+    contenidoVideo:null
 });
 
 const selectNewFile = () => 
 {
     fileUpload.value.click();
+    tipoContenido.value.click();
 };
 
 const uploadFile = () =>
@@ -33,6 +42,12 @@ const uploadFile = () =>
   noticiaForm.imagen  = file;
 };
 
+
+const uploadContentFile = () => 
+{
+    const newfile = contentUpload.value.files[0];
+    noticiaForm.contenidoImg = newfile;
+}
 
 const enviarNuevaNoticia = () =>
 {
@@ -58,14 +73,23 @@ const close = () => {
                   <div style="float:left; margin: 2rem; margin-top: 0rem;" >
                      <InputLabel>Titulo de noticia</InputLabel>
                      <TextInput v-model="noticiaForm.titulo" class="border-2 border-black border-solid "></TextInput>
-                     <InputLabel>Noticia:</InputLabel>
-                     <input type="file" enctype="multipart/form-data"
-                         ref="fileUpload"
-                         @change="uploadFile">
+                     <InputLabel class="mt-4">Portada:</InputLabel>
+                     <DropZone v-model="noticiaForm.imagen"></DropZone>
+                     <InputLabel class="mt-4">Tipo de contenido.</InputLabel>
+                     <SelectComponent v-model="tipoContenido">
+                        <option selected disabled>Selecciona un tipo</option>
+                        <option value="video">Video</option>
+                        <option value="imagen">Imagen</option>
+                     </SelectComponent>
                    </div> 
                    <div>
-                    <InputLabel>Descripción</InputLabel>
-                    <textarea v-model="noticiaForm.descripcion"></textarea>
+                     <InputLabel>Descripción</InputLabel>
+                     <textarea v-model="noticiaForm.descripcion"></textarea>
+                     <div v-if="tipoContenido != null">
+                        <InputLabel class="mt-9">Contenido</InputLabel>
+                        <TextInput v-if="tipoContenido == 'video'" v-model="noticiaForm.contenido" class="border-2 border-black border-solid"></TextInput>
+                        <DropZone v-if="tipoContenido == 'imagen'" v-model="noticiaForm.contenidoImg" ></DropZone>
+                     </div>
                    </div>
                 </div>
                   <ButtonModal  type="submit">Enviar</ButtonModal>

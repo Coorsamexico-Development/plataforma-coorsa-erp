@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
 use App\Exports\UsersExport;
+use App\Models\empleados_puesto;
+use App\Models\UsuarioPosicion;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
@@ -44,5 +46,15 @@ class UserController extends Controller
     {
         return Inertia::render('CardViewUser/IndexCard',
         []);
+    }
+
+    public function getPuesto($id)
+    {
+        $puesto  = empleados_puesto::select('puestos.name AS puesto')
+        ->where('empleado_id','=',$id)
+        ->join('puestos','empleados_puestos.puesto_id','=','puestos.id')
+        ->get();
+
+        return $puesto[0];
     }
 }

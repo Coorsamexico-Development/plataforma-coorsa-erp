@@ -9,6 +9,8 @@ import ButtonModal from '../../Components/ButtonModal.vue';
 import ModalAddNoticia from './ModalAddNoticia.vue';
 import ModalNoticiaDes from './ModalNoticiaDesc.vue';
 import ButtonAdd from '@/Components/ButtonAdd.vue';
+import { Fancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox.css";
 
 
 var props = defineProps({
@@ -36,13 +38,13 @@ const closeMasInfo = () =>
 }
 </style>
 <template>
-    <Card class="w-full h-96 fondo card"  :style="{ backgroundImage : 'url(' + encodeURI(props.noticia.image) + ')' }">  
-      <div class="flex flex-col items-center content-center justify-center mt-40">
-        <h3 class="text-xl font-bold text-white" style="z-index:3;">{{ props.noticia.titulo }}</h3>
-        <button @click="masInfo" style="z-index:3;" class="p-2 pr-11 pl-11 border-2 border-solid border-[#EC2944] text-white">
-          LEER MÁS
-        </button>
-      </div>
+    <Card class="w-full fondo card">  
+       <img  class="w-full" style="height:25rem" :src="noticia.image">
+       <div class="ml-4" style="font-family: 'Montserrat';">
+          <h3 class="mt-8 text-[#1A1A22] font-semibold">{{noticia.titulo}}</h3>
+          <p class="mt-2 text-sm font-extralight">{{ noticia.descripcion }}</p>
+       </div>
+       <ButtonAdd :data-fancybox="'single'+noticia.id"  :data-src="noticia.mas"  class="m-4">Ver más</ButtonAdd>
     </Card>
     <ModalNoticiaDes :show="abrirModalDes" @close="closeMasInfo" :descripcion="props.noticia.descripcion"></ModalNoticiaDes>
 </template>

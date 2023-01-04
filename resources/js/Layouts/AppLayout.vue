@@ -26,13 +26,32 @@ const switchToTeam = (team) => {
 const logout = () => {
     Inertia.post(route('logout'));
 };
+
+const user = ref(null);
+const userInfo = usePage().props.value.user;
+//console.log(userInfo);
+user.value = userInfo;
+let puesto = ref("");
+
+axios.get(route('getPuesto', user.value.id))
+        .then((response) => 
+        {
+            puesto.value = response.data;
+        }).catch(error => {
+            if (error.response) 
+            {
+                let messageError = '';
+                const messageServer = error.response.data.message 
+            }
+        });
+
+
 </script>
 
 <template>
     <div>
 
         <Head :title="title" />
-
         <Banner />
 
         <div class="min-h-screen bg-white">
@@ -173,6 +192,7 @@ const logout = () => {
                                                 </div>
 
                                                 <template v-for="team in $page.props.user.all_teams" :key="team.id">
+                                                    
                                                     <form @submit.prevent="switchToTeam(team)">
                                                         <DropdownLink as="button">
                                                             <div class="flex items-center">
@@ -201,8 +221,22 @@ const logout = () => {
                                     <template #trigger>
                                         <button v-if="$page.props.jetstream.managesProfilePhotos"
                                             class="flex text-sm transition border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300">
-                                            <img class="object-cover w-8 h-8 rounded-full"
-                                                :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="54" height="52" viewBox="0 0 54 52">
+                                                   <defs>
+                                                     <clipPath id="clip-ICONO">
+                                                       <rect width="54" height="52"/>
+                                                     </clipPath>
+                                                   </defs>
+                                                   <g id="ICONO" clip-path="url(#clip-ICONO)">
+                                                     <g id="Grupo_26" data-name="Grupo 26" transform="translate(-1147 -9.146)">
+                                                       <g id="Elipse_1" data-name="Elipse 1" transform="translate(1152.557 14)" fill="none" stroke="#fff" stroke-width="2">
+                                                         <circle cx="21.5" cy="21.5" r="21.5" stroke="none"/>
+                                                         <circle cx="21.5" cy="21.5" r="20.5" fill="none"/>
+                                                       </g>
+                                                       <path id="usuario_1_" data-name="usuario (1)" d="M16.8,13.233a5.654,5.654,0,1,0-6.607,0A10.514,10.514,0,0,0,3,23.192.807.807,0,0,0,3.808,24H23.192A.807.807,0,0,0,24,23.192,10.514,10.514,0,0,0,16.8,13.233ZM9.462,8.654A4.038,4.038,0,1,1,13.5,12.692,4.043,4.043,0,0,1,9.462,8.654ZM4.652,22.385a8.885,8.885,0,0,1,17.7,0Z" transform="translate(1161 21)" fill="#fff"/>
+                                                     </g>
+                                                   </g>
+                                                </svg>
                                         </button>
 
                                         <span v-else class="inline-flex rounded-md">
@@ -221,11 +255,23 @@ const logout = () => {
                                     </template>
 
                                     <template #content>
-                                        <!-- Account Management -->
-                                        <div class="block px-4 py-2 text-xs text-gray-400">
-                                            Manage Account
+                                        <div>
+                                            <h1 class="uppercase text-[#1D2B4E] font-semibold text-center">Perfil</h1>
+                                            <div style="display:flex; justify-content: center;">
+                                                <div style="height: 100px;
+                                                    width: 100px;
+                                                    /* los siguientes valores son independientes del tamaño del círculo */
+                                                    background-repeat: no-repeat;
+                                                    background-position: 50%;
+                                                    border-radius: 50%;
+                                                    background-size: 100% auto;" 
+                                                    :style="{backgroundImage: `url(${user.fotografia})`}">                                       
+                                               </div>
+                                            </div>
+                                            <p class="text-center text-[#1D2B4E] font-bold">{{ user.name+' '+user.apellido_paterno }}</p>
+                                            <p class="text-center text-[#1D2B4E]"> {{ puesto.puesto }}</p>
                                         </div>
-
+                                          <!-- Account Management
                                         <DropdownLink :href="route('profile.show')">
                                             Profile
                                         </DropdownLink>
@@ -234,13 +280,13 @@ const logout = () => {
                                             :href="route('api-tokens.index')">
                                             API Tokens
                                         </DropdownLink>
-
+                                         -->
                                         <div class="border-t border-gray-100" />
 
                                         <!-- Authentication -->
                                         <form @submit.prevent="logout">
                                             <DropdownLink as="button">
-                                                Log Out
+                                                Salir
                                             </DropdownLink>
                                         </form>
                                     </template>

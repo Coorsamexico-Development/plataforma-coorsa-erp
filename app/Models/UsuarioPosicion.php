@@ -5,14 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class noticiaDescr extends Model
+class UsuarioPosicion extends Model
 {
     use HasFactory;
-
-    
-    protected $fillable = [
-        'descripcion',
-        'noticia_id',
-        'image'
-    ];
 }

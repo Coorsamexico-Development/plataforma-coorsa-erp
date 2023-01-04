@@ -61,13 +61,13 @@ const deleteCalificaion = (docCalifacionId) => {
         <Title class="flex items-center">
             <CirculeLogo url-logo="/assets/img/icono doc 7.png" /> <span>Documentos</span>
         </Title>
-        <div class="h-32 px-6 py-4 md:h-48 md:px-12">
+        <div style="height:20rem" class="h-32 px-6 py-4 md:h-48 md:px-12">
             <swiper class="h-full" :modules="modules" :slidesPerView="'auto'" :spaceBetween="20" :pagination="{
                 clickable: true,
             }" navigation :scrollbar="{ draggable: true }">
                 <swiper-slide v-for="doc in documentos" :key="'doc' + doc.id">
                     <CardDocumento @click.stop="startFancy(doc.documento_url)" class="relative h-full border"
-                        :scr="doc.documento_url">
+                        :src="doc.documento_url">
                         {{ doc.mes }}
                         <DangerButton v-if="$page.props.can['calificacion.delete']"
                             class="absolute w-6 px-1 py-0 rounded-full shadow top-2 right-1"
@@ -82,7 +82,6 @@ const deleteCalificaion = (docCalifacionId) => {
                         </DangerButton>
                     </CardDocumento>
                 </swiper-slide>
-
             </swiper>
         </div>
     </Card>
