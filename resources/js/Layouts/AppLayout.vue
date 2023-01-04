@@ -258,7 +258,15 @@ axios.get(route('getPuesto', user.value.id))
                                         <div>
                                             <h1 class="uppercase text-[#1D2B4E] font-semibold text-center">Perfil</h1>
                                             <div style="display:flex; justify-content: center;">
-                                                <img class="w-16 h-16 rounded-full"  :src="user.fotografia">
+                                                <div style="height: 100px;
+                                                    width: 100px;
+                                                    /* los siguientes valores son independientes del tamaño del círculo */
+                                                    background-repeat: no-repeat;
+                                                    background-position: 50%;
+                                                    border-radius: 50%;
+                                                    background-size: 100% auto;" 
+                                                    :style="{backgroundImage: `url(${user.fotografia})`}">                                       
+                                               </div>
                                             </div>
                                             <p class="text-center text-[#1D2B4E] font-bold">{{ user.name+' '+user.apellido_paterno }}</p>
                                             <p class="text-center text-[#1D2B4E]"> {{ puesto.puesto }}</p>
