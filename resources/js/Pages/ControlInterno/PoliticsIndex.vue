@@ -136,8 +136,8 @@ const updateHoverState = (isHover) =>
         <div class="documentos_view">
            <!-- Files Section -->
           <AnimationCard  >
-                 <CardImage  style="margin:1.8rem; height: 20rem; width:16rem; margin-top: 4rem;" v-for="politica in politicas" :key="politica.id" :file="politica.pdf">
-                     <div class="row">
+                 <CardImage  style="margin:1.8rem; height: 20rem; width:16rem; margin-top: 4rem;" v-for="politica in politicas" :key="politica.id" :file="politica.pdf"> 
+                    <div class="row">
                          <div class="col-lg-3 col-md-4">
                              <img class="h-48" style="width:50rem;" :src="politica.imagePolitic" />
                          </div>

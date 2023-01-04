@@ -165,7 +165,7 @@ const titleModal = computed(() => {
     <DialogModal :show="show" maxWidth="2xl" @close="close()">
         <template #title>
             <h2 class="font-semibold text-md">
-              Crear documento
+              {{titleModal}}
             </h2>
         </template>
         <template #content>
