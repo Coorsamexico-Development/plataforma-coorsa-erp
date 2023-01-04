@@ -20,18 +20,7 @@ class PlantillasAutorizadaController extends Controller
 
 
         //Get catologos
-        $puestos = puesto::select('puestos.id', 'puestos.name')
-            ->with([
-                'plantillasAutorizadas' => function ($query) {
-                    $query->select('plantillas_autorizadas.*')
-                        ->selectRaw('count(empleados_puestos.id) as cantidad_activa')
-                        ->leftJoin('empleados_puestos', function ($join) {
-                            $join->on('plantillas_autorizadas.puesto_id', '=', 'empleados_puestos.puesto_id')
-                                ->on('empleados_puestos.activo', '=', DB::raw(1));
-                        })
-                        ->groupBy('plantillas_autorizadas.id');
-                }
-            ]);
+        $puestos = puesto::select('puestos.id', 'puestos.name');
 
         if (request()->has('search')) {
 
@@ -46,7 +35,23 @@ class PlantillasAutorizadaController extends Controller
         }
 
         $ubicaciones = Ubicacion::select('ubicaciones.id', 'ubicaciones.name')
-            ->orderBy('ubicaciones.id', 'asc');
+            ->with([
+                'plantillasAutorizadas' => function ($query) {
+                    $query->select('plantillas_autorizadas.*')
+                        ->selectRaw('count(users.id) as cantidad_activa')
+                        ->leftJoin('cecos', 'plantillas_autorizadas.ubicacione_id', '=', 'cecos.ubicacione_id')
+                        ->leftJoin('empleados_puestos', function ($join) {
+                            $join->on('cecos.id', '=', 'empleados_puestos.departamento_id')
+                                ->on('plantillas_autorizadas.puesto_id', '=', 'empleados_puestos.puesto_id')
+                                ->on('empleados_puestos.activo', '=', DB::raw(1));
+                        })
+                        ->leftJoin('users', function ($join) {
+                            $join->on('empleados_puestos.empleado_id', '=', 'users.id')
+                                ->on('users.activo', '=', DB::raw(1));
+                        })
+                        ->groupBy('plantillas_autorizadas.id');
+                }
+            ])->orderBy('ubicaciones.id', 'asc');
 
         return Inertia::render('PlantillasAutorizadas/PlantillasAutorizadasIndex', [
             'puestos' => fn () => $puestos->get(),
@@ -69,7 +74,7 @@ class PlantillasAutorizadaController extends Controller
         ], [
             'cantidad' =>   $validated['cantidad'],
         ]);
-        return response()->json($plantillasAutorizada);
+        return redirect()->back();
     }
 
 
@@ -80,6 +85,8 @@ class PlantillasAutorizadaController extends Controller
         ]);
 
         $plantillasAutorizada->update($validated);
+
+        return redirect()->back();
         return response()->json([
             'message' => 'updated'
         ]);

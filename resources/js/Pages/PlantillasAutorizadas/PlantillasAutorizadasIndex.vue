@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, watch, ref, watchEffect } from 'vue';
+import { reactive, watch, computed } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { useForm } from "@inertiajs/inertia-vue3";
 import { pickBy, throttle } from 'lodash';
@@ -12,6 +12,7 @@ import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SpinProgress from '@/Components/SpinProgress.vue';
+import PlantillaHeader from './Partials/PlantillaHeader.vue';
 
 var props = defineProps({
     puestos: {
@@ -33,10 +34,6 @@ const params = reactive({
     field: props.filters.field,
     direction: props.filters.direction,
 });
-
-
-const ubicacionesHeader = ref([]);
-
 
 const form = useForm({
     'name': "",
@@ -60,9 +57,6 @@ const updateUbicacion = async (ubicacion) => {
         preserveScroll: true,
         preserveState: true,
         only: ['ubicaciones', 'errors'],
-        onSuccess: () => {
-            close()
-        }
     });
 }
 
@@ -73,29 +67,27 @@ const sort = (field) => {
 
 
 const storePlantilla = (data) => {
-    axios.post(route('rh.plantillas-autorizadas.store'), data)
-        .then((response) => {
-            data.id = response.data.id
-        }).catch((error) => {
-            console.log(error);
-            if (error.hasOwnProperty('response') && error.response.data) {
-                alert(error.response.data)
-            } else {
-                alert('Error CREATE PLANTILLA AUTORIZADA');
-            }
-        });
+    Inertia.post(route('rh.plantillas-autorizadas.store'), data, {
+        preserveScroll: true,
+        preserveState: true,
+        only: ['ubicaciones', 'errors'],
+        onError: (error) => {
+            console.log(error)
+            alert("ERROR TO CREATE PLANTILLA")
+        }
+    });
 }
 
 const updatePlantilla = (data) => {
-    axios.put(route('rh.plantillas-autorizadas.update', data.id), data)
-        .catch((error) => {
-            console.log(error);
-            if (error.hasOwnProperty('response') && error.response.data) {
-                alert(error.response.data.message)
-            } else {
-                alert('Error UPDATE PLANTILLA AUTORIZADA');
-            }
-        });
+    Inertia.put(route('rh.plantillas-autorizadas.update', data.id), data, {
+        preserveScroll: true,
+        preserveState: true,
+        only: ['ubicaciones', 'errors'],
+        onError: (error) => {
+            console.log(error)
+            alert("ERROR TO UPDATE PLANTILLA")
+        }
+    });
 }
 
 
@@ -123,15 +115,19 @@ watch(params, throttle(function () {
 
 }, 150));
 
+const totalGlobal = computed(() => {
+    let totalActivos = 0
+    let totalRequeridos = 0
+    props.ubicaciones.forEach((ubicacion) => {
+        ubicacion.plantillas_autorizadas.forEach(plantilla => {
+            totalActivos += plantilla.cantidad_activa;
+            totalRequeridos += plantilla.cantidad;
+        });
+    });
 
-watchEffect(() => {
-    ubicacionesHeader.value = props.ubicaciones.map(({ id, name }) => {
-        return {
-            'id': id,
-            'name': name,
-        }
-    })
+    return totalActivos + '/' + totalRequeridos
 })
+
 
 
 </script>
@@ -149,6 +145,11 @@ watchEffect(() => {
                                 <div class="flex justify-between gap-2">
                                     <div>
                                         <InputSearch type="search" v-model="params.search" aria-label="Search" />
+                                    </div>
+                                    <div>
+                                        Total Global:<span class="px-1 text-white bg-blue-600 rounded-md">{{ totalGlobal
+}}
+                                        </span>
                                     </div>
                                     <div>
                                         <form id="formUbicacion" class="flex font-normal"
@@ -189,10 +190,9 @@ watchEffect(() => {
                                         </svg>
                                     </template>
                                 </th>
-                                <th scope="col" v-for="ubicacion in ubicacionesHeader" :key="ubicacion.id"
-                                    class="px-2 py-1 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
-                                    <TextInput v-model="ubicacion.name" @blur="updateUbicacion(ubicacion)" />
-                                </th>
+                                <PlantillaHeader v-for="ubicacion in ubicaciones" :key="ubicacion.id"
+                                    :ubicacion="ubicacion" @update-ubicacion="updateUbicacion($event)" />
+
                             </tr>
                         </template>
                         <template #table-body>
