@@ -111,7 +111,7 @@ class PoliticController extends Controller
             'autor' => $request->autor,
             'imagePolitic' => $urlImage,
             'pdf' => $urlPdf,
-            'empleado_id' => Auth::id(),
+            'empleado_id' => $request->autor,
         ]);
         return redirect()->back();
     }
