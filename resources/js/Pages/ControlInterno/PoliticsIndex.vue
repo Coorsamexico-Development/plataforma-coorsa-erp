@@ -112,24 +112,42 @@ const updateHoverState = (isHover) =>
         <div class="lateral">
             <header class="text-[#1A1A22]" style="font-family: 'Montserrat';">Documentos</header>
             <ul class="menuVert" v-for="tipoPoliticas in tipoPoliticas" :key="'poli' + tipoPoliticas.id">
-               <span v-if="hoverState" class="absolute w-2 h-8 mt-2" style="float: left; margin-left: -1rem;" :style="{backgroundColor:'#'+tipoPoliticas.color}"></span>
-               <span v-if="!hoverState" class="absolute w-2 h-8 mt-2" style="float: left;"></span>
-               <li @click="params.type_politic = tipoPoliticas.id" >
-                 <a  class="font-semibold"  @mouseenter="updateHoverState(true)" @mouseleave="updateHoverState(false)" >
-                    <p v-if="params.type_politic == tipoPoliticas.id" :style="{color:'#'+tipoPoliticas.color}">
-                        <span  class="absolute w-2 h-8 mt-0" style="float: left; margin-left: -1rem;" :style="{backgroundColor:'#'+tipoPoliticas.color}"></span>
-                        <span v-if="hoverState"  :style="{color:'#'+tipoPoliticas.color}">{{ tipoPoliticas.name }}</span>
-                        <span v-if="!hoverState">{{ tipoPoliticas.name }}</span>
-                    </p>
-                    <p v-else>
-                        <span v-if="hoverState"  :style="{color:'#'+tipoPoliticas.color}">{{ tipoPoliticas.name }}</span>
-                        <span v-if="!hoverState">{{ tipoPoliticas.name }}</span>
-                    </p>
-
-
-                 </a>
-               </li>
-               
+                <div v-if="tipoPoliticas.id == 14">
+                     <div  v-if="$page.props.can['minutas.watch']">
+                        <span v-if="hoverState" class="absolute w-2 h-8 mt-2" style="float: left; margin-left: -1rem;" :style="{backgroundColor:'#'+tipoPoliticas.color}"></span>
+                        <span v-if="!hoverState" class="absolute w-2 h-8 mt-2" style="float: left;"></span>
+                        <li @click="params.type_politic = tipoPoliticas.id" >
+                          <a   class="font-semibold"  @mouseenter="updateHoverState(true)" @mouseleave="updateHoverState(false)" >
+                             <p v-if="params.type_politic == tipoPoliticas.id" :style="{color:'#'+tipoPoliticas.color}">
+                                 <span  class="absolute w-2 h-8 mt-0" style="float: left; margin-left: -1rem;" :style="{backgroundColor:'#'+tipoPoliticas.color}"></span>
+                                 <span v-if="hoverState"  :style="{color:'#'+tipoPoliticas.color}">{{ tipoPoliticas.name }}</span>
+                                 <span v-if="!hoverState">{{ tipoPoliticas.name }}</span>
+                             </p>
+                             <p v-else>
+                                 <span v-if="hoverState"  :style="{color:'#'+tipoPoliticas.color}">{{ tipoPoliticas.name }}</span>
+                                 <span v-if="!hoverState">{{ tipoPoliticas.name }}</span>
+                             </p>
+                          </a>
+                        </li>
+                     </div>
+                </div>
+                <div v-else>
+                  <span v-if="hoverState" class="absolute w-2 h-8 mt-2" style="float: left; margin-left: -1rem;" :style="{backgroundColor:'#'+tipoPoliticas.color}"></span>
+                  <span v-if="!hoverState" class="absolute w-2 h-8 mt-2" style="float: left;"></span>
+                  <li @click="params.type_politic = tipoPoliticas.id" >
+                    <a   class="font-semibold"  @mouseenter="updateHoverState(true)" @mouseleave="updateHoverState(false)" >
+                       <p v-if="params.type_politic == tipoPoliticas.id" :style="{color:'#'+tipoPoliticas.color}">
+                           <span  class="absolute w-2 h-8 mt-0" style="float: left; margin-left: -1rem;" :style="{backgroundColor:'#'+tipoPoliticas.color}"></span>
+                           <span v-if="hoverState"  :style="{color:'#'+tipoPoliticas.color}">{{ tipoPoliticas.name }}</span>
+                           <span v-if="!hoverState">{{ tipoPoliticas.name }}</span>
+                       </p>
+                       <p v-else>
+                           <span v-if="hoverState"  :style="{color:'#'+tipoPoliticas.color}">{{ tipoPoliticas.name }}</span>
+                           <span v-if="!hoverState">{{ tipoPoliticas.name }}</span>
+                       </p>
+                    </a>
+                  </li>
+                </div>
             </ul> 
             <ButtonAdd v-if="$page.props.can['politics.create']" @click="showFormPolitic('create')" style="margin-top:2rem;font-family: 'Montserrat'; margin-left: 2.2rem;">AGREGAR DOCUMENTO</ButtonAdd>
         </div>
