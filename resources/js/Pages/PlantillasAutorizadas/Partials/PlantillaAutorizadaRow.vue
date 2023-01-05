@@ -18,8 +18,8 @@ const props = defineProps({
 <template>
     <tr>
         <td class="px-2 whitespace-nowrap">{{ puesto.name }}</td>
-        <ColumnPlantilla v-for="ubicacion in ubicaciones" :key="ubicacion.id" :ubicacionId="ubicacion.id"
-            :puesto="puesto" class="px-2 whitespace-nowrap" @save="$emit('save', $event)" />
+        <ColumnPlantilla v-for="ubicacion in ubicaciones" :key="ubicacion.id" :puestoId="puesto.id"
+            :ubicacion="ubicacion" class="px-2 whitespace-nowrap" @save="$emit('save', $event)" />
         <td></td>
     </tr>
 </template>

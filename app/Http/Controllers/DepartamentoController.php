@@ -40,12 +40,16 @@ class DepartamentoController extends Controller
             'cecos.nombre AS nombre',
             'cecos.ubicacione_id',
             'cecos.cliente_id',
-            DB::raw('COUNT(empleados_puestos.empleado_id) AS personal')
+            DB::raw('COUNT(users.id) AS personal')
         )
-            ->leftjoin('departamento_puestos', 'cecos.id', 'departamento_puestos.id')
-            ->leftjoin('puestos', 'departamento_puestos.puesto_id', 'puestos.id')
-            ->leftjoin('empleados_puestos', 'puestos.id', 'empleados_puestos.puesto_id')
-            ->leftjoin('users', 'empleados_puestos.empleado_id', 'users.id')
+            ->leftjoin('empleados_puestos', function ($join) {
+                $join->on('cecos.id', '=', 'empleados_puestos.departamento_id')
+                    ->on('empleados_puestos.activo', '=', DB::raw(1));
+            })
+            ->leftjoin('users', function ($join) {
+                $join->on('empleados_puestos.empleado_id', '=', 'users.id')
+                    ->on('users.activo', '=', DB::raw(1));
+            })
             ->groupby('cecos.id');
 
         $ubicaciones = Ubicacion::select('ubicaciones.id', 'ubicaciones.name');

@@ -5,27 +5,27 @@ import { computed, reactive } from "vue"
 defineEmits(['save']);
 
 const props = defineProps({
-    ubicacionId: {
-        type: Number,
+    ubicacion: {
+        type: Object,
         required: true,
     },
-    puesto: {
-        type: Object,
+    puestoId: {
+        type: Number,
         required: true,
     }
 })
 
 const plantillaAutorizada = reactive({
     'id': -1,
-    'puesto_id': props.puesto.id,
-    'ubicacione_id': props.ubicacionId,
+    'puesto_id': props.puestoId,
+    'ubicacione_id': props.ubicacion.id,
     'cantidad': 0,
     'cantidad_activa': 0,
 });
 
 const color = computed(() => {
-    let plantillaFind = props.puesto.plantillas_autorizadas.find(plantilla => {
-        return plantilla.ubicacione_id === props.ubicacionId
+    let plantillaFind = props.ubicacion.plantillas_autorizadas.find(plantilla => {
+        return plantilla.puesto_id === props.puestoId
     });
     if (plantillaFind !== undefined) {
         plantillaAutorizada.id = plantillaFind.id;
@@ -44,13 +44,13 @@ const color = computed(() => {
 </script>
 <template>
     <td class="relative px-2 whitespace-nowrap">
-        <span v-if="plantillaAutorizada.id === -1" class="absolute text-xs text-white bg-red-500 rounded -top-1">SIN
-            DEFINIR</span>
+        <span v-if="plantillaAutorizada.id === -1"
+            class="absolute text-xs text-white bg-yellow-500 rounded -top-1">S/D</span>
         <div :class="color" class="mx-4 my-1 rounded">
             {{ plantillaAutorizada.cantidad_activa }}
             /
             <input type="number"
-                class="w-1/4 p-0 bg-transparent border-transparent focus:ring-0 focus:border-transparent focus:border-b-gray-600"
+                class="w-2/4 p-0 bg-transparent border-transparent focus:ring-0 focus:border-transparent focus:border-b-gray-600"
                 @blur="$emit('save', plantillaAutorizada)" min="0" max="10000" v-model="plantillaAutorizada.cantidad" />
 
         </div>
