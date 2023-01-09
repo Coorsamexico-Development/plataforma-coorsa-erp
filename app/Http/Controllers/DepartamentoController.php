@@ -40,6 +40,7 @@ class DepartamentoController extends Controller
             'cecos.nombre AS nombre',
             'cecos.ubicacione_id',
             'cecos.cliente_id',
+            'cecos.activo_erp',
             DB::raw('COUNT(users.id) AS personal')
         )
             ->leftjoin('empleados_puestos', function ($join) {

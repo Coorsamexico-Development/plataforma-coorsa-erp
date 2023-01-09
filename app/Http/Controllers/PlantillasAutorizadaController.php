@@ -20,7 +20,12 @@ class PlantillasAutorizadaController extends Controller
 
 
         //Get catologos
-        $puestos = puesto::select('puestos.id', 'puestos.name');
+        $puestos = puesto::select('puestos.id', 'puestos.name')
+            ->join('departamento_puestos', 'puestos.id', '=', 'departamento_puestos.puesto_id')
+            ->join('cecos', function ($join) {
+                $join->on('departamento_puestos.departamento_id', '=', 'cecos.id')
+                    ->on('cecos.activo_erp', '=', DB::raw(1));
+            })->distinct();
 
         if (request()->has('search')) {
 
@@ -39,7 +44,10 @@ class PlantillasAutorizadaController extends Controller
                 'plantillasAutorizadas' => function ($query) {
                     $query->select('plantillas_autorizadas.*')
                         ->selectRaw('count(users.id) as cantidad_activa')
-                        ->leftJoin('cecos', 'plantillas_autorizadas.ubicacione_id', '=', 'cecos.ubicacione_id')
+                        ->leftJoin('cecos', function ($join) {
+                            $join->on('plantillas_autorizadas.ubicacione_id', '=', 'cecos.ubicacione_id')
+                                ->on('cecos.activo_erp', '=', DB::raw(1));
+                        })
                         ->leftJoin('empleados_puestos', function ($join) {
                             $join->on('cecos.id', '=', 'empleados_puestos.departamento_id')
                                 ->on('plantillas_autorizadas.puesto_id', '=', 'empleados_puestos.puesto_id')

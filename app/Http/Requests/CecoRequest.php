@@ -31,7 +31,8 @@ class CecoRequest extends FormRequest
         return [
             'nombre' => ['required', 'unique:cecos,nombre' . $unique],
             'ubicacione_id' => ['required', 'exists:ubicaciones,id'],
-            'cliente_id' => ['required', 'exists:clientes,id']
+            'cliente_id' => ['required', 'exists:clientes,id'],
+            'activo_erp' => ['required', 'boolean']
         ];
     }
 }

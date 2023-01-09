@@ -32,6 +32,24 @@
             <th scope="col" class="w-2/6 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase">
                 #Personal
             </th>
+            <th scope="col" class="w-2/6 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase">
+                <span class="inline-flex justify-between w-full px-6 py-3 cursor-pointer"
+                    @click="sort('activo_erp')">ACTIVO
+                    <template v-if="params.field === 'activo_erp'">
+                        <svg v-if="params.direction === 'asc'" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
+                            viewBox="0 0 20 20" fill="currentColor">
+                            <path
+                                d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z" />
+                        </svg>
+                        <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path
+                                d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
+                        </svg>
+                    </template>
+
+                </span>
+            </th>
         </template>
         <template #table-body>
             <tr class="text-gray-500" v-for='departamento in departamentos.data' :key="departamento.id"
@@ -47,6 +65,18 @@
                 </td>
                 <td class="px-2 whitespace-nowrap">{{ departamento.nombre }}</td>
                 <td>{{ departamento.personal }}</td>
+                <td class="px-1 py-2 text-sm text-center text-gray-500 uppercase break-all">
+                    <svg v-if="departamento.activo_erp" class="w-6 h-6 m-auto text-green-500"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <svg v-else class="w-6 h-6 m-auto text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </td>
             </tr>
         </template>
     </DataTable>

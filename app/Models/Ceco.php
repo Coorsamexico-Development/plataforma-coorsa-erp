@@ -14,10 +14,11 @@ class Ceco extends Model
         'nombre',
         'cliente_id',
         'ubicacione_id',
+        'activo_erp',
     ];
 
     protected $casts = [
-        'activo' => 'boolean'
+        'activo_erp' => 'boolean'
     ];
 
     public function puestos()
