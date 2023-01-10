@@ -13,6 +13,7 @@ use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\PlantillasAutorizadaController;
 use App\Http\Controllers\PoliticController;
 use App\Http\Controllers\PuestoController;
+use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\UserController;
@@ -41,6 +42,11 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 })->name('inicio')->middleware('guest');
+Route::middleware('guest')->name('password.reset.')->group(function () {
+    Route::get('/reset-password-fisrt/{token}', [ResetPasswordController::class, 'create'])->name('first');
+    Route::post('/reset-password-fisrt', [ResetPasswordController::class, 'update'])->name('first.update');
+});
+
 
 Route::middleware([
     'auth:sanctum',
@@ -52,14 +58,14 @@ Route::middleware([
 
         $noticias = DB::table(DB::raw('noticias'))
             ->selectRaw(
-             'noticias.id AS id,
+                'noticias.id AS id,
               noticias.titulo AS titulo,
               noticias.image AS image,
               noticias.activo AS activo,
               noticia_descrs.descripcion AS descripcion,
               noticia_descrs.image AS mas'
-              )
-            ->join('noticia_descrs','noticia_descrs.noticia_id','noticias.id')
+            )
+            ->join('noticia_descrs', 'noticia_descrs.noticia_id', 'noticias.id')
             ->where('noticias.activo', '=', '1')
             ->limit(3)
             ->get();
@@ -136,4 +142,4 @@ Route::get('users/export/{activo}', [UserController::class, 'export'])->name('ex
 
 Route::get('card/user', [UserController::class, 'viewCard'])->name('view.card');
 
-Route::get('user/puesto/{id}',[UserController::class, 'getPuesto'])->name('getPuesto');
+Route::get('user/puesto/{id}', [UserController::class, 'getPuesto'])->name('getPuesto');
