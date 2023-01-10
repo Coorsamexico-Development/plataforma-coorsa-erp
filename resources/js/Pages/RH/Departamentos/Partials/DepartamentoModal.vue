@@ -31,7 +31,7 @@
                 <input-error :message="form.errors.ubicacione_id" class="mt-2" />
             </div>
             <div class="block mt-4">
-                <input-label for="activo_erp" class="flex items-center" value="Ubicacion:" />
+                <input-label for="activo_erp" class="flex items-center" value="Activo:" />
                 <switch-button id="activo_erp" name="activo_erp" v-model:checked="form.activo_erp" required />
                 <input-error :message="form.errors.activo_erp" class="mt-2" />
             </div>
