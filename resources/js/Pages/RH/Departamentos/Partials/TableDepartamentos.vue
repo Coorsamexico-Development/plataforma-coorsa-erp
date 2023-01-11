@@ -55,7 +55,8 @@
             <tr class="text-gray-500" v-for='departamento in departamentos.data' :key="departamento.id"
                 @click="selectedRow(departamento, $event)">
                 <td>
-                    <info-button class="w-5 h-5 px-0" @click="$emit('update', departamento)">
+                    <info-button v-if="$page.props.can['departamentos.update']" class="w-5 h-5 px-0"
+                        @click="$emit('update', departamento)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

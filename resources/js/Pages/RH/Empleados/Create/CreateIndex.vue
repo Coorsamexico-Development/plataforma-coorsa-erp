@@ -26,7 +26,7 @@ var props = defineProps(
         bancos: Object,
         departamentos: Object,
         tipos_contrato: Object,
-        roles:Object
+        roles: Object
     }
 );
 
@@ -98,7 +98,7 @@ const form = useForm
         'fecha_finiquito': '',
         'monto_finiquito': 0,
         'finiquito_pagado': false,
-        'password':"12345678",
+        'password': "12345678",
         'rol_id': ''
     });
 
@@ -339,7 +339,7 @@ const fecha_termino = computed(() => {
                             </div>
                         </ButtonSeccion>
                     </div>
-                    <div class="divseccion" v-if="typeForm == 'update'">
+                    <div class="divseccion" v-if="typeForm == 'update' && $page.props.can['users.update-finiquito']">
                         <ButtonSeccion style="width:10rem" @click="cambiar(8)">
                             <div class="grid grid-rows-2 " style="margin-left: 1.5rem;justify-content: center;">
                                 <img style="margin-left:0.8rem" :src="'/assets/img/finiquitos.png'" />
@@ -462,7 +462,7 @@ const fecha_termino = computed(() => {
                                                         :disabled="editEmpleadoDisable">
                                                         <option v-for="escolaridad in catalogos.escolaridades"
                                                             :key="escolaridad.id" :value="escolaridad.id">
-                                                            {{escolaridad.nombre}}
+                                                            {{ escolaridad.nombre }}
                                                         </option>
                                                     </Select>
                                                     <InputError :message="form.errors.escolaridade_id" class="mt-2" />
@@ -473,7 +473,7 @@ const fecha_termino = computed(() => {
                                                         :disabled="editEmpleadoDisable">
                                                         <option v-for="estados_civil in estados_civiles"
                                                             :key="estados_civil.id" :value="estados_civil.id">
-                                                            {{estados_civil.nombre}}
+                                                            {{ estados_civil.nombre }}
                                                         </option>
                                                     </Select>
                                                     <InputError :message="form.errors.cat_estados_civile_id"
@@ -508,9 +508,8 @@ const fecha_termino = computed(() => {
                                                     <InputLabel for="cat_estados_civile_id" value="Rol:*" />
                                                     <Select v-model="form.rol_id" class="w-full"
                                                         :disabled="editEmpleadoDisable">
-                                                        <option v-for="rol in roles"
-                                                            :key="rol.id" :value="rol.id">
-                                                            {{rol.nombre}}
+                                                        <option v-for="rol in roles" :key="rol.id" :value="rol.id">
+                                                            {{ rol.nombre }}
                                                         </option>
                                                     </Select>
                                                     <InputError :message="form.errors.cat_estados_civile_id"
@@ -575,7 +574,8 @@ const fecha_termino = computed(() => {
                                                     <InputLabel for="codigo_postal" value="CP:*" />
                                                     <TextInput id="codigo_postal" type="number" maxlength="5"
                                                         v-model="form.codigo_postal" class="block w-full mt-1"
-                                                        placeholder="Codigo Postal" :disabled="editEmpleadoDisable" required />
+                                                        placeholder="Codigo Postal" :disabled="editEmpleadoDisable"
+                                                        required />
                                                     <InputError :message="form.errors.codigo_postal" class="mt-2" />
                                                 </div>
                                                 <div class="mt-4">
@@ -667,7 +667,7 @@ const fecha_termino = computed(() => {
                                                         :disabled="editEmpleadoDisable">
                                                         <option v-for="banco in catalogos.bancos" :key="banco.id"
                                                             :value="banco.id">
-                                                            {{banco.nombre}}
+                                                            {{ banco.nombre }}
                                                         </option>
                                                     </Select>
                                                     <InputError :message="form.errors.banco_id" class="mt-2" />
@@ -731,13 +731,13 @@ const fecha_termino = computed(() => {
                                                 </div>
                                                 <div class="mt-4">
                                                     <InputLabel for="puesto_id" value="Puesto:*" />
-                                                    
+
                                                     <Select v-model="form.puesto_id" class="w-full"
                                                         :disabled="editEmpleadoDisable">
-                        
+
                                                         <option v-for="puesto in puestos" :key="puesto.id"
                                                             :value="puesto.id">
-                                                            {{puesto.name}}
+                                                            {{ puesto.name }}
                                                         </option>
                                                     </Select>
                                                     <InputError :message="form.errors.puesto_id" class="mt-2" />
@@ -796,7 +796,7 @@ const fecha_termino = computed(() => {
                                                         :disabled="editEmpleadoDisable">
                                                         <option v-for="tipo_contrato in catalogos.tiposContratos"
                                                             :key="tipo_contrato.id" :value="tipo_contrato.id">
-                                                            {{tipo_contrato.nombre}}
+                                                            {{ tipo_contrato.nombre }}
                                                         </option>
                                                     </Select>
                                                     <InputError :message="form.errors.tipos_contrato_id" class="mt-2" />
@@ -925,7 +925,7 @@ const fecha_termino = computed(() => {
                                                         :disabled="editEmpleadoDisable">
                                                         <option v-for="sangre in catalogos.tiposSangres"
                                                             :key="sangre.id" :value="sangre.id">
-                                                            {{sangre.nombre}}
+                                                            {{ sangre.nombre }}
                                                         </option>
                                                     </Select>
                                                     <InputError :message="form.errors.cat_tipos_sangre_id"
@@ -1003,8 +1003,8 @@ const fecha_termino = computed(() => {
                                                 </template>
                                                 <div v-if="typeForm == 'update'" class="mt-4">
                                                     <span v-if="empleado.fotografia">
-                                                        <a :data-fancybox="'fotografia'+empleado.id"
-                                                            :data-src="empleado.fotografia+timeImage"
+                                                        <a :data-fancybox="'fotografia' + empleado.id"
+                                                            :data-src="empleado.fotografia + timeImage"
                                                             class="inline-flex items-center w-10 h-10 p-1 m-1 text-xs font-semibold tracking-widest text-white uppercase transition bg-green-800 border border-transparent rounded-full hover:bg-green-700 active:bg-gray-900 focus:ring-green-300 disabled:opacity-25">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                                                 class="w-10 h-10" viewBox="0 0 16 16">
@@ -1015,9 +1015,9 @@ const fecha_termino = computed(() => {
                                                         </a>
                                                     </span>
                                                     <span v-if="empleado.expedienteGeneral">
-                                                        <a :data-fancybox="'expedientes'+empleado.id" data-type="pdf"
+                                                        <a :data-fancybox="'expedientes' + empleado.id" data-type="pdf"
                                                             data-caption="Expediente General"
-                                                            :data-src="empleado.expedienteGeneral.ruta+timeImage"
+                                                            :data-src="empleado.expedienteGeneral.ruta + timeImage"
                                                             class="inline-flex items-center w-10 h-10 p-1 m-1 text-xs font-semibold tracking-widest text-red-500 uppercase transition bg-transparent border border-red-800 rounded-full hover:border-red-700 active:bg-gray-900 focus:ring-green-300 disabled:opacity-25">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                                                 class="w-10 h-10" viewBox="0 0 16 16">
@@ -1029,9 +1029,9 @@ const fecha_termino = computed(() => {
                                                         </a>
                                                     </span>
                                                     <span v-if="empleado.contrato">
-                                                        <a :data-fancybox="'contrato'+empleado.id" data-type="pdf"
+                                                        <a :data-fancybox="'contrato' + empleado.id" data-type="pdf"
                                                             data-caption="Contrato"
-                                                            :data-src="empleado.contrato.ruta+timeImage"
+                                                            :data-src="empleado.contrato.ruta + timeImage"
                                                             class="inline-flex items-center w-6 h-6 p-1 m-1 text-xs font-semibold tracking-widest text-blue-400 uppercase transition bg-transparent border border-blue-400 rounded-full hover:border-blue-700 active:bg-gray-900 focus:ring-green-300 disabled:opacity-25">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16"
                                                                 height="16" fill="currentColor" class="bi bi-card-list"
@@ -1084,7 +1084,7 @@ const fecha_termino = computed(() => {
                                                         class="w-full" :disabled="!$page.props.can['empleados.delete']">
                                                         <option v-for="motivo in catalogos.motivosBajas"
                                                             :key="motivo.id" :value="motivo.id">
-                                                            {{motivo.nombre}}
+                                                            {{ motivo.nombre }}
                                                         </option>
                                                     </component-select>
                                                     <input-error :message="form.errors.cat_bajas_empleado_id"
@@ -1134,7 +1134,7 @@ const fecha_termino = computed(() => {
                         <ButtonAdd @click="createOrUpdate" style="float:right; margin:2rem; justify-content: center;">
                             Guardar
                         </ButtonAdd>
-                        <a :href="route('empleado.indexmanual', {activo: 'activo'})">
+                        <a :href="route('empleado.indexmanual', { activo: 'activo' })">
                             <ButtonInfo style="float:right; margin:2rem; justify-content: center;">
                                 Regresar
                             </ButtonInfo>
@@ -1142,7 +1142,7 @@ const fecha_termino = computed(() => {
                         <div class="px-6 py-4 ">
                             <ul v-if="form.hasErrors" class="text-red-500">
                                 <li v-for="(error, index) in form.errors" :key="index">
-                                    *{{error}}
+                                    *{{ error }}
                                 </li>
                             </ul>
                         </div>

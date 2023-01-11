@@ -45,25 +45,19 @@ class EmpleadoControlller extends Controller
             ->leftjoin('puestos', 'empleados_puestos.puesto_id', 'puestos.id');
 
         if ($activo === 'activo') {
-            $empleados = $empleados->where('users.activo', 1);
-            if (request('search')) {
-                $busqueda = request('search');
-                $empleados = $empleados->where(
-                    'users.name',
-                    'LIKE',
-                    '%' . $busqueda . '%'
-                );
-            }
+            $this->authorize('user-activos.show');
+            $empleados->where('users.activo', 1);
         } else if ($activo === 'inactivo') {
-            $empleados = $empleados->where('users.activo', 0);
-            if (request('search')) {
-                $busqueda = request('search');
-                $empleados = $empleados->where(
-                    'users.name',
-                    'LIKE',
-                    '%' . $busqueda . '%'
-                );
-            }
+            $this->authorize('user-inactivos.show');
+            $empleados->where('users.activo', 0);
+        }
+        if (request('search')) {
+            $busqueda = request('search');
+            $empleados->where(
+                'users.name',
+                'LIKE',
+                '%' . $busqueda . '%'
+            );
         }
 
 

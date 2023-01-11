@@ -27,13 +27,13 @@ var props = defineProps(
         departamentos: Object,
         tipos_contrato: Object,
         empleado: Object,
-        direccion:Object,
-        roles:Object,
+        direccion: Object,
+        roles: Object,
         documentos: Object,
         cat_bajas: Object,
-        empleado_baja:Object,
-        finiquito:Object,
-        departamento_puesto:Object
+        empleado_baja: Object,
+        finiquito: Object,
+        departamento_puesto: Object
     }
 );
 
@@ -54,15 +54,13 @@ let puestos = ref([]);
 let puesto_empleado = ref(-1);
 let departamento_empleado = ref(-1);
 
-if(props.departamento_puesto.length <= 0 )
-{
+if (props.departamento_puesto.length <= 0) {
     puesto_empleado.value = '';
     departamento_empleado.value = '';
 }
-else
-{
-  puesto_empleado.value = props.departamento_puesto[0].puesto_id;
-  departamento_empleado.value = props.departamento_puesto[0].departamento_id;
+else {
+    puesto_empleado.value = props.departamento_puesto[0].puesto_id;
+    departamento_empleado.value = props.departamento_puesto[0].departamento_id;
 }
 
 
@@ -71,21 +69,19 @@ empleado.value = props.empleado[0];
 
 let direccion = ref({});
 
-if(props.direccion.length<=0)
-{
+if (props.direccion.length <= 0) {
     direccion.value.estado_id = '';
     direccion.value.municipio_id = '';
     direccion.value.localidad_id = '';
-    direccion.value.calle ='';
-    direccion.value.numero=0
-    direccion.value.colonia=0
-    direccion.value.codigo_postal=0
-    direccion.value.lote=0
-    direccion.value.manzana=0
+    direccion.value.calle = '';
+    direccion.value.numero = 0
+    direccion.value.colonia = 0
+    direccion.value.codigo_postal = 0
+    direccion.value.lote = 0
+    direccion.value.manzana = 0
 
 }
-else
-{
+else {
     direccion.value = props.direccion[0];
 }
 
@@ -95,19 +91,16 @@ const fotografia = ref(null);
 
 
 
-if(empleado.value.apellido_paterno === null)
-{
-   empleado.value.apellido_paterno = "";
+if (empleado.value.apellido_paterno === null) {
+    empleado.value.apellido_paterno = "";
 }
 
-if(empleado.value.apellido_materno === null)
-{
-   empleado.value.apellido_materno = "";
+if (empleado.value.apellido_materno === null) {
+    empleado.value.apellido_materno = "";
 }
 
-if(empleado.value.fecha_nacimiento === null)
-{
-   empleado.value.fecha_nacimiento = "";
+if (empleado.value.fecha_nacimiento === null) {
+    empleado.value.fecha_nacimiento = "";
 }
 
 
@@ -115,25 +108,20 @@ let expediente = ref(null);
 
 console.log(props.documentos)
 
-if(props.documentos.length > 0 )
-{
-  if(props.documentos[0].cat_tipos_documento_id == 25)
-  {
-     expediente.value = props.documentos[0].ruta;
-  }
+if (props.documentos.length > 0) {
+    if (props.documentos[0].cat_tipos_documento_id == 25) {
+        expediente.value = props.documentos[0].ruta;
+    }
 }
 
 
 let contrato = ref(null);
-if(props.documentos.length >0)
-{
-  if(props.documentos[1])
-  {
-    if(props.documentos[1].cat_tipos_documento_id == 26)
-    {
-        contrato.value = props.documentos[1].ruta;
+if (props.documentos.length > 0) {
+    if (props.documentos[1]) {
+        if (props.documentos[1].cat_tipos_documento_id == 26) {
+            contrato.value = props.documentos[1].ruta;
+        }
     }
-  }
 }
 
 
@@ -168,7 +156,7 @@ const form = useForm
         'calle': direccion.value.calle,
         'numero': direccion.value.numero,
         'colonia': direccion.value.colonia,
-        'codigo_postal':direccion.value.codigo_postal,
+        'codigo_postal': direccion.value.codigo_postal,
         'lote': direccion.value.lote,
         'manzana': direccion.value.manzana,
         'cat_tipos_nomina_id': empleado.value.cat_tipos_nomina_id,
@@ -190,46 +178,41 @@ const form = useForm
         'enfermedades_cronicas': empleado.value.enfermedades_cronicas,
         'cat_genero_id': empleado.value.cat_genero_id,
         'cat_bajas_empleado_id': '',
-        'fecha_baja':'',
+        'fecha_baja': '',
         'fecha_finiquito': '',
         'monto_finiquito': 0,
         'finiquito_pagado': false,
-        'password':'',
+        'password': '',
         'rol_id': empleado.value.role_id
     });
 
 
-if(props.empleado_baja.length > 0)
-{
-  form.cat_bajas_empleado_id = props.empleado_baja[0].cat_bajas_empleado_id;
-  form.fecha_baja = props.empleado_baja[0].fecha_baja;
+if (props.empleado_baja.length > 0) {
+    form.cat_bajas_empleado_id = props.empleado_baja[0].cat_bajas_empleado_id;
+    form.fecha_baja = props.empleado_baja[0].fecha_baja;
 }
 
 
-if(props.finiquito.length > 0)
-{
-  form.fecha_finiquito = props.finiquito[0].fecha_finiquito;
-  form.monto_finiquito = props.finiquito[0].monto;
-  form.finiquito_pagado = props.finiquito[0].pagado;
+if (props.finiquito.length > 0) {
+    form.fecha_finiquito = props.finiquito[0].fecha_finiquito;
+    form.monto_finiquito = props.finiquito[0].monto;
+    form.finiquito_pagado = props.finiquito[0].pagado;
 }
 
 
 const createOrUpdate = () => {
-    if(form.fotografia == "")
-    {
-      form.fotografia = null;
+    if (form.fotografia == "") {
+        form.fotografia = null;
     }
 
-    if(form.expediente == "")
-    {
-      form.expediente = null;
+    if (form.expediente == "") {
+        form.expediente = null;
     }
 
-    if(form.contrato == undefined)
-    {
-      form.contrato = null;
+    if (form.contrato == undefined) {
+        form.contrato = null;
     }
-    
+
     form.post(route('empleado.update'),
         {
             preserveScroll: true,
@@ -462,7 +445,7 @@ const fecha_termino = computed(() => {
                             </div>
                         </ButtonSeccion>
                     </div>
-                    <div class="divseccion" v-if="typeForm == 'update'">
+                    <div class="divseccion" v-if="typeForm == 'update' && $page.props.can['users.update-finiquito']">
                         <ButtonSeccion style="width:10rem" @click="cambiar(8)">
                             <div class="grid grid-rows-2 " style="margin-left: 1.5rem;justify-content: center;">
                                 <img style="margin-left:0.8rem" :src="'/assets/img/finiquitos.png'" />
@@ -585,7 +568,7 @@ const fecha_termino = computed(() => {
                                                         :disabled="editEmpleadoDisable">
                                                         <option v-for="escolaridad in catalogos.escolaridades"
                                                             :key="escolaridad.id" :value="escolaridad.id">
-                                                            {{escolaridad.nombre}}
+                                                            {{ escolaridad.nombre }}
                                                         </option>
                                                     </Select>
                                                     <InputError :message="form.errors.escolaridade_id" class="mt-2" />
@@ -596,7 +579,7 @@ const fecha_termino = computed(() => {
                                                         :disabled="editEmpleadoDisable">
                                                         <option v-for="estados_civil in estados_civiles"
                                                             :key="estados_civil.id" :value="estados_civil.id">
-                                                            {{estados_civil.nombre}}
+                                                            {{ estados_civil.nombre }}
                                                         </option>
                                                     </Select>
                                                     <InputError :message="form.errors.cat_estados_civile_id"
@@ -630,9 +613,8 @@ const fecha_termino = computed(() => {
                                                     <InputLabel for="cat_estados_civile_id" value="Rol:*" />
                                                     <Select v-model="form.rol_id" class="w-full"
                                                         :disabled="editEmpleadoDisable">
-                                                        <option v-for="rol in roles"
-                                                            :key="rol.id" :value="rol.id">
-                                                            {{rol.nombre}}
+                                                        <option v-for="rol in roles" :key="rol.id" :value="rol.id">
+                                                            {{ rol.nombre }}
                                                         </option>
                                                     </Select>
                                                     <InputError :message="form.errors.cat_estados_civile_id"
@@ -789,7 +771,7 @@ const fecha_termino = computed(() => {
                                                         :disabled="editEmpleadoDisable">
                                                         <option v-for="banco in catalogos.bancos" :key="banco.id"
                                                             :value="banco.id">
-                                                            {{banco.nombre}}
+                                                            {{ banco.nombre }}
                                                         </option>
                                                     </Select>
                                                     <InputError :message="form.errors.banco_id" class="mt-2" />
@@ -857,7 +839,7 @@ const fecha_termino = computed(() => {
                                                         :disabled="editEmpleadoDisable">
                                                         <option v-for="puesto in puestos" :key="puesto.id"
                                                             :value="puesto.id">
-                                                            {{puesto.name}}
+                                                            {{ puesto.name }}
                                                         </option>
                                                     </Select>
                                                     <InputError :message="form.errors.puesto_id" class="mt-2" />
@@ -916,7 +898,7 @@ const fecha_termino = computed(() => {
                                                         :disabled="editEmpleadoDisable">
                                                         <option v-for="tipo_contrato in catalogos.tiposContratos"
                                                             :key="tipo_contrato.id" :value="tipo_contrato.id">
-                                                            {{tipo_contrato.nombre}}
+                                                            {{ tipo_contrato.nombre }}
                                                         </option>
                                                     </Select>
                                                     <InputError :message="form.errors.tipos_contrato_id" class="mt-2" />
@@ -1045,7 +1027,7 @@ const fecha_termino = computed(() => {
                                                         :disabled="editEmpleadoDisable">
                                                         <option v-for="sangre in catalogos.tiposSangres"
                                                             :key="sangre.id" :value="sangre.id">
-                                                            {{sangre.nombre}}
+                                                            {{ sangre.nombre }}
                                                         </option>
                                                     </Select>
                                                     <InputError :message="form.errors.cat_tipos_sangre_id"
@@ -1123,7 +1105,7 @@ const fecha_termino = computed(() => {
                                                 </template>
                                                 <div class="mt-4">
                                                     <span v-if="empleado.fotografia">
-                                                        <a :data-fancybox="'fotografia'+empleado.id"
+                                                        <a :data-fancybox="'fotografia' + empleado.id"
                                                             :data-src="empleado.fotografia"
                                                             class="inline-flex items-center w-10 h-10 p-1 m-1 text-xs font-semibold tracking-widest text-white uppercase transition bg-green-800 border border-transparent rounded-full hover:bg-green-700 active:bg-gray-900 focus:ring-green-300 disabled:opacity-25">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
@@ -1135,9 +1117,9 @@ const fecha_termino = computed(() => {
                                                         </a>
                                                     </span>
                                                     <span v-if="empleado.expedienteGeneral">
-                                                        <a :data-fancybox="'expedientes'+empleado.id" data-type="pdf"
+                                                        <a :data-fancybox="'expedientes' + empleado.id" data-type="pdf"
                                                             data-caption="Expediente General"
-                                                            :data-src="empleado.expedienteGeneral.ruta+timeImage"
+                                                            :data-src="empleado.expedienteGeneral.ruta + timeImage"
                                                             class="inline-flex items-center w-10 h-10 p-1 m-1 text-xs font-semibold tracking-widest text-red-500 uppercase transition bg-transparent border border-red-800 rounded-full hover:border-red-700 active:bg-gray-900 focus:ring-green-300 disabled:opacity-25">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                                                 class="w-10 h-10" viewBox="0 0 16 16">
@@ -1149,9 +1131,9 @@ const fecha_termino = computed(() => {
                                                         </a>
                                                     </span>
                                                     <span v-if="empleado.contrato">
-                                                        <a :data-fancybox="'contrato'+empleado.id" data-type="pdf"
+                                                        <a :data-fancybox="'contrato' + empleado.id" data-type="pdf"
                                                             data-caption="Contrato"
-                                                            :data-src="empleado.contrato.ruta+timeImage"
+                                                            :data-src="empleado.contrato.ruta + timeImage"
                                                             class="inline-flex items-center w-6 h-6 p-1 m-1 text-xs font-semibold tracking-widest text-blue-400 uppercase transition bg-transparent border border-blue-400 rounded-full hover:border-blue-700 active:bg-gray-900 focus:ring-green-300 disabled:opacity-25">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16"
                                                                 height="16" fill="currentColor" class="bi bi-card-list"
@@ -1202,7 +1184,7 @@ const fecha_termino = computed(() => {
                                                     <Select v-model="form.cat_bajas_empleado_id" class="w-full">
                                                         <option v-for="motivo in catalogos.motivosBajas"
                                                             :key="motivo.id" :value="motivo.id">
-                                                            {{motivo.nombre}}
+                                                            {{ motivo.nombre }}
                                                         </option>
                                                     </Select>
                                                     <InputError :message="form.errors.cat_bajas_empleado_id"
@@ -1245,7 +1227,7 @@ const fecha_termino = computed(() => {
                         <ButtonAdd @click="createOrUpdate" style="float:right; margin:2rem; justify-content: center;">
                             Guardar
                         </ButtonAdd>
-                        <a :href="route('empleado.indexmanual', {activo: 'activo'})">
+                        <a :href="route('empleado.indexmanual', { activo: 'activo' })">
                             <ButtonInfo style="float:right; margin:2rem; justify-content: center;">
                                 Regresar
                             </ButtonInfo>
@@ -1253,7 +1235,7 @@ const fecha_termino = computed(() => {
                         <div class="px-6 py-4 ">
                             <ul v-if="form.hasErrors" class="text-red-500">
                                 <li v-for="(error, index) in form.errors" :key="index">
-                                    *{{error}}
+                                    *{{ error }}
                                 </li>
                             </ul>
                         </div>

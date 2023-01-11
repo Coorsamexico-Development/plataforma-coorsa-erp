@@ -13,11 +13,10 @@ class PlantillasAutorizadaController extends Controller
 {
     public function index()
     {
+        $this->authorize('plantilla-autorizada.show');
         request()->validate([
             'direction' => ['in:asc,desc']
         ]);
-
-
 
         //Get catologos
         $puestos = puesto::select('puestos.id', 'puestos.name')
@@ -70,6 +69,7 @@ class PlantillasAutorizadaController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('plantilla-autorizada.update'); // es el mismo por simpliciadad
         $validated =  $request->validate([
             'puesto_id' =>  ['required', 'exists:puestos,id'],
             'ubicacione_id' => ['required', 'exists:ubicaciones,id'],
@@ -88,6 +88,7 @@ class PlantillasAutorizadaController extends Controller
 
     public function update(Request $request, PlantillasAutorizada $plantillasAutorizada)
     {
+        $this->authorize('plantilla-autorizada.update'); // es el mismo por simpliciadad al store
         $validated =  $request->validate([
             'cantidad' => ['required', 'numeric', 'min:0'],
         ]);

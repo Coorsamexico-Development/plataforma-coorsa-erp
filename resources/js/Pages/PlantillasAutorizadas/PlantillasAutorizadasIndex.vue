@@ -13,6 +13,8 @@ import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SpinProgress from '@/Components/SpinProgress.vue';
 import PlantillaHeader from './Partials/PlantillaHeader.vue';
+import PlantillaHeaderEdit from './Partials/PlantillaHeaderEdit.vue';
+import PlantillaAutorizadaRowEdit from './Partials/PlantillaAutorizadaRowEdit.vue';
 
 var props = defineProps({
     puestos: {
@@ -147,11 +149,12 @@ const totalGlobal = computed(() => {
                                         <InputSearch type="search" v-model="params.search" aria-label="Search" />
                                     </div>
                                     <div>
-                                        Total Global:<span class="px-1 text-white bg-blue-600 rounded-md">{{ totalGlobal
-}}
+                                        Total Global:<span class="px-1 text-white bg-blue-600 rounded-md">{{
+                                            totalGlobal
+                                        }}
                                         </span>
                                     </div>
-                                    <div>
+                                    <div v-if="$page.props.can['ubicaciones.update']">
                                         <form id="formUbicacion" class="flex font-normal"
                                             @submit.prevent="createUbicacion()">
                                             <TextInput id="name-ubicacion" type="text" v-model="form.name"
@@ -190,14 +193,29 @@ const totalGlobal = computed(() => {
                                         </svg>
                                     </template>
                                 </th>
-                                <PlantillaHeader v-for="ubicacion in ubicaciones" :key="ubicacion.id"
-                                    :ubicacion="ubicacion" @update-ubicacion="updateUbicacion($event)" />
+                                <template v-if="$page.props.can['ubicaciones.update']">
+                                    <PlantillaHeaderEdit v-for="ubicacion in ubicaciones" :key="ubicacion.id"
+                                        :ubicacion="ubicacion" @update-ubicacion="updateUbicacion($event)" />
+                                </template>
+                                <template v-else>
+                                    <PlantillaHeader v-for="ubicacion in ubicaciones" :key="ubicacion.id"
+                                        :ubicacion="ubicacion" />
+                                </template>
+
 
                             </tr>
                         </template>
                         <template #table-body>
-                            <PlantillaAutorizadaRow v-for="puesto in puestos" :key="'p' + puesto.id"
-                                :ubicaciones="ubicaciones" :puesto="puesto" @save="savePlantillaAutorizada($event)" />
+                            <template v-if="$page.props.can['plantilla-autorizada.update']">
+                                <PlantillaAutorizadaRowEdit v-for="puesto in puestos" :key="'p' + puesto.id"
+                                    :ubicaciones="ubicaciones" :puesto="puesto"
+                                    @save="savePlantillaAutorizada($event)" />
+                            </template>
+                            <template v-else>
+                                <PlantillaAutorizadaRow v-for="puesto in puestos" :key="'p' + puesto.id"
+                                    :ubicaciones="ubicaciones" :puesto="puesto" />
+                            </template>
+
                         </template>
                     </DataTable>
 

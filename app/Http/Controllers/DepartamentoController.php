@@ -31,6 +31,7 @@ class DepartamentoController extends Controller
 
     public function index()
     {
+        $this->authorize('departamentos.show');
         request()->validate([
             'direction' => ['in:asc,desc']
         ]);

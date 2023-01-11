@@ -9,7 +9,7 @@
                     </Titlecomponent>
                     <InputSearch type="search" v-model="filters.search" aria-label="Search"
                         class="block w-40 max-w-xs border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-                    <primary-button @click="showModalPuesto">
+                    <primary-button v-if="$page.props.can['puestos.create']" @click="showModalPuesto">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd"
                                 d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
@@ -67,18 +67,21 @@
             <template #table-body>
                 <tr v-for='(puesto, index) in puestos.data' :key="index">
                     <td class="flex gap-1 px-2 py-2 text-sm">
-                        <input type="checkbox" :id="'puesto-' + puesto.id" name="checke-puesto"
+                        <input v-if="$page.props.can['departamentos.update']" type="checkbox"
+                            :id="'puesto-' + puesto.id" name="checke-puesto"
                             class="text-indigo-600 border-gray-300 rounded shadow-sm disabled:bg-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             @change.self="setPuestoToDepartamento(puesto.id, $event.target.checked)"
                             v-bind:value="puesto.id" v-model="puestosDepartamento" :disabled="disableCheck" />
-                        <info-button class="w-5 h-5 px-0" @click="editPuesto(puesto)">
+                        <info-button v-if="$page.props.can['puestos.update']" class="w-5 h-5 px-0"
+                            @click="editPuesto(puesto)">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
                         </info-button>
-                        <danger-button class="w-5 h-5 px-0" @click="setDeletion(puesto)">
+                        <danger-button v-if="$page.props.can['puestos.delete']" class="w-5 h-5 px-0"
+                            @click="setDeletion(puesto)">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

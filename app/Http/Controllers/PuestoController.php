@@ -30,6 +30,7 @@ class PuestoController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('puestos.create');
         $newPuesto = $request->validate([
             'name' => ['required', 'max:60', 'unique:puestos,name'],
         ]);
@@ -49,6 +50,8 @@ class PuestoController extends Controller
      */
     public function update(Request $request, puesto $puesto)
     {
+
+        $this->authorize('puestos.update');
         $request->validate([
             'name' => [
                 'required', 'max:60',
@@ -70,6 +73,8 @@ class PuestoController extends Controller
      */
     public function destroy(Puesto $puesto)
     {
+
+        $this->authorize('puestos.delete');
         $puesto->delete();
         return response()->json([
             'message' => 'ok'

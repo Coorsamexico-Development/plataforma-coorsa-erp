@@ -104,7 +104,7 @@ watch(params, throttle(function () {
                 </div>
                 <div class="px-1 ml-5 overflow-hidden shadow-xl white-transparent sm:rounded-lg">
                     <h1 class="mx-10 mt-4 text-lg font-bold border-b-2">Permisos</h1>
-                    <div class="flex justify-center">
+                    <!-- <div class="flex justify-center">
                         <InputLabel for="plataforma" vale="Plataforma" />
                         <SelectComponent v-model="params.plataforma_id">
                             <option value="">Selecciona una plataforma</option>
@@ -113,7 +113,7 @@ watch(params, throttle(function () {
                                 {{ plataforma.nombre }}
                             </option>
                         </SelectComponent>
-                    </div>
+                    </div> -->
                     <PermissionsTable :role="roleSelect" :permissions="laravelPermissions" @message-error="showError" />
                 </div>
             </div>

@@ -114,9 +114,8 @@ class User extends Authenticatable
     public function canAccess()
     {
         $can = true;
-        
-        if (!$this->is_admin) 
-        {
+
+        if (!$this->is_admin) {
             return  $this->role->permissions()->where('permissions.plataforma_id', '=', 2)
                 ->where('permissions.is_acceso', 1)->exists();
         }
@@ -154,14 +153,22 @@ class User extends Authenticatable
     public function getExpedienteGeneralAttribute()
     {
         return $this->expediente()->select('id', 'ruta', 'cat_tipos_documento_id')
-        ->where('cat_tipos_documento_id', 25)->first();
+            ->where('cat_tipos_documento_id', 25)->first();
     }
 
     public function getContratoAttribute()
     {
         return $this->expediente()->select('id', 'ruta', 'cat_tipos_documento_id')
-        ->where('cat_tipos_documento_id', 26)->first();
+            ->where('cat_tipos_documento_id', 26)->first();
     }
 
-
+    public function puestos()
+    {
+        return $this->belongsToMany(Puesto::class, 'empleados_puestos', 'empleado_id', 'puesto_id');
+    }
+    //por ahora no puede ser un attributo
+    public function getPuesto()
+    {
+        return $this->puestos()->where('empleados_puestos.activo', '=', 1)->first();
+    }
 }
