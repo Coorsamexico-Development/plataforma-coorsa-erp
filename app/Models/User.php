@@ -164,7 +164,7 @@ class User extends Authenticatable
 
     public function puestos()
     {
-        return $this->belongsToMany(Puesto::class, 'empleados_puestos', 'empleado_id', 'puesto_id');
+        return $this->belongsToMany(puesto::class, 'empleados_puestos', 'empleado_id', 'puesto_id');
     }
     //por ahora no puede ser un attributo
     public function getPuesto()
