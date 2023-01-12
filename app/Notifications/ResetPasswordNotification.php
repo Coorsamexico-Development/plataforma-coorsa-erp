@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Mail\WelcomeEmployde;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -59,7 +60,8 @@ class ResetPasswordNotification extends Notification
     public function toMail($notifiable)
     {
         $nombre = $notifiable->name . ' ' . $notifiable->apellido_paterno;
-        return $this->buildMailMessage($this->resetUrl($notifiable), $nombre);
+        $email = $notifiable->getEmailForPasswordReset();
+        return $this->buildMailMessage($this->resetUrl($notifiable), $nombre, $email);
     }
 
     /**
@@ -68,16 +70,17 @@ class ResetPasswordNotification extends Notification
      * @param  string  $url
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    protected function buildMailMessage($url, $nombre)
+    protected function buildMailMessage($url, $nombre, $email)
     {
-        return (new MailMessage)
-
-            ->subject('Bienvenido(a) a Coorsamexico.')
-            ->greeting('!HOLA! ' . $nombre)
-            ->line('Está recibiendo este correo electrónico porque acabas ser dado de alta en nuestro portal.')
-            ->line('Es necesario que ingreses al portal para que establezcas tu contraseña.')
-            ->action('Establecer contraseña', $url)
-            ->salutation('!Saludos!');
+        return (new WelcomeEmployde('Bienvenido a Coorsa.', $email, $url));
+        // return (new MailMessage)
+        //     ->(['imageWelcome' => true])
+        //     ->subject('Bienvenido a Coorsa.')
+        //     // ->greeting('!HOLA! ' . $nombre)
+        //     // ->line('Está recibiendo este correo electrónico porque acabas ser dado de alta en nuestro portal.')
+        //     // ->line('Es necesario que ingreses al portal para que establezcas tu contraseña.')
+        //     ->action('Establecer contraseña', $url)
+        //     ->salutation('!Saludos!');
     }
 
     /**
