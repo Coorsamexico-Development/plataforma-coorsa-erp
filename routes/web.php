@@ -92,6 +92,8 @@ Route::middleware([
         );
     })->name('dashboard');
 
+    //Reenvio de correo de bienvenida
+    Route::post('/welcome-password/{user}', [ResetPasswordController::class, 'store'])->name('welcome.password.first');
 
     Route::get('/control-interno/departamentos-aditorias', [DepartamentosAuditoriaController::class, 'index'])
         ->name('control-interno.departamentos-aditorias.index');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Helpers\SendResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,18 @@ class ResetPasswordController extends Controller
         return Inertia::render('Auth/ResetPasswordFirst', [
             'token' => $request->route('token'),
             'email' => $request->email,
+        ]);
+    }
+
+    /**
+     * Send email of user to initial session
+     */
+    public function store(User $user)
+    {
+        $sendRestPassword = new SendResetPassword();
+        $message = $sendRestPassword->send($user);
+        return redirect()->back()->with([
+            'message' => __($message)
         ]);
     }
 
