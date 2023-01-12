@@ -154,7 +154,7 @@ const totalGlobal = computed(() => {
                                         }}
                                         </span>
                                     </div>
-                                    <div v-if="$page.props.can['ubicaciones.update']">
+                                    <div v-if="$page.props.can['ubicaciones.create']">
                                         <form id="formUbicacion" class="flex font-normal"
                                             @submit.prevent="createUbicacion()">
                                             <TextInput id="name-ubicacion" type="text" v-model="form.name"
