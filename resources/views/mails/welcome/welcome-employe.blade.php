@@ -28,7 +28,7 @@ width: 100% !important;
 <tr>
 <td align="center">
 <a href="{{ $actionUrl }}" style="display: inline-block;">
-    <img src="{{asset('assets/img/bienvenida-mail-plataforma.png')}}" class="Fondo Coorsa" alt="Coorsa Logo" style="width: 100%">
+    <img src="https://storage.googleapis.com/coorsamexico-politicas/generales/bienvenida-mail-plataforma.webp" class="Fondo Coorsa" alt="Coorsa Logo" style="width: 100%">
 </a>
 </td>
 </tr>

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -15,8 +16,11 @@ class RestPassowordLoginTest extends TestCase
      */
     public function test_can_send_password()
     {
-        $response = $this->get('/');
 
-        $response->assertStatus(200);
+        $user = User::find(1);
+        $response = $this->withoutExceptionHandling()->actingAs($user, 'web')->withSession(['banned' => false])
+            ->post(route('welcome.password.first', ['user' =>  $user->getRouteKey()]));
+
+        $response->assertStatus(200);;
     }
 }
