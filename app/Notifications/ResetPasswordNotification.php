@@ -75,7 +75,7 @@ class ResetPasswordNotification extends Notification
     {
 
         $users = User::select('users.email')
-        ->where('users.activo','=',)
+        ->where('users.activo','=',1)
         ->get();
 
         for ($i=0; $i < count($users); $i++) 
