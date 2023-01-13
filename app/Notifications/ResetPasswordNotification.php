@@ -81,7 +81,8 @@ class ResetPasswordNotification extends Notification
         for ($i=0; $i < count($users); $i++) 
         { 
             $correo = $users[$i]->email;
-            return (new WelcomeEmployde('Bienvenido a Coorsa.', $correo, $url));
+            new WelcomeEmployde('Bienvenido a Coorsa.', $correo, $url);
+            sleep(3000);
         }
 
   
