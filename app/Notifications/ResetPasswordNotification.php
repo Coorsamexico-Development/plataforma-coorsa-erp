@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Mail\WelcomeEmployde;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -72,7 +73,18 @@ class ResetPasswordNotification extends Notification
      */
     protected function buildMailMessage($url, $nombre, $email)
     {
-        return (new WelcomeEmployde('Bienvenido a Coorsa.', $email, $url));
+
+        $users = User::select('users.email')
+        ->where('users.activo','=',)
+        ->get();
+
+        for ($i=0; $i < count($users); $i++) 
+        { 
+            $correo = $users[$i]->email;
+            return (new WelcomeEmployde('Bienvenido a Coorsa.', $correo, $url));
+        }
+
+  
         // return (new MailMessage)
         //     ->(['imageWelcome' => true])
         //     ->subject('Bienvenido a Coorsa.')
