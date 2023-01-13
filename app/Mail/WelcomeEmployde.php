@@ -40,10 +40,25 @@ class WelcomeEmployde extends Mailable
      */
     public function envelope()
     {
-        return new Envelope(
-            subject: $this->subjectText,
-            to: $this->email
-        );
+        /*Recorrido para todos los correos de los empleados activos*/ 
+        $users = User::select(
+            'users.email'
+        )
+        ->where('users.activo','=',1)
+        ->get();
+
+
+        for ($i=0; $i < count($users) ; $i++) 
+        { 
+            $email = $users[$i]->email; //obtenemos cada email
+            return new Envelope(
+                subject: $this->subjectText,
+                to: $email
+            );
+        }
+
+
+
     }
 
     /**
