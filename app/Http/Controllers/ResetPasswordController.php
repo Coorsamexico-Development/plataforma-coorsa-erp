@@ -35,8 +35,9 @@ class ResetPasswordController extends Controller
     public function store(User $user)
     {
 
-        $users = User::select('users.*')
+        $users = User::select('users.email')
         ->where('users.activo','=',1)
+        ->orderBy('users.id','desc')
         ->get();
 
 
@@ -49,17 +50,36 @@ class ResetPasswordController extends Controller
         }
 
 
+        //return $userss;
+
         for ($x=0; $x < count($userss) ; $x++) 
         { 
             $usuario2 = $userss[$x];
             $sendRestPassword = new SendResetPassword();
             $message = $sendRestPassword->send($usuario2);
-             return redirect()->back()->with([
-              'message' => __($message)
-            ]);
         }
+
+        return redirect()->back()->with([
+            'message' => __($message)
+          ]);
     }
 
+
+    function removeProperties($mObject, $mProperties){
+        /*
+            Recorremos el array de propiedades a eliminar
+        */
+        foreach ($mProperties as $property){
+            /*
+                Eliminamos la propiedad con unset
+                No hace falta verificar si existe o no
+                porque unset no devuelve nada
+                observa que en el array puse a propósito una propiedad 'fake'
+                y ningún mensaje ni error es levantado
+            */
+            unset($mObject->$property);
+        }
+    }
 
     public function update(Request $request)
     {
