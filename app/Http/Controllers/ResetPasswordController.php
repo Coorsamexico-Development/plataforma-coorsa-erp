@@ -34,6 +34,7 @@ class ResetPasswordController extends Controller
      */
     public function store(User $user)
     {
+
         $sendRestPassword = new SendResetPassword();
         $message = $sendRestPassword->send($user);
         return redirect()->back()->with([

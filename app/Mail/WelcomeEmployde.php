@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -40,25 +39,10 @@ class WelcomeEmployde extends Mailable
      */
     public function envelope()
     {
-        /*Recorrido para todos los correos de los empleados activos*/ 
-        $users = User::select(
-            'users.email'
-        )
-        ->where('users.activo','=',1)
-        ->get();
-
-
-        for ($i=0; $i < count($users) ; $i++) 
-        { 
-            $email = $users[$i]->email; //obtenemos cada email
-            return new Envelope(
-                subject: $this->subjectText,
-                to: $email
-            );
-        }
-
-
-
+        return new Envelope(
+            subject: $this->subjectText,
+            to: $this->email
+        );
     }
 
     /**
