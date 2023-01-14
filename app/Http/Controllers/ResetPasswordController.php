@@ -37,7 +37,7 @@ class ResetPasswordController extends Controller
 
         $users = User::select('users.email')
         ->where('users.activo','=',1)
-        ->orderBy('users.id','desc')
+        ->orderBy('users.id')
         ->get();
 
 
