@@ -43,7 +43,6 @@ class ResetPasswordController extends Controller
         for ($i=0; $i < count($users) ; $i++) 
         { 
             $usuario = $users[$i];
-            return $usuario;
             $message = $sendRestPassword->send($usuario);
         }
 
