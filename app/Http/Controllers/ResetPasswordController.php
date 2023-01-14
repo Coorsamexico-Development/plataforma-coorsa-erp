@@ -48,7 +48,6 @@ class ResetPasswordController extends Controller
             array_push($userss, $usuario);
         }
 
-        return $userss;
 
         for ($x=0; $x < count($userss) ; $x++) 
         { 
