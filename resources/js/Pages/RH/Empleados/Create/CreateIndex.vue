@@ -438,7 +438,7 @@ const fecha_termino = computed(() => {
                                                 </div>
                                                 <div class="mt-4">
                                                     <InputLabel for="correo_electronico" value="Correo:*" />
-                                                    <TextInput id="correo_electronico" type="text"
+                                                    <TextInput id="correo_electronico" type="email"
                                                         v-model="form.correo_electronico" class="block w-full mt-1"
                                                         placeholder="correo@ejemplo.com"
                                                         :disabled="editEmpleadoDisable" />

@@ -556,7 +556,7 @@ const sendEmail = () => {
                                             <div class="mt-4">
                                                 <InputLabel for="correo_electronico" value="Correo:*" />
                                                 <div class="flex gap-1">
-                                                    <TextInput id="correo_electronico" type="text"
+                                                    <TextInput id="correo_electronico" type="email"
                                                         v-model="form.correo_electronico" class="block w-full mt-1"
                                                         placeholder="correo@ejemplo.com"
                                                         :disabled="editEmpleadoDisable" />
