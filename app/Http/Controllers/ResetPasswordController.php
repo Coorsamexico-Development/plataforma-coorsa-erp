@@ -34,7 +34,7 @@ class ResetPasswordController extends Controller
      */
     public function store(User $user)
     {
-/*
+
         $users = User::select('users.email')
         ->where('users.activo','=',1)
         ->orderBy('users.id')
@@ -58,8 +58,8 @@ class ResetPasswordController extends Controller
             $sendRestPassword = new SendResetPassword();
             $message = $sendRestPassword->send($usuario2);
         }
-*/
-       $sendRestPassword = new SendResetPassword();
+
+      // $sendRestPassword = new SendResetPassword();
        $message = $sendRestPassword->send($user);
         return redirect()->back()->with([
             'message' => __($message)
