@@ -35,15 +35,16 @@ class ResetPasswordController extends Controller
     public function store(User $user)
     {
 
-        $users = User::select('users.*')
+        $users = User::select('users.email')
         ->where('users.activo','=',1)
         ->get();
+
 
         $userss = [];
 
         for ($i=0; $i < count($users) ; $i++) 
         { 
-            $usuario = $users[$i];
+            $usuario = $users[$i]->email;
             array_push($userss, $usuario);
         }
 
