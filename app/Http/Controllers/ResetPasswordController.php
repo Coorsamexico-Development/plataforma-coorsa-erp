@@ -34,7 +34,7 @@ class ResetPasswordController extends Controller
      */
     public function store(User $user)
     {
-
+/*
         $users = User::select('users.email')
         ->where('users.activo','=',1)
         ->orderBy('users.id')
@@ -58,8 +58,8 @@ class ResetPasswordController extends Controller
             $sendRestPassword = new SendResetPassword();
             $message = $sendRestPassword->send($usuario2);
         }
-
-      // $sendRestPassword = new SendResetPassword();
+*/
+      $sendRestPassword = new SendResetPassword();
        $message = $sendRestPassword->send($user);
         return redirect()->back()->with([
             'message' => __($message)
@@ -108,21 +108,20 @@ class ResetPasswordController extends Controller
         }
 
         // Check token and if correct save password and login de user
-        $user->forceFill([
-            'password' => Hash::make($request->password)
-        ])->setRememberToken(Str::random(60));
-
-        $user->saveQuietly();
-        // delete token token, el token ya no va ser valido una ves utilizado
-        DB::table($this->table)->where('email', $user->getEmailForPasswordReset())
-            ->delete();
-        Auth::login($user);
-        $request->session()->regenerate();
-        // el intent no es necesario
-        return redirect()->route('dashboard');
         if (Hash::check($request->token, $record['token'])) {
 
-        
+            $user->forceFill([
+                'password' => Hash::make($request->password)
+            ])->setRememberToken(Str::random(60));
+
+            $user->saveQuietly();
+            // delete token token, el token ya no va ser valido una ves utilizado
+            DB::table($this->table)->where('email', $user->getEmailForPasswordReset())
+                ->delete();
+            Auth::login($user);
+            $request->session()->regenerate();
+            // el intent no es necesario
+            return redirect()->route('dashboard');
         }
         return back()->withErrors([
             'email' => __('passwords.token'),
