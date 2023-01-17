@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="38" height="38" viewBox="0 0 38 38">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectángulo_12" data-name="Rectángulo 12" width="32.182" height="24.523" fill="#b7b7b7" stroke="#b7b7b7" stroke-width="1"/>
+    </clipPath>
+    <clipPath id="clip-Icono-email">
+      <rect width="38" height="38"/>
+    </clipPath>
+  </defs>
+  <g id="Icono-email" clip-path="url(#clip-Icono-email)">
+    <rect width="38" height="38" fill="rgba(255,255,255,0)"/>
+    <g id="Grupo_23" data-name="Grupo 23" transform="translate(3 7)">
+      <g id="Grupo_7" data-name="Grupo 7" clip-path="url(#clip-path)">
+        <path id="Trazado_8" data-name="Trazado 8" d="M30.127.008h-.014c-.049,0-.1-.006-.147-.006H2.215c-.049,0-.1,0-.147.006H2.055A2.46,2.46,0,0,0,0,2.592V21.93a2.672,2.672,0,0,0,1.215,2.311.539.539,0,0,0,.09.051,1.943,1.943,0,0,0,.911.231H29.967a2.43,2.43,0,0,0,2.215-2.592V2.592A2.46,2.46,0,0,0,30.127.008M2.047,1.33l.045-.007.03,0c.031,0,.062-.005.093-.005H29.967c.031,0,.062,0,.093.005l.03,0,.045.007.036.007L17.61,13.1a2.172,2.172,0,0,1-3.042,0L2.011,1.337l.036-.007M1.406,22.787a1.4,1.4,0,0,1-.283-.856V2.592a1.42,1.42,0,0,1,.045-.362L10.1,10.594Zm1.164.422,8.405-11.8,2.893,2.709a3.167,3.167,0,0,0,4.446,0l2.893-2.709,8.405,11.8ZM31.059,21.93a1.4,1.4,0,0,1-.291.866l-8.687-12.2L31.015,2.23a1.42,1.42,0,0,1,.045.362Z" fill="#b7b7b7" stroke="#b7b7b7" stroke-width="1"/>
+      </g>
+    </g>
+  </g>
+</svg>
