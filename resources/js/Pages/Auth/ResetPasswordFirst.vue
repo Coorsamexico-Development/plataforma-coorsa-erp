@@ -35,7 +35,7 @@ const submit = () => {
              <div class="" style="display:flex; justify-content:center; margin-right:14rem; margin-bottom:5rem;">
                 <span class="w-1 h-24 bg-[#EC2944] mt-1 mr-48" style="position:absolute;"></span>
                 <h1 class="text-2xl text-white" style="font-family: 'Montserrat';">Bienvenido a <br>
-                  <span class="text-3xl uppercase">
+                  <span class="text-3xl font-extrabold uppercase">
                      INTRANET<br>COORSA
                   </span>
                 </h1>
