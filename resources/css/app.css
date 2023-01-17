@@ -769,19 +769,21 @@ input:checked ~ .tab-content {
     position: absolute;
     left: 160px;
     top: -50px;
-    color: #5356ad;
+    color: #EC2944;
     font-size: 130px;
     opacity: 0;
     -moz-transition: all 0.5s;
     -o-transition: all 0.5s;
     -webkit-transition: all 0.5s;
     transition: all 0.5s;
+    z-index: 2;
   }
   .container .container-form .btn {
     position: relative;
-    box-shadow: 0 0 10px 1px #ff73b3;
     margin-top: 30px;
+
   }
+
   .container .form-item {
     position: absolute;
     left: 0;
@@ -836,9 +838,10 @@ input:checked ~ .tab-content {
     position: absolute;
     left: 51px;
     top: 5px;
-    color: #5356ad;
+    color: #EC2944;
     font-size: 130px;
     opacity: 1;
+    z-index: 2;
   }
   .container.active input, .container.active .btn, .container.active .info-item {
     display: none;
@@ -849,6 +852,7 @@ input:checked ~ .tab-content {
   }
   .container.active .form-item {
     height: 100%;
+    z-index: -2;
   }
   .container.active .container-forms .container-info .info-item {
     height: 0%;

@@ -57,7 +57,7 @@ const submitReset = () =>
 <template>
     <Head title="Log in" />
     <div class="login">
-      <div style="border:1px white solid;grid-column: 2/5;grid-row: 2/3; border-radius: 2rem; width:50rem; height:22rem; display: flex; justify-content: center;">
+      <div style="border:0.1rem white solid;grid-column: 2/5;grid-row: 2/3; border-radius: 2rem; width:50rem; height:20rem; display: flex; justify-content: center;">
           <div class="container">
           <div class="box"></div>
           <div class="container-forms">
@@ -98,7 +98,7 @@ const submitReset = () =>
                         </h1>
                      </div>
                      <div class="m-8">
-                       <form @submit.prevent="submit">
+                       <form >
                            <div class="mt-10">
                              <TextInput
                                    id="email"
@@ -132,7 +132,7 @@ const submitReset = () =>
                               </label>
                           </div>
                           <div class="btn" style="margin-top:0rem; display: flex; justify-content: center;margin-right: 0rem;">
-                             <button type="submit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" style="font-size: 0.8rem;">Iniciar sesión</button>
+                             <button @click="submit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" style="font-size: 0.8rem;">Iniciar sesión</button>
                           </div>
                        </form>
                      </div>
