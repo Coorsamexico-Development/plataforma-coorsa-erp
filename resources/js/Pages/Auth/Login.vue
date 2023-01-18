@@ -119,8 +119,8 @@ const submitReset = () =>
                                    placeholder="Usuario"
                                    style="border-radius:5rem; font-family: 'Montserrat'; padding-left: 3rem; font-size: 0.9rem;"
                                />
-                               <span class="ml-2" style="position:absolute; margin-top:-3.5rem">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="39" height="39" viewBox="0 0 39 39">
+                               <span class="ml-2" style="position:absolute; margin-top:-3.5rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="39" height="39" viewBox="0 0 50 39">
                                    <defs>
                                      <clipPath id="clip-path">
                                        <rect id="Rectángulo_3" data-name="Rectángulo 3" width="32.584" height="32.647" fill="#b7b7b7"/>
@@ -152,8 +152,8 @@ const submitReset = () =>
                                   placeholder="Contraseña"
                                   style="border-radius:5rem; padding-left: 3.5rem;"
                               />
-                              <span class="ml-2" style="position:absolute; margin-top:-3.5rem;">
-                                <svg  style="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="39" height="39" viewBox="0 0 39 39">
+                              <span class="ml-2" style="position:absolute; margin-top:-3.5rem; ">
+                                <svg  style="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="39" height="39" viewBox="0 0 50 39">
                                   <defs>
                                     <clipPath id="clip-path">
                                       <rect id="Rectángulo_4" data-name="Rectángulo 4" width="27.938" height="37.302" fill="#b7b7b7"/>
@@ -203,7 +203,7 @@ const submitReset = () =>
                        <form >
                         <div class="mt-10">
                             <span class="ml-2" style="position:absolute; margin-top:0rem;">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="38" height="38" viewBox="0 0 38 38">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="38" height="38" viewBox="0 0 50 38">
                                   <defs>
                                     <clipPath id="clip-path">
                                       <rect id="Rectángulo_12" data-name="Rectángulo 12" width="32.182" height="24.523" fill="#b7b7b7" stroke="#b7b7b7" stroke-width="1"/>
