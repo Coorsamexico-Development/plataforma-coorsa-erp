@@ -26,6 +26,8 @@ defineProps({
     status: String,
 });
 
+
+/*Login form styles*/ 
 const form = useForm({
     email: '',
     password: '',
@@ -33,17 +35,26 @@ const form = useForm({
     status: String,
 });
 
+const style1 = ref(false);
+
 const submit = () => {
+    style1.value=true;
     form.transform(data => ({
         ...data,
         remember: form.remember ? 'on' : '',
-    })).post(route('login'), {
+    })).post(route('login'), 
+    {
         onFinish: () => form.reset('password'),
+        onError:() => style1.value=false,
+        onSuccess:() => onprogress(),
     });
 };
 
 
 /*Form reset password*/
+
+const style2 = ref(false);
+
 const formReset = useForm({
     email: '',
 });
@@ -58,14 +69,14 @@ const submitReset = () =>
     <Head title="Log in" />
     <div class="login">
       <div style="border:0.1rem white solid;grid-column: 2/5;grid-row: 2/3; border-radius: 2rem; width:50rem; height:20rem; display: flex; justify-content: center;">
-          <div class="container">
+          <div class="container" :class="{'active': style1}">
           <div class="box"></div>
           <div class="container-forms">
             <div class="container-info">
               <div class="info-item">
                 <div class="table">
                   <div class="table-cell">
-                    <p class="text-white" style="font-family: 'Montserrat'; font-size: 1rem;">
+                    <p class="text-white" style="font-family: 'Montserrat'; font-size:1rem;">
                       ¿Ya tienes una cuenta?
                     </p>
                     <div class="btn" style="display:flex; justify-content:center; font-size: 1rem; width: 0rem;">
@@ -172,8 +183,8 @@ const submitReset = () =>
                                   <span class="ml-2 text-sm">Recordar</span>
                               </label>
                           </div>
-                          <div class="btn" style="margin-top:0rem; display: flex; justify-content: center;margin-right: 0rem;">
-                             <button @click="submit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" style="font-size: 0.8rem;">Iniciar sesión</button>
+                          <div class="flex justify-center">
+                            <button @click="submit" class="bg-[#EC2944] text-white pl-8 pr-8 pt-1 pb-1 rounded-full" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" style="font-size: 0.8rem;">Iniciar sesión</button>
                           </div>
                        </form>
                      </div>
@@ -223,13 +234,14 @@ const submitReset = () =>
                                    placeholder="Usuario"
                                    style="border-radius:5rem; font-family: 'Montserrat';padding-left: 3rem; "
                                />
-                               <InputError class="" :message="formReset.errors.email" />
+                               <InputError class="" style="z-index:4" :message="formReset.errors.email" />
                            </div>
-                           <div class="btn" style="display:flex; justify-content:center; margin-right:2rem">
-                              <button @click="submitReset" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                                Enviar
-                              </button>
-                          </div>
+                           <div class="flex justify-center">
+                            <button class="bg-[#EC2944] text-white pl-8 pr-8 pt-1 pb-1 rounded-full " @click="submitReset" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                              Enviar
+                            </button>
+                           </div>
+
                        </form>
                      </div>
                   </div>
