@@ -38,14 +38,12 @@ const form = useForm({
 const style1 = ref(false);
 
 const submit = () => {
-    style1.value=true;
     form.transform(data => ({
         ...data,
         remember: form.remember ? 'on' : '',
     })).post(route('login'), 
     {
         onFinish: () => form.reset('password'),
-        onError:() => style1.value=false,
         onSuccess:() => onprogress(),
     });
 };
@@ -69,7 +67,7 @@ const submitReset = () =>
     <Head title="Log in" />
     <div class="login">
       <div style="border:0.1rem white solid;grid-column: 2/5;grid-row: 2/3; border-radius: 2rem; width:50rem; height:20rem; display: flex; justify-content: center;">
-          <div class="container" :class="{'active': style1}">
+          <div class="container">
           <div class="box"></div>
           <div class="container-forms">
             <div class="container-info">
