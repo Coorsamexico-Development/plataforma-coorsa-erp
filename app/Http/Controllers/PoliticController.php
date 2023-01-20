@@ -13,7 +13,7 @@ class PoliticController extends Controller
 {
     public function index()
     {
-        $tipoPoliticas = Tipopolitica::orderBy('id', 'asc');
+        $tipoPoliticas = Tipopolitica::orderBy('id', 'asc')->where('seccion_id','=',1);
         $politicas = Politic::select('politics.*',
         'users.name AS nombre',
         'users.apellido_paterno AS apellido_paterno',
@@ -21,7 +21,8 @@ class PoliticController extends Controller
         'tipopoliticas.color')
         ->join('users','politics.empleado_id','users.id')
         ->join('tipopoliticas','politics.type_politic','tipopoliticas.id')
-        ->where('id_statu', '=', 1);
+        ->where('id_statu', '=', 1)
+        ->where('tipopoliticas.seccion_id','=',1);
 
 
         if (request()->has('search')) {
@@ -39,6 +40,34 @@ class PoliticController extends Controller
         ]);
     }
 
+
+    public function docsinternos ()
+    {
+        $tipoPoliticas = Tipopolitica::orderBy('id', 'asc')->where('seccion_id','=',2);
+        $politicas = Politic::select('politics.*',
+        'users.name AS nombre',
+        'users.apellido_paterno AS apellido_paterno',
+        'users.apellido_materno AS apellido_materno',
+        'tipopoliticas.color')
+        ->join('users','politics.empleado_id','users.id')
+        ->join('tipopoliticas','politics.type_politic','tipopoliticas.id')
+        ->where('id_statu', '=', 1)
+        ->where('tipopoliticas.seccion_id','=',2);
+
+        if (request()->has('search')) {
+            $search = '%' . strtr(request('search'), array("'" => "\\'", "%" => "\\%")) . '%';
+            $politicas->where('politics.namepolitica', 'like', $search);
+        }
+        if (request()->has('type_politic')) {
+            $politicas->where('politics.type_politic', '=', request('type_politic'));
+        }
+
+        return Inertia::render('ControlInterno/DocumentosInternos', [
+            'tipoPoliticas' => fn () => $tipoPoliticas->get(),
+            'politicas' =>  fn () => $politicas->get(),
+            'filters' => fn () => request()->all(['search', 'type_politic']),
+        ]);
+    }
 
     public function store(Request $request)
     {
