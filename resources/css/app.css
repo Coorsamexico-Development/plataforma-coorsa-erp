@@ -327,7 +327,7 @@ input:checked ~ .tab-content {
     background-repeat: no-repeat;
     background-size: cover;
     font-family: var(--fuentePrincipal);
-    height: 46.8rem;
+    height: 100%;
     display: grid;
     grid-template-columns: repeat(5,1fr);
     grid-template-rows: repeat(3,1fr);

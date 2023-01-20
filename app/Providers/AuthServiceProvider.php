@@ -42,7 +42,7 @@ class AuthServiceProvider extends ServiceProvider
             Permission::where('plataforma_id', '=', 2)->get(['id', 'nombre'])
                 ->map(function ($permission) {
                     Gate::define(
-                        $permission->nombre,
+                        $permission->nombre, // define el nombre del permiso
                         function (User $user) use ($permission) {
                             return $user->HasPermission($permission->id);
                         }
