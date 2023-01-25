@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivoController;
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\DepartamentosAuditoriaController;
@@ -139,6 +140,13 @@ Route::middleware([
         Route::post('empleados/update', 'update')->name('empleado.update');
         Route::get('empleados/{activo}', 'index')->name('empleado.indexmanual');
     });
+});
+
+
+Route::controller(ActivoController::class)->group(function () {
+    Route::get('activos/index', 'index')->name('activo.index');
+    Route::get('/activosxtipo/{idTipo}', 'activos');
+    Route::post('/storeCategory', 'storeCategory')->name('storeCategory');
 });
 
 
