@@ -301,10 +301,10 @@ input:checked ~ .tab-content {
     background-size: cover;
     background-position: center;
     font-family: var(--fuentePrincipal);
-    height: 56.8rem;
+    height: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
 }
 @media (min-width: 640px) {
     .login {
@@ -601,6 +601,11 @@ input:checked ~ .tab-content {
     width: 100%;
     height: 100%;
 }
+@media (max-width: 640px) {
+    .info-item .table {
+        height: auto;
+    }
+}
 
 .table-cell {
     display: table-cell;
@@ -667,11 +672,15 @@ input:checked ~ .tab-content {
     text-align: left;
     font-size: 0;
 }
+@media (min-width: 640px) {
+    .container .container-forms .container-info .info-item {
+        height: 320px;
+    }
+}
 .container .container-forms .container-info .info-item {
     text-align: center;
     font-size: 16px;
     width: 300px;
-    height: 320px;
     display: inline-block;
     vertical-align: top;
     opacity: 1;
@@ -692,13 +701,6 @@ input:checked ~ .tab-content {
     .container .container-forms .container-info .info-item .table-cell {
         padding-right: 35px;
     }
-}
-.container
-    .container-forms
-    .container-info
-    .info-item:nth-child(2)
-    .table-cell {
-    padding-left: 2rem;
 }
 @media (min-width: 640px) {
     .container
@@ -774,10 +776,10 @@ input:checked ~ .tab-content {
 
 .container .info-item.s {
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 50%;
+    transform: translate(-50%);
+    top: 23rem;
     width: 100%;
-    height: 100%;
     opacity: 1;
     -moz-transition: all 0.5s;
     -o-transition: all 0.5s;
@@ -786,6 +788,7 @@ input:checked ~ .tab-content {
 }
 .container .info-item.sign-up {
     position: absolute;
+    top: 22rem;
     left: -100%;
     opacity: 0;
 }
@@ -821,11 +824,11 @@ input:checked ~ .tab-content {
 }
 @media (max-width: 640px) {
     .container.log-in .container-info .info-item.sign-up {
-        bottom: 0;
-        opacity: 0;
+        left: 11%;
+        opacity: 1;
     }
     .container.log-in .container-info .info-item.log-in {
-        top: -100%;
+        left: -100%;
         opacity: 0;
     }
 }

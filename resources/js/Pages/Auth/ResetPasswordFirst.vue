@@ -44,9 +44,9 @@ const submit = () => {
           <div class="" style="width:45rem; margin-top: -8rem; margin-left: 28rem; height: 30rem; z-index: 5; position: absolute;">        
               <div class="w-full h-full px-6 py-4 mt-2 overflow-hidden bg-white shadow-md sm:max-w-md sm:rounded-3xl">
                 <div class="mt-4">
-                    <h1 class="mb-8 ml-4 text-2xl ">
+                    <h1 class="mb-8 ml-4 text-2xl " style="font-family:'Montserrat';">
                       Crea tu<br>
-                      <span class="uppercase">NUEVA CONTRASEÑA</span>
+                      <span class="font-extrabold uppercase">NUEVA CONTRASEÑA</span>
                     </h1>
                 </div>
                   <form @submit.prevent="submit">

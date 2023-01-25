@@ -87,7 +87,12 @@ const logout = () => {
                                         </DropdownLink>
                                         <DropdownLink :href="route('control-interno.politics.index')">
                                             <span class="text-xs">
-                                                DOCUMENTOS
+                                                DOCUMENTOS GENERALES
+                                            </span>
+                                        </DropdownLink>
+                                        <DropdownLink v-if="$page.props.can['documentos-internos.show']" :href="route('control-interno.documentos-internos.index')">
+                                            <span class="text-xs">
+                                                DOCUMENTOS INTERNOS
                                             </span>
                                         </DropdownLink>
                                         <div class="border-t border-gray-100" />

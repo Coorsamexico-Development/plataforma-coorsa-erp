@@ -25,12 +25,15 @@ defineProps({
     status: String,
 });
 
+/*Login form styles*/
 const form = useForm({
     email: "",
     password: "",
     remember: false,
     status: String,
 });
+
+const style1 = ref(false);
 
 const submit = () => {
     form.transform((data) => ({
@@ -42,6 +45,9 @@ const submit = () => {
 };
 
 /*Form reset password*/
+
+const style2 = ref(false);
+
 const formReset = useForm({
     email: "",
 });
@@ -54,10 +60,9 @@ const submitReset = () => {
 <template>
     <Head title="Log in" />
     <div class="login">
-        <!-- Mobile -->
         <div
-            class="mb-8 flex justify-between p-12 items-center sm:hidden text-white col-start-1 col-span-3 row-start-1"
-            style="text-align: left; margin-left: 0"
+            class="flex justify-between p-8 mb-2 items-center sm:hidden text-white col-start-1 col-span-3 row-start-1"
+            style="text-align: left"
         >
             <div class="pl-4">
                 <span
@@ -79,9 +84,9 @@ const submitReset = () => {
 
         <!-- Fin Mobile -->
         <div
-            class="border-hidden border-white sm:border-2 sm:border-solid sm:col-start-2 col-span-3 row-start-2 col-start-1 flex sm:w-[50rem] rounded-[2rem] h-80 justify-center"
+            class="border-hidden border-white sm:border-2 sm:border-solid sm:col-start-2 col-span-3 row-start-2 col-start-1 flex sm:w-[50rem] rounded-[2rem] sm:h-80 h-40 row-span-2 justify-center"
         >
-            <div class="container flex flex-col sm:flex-row content-center">
+            <div class="container flex flex-col sm:flex-row">
                 <div class="box"></div>
                 <div class="container-forms">
                     <div class="container-info sm:hidden">
@@ -112,7 +117,7 @@ const submitReset = () => {
                             </div>
                         </div>
                         <div class="info-item s log-in">
-                            <div class="table" style="margin-left: 2rem">
+                            <div class="table sm:ml-8">
                                 <div class="table-cell">
                                     <p
                                         style="
@@ -413,21 +418,18 @@ const submitReset = () => {
                 </div>
             </div>
         </div>
-        <div
-            class="col-start-1 sm:col-start-2 col-span-3 sm:row-start-4 row-start-5"
-            style="
-                margin-top: -5rem;
-                display: flex;
-                justify-content: center;
-                font-family: 'Montserrat';
-            "
-        >
-            <h2
-                class="text-white text-xs sm:text-1xl"
-                style="letter-spacing: 1rem"
-            >
-                <a href="https://coorsamexico.com/">WWW.COORSAMEXICO.COM</a>
-            </h2>
-        </div>
+    </div>
+    <div
+        class="col-start-1 sm:col-start-2 col-span-3 sm:row-start-4"
+        style="
+            margin-top: -5rem;
+            display: flex;
+            justify-content: center;
+            font-family: 'Montserrat';
+        "
+    >
+        <h2 class="text-white text-xs sm:text-xl" style="letter-spacing: 1rem">
+            <a href="https://coorsamexico.com/">WWW.COORSAMEXICO.COM</a>
+        </h2>
     </div>
 </template>

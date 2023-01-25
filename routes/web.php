@@ -104,6 +104,7 @@ Route::middleware([
         ->name('documentos-calificacion-mes.destroy')->middleware('can:calificacion.delete');
 
     Route::apiResource('politics', PoliticController::class)->name('index', 'control-interno.politics.index');
+    Route::get('/docinternos', [PoliticController::class, 'docsinternos'])->name('control-interno.documentos-internos.index');
 
     Route::get('users/list', [UserController::class, 'list'])->name('users.list');
     Route::apiResource('roles', RoleController::class)->middleware('can:roles.manager');
