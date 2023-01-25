@@ -18,6 +18,8 @@ var props = defineProps(
     }
 );
 
+/*Comentario*/
+
 const modalNewCategory = ref(false);
 
 const openModalNewCategory = () => 
