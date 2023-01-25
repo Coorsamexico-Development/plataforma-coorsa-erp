@@ -2,7 +2,8 @@
 
 var props = defineProps(
     {
-        activos:Object
+        activos:Object,
+        campos:Object
     }
 );
 
@@ -12,9 +13,7 @@ var props = defineProps(
         <thead class="drop-shadow-xl border-b-2 border-gray-300 text-gray-400 font-extralight" style="font-family: 'Montserrat';">
             <tr>
                 <th>Acciones</th>
-                <th>Codigo</th>
-                <th>Alta</th>
-                <th>Status</th>
+                <th v-for="campo in campos" :key="campo.id">{{ campo.campo }}</th>
                 <th>Documento</th>
                 <th>Usuarios</th>
             </tr>

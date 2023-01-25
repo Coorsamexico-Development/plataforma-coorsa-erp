@@ -20,4 +20,10 @@ class tipos_activo extends Model
         return $this->hasMany(activosItem::class, 'tipo_activo');
     }
 
+
+    public function tipo_activo_campos () 
+    {
+        
+        return $this->hasMany(tipoActivoCampo::class, 'tipo_activo_id');
+    }
 }

@@ -3,7 +3,7 @@ import { Inertia } from '@inertiajs/inertia';
 import { ref } from "@vue/reactivity";
 import axios from 'axios';
 import TableActivos from '../Partials/TableActivos.vue';
-
+import ModalAddItem from '../Partials/ModalAddItem.vue';
 
 
 var props = defineProps(
@@ -39,6 +39,19 @@ const open = (id) =>
         });}
     */
 }
+
+/*Funciones modal*/
+const itemModal = ref(false);
+
+const openItemModal = () => 
+{
+   itemModal.value = true;
+}
+
+const closeItemModal = () =>
+{
+    itemModal.value = false;
+}
 </script>
 <template>
     <div class="col-start-2 col-end-7">
@@ -65,7 +78,8 @@ const open = (id) =>
                             <td class="pr-4 pl-4 text-center text-4xl border-r-8 border-[#EC2944]">20</td>
                             <td class="pl-4 text-center text-4xl">10</td>
                             <td class="pl-4">
-                                <button class="bg-[#EC2944] text-white rounded-full w-10">+</button>
+                                <button @click="openItemModal" class="bg-[#EC2944] text-white rounded-full w-10">+</button>
+                                <ModalAddItem :show="itemModal" :campos="tipoActivo.tipo_activo_campos" @close="closeItemModal"></ModalAddItem>
                             </td>
                         </tr>
                     </tbody>
@@ -73,7 +87,7 @@ const open = (id) =>
             </div>
          </div>
          <div class="w-full mt-2 mb-8"  :class="{ 'visible': visible, 'invisible': !visible }">
-           <TableActivos :activos="activos"></TableActivos>
+           <TableActivos :activos="activos" :campos="tipoActivo.tipo_activo_campos"></TableActivos>
         </div>
     </div>
 </template>

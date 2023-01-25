@@ -9,10 +9,16 @@ class tipoActivoCampo extends Model
 {
     use HasFactory;
 
+
     protected $fillable = [
         'tipo_activo_id',
         'campo',
         'principal',
         'tipo_input_id'
     ];
+
+    public function tipoInput ()
+    {
+        return $this->hasOne(TipoInput::class, 'tipo_input_id');
+    }
 }
