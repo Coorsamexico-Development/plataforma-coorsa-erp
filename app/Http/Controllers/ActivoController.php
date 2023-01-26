@@ -18,7 +18,6 @@ class ActivoController extends Controller
     {
         //traemos todos los tipos de activos
         $tipo_activos = tipos_activo::select('tipos_activos.*')
-        ->with('tipo_activo_campos')
         ->get();
 
         $tipo_inputs = TipoInput::all();

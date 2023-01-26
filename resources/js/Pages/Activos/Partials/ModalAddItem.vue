@@ -8,6 +8,7 @@ import TextInput from '@/Components/TextInput.vue';
 import { usePage } from '@inertiajs/inertia-vue3'
 import SelectComponent from '@/Components/SelectComponent.vue';
 import Checkbox from '@/Components/Checkbox.vue';
+import ButtonAdd from '@/Components/ButtonAdd.vue';
 
 const emit = defineEmits(["close"]);
 
@@ -17,10 +18,32 @@ var props = defineProps(
     }
 );
 
+const arregloItems = ref([]);
+
 const close = () => {
         
         emit('close');
     };
+
+const AddItem = () => {
+  for (let index = 0; index < props.campos.length; index++) 
+  {
+     let nombreCampo = props.campos[index].campo;
+     let tipoCampo = props.campos[index].input;
+     let newObjItem = [];
+     let newObj = {};
+
+     newObj[`${nombreCampo}`] = "";
+     newObj.type = tipoCampo;
+
+     newObjItem.push(newObj);
+     //newObj[`${tipoCampo}`] = "";
+      //console.log(`Fifteen is ${nombreCampo} andnot ${tipoCampo}.`);
+     arregloItems.value.push(newObjItem);
+  }
+
+  console.log(arregloItems.value);
+}
 
 const saveItem = () => 
 {
@@ -34,9 +57,12 @@ const saveItem = () =>
                <h2 style="font-weight:bolder">Nuevo activo</h2>
             </template>
             <template #content>
-                {{ campos }}
+                <ButtonAdd @click="AddItem">+</ButtonAdd>
                 <form class="flex flex-wrap justify-center">
-                  
+                  <div v-for="campo in campos" :key="campo.id">
+                     <InputLabel>{{campo.campo}}</InputLabel>
+                     <TextInput :type="campo.input"></TextInput>
+                  </div>
                 </form>
                 <div class="flex flex-row-reverse">
                         <button @click="saveItem" style="" class="p-2 bg-blue-500 rounded-lg hover:opacity-50">

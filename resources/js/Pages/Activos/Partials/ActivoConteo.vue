@@ -79,7 +79,7 @@ const closeItemModal = () =>
                             <td class="pl-4 text-center text-4xl">10</td>
                             <td class="pl-4">
                                 <button @click="openItemModal" class="bg-[#EC2944] text-white rounded-full w-10">+</button>
-                                <ModalAddItem :show="itemModal" :campos="tipoActivo.tipo_activo_campos" @close="closeItemModal"></ModalAddItem>
+                                <ModalAddItem :show="itemModal" :campos="tipoActivo.camposInput" @close="closeItemModal"></ModalAddItem>
                             </td>
                         </tr>
                     </tbody>
@@ -87,7 +87,7 @@ const closeItemModal = () =>
             </div>
          </div>
          <div class="w-full mt-2 mb-8"  :class="{ 'visible': visible, 'invisible': !visible }">
-           <TableActivos :activos="activos" :campos="tipoActivo.tipo_activo_campos"></TableActivos>
+           <TableActivos :activos="activos" :campos="tipoActivo.camposInput"></TableActivos>
         </div>
     </div>
 </template>
