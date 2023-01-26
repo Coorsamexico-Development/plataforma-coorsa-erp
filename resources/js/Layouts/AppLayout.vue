@@ -40,9 +40,9 @@ const logout = () => {
             <nav class="navMenu">
                 <!-- Primary Navigation Menu -->
                 <div class="px-4 2xl:ml-16 sm:px-6 lg:px-8">
-                    <div class="flex justify-between h-16">
+                    <div class="flex sm:flex-row flex-row-reverse items-end justify-between h-16">
                         <!-- Logo -->
-                        <div class="items-center xl:flex shrink-0 xl:mr-60">
+                        <div class="items-center h-8 xl:flex shrink-0 xl:mr-60">
                             <Link :href="route('dashboard')">
                             <img class="w-28" src="../../img/logo_coorsa.png">
                             </Link>
