@@ -34,7 +34,7 @@ const closeModalAgregarNoticia = () => {
     <AppLayout title="Dashboard">
         <section class="inicio">
             <div class="inicio_info">
-                <div class="ml-16 mt-20 sm:mt-0 inicio_info_text">
+                <div class="sm:ml-16 ml-8 mt-20 sm:mt-0 inicio_info_text">
                     <h1
                         class="m-5 text-2xl sm:text-6xl font-bold sm:font-semibold text-white"
                         style="font-family: 'Montserrat'"
@@ -97,13 +97,13 @@ const closeModalAgregarNoticia = () => {
                 />
                 <div>
                     <h3
-                        class="sm:mt-10 text-2xl sm:text-3xl text-white"
+                        class="sm:mt-10 text-2xl px-4 sm:px-0 sm:text-3xl text-white"
                         style="font-family: 'Montserrat'"
                     >
                         Misión
                     </h3>
                     <p
-                        class="sm:mt-5 mt-1 text-xl pb-24 sm:pb-0 sm:text-2xl text-white"
+                        class="sm:mt-5 mt-1 text-lg px-4 sm:px-0 pb-24 sm:pb-0 sm:text-2xl text-white"
                         style="font-family: 'Montserrat'; line-height: 1.8"
                     >
                         Eficientar los procesos de la cadena de<br />
@@ -120,13 +120,13 @@ const closeModalAgregarNoticia = () => {
                 />
                 <div>
                     <h3
-                        class="sm:mt-10 text-2xl sm:text-3xl text-white"
+                        class="sm:mt-10 text-2xl px-4 sm:px-0 sm:text-3xl text-white"
                         style="font-family: 'Montserrat'"
                     >
                         Visión
                     </h3>
                     <p
-                        class="sm:mt-5 mt-1 text-xl pb-24 sm:pb-0 sm:text-2xl text-white"
+                        class="sm:mt-5 mt-1 text-lg px-4 sm:px-0 pb-24 sm:pb-0 sm:text-2xl text-white"
                         style="font-family: 'Montserrat'; line-height: 1.8"
                     >
                         Ser la empresa lider en soluciones logísticas<br />
@@ -140,19 +140,19 @@ const closeModalAgregarNoticia = () => {
         </section>
         <section>
             <div class="video_section">
-                <div class="sm:pt-20 pt-80 pb-40 sm:pb-48 sm:ml-48 pl-12">
+                <div class="sm:pt-20 pt-72 pb-32 sm:pb-48 sm:ml-48 pl-4">
                     <img
                         class="float-right mt-16 mr-16"
                         src="../../img/VIDEO_APARTADO_icon.png"
                     />
                     <h2
-                        class="text-[#EC2944] font-500 text-4xl sm:text-5xl mt-16"
+                        class="text-[#EC2944] font-500 text-3xl sm:text-5xl mt-16"
                         style="font-family: 'Montserrat'"
                     >
                         NUESTRA
                     </h2>
                     <h1
-                        class="font-bold text-white text-7xl sm:text-8xl"
+                        class="font-bold text-white text-6xl sm:text-8xl"
                         style="font-family: 'Montserrat'"
                     >
                         COMUNIDAD

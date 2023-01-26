@@ -406,7 +406,7 @@ input:checked ~ .tab-content {
         grid-column-end: 3;
         margin-top: 0;
         padding: 2rem;
-        margin-left: 10rem;
+        margin-left: 6rem;
     }
 }
 
@@ -420,6 +420,7 @@ input:checked ~ .tab-content {
         grid-column: 1/2;
         grid-column-end: 3;
         margin-top: 0;
+        padding-left: 1rem;
         padding-bottom: 1rem;
     }
 }
