@@ -9,6 +9,7 @@ import { usePage } from '@inertiajs/inertia-vue3'
 import SelectComponent from '@/Components/SelectComponent.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import ButtonAdd from '@/Components/ButtonAdd.vue';
+import { Inertia } from "@inertiajs/inertia";
 
 const emit = defineEmits(["close"]);
 
@@ -92,6 +93,7 @@ if(mesToString.length < 2)
 
      campos.campo = nombreCampo;
      campos.type = tipoCampo;
+     campos.campo_id = props.campos[index].idCampo;
      campos.valor = null;
      newObjItem.campos.push(campos);
 
@@ -99,12 +101,13 @@ if(mesToString.length < 2)
      //console.log(`Fifteen is ${nombreCampo} andnot ${tipoCampo}.`);
   }
   arregloItems.value.push(newObjItem); 
- // console.log(arregloItems.value)
+  //console.log(arregloItems.value)
 }
 
 const saveItems = () => 
 {
-  console.log(arregloItems.value);
+   Inertia.post(route('storeItem'), {arreglo:arregloItems.value});
+   close();
 }
 
 </script>
@@ -124,10 +127,6 @@ const saveItems = () =>
                         <div class="mr-2">
                           <InputLabel>Fecha de alta</InputLabel>
                           <TextInput type="date" v-model="item.fecha_alta"></TextInput>
-                        </div>
-                        <div class="mr-2">
-                          <InputLabel>Status</InputLabel>
-                          <Checkbox @click="!item.status"></Checkbox>
                         </div>
                         <div class="m-2" v-for="campo in item.campos" :key="campo">
                             <InputLabel>{{ campo.campo }}</InputLabel>

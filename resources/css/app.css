@@ -8,12 +8,25 @@
 
 /*Nav*/
 
-.navMenu {
-    background-image: url("../img/HEADER_24.jpg");
-    height: 5rem;
-    background-size: cover;
-    background-repeat: no-repeat;
-    border: gray;
+@media only screen and (min-width : 1224px) 
+{
+    .navMenu {
+        background-image: url("../img/HEADER_24.jpg");
+        height: 5rem;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border: gray;
+    }
+}
+
+
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px)
+{
+    .navMenu {
+       background-color: #1A1A22;
+       color: white;
+    }
 }
 
 .navLinks {

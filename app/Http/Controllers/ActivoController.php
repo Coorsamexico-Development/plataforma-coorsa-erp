@@ -6,6 +6,7 @@ use App\Models\activosItem;
 use App\Models\tipoActivoCampo;
 use App\Models\TipoInput;
 use App\Models\tipos_activo;
+use App\Models\valorCampoActivo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -75,14 +76,31 @@ class ActivoController extends Controller
 
     public function storeItem (Request $request) 
     {
-      return $request;
-        $arregloItems = $request['arregloItems'];
+        //return $request;
 
-        for ($i=0; $i < count($arregloItems) ; $i++) 
+        for ($i=0; $i < count($request['arreglo']) ; $i++) //recorremos las propiedades del objeto
         { 
-          return ($arregloItems[$i]); // recuperamos un item
+            $item = $request['arreglo'][$i];
+            $activoItem = activosItem::create([
+              'tipo_activo' => $item['tipoActivo_id'],
+              'fecha' => $item['fecha_alta'],
+              'status' => $item['status']
+            ]);
 
+            $arregloCampos = $item['campos'];
+          
+            //recorremos los campos por objeto
+            for ($x=0; $x < count($arregloCampos) ; $x++) 
+            { 
+               $campo = $arregloCampos[$x]; //recuperamos el campo por item
+               valorCampoActivo::create([
+                 "valor" => $campo['valor'],
+                 "tipo_activo_campo_id" => $campo['campo_id'],
+                 "activo_id" => $activoItem->id
+               ]);
+            }    
         }
+        return  redirect()->back(); 
     }
   
 }

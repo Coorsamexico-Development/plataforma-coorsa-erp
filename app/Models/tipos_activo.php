@@ -31,6 +31,7 @@ class tipos_activo extends Model
         //return $campos_inputs = [];
 
        return  tipoActivoCampo::select(
+            'tipo_activo_campos.id AS idCampo',
             'tipo_activo_campos.campo AS campo',
             'tipo_activo_campos.principal',
             'tipo_inputs.nombre AS input',

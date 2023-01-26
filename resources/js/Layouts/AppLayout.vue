@@ -36,7 +36,7 @@ const logout = () => {
         <Head :title="title" />
         <Banner />
 
-        <div class="min-h-screen bg-white">
+        <div class="min-h-screen ">
             <nav class="navMenu">
                 <!-- Primary Navigation Menu -->
                 <div class="px-4 2xl:ml-16 sm:px-6 lg:px-8">
@@ -317,10 +317,10 @@ const logout = () => {
 
                 <!-- Responsive Navigation Menu -->
                 <div :class="{ 'block': showingNavigationDropdown, 'hidden': !showingNavigationDropdown }"
-                    class="sm:hidden">
+                    class="sm:hidden sm:bg-white">
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
+                        <ResponsiveNavLink class="sm:text-white" :href="route('dashboard')" :active="route().current('dashboard')">
+                            Inicio
                         </ResponsiveNavLink>
                     </div>
                     <div v-if="$page.props.can['roles.manager']" class="pt-2 pb-3 space-y-1">
@@ -364,10 +364,11 @@ const logout = () => {
                         </div>
 
                         <div class="mt-3 space-y-1">
+                         <!--
                             <ResponsiveNavLink :href="route('profile.show')" :active="route().current('profile.show')">
                                 Profile
                             </ResponsiveNavLink>
-
+                         -->
                             <ResponsiveNavLink v-if="$page.props.jetstream.hasApiFeatures"
                                 :href="route('api-tokens.index')" :active="route().current('api-tokens.index')">
                                 API Tokens

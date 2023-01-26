@@ -9,6 +9,12 @@ class activosItem extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'tipo_activo',
+        'fecha',
+        'status',
+    ];
+
     public function tipoActivo ()
     {
        return $this->belongsTo('App\tipos_activo');
