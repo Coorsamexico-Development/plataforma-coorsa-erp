@@ -5,7 +5,6 @@ import axios from 'axios';
 import TableActivos from '../Partials/TableActivos.vue';
 import ModalAddItem from '../Partials/ModalAddItem.vue';
 
-
 var props = defineProps(
     {
         tipoActivo:Object
@@ -79,7 +78,7 @@ const closeItemModal = () =>
                             <td class="pl-4 text-center text-4xl">10</td>
                             <td class="pl-4">
                                 <button @click="openItemModal" class="bg-[#EC2944] text-white rounded-full w-10">+</button>
-                                <ModalAddItem :show="itemModal" :campos="tipoActivo.camposInput" @close="closeItemModal"></ModalAddItem>
+                                <ModalAddItem :show="itemModal" :tipoActivo="tipoActivo" :campos="tipoActivo.camposInput" @close="closeItemModal"></ModalAddItem>
                             </td>
                         </tr>
                     </tbody>

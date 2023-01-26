@@ -14,7 +14,8 @@ const emit = defineEmits(["close"]);
 
 var props = defineProps(
     {
-       campos:Object
+       campos:Object,
+       tipoActivo:Object
     }
 );
 
@@ -25,29 +26,85 @@ const close = () => {
         emit('close');
     };
 
-const AddItem = () => {
+const statusReactivo =  ref(true);
+const changeStatus = () =>
+{
+  //console.log(statusReactivo.value);
+  statusReactivo.value  = !statusReactivo.value; 
+}
+
+const formatDate = new Date();
+let dia = formatDate.getDate();
+let mes = (formatDate.getMonth() + 1);
+const año = formatDate.getFullYear();
+mes = mes < 10 ? '0' + mes : mes;
+dia = dia < 10 ? '0' + dia : dia;
+let mesToString =mes.toString();
+let diaToString = dia.toString();
+
+let cero = "0"; 
+let newMes = "";
+let newDia = "";
+let fechaCompleta = "";
+
+if(mesToString.length < 2)
+  {
+    //console.log(cero+mesToString)
+    newMes =  cero+mesToString;
+    if(diaToString.length < 2)
+      {
+        newDia = cero+diaToString;
+        fechaCompleta = año+ '-' + newMes + '-' +newDia
+      }
+      else
+      {
+        fechaCompleta = año + '-' + newMes + '-' + dia; 
+      }
+  }
+  else
+  {
+    if(diaToString.length < 2)
+      {
+        newDia = cero+diaToString;
+        fechaCompleta = año+ '-' + mes + '-' +newDia
+      }
+       else
+      {
+        fechaCompleta = año + '-' + mes + '-' + dia; 
+      } 
+  }
+
+//console.log(fechaCompleta)
+  const AddItem = () => 
+  {
+  let newObjItem = 
+  {
+    fecha_alta: fechaCompleta,
+    tipoActivo_id: props.tipoActivo.id,
+    status:true,
+    campos:[]
+  };
   for (let index = 0; index < props.campos.length; index++) 
   {
      let nombreCampo = props.campos[index].campo;
      let tipoCampo = props.campos[index].input;
-     let newObjItem = [];
-     let newObj = {};
+     let campos = {};
 
-     newObj[`${nombreCampo}`] = "";
-     newObj.type = tipoCampo;
+     campos.campo = nombreCampo;
+     campos.type = tipoCampo;
+     campos.valor = null;
+     newObjItem.campos.push(campos);
 
-     newObjItem.push(newObj);
      //newObj[`${tipoCampo}`] = "";
-      //console.log(`Fifteen is ${nombreCampo} andnot ${tipoCampo}.`);
-     arregloItems.value.push(newObjItem);
+     //console.log(`Fifteen is ${nombreCampo} andnot ${tipoCampo}.`);
   }
-
-  console.log(arregloItems.value);
+  arregloItems.value.push(newObjItem); 
+ // console.log(arregloItems.value)
 }
 
-const saveItem = () => 
+const saveItems = () => 
 {
-
+  console.log(arregloItems.value);
 }
 
 </script>
@@ -56,16 +113,30 @@ const saveItem = () =>
            <template #title>
                <h2 style="font-weight:bolder">Nuevo activo</h2>
             </template>
-            <template #content>
-                <ButtonAdd @click="AddItem">+</ButtonAdd>
-                <form class="flex flex-wrap justify-center">
-                  <div v-for="campo in campos" :key="campo.id">
-                     <InputLabel>{{campo.campo}}</InputLabel>
-                     <TextInput :type="campo.input"></TextInput>
-                  </div>
-                </form>
-                <div class="flex flex-row-reverse">
-                        <button @click="saveItem" style="" class="p-2 bg-blue-500 rounded-lg hover:opacity-50">
+            <template #content>  
+              <ButtonAdd @click="AddItem">Agregar nuevo activo</ButtonAdd>
+              <div  class="mt-8">
+                <InputLabel>Categoria de activo</InputLabel>
+                <TextInput  :value="tipoActivo.nombre"  :placeholder="tipoActivo.nombre"></TextInput> 
+              </div>
+              <div class="h-72" style="overflow-y:scroll;">     
+                  <div class="flex flex-row w-full mt-2 border-b-2 p-8" style="overflow-x:scroll; " v-for="item in arregloItems" :key="item.id"> <!--Recorremos el arreglo para agregar nuevos items-->
+                        <div class="mr-2">
+                          <InputLabel>Fecha de alta</InputLabel>
+                          <TextInput type="date" v-model="item.fecha_alta"></TextInput>
+                        </div>
+                        <div class="mr-2">
+                          <InputLabel>Status</InputLabel>
+                          <Checkbox @click="!item.status"></Checkbox>
+                        </div>
+                        <div class="m-2" v-for="campo in item.campos" :key="campo">
+                            <InputLabel>{{ campo.campo }}</InputLabel>
+                            <TextInput :type="campo.type" v-model="campo.valor"></TextInput>
+                        </div>
+                     </div>
+              </div>
+              <div class="flex flex-row-reverse">
+                        <button @click="saveItems" style="" class="p-2 bg-blue-500 rounded-lg hover:opacity-50">
                             <svg style="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 30 30">
                                 <defs>
                                   <clipPath id="clip-Icono-guardar">
@@ -84,7 +155,7 @@ const saveItem = () =>
                                 </g>
                             </svg>
                         </button>
-                    </div>
+              </div>
             </template>
             
             <template #footer>

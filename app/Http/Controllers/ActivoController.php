@@ -71,4 +71,20 @@ class ActivoController extends Controller
    
        return  redirect()->back();
     }
+
+
+    public function storeItem (Request $request) 
+    {
+      return $request;
+        $arregloItems = $request['arregloItems'];
+
+        for ($i=0; $i < count($arregloItems) ; $i++) 
+        { 
+          return ($arregloItems[$i]); // recuperamos un item
+
+        }
+    }
+  
 }
+
+ 

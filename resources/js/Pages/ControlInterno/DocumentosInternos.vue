@@ -11,6 +11,7 @@ import { pickBy } from 'lodash';
 import AnimationCard from '../../Components/AnimationCard.vue';
 import { Fancybox } from '@fancyapps/ui/src/Fancybox/Fancybox.js';
 import ButtonAdd from '@/Components/ButtonAdd.vue';
+import FormDocsInternosModal from './Modals/FormDocsInternosModal.vue';
 
 
 let props = defineProps({
@@ -146,7 +147,7 @@ const updateHoverState = (isHover) =>
                   </li>
                 </div>
             </ul> 
-            <ButtonAdd v-if="$page.props.can['politics.create']" @click="showFormPolitic('create')" style="margin-top:2rem;font-family: 'Montserrat'; margin-left: 2.2rem;">AGREGAR DOCUMENTO</ButtonAdd>
+            <ButtonAdd v-if="$page.props.can['documentos-internos.create']" @click="showFormPolitic('create')" style="margin-top:2rem;font-family: 'Montserrat'; margin-left: 2.2rem;">AGREGAR DOCUMENTO</ButtonAdd>
         </div>
         <div class="documentos_view">
            <!-- Files Section -->
@@ -168,7 +169,7 @@ const updateHoverState = (isHover) =>
                          <span class="font-light text-[#1D2B4E]" style="font-size:0.8rem;  margin-left: 2rem;  font-family: 'Montserrat';">{{ politica.nombre +' '+politica.apellido_paterno+' '+politica.apellido_materno }}</span>
                      </div>
        
-                     <div v-if="$page.props.can['politics.update']" style="white-space: normal; "
+                     <div v-if="$page.props.can['documentos-internos.update']" style="white-space: normal; "
                          class="absolute z-10 w-6 h-6 py-1 bg-white rounded-full shadow -bottom-2 -right-1 hover:bg-gray-500 hover:text-white"
                          @click="showFormPolitic('update', politica)">
        
@@ -184,7 +185,7 @@ const updateHoverState = (isHover) =>
              <!-- End Files Section -->
          </div>
       </section>
-      <FormPoliticsModal :show="showingFormPolitics" :tipoPoliticas="tipoPoliticas" :politic="politic"
+      <FormDocsInternosModal :show="showingFormPolitics" :tipoPoliticas="tipoPoliticas" :politic="politic"
             :typeForm="typeFormPolitic" @close="closeFormPolitics()" />
     </AppLayout>
 </template>

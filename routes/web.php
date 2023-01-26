@@ -147,6 +147,7 @@ Route::controller(ActivoController::class)->group(function () {
     Route::get('activos/index', 'index')->name('activo.index');
     Route::get('/activosxtipo/{idTipo}', 'activos');
     Route::post('/storeCategory', 'storeCategory')->name('storeCategory');
+    Route::post('/storeItem', 'storeItem')->name('storeItem');
 });
 
 
