@@ -61,10 +61,10 @@ const closeModalAgregarNoticia = () =>
           </div>
           <div class="inicio_quienes_somos_text">
              <p class="text-lg sm:text-2xl" style="font-family: 'Montserrat'; line-height: 1.8;">
-                 <span style="font-weight:600">COORSA</span> es una empresa dedicada a innovar y<br>
-                 mejorar procesos de la cadena de suministros con<br>
-                 más de 10 servicios dentro  del rango del ramo logístico<br>
-                 ubicados en más de 9 estados de la república<br>
+                 <span style="font-weight:600">COORSA</span> es una empresa dedicada a innovar y
+                 mejorar procesos de la cadena de suministros con
+                 más de 10 servicios dentro  del rango del ramo logístico
+                 ubicados en más de 9 estados de la república
                  mexicana.
              </p>
           </div>
@@ -73,25 +73,25 @@ const closeModalAgregarNoticia = () =>
       <section class="inicio_mv">
               <div class="flex flex-col items-center align-middle inicio_m">
                 <img class="sm:mt-24 mt-8 icon_m" src="../../img/Icono_Mision.png">
-                <div>
-                   <h3 class="mt-10 text-3xl text-white" style="font-family: 'Montserrat'; ">Misión</h3>
-                   <p class="mt-5 text-2xl text-white" style="font-family: 'Montserrat'; line-height: 1.8;">
-                     Eficientar los procesos de la cadena de<br>
-                     suministros, a través de servicios de alta calidad<br>
-                     que generan ambientes de innovación logística, <br>
+                <div class="p-2 sm:p-8">
+                   <h3 class="mt-2 md:mt-10 text-3xl text-white" style="font-family: 'Montserrat'; ">Misión</h3>
+                   <p class="mt-5  text-sm  sm:text-2xl text-white" style="font-family: 'Montserrat'; line-height: 1.8;">
+                     Eficientar los procesos de la cadena de
+                     suministros, a través de servicios de alta calidad
+                     que generan ambientes de innovación logística, 
                      haciendo de lo bueno algo mejor
                    </p>
                 </div>
               </div>
               <div class="flex flex-col items-center inicio_v">
                  <img class="sm:mt-24 mt-8 icon_v" src="../../img/Icono_Vision.png">
-                 <div>
-                   <h3 class="mt-10 text-3xl text-white" style="font-family: 'Montserrat'; ">Visión</h3>
-                   <p class="mt-5 mb-16 text-2xl text-white" style="font-family: 'Montserrat';line-height: 1.8; ">
-                     Ser la empresa lider en soluciones logísticas<br>
-                     en México y en otros países, innovando y <br>
-                     creando procesos en la cadena de suministros,<br>
-                     convirtiéndonos en socios estrátegicos de <br>
+                 <div class="p-2 sm:p-8">
+                   <h3 class="mt-2 md:mt-10 text-3xl text-white" style="font-family: 'Montserrat'; ">Visión</h3>
+                   <p class="mt-5 mb-8 sm:mb-16 text-sm  sm:text-2xl text-white" style="font-family: 'Montserrat';line-height: 1.8; ">
+                     Ser la empresa lider en soluciones logísticas
+                     en México y en otros países, innovando y 
+                     creando procesos en la cadena de suministros,
+                     convirtiéndonos en socios estrátegicos de 
                      nuestros clientes.
                    </p>
                 </div>

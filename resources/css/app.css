@@ -403,6 +403,17 @@ input:checked ~ .tab-content {
         padding: 1.5rem;
     }
 
+    .inicio_quienes_somos_title
+    {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .inicio_quienes_somos_title div 
+    {
+        padding: 2rem;
+    }
+
     .inicio_mv {
         display: grid;
         grid-template-rows: repeat(2, 1fr);
@@ -415,7 +426,7 @@ input:checked ~ .tab-content {
         background-size: cover;
         grid-column: 1/2;
         grid-column-end: 3;
-        
+        padding: 2rem;
     }
 
     .contain_text_m
@@ -447,6 +458,7 @@ input:checked ~ .tab-content {
         background-size: cover;
         grid-column: 1/2;
         grid-column-end: 3;
+        padding: 2rem;
     }
 
     .icon_v {
