@@ -200,7 +200,7 @@ const updateHoverState = (isHover) =>
                 </div>
                 <!--Politics-->
                 <div style="overflow-x:scroll;  display: -webkit-box ;  ">
-                    <div v-for="politica in politicas" :key="politica.id"  class="mr-1">
+                    <div v-for="politica in politicas" :key="politica.id">
                          <AnimationCard v-if="politica.type_politic == tipoPolitica.id">
                            <CardImage  style=" height: 20rem; width:16rem;" :file="politica.pdf"> 
                               <div class="row">
@@ -231,7 +231,10 @@ const updateHoverState = (isHover) =>
                   
                                </div>
                            </CardImage>
-                      </AnimationCard>
+                         </AnimationCard>
+                         <div v-else style="display:none">
+                            
+                         </div>
                     </div>
                 </div>
              </div> 
