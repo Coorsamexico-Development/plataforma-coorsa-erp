@@ -45,7 +45,7 @@ const closeModalAgregarNoticia = () =>
                 <span style="position:absolute" class="sm:hidden  w-32 h-1 ml-6 bg-[#EC2944]"></span>
               </div>
                <div class="text2-inicio">
-                <h3 class="m-5 mt-10 text-xl sm:text-4xl text-white" style="font-family: 'Montserrat';"><span>Cónoce </span> más sobre coorsa</h3>
+                <h3 class="m-5 mt-10 text-xl sm:text-4xl text-white" style="font-family: 'Montserrat';"><span>Conoce </span> más sobre COORSA</h3>
                 <span style="position:absolute" class="hidden sm:block w-16 h-1 ml-6 bg-[#EC2944]"></span>
                </div>
             </div>

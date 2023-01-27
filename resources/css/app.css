@@ -509,6 +509,17 @@ input:checked ~ .tab-content {
      display:block;
      margin-top:4rem
    }
+
+   .objetivo
+   {
+    background-image: url('../img/Fondo-documentos.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+   }
+
+   .documentos{
+    display: none;
+   }
 }
 
 @media(min-width: 1080px) {

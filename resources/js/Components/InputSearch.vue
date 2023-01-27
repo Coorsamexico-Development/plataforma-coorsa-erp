@@ -19,7 +19,7 @@ defineExpose({ focus: () => input.value.focus() });
 </script>
 
 <template>
-    <div class="relative p-2 text-gray-600 bg-white shadow-md input-gradiante-blue" style="border-radius:2rem; border: 3px solid gray; background: transparent;" >
+    <div class="relative p-2 text-gray-600 bg-white shadow-md input-gradiante-blue" style="border-radius:2rem; border: 1px solid gray; background: transparent;" >
         <input type="search" aria-label="Search" placeholder="BUSCAR..."
             class="w-full h-5 px-5 py-1 pr-8 text-sm border-0 focus:ring-0 focus:ring-opacity-50" ref="input"
             :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" style="background:transparent">

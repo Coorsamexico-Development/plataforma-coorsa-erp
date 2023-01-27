@@ -20,7 +20,7 @@ var props = defineProps(
         </thead>
         <tbody>
             <tr v-for="activo in activos" :key="activo.id">
-               <td></td>
+               <td>{{ activo }}</td>
                <td></td>
                <td  :class="{'text-green-500':activo.status, 'text-red-500':!activo.status }">
                 <p v-if="activo.status">Activo</p>

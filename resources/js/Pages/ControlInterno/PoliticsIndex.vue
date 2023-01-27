@@ -95,14 +95,14 @@ const updateHoverState = (isHover) =>
 
 <template>
     <AppLayout title="Dashboard">
-      <section class="objetivo "  >
+      <section class="objetivo p-4">
             <div class="text-center pt-14 objetivos" style="font-family: 'Montserrat';">
-                <h1 class="text-4xl font-semibold text-white">Objetivo de documentos</h1>
-                <span  class="w-16 h-1 bg-[#EC2944] mt-4" style="display:block; margin-left: 27.5rem;"></span>
+                <h1 class="text-xl mr-12  sm:mr-16 sm:text-4xl font-semibold text-white">Objetivo de documentos</h1>
+                <span  class="w-16 h-1 bg-[#EC2944] mt-4 sm:ml-96 ml-2" style="display:block;"></span>
             </div>
-                <p class="mt-6 mb-16 text-xl text-white" style="margin-left: 27.5rem; font-family: 'Montserrat'; line-height: 1.8;">
-                       En esta sección tendrás acceso a toda la documentación normativa de la empresa de<br>
-                       manera organizada para su revisión, lo cual te permitirá cumplir con los procesos y <br>
+                <p class="sm:mt-6 mt-4 mb-4 sm:mb-16 text-sm sm:text-xl sm:ml-96 text-white" style=" font-family: 'Montserrat'; line-height: 1.8;">
+                       En esta sección tendrás acceso a toda la documentación normativa de la empresa de
+                       manera organizada para su revisión, lo cual te permitirá cumplir con los procesos y 
                        optimizar tus tiempos.
                 </p>
       </section>
@@ -187,6 +187,25 @@ const updateHoverState = (isHover) =>
              <!-- End Files Section -->
          </div>
       </section>
+      <!--Files Mobiles-->
+       <section class="sm:hidden block">
+          <div class="pl-8 pr-8">
+             <InputSearch class="mt-8" v-model="params.search"></InputSearch>
+          </div>
+          <div class="flex flex-col mt-6">
+             <div class="" v-for="tipoPolitica in tipoPoliticas" :key="tipoPolitica.id">
+                <div class="ml-2">
+                    <span  class="absolute w-2 h-8 mt-0" style="float: left;" :style="{backgroundColor:'#'+tipoPolitica.color}"></span>
+                    <h1 class="text-xl font-bold ml-4" :style="{color:'#'+tipoPolitica.color}">{{ tipoPolitica.name }}</h1>
+                </div>
+                <!--Politics-->
+                <div >
+                  {{ politicas }}
+               </div>
+             </div> 
+          </div>
+       </section>
+      <!--END FILES Mobiles-->
       <FormPoliticsModal :show="showingFormPolitics" :tipoPoliticas="tipoPoliticas" :politic="politic"
             :typeForm="typeFormPolitic" @close="closeFormPolitics()" />
     </AppLayout>
