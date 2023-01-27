@@ -107,7 +107,7 @@ const closeModalAgregarNoticia = () =>
           
         </div>
       </section>
-      <section v-if="noticias.length > 0" style="margin-top:-2rem">
+      <section v-if="noticias.length > 0" style="margin-top:-2rem" class="noticias_section">
         <div class="flex flex-col items-center mb-8">
           <h1 class="text-4xl font-bold uppercase" style="font-family: 'Montserrat';">
             <span class="text-[#1A1A22]">Solo, </span>

@@ -368,7 +368,7 @@ input:checked ~ .tab-content {
 
 /*Dashboard styles*/
 
-@media(min-width: 400px) {
+@media(min-width: 600px) {
     .inicio {
         background-image: url("../img/fondo-dashboard.jpg");
         background-repeat: no-repeat;
@@ -463,6 +463,11 @@ input:checked ~ .tab-content {
     .quienes_somos
     {
         display:none;
+    }
+
+    .noticias_section
+    {
+        display: none;
     }
 }
 
@@ -647,6 +652,11 @@ input:checked ~ .tab-content {
 .quienes_somos
 {
     display:block;
+}
+
+.noticias_section
+{
+    display: block;
 }
 }
 
