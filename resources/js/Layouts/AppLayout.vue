@@ -298,7 +298,7 @@ const logout = () => {
                         <!-- Hamburger -->
                         <div class="flex items-center -mr-2 sm:hidden">
                             <button
-                                class="inline-flex items-center justify-center p-2 text-gray-400 transition rounded-md hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500"
+                                class="inline-flex items-center justify-center p-2 text-gray-400 transition rounded-md hover:text-white  focus:outline-none  focus:text-white"
                                 @click="showingNavigationDropdown = !showingNavigationDropdown">
                                 <svg class="w-6 h-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                                     <path
@@ -314,48 +314,18 @@ const logout = () => {
                         </div>
                     </div>
                 </div>
-
-                <!-- Responsive Navigation Menu -->
-                <div :class="{ 'block': showingNavigationDropdown, 'hidden': !showingNavigationDropdown }"
-                    class="sm:hidden sm:bg-white">
-                    <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink class="sm:text-white" :href="route('dashboard')" :active="route().current('dashboard')">
-                            Inicio
-                        </ResponsiveNavLink>
-                    </div>
-                    <div v-if="$page.props.can['roles.manager']" class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('roles.index')" :active="route().current('roles.index')">
-                            Roles
-                        </ResponsiveNavLink>
-                    </div>
-                    <div class="pt-4 pb-1 border-t border-gray-200">
-                        <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink
-                                :href="route('control-interno.departamentos-aditorias.index', { 'departamento_auditoria_id': '1' })"
-                                :active="route().current('control-interno.departamentos-aditorias.index')">
-                                DASHBOARD AUDITORIAS
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('control-interno.politics.index')"
-                                :active="route().current('control-interno.politics.index')">
-                                <span class="text-xs">
-                                    DOCUMENTOS
-                                </span>
-                            </ResponsiveNavLink>
-
-                        </div>
-                    </div>
-
+                <div class="sm:hidden" :class="{ 'block': showingNavigationDropdown, 'hidden': !showingNavigationDropdown }">
                     <!-- Responsive Settings Options -->
                     <div class="pt-4 pb-1 border-t border-gray-200">
-                        <div class="flex items-center px-4">
+                        <div class="flex flex-col items-center px-4">
                             <div v-if="$page.props.jetstream.managesProfilePhotos" class="mr-3 shrink-0">
-                                <img class="object-cover w-10 h-10 rounded-full"
+                                <img class="object-cover w-24 h-24 rounded-full"
                                     :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name">
                             </div>
 
-                            <div>
-                                <div class="text-base font-medium text-gray-800">
-                                    {{ $page.props.user.name }}
+                            <div class="mt-4 flex flex-col items-center">
+                                <div class="text-base font-medium text-white" style="font-family:'Montserrat';">
+                                    {{ $page.props.user.name + ' ' + $page.props.user.apellido_paterno + ' ' + $page.props.user.apellido_materno}}
                                 </div>
                                 <div class="text-sm font-medium text-gray-500">
                                     {{ $page.props.user.email }}
@@ -373,14 +343,6 @@ const logout = () => {
                                 :href="route('api-tokens.index')" :active="route().current('api-tokens.index')">
                                 API Tokens
                             </ResponsiveNavLink>
-
-                            <!-- Authentication -->
-                            <form method="POST" @submit.prevent="logout">
-                                <ResponsiveNavLink as="button">
-                                    Log Out
-                                </ResponsiveNavLink>
-                            </form>
-
                             <!-- Team Management -->
                             <template v-if="$page.props.jetstream.hasTeamFeatures">
                                 <div class="border-t border-gray-200" />
@@ -424,6 +386,44 @@ const logout = () => {
                                 </template>
                             </template>
                         </div>
+                    </div>
+                </div>
+                <!-- Responsive Navigation Menu -->
+                <div :class="{ 'block': showingNavigationDropdown, 'hidden': !showingNavigationDropdown }"
+                    class="sm:hidden sm:bg-white">
+                    <div class="pt-2 pb-3 space-y-1">
+                        <ResponsiveNavLink class="sm:text-white" :href="route('dashboard')" :active="route().current('dashboard')">
+                            Inicio
+                        </ResponsiveNavLink>
+                    </div>
+                    <div v-if="$page.props.can['roles.manager']" class="pt-2 pb-3 space-y-1">
+                        <ResponsiveNavLink :href="route('roles.index')" :active="route().current('roles.index')">
+                            Roles
+                        </ResponsiveNavLink>
+                    </div>
+                    <div v-if="$page.props.can['roles.manager']" class="pt-2 pb-3 space-y-1">
+                        <ResponsiveNavLink :href="route('control-interno.politics.index')"  :active="route().current('control-interno.politics.index')">
+                            Control Interno
+                        </ResponsiveNavLink>
+                    </div>
+                    <div v-if="$page.props.can['rh.manager']" class="pt-2 pb-3 space-y-1">
+                        <ResponsiveNavLink :href="route('roles.index')" :active="route().current('roles.index')">
+                            Recursos Humanos
+                        </ResponsiveNavLink>
+                    </div>
+                    <div class="flex justify-center mb-2 mt-2">
+                        <h2 style="font-family: 'Montserrat'; letter-spacing:0.5rem; font-size:0.6rem" 
+                        class="text-white  mt-4">
+                            <a href="https://coorsamexico.com/">WWW.COORSAMEXICO.COM</a>
+                        </h2>
+                    </div>
+                    <div class="pt-4 pb-1 border-t border-gray-200">
+                       <!-- Authentication -->
+                        <form method="POST" @submit.prevent="logout">
+                            <ResponsiveNavLink as="button">
+                                Salir
+                            </ResponsiveNavLink>
+                        </form>
                     </div>
                 </div>
             </nav>
