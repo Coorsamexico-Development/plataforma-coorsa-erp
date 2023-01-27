@@ -205,7 +205,7 @@ const isDownload = computed((file) => {
                 <div style="overflow-x:scroll;  display: -webkit-box ;  ">
                     <div v-for="politica in politicas" :key="politica.id">
                          <AnimationCard v-if="politica.type_politic == tipoPolitica.id">
-                           <CardImageResponsive  style=" height: 20rem; width:16rem;"> 
+                           <CardImageResponsive class="ml-3" style=" height: 20rem; width:16rem;"> 
                               <div class="row">
                                    <div class="col-lg-3 col-md-4">
                                     
