@@ -38,9 +38,9 @@ const closeModalAgregarNoticia = () =>
     <AppLayout title="Dashboard">
       <section class="inicio">
         <div class="inicio_info">
-            <div class="ml-16 mt-20 sm:mt-0 inicio_info_text">
-              <div class="">
-                <h1 class="m-5 sm:text-6xl text-2xl  sm:font-bold text-white" style="font-family: 'Montserrat'; ">Somos más que <br> un TEAM.</h1>
+            <div class="sm:ml-16  sm:mt-0 inicio_info_text">
+              <div class="p-0">
+                <h1 class="sm:m-5 sm:text-6xl text-2xl font-semibold   sm:font-bold text-white" style="font-family: 'Montserrat'; ">Somos más que <br> un TEAM.</h1>
                 <span style="position:absolute" class="sm:hidden w-32 h-1 ml-6 bg-[#EC2944]"></span>
               </div>
                <div class="">
@@ -112,7 +112,7 @@ const closeModalAgregarNoticia = () =>
           
         </div>
       </section>
-      <section v-if="noticias.length > 0" style="margin-top:-2rem">
+      <section class="section_noti" v-if="noticias.length > 0" >
         <div class="flex flex-col items-center mb-8">
           <h1 class="text-4xl font-bold uppercase" style="font-family: 'Montserrat';">
             <span class="text-[#1A1A22]">Solo, </span>

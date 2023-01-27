@@ -390,8 +390,8 @@ input:checked ~ .tab-content {
       grid-row: 2/3;
       display: flex;
       flex-direction: column;
-      margin-top: 0;
-      margin-left: 0;
+      margin-top: 2rem;
+      margin-left: 1rem;
     }
 
     .inicio_quienes_somos{
@@ -482,6 +482,10 @@ input:checked ~ .tab-content {
         display: none;
     }
 
+    .section_noti
+    {
+        margin-top: 28rem;
+    }
 
 
 }
@@ -669,10 +673,17 @@ input:checked ~ .tab-content {
     display:block;
 }
 
+.section_noti
+{
+    margin-top:-2rem
+}
+
 .noticias_section
 {
     display: block;
 }
+
+
 }
 
 
