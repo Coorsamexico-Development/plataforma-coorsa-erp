@@ -504,9 +504,19 @@ input:checked ~ .tab-content {
      overflow-x: scroll;
      display: -webkit-box ;
    }
+
+   .ellos_hablan_carrusel{
+     display:block;
+     margin-top:4rem
+   }
 }
 
 @media(min-width: 1080px) {
+
+    .ellos_hablan_carrusel
+    {
+        display:none
+    }
 
     .img_somos
     {

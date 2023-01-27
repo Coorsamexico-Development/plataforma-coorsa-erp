@@ -7,6 +7,7 @@ import CardVideos from './PartialsDashboard/CardVideos.vue';
 import CardNominas from './PartialsDashboard/CardNominas.vue';
 import CardMV from './PartialsDashboard/CardMV.vue';
 import CarruselNoticias from './PartialsDashboard/CarruselNoticias.vue';
+import CarruselEllosHablan from './PartialsDashboard/CarruselEllosHablan.vue';
 import MenuDesplegable from './PartialsDashboard/MenuDesplegable.vue';
 import ButtonAdd from '@/Components/ButtonAdd.vue';
 import { onMounted, reactive, ref, watch } from 'vue';
@@ -114,8 +115,8 @@ const closeModalAgregarNoticia = () =>
       </section>
       <section class="section_noti" v-if="noticias.length > 0" >
         <div class="flex flex-col items-center mb-8">
-          <h1 class="text-4xl font-bold uppercase" style="font-family: 'Montserrat';">
-            <span class="text-[#1A1A22]">Solo, </span>
+          <h1 class="sm:text-4xl font-bold uppercase text-xl tracking-widest" style="font-family: 'Montserrat';">
+            <span class="text-[#1A1A22]">Sólo, </span>
             <span class="text-[#EC2944]"> lo más reciente</span>
           </h1>
         </div>
@@ -171,6 +172,9 @@ const closeModalAgregarNoticia = () =>
           </h3>
           <h2 style="font-family: 'Montserrat'; letter-spacing:2rem; margin-top: 3rem;" class="text-[#1A1A22] text-2xl mt-4"><a href="https://coorsamexico.com/">WWW.COORSAMEXICO.COM</a></h2>
         </div>
+      </section>
+      <section class="ellos_hablan_carrusel">
+         <CarruselEllosHablan></CarruselEllosHablan>
       </section>
     </AppLayout>
 </template>
