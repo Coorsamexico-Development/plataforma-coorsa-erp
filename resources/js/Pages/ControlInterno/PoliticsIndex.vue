@@ -183,7 +183,7 @@ const updateHoverState = (isHover) =>
        
                      </div>
                  </CardImage>
-             </AnimationCard>
+          </AnimationCard>
              <!-- End Files Section -->
          </div>
       </section>
@@ -192,16 +192,48 @@ const updateHoverState = (isHover) =>
           <div class="pl-8 pr-8">
              <InputSearch class="mt-8" v-model="params.search"></InputSearch>
           </div>
-          <div class="flex flex-col mt-6">
+          <div class="mt-6">
              <div class="" v-for="tipoPolitica in tipoPoliticas" :key="tipoPolitica.id">
                 <div class="ml-2">
                     <span  class="absolute w-2 h-8 mt-0" style="float: left;" :style="{backgroundColor:'#'+tipoPolitica.color}"></span>
                     <h1 class="text-xl font-bold ml-4" :style="{color:'#'+tipoPolitica.color}">{{ tipoPolitica.name }}</h1>
                 </div>
                 <!--Politics-->
-                <div >
-                  {{ politicas }}
-               </div>
+                <div style="overflow-x:scroll;  display: flex ; ">
+                    <div v-for="politica in politicas" :key="politica.id"  class="m-3">
+                         <AnimationCard v-if="politica.type_politic == tipoPolitica.id">
+                           <CardImage  style=" height: 20rem; width:16rem;" :file="politica.pdf"> 
+                              <div class="row">
+                                   <div class="col-lg-3 col-md-4">
+                                       <img class="h-48" style="width:50rem;" :src="politica.imagePolitic" />
+                                   </div>
+                               </div>
+                  
+                               <div class="pt-6 row">
+                                  <span class="absolute w-2 h-12" style="float: left;" :style="{backgroundColor:'#'+politica.color}"></span>
+                                   <span class="text-[#1D2B4E] ;" style="font-size:0.9rem; font-weight: 600; margin-left: 2rem; font-family: 'Montserrat';display: block;">{{ politica.namepolitica }}</span>
+                           
+                               </div>
+           
+                               <div class="pb-12 row">
+                                   <span class="font-light text-[#1D2B4E]" style="font-size:0.8rem;  margin-left: 2rem;  font-family: 'Montserrat';">{{ politica.nombre +' '+politica.apellido_paterno+' '+politica.apellido_materno }}</span>
+                               </div>
+                  
+                               <div v-if="$page.props.can['politics.update']" style="white-space: normal; "
+                                   class="absolute z-10 w-6 h-6 py-1 bg-white rounded-full shadow -bottom-2 -right-1 hover:bg-gray-500 hover:text-white"
+                                   @click="showFormPolitic('update', politica)">
+                  
+                                   <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 m-auto" fill="currentColor"
+                                       viewBox="0 0 16 16">
+                                       <path
+                                           d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+                                   </svg>
+                  
+                               </div>
+                           </CardImage>
+                      </AnimationCard>
+                    </div>
+                </div>
              </div> 
           </div>
        </section>

@@ -21,7 +21,7 @@ const isDownload = computed(() => {
 
 </script>
 <template>
-    <div class="h-48 bg-white shadow-xl hover:shadow-md w-36 md:h-52 md:w-44" 
+    <div class="h-48 bg-white sm:rounded-none rounded-lg shadow-xl hover:shadow-md w-36 md:h-52 md:w-44" 
     style="display: flex;
     align-items: center;
     justify-content: space-evenly;

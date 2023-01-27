@@ -1,5 +1,5 @@
 <template>
-    <TransitionGroup name="list" mode="out-in" tag="div" class="flex flex-wrap gap-4 py-6">
+    <TransitionGroup name="list" mode="out-in" tag="div" class="flex flex-wrap gap-4 py-6 ">
         <slot />
     </TransitionGroup>
 </template>
