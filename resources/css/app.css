@@ -368,7 +368,7 @@ input:checked ~ .tab-content {
 
 /*Dashboard styles*/
 
-@media(min-width: 600px) {
+@media(max-width: 600px) {
     .inicio {
         background-image: url("../img/fondo-dashboard.jpg");
         background-repeat: no-repeat;
