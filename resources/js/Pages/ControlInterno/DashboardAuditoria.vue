@@ -52,17 +52,19 @@ watch(params, (newParams) => {
 
 <template>
     <AppLayout title="Dashboard">
-      <section class="objetivo "  >
-            <div class="text-center pt-14 objetivo_area" style="font-family: 'Montserrat';">
+      <section class="objetivo p-8"  >
+            <div class="text-center mr-0 sm:mr-96 pt-14 " style="font-family: 'Montserrat';">
                 <h1 class="text-4xl font-semibold text-white">Objetivo del área</h1>
-                <span  class="w-16 h-1 bg-[#EC2944] mt-4" style="display:block; margin-left: 27.5rem;"></span>
+                <span  class="w-16 h-1 bg-[#EC2944] mt-4" style="display:block;"></span>
             </div>
-                <p class="mt-6 mb-16 text-xl text-white" style="margin-left: 27.5rem; font-family: 'Montserrat'; line-height: 1.8;">
-                       Dentro de Control Interno, nos encargamos de la creación  y seguimiento del cumplimiento de los <br>
-                       procesos, políticas, manuales, normas y métodos estratégicos de la empresa, todo con la finalidad de <br>
-                       llegar al plan estratégico de esta, para poder lograrlo se realizan evaluaciones continuamente a las <br>
+            <div class="sm:mr-12 mr-0 sm:pl-16">
+                <p class="mt-6 mb-16 text-xl sm:ml-72 text-white" style="font-family: 'Montserrat'; line-height: 1.8;">
+                       Dentro de Control Interno, nos encargamos de la creación  y seguimiento del cumplimiento de los 
+                       procesos, políticas, manuales, normas y métodos estratégicos de la empresa, todo con la finalidad de 
+                       llegar al plan estratégico de esta, para poder lograrlo se realizan evaluaciones continuamente a las 
                        distintas áreas que la conforman.
                 </p>
+            </div>
        </section>
        <section class="documentos">
         <div class="lateral">
