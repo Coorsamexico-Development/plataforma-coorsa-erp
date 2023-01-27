@@ -675,8 +675,7 @@ input:checked ~ .tab-content {
         grid-column: 1/2;
         grid-column-end: 3;
         margin-top: 0;
-        padding: 3rem;
-      
+        padding-top:3rem;
     }
 }
 
