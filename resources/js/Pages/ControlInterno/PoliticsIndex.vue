@@ -3,7 +3,7 @@ import { reactive, ref, watch, computed } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import ButtonSeccion from '../../Components/ButtonSeccion.vue';
 import Title from '../../Components/Title.vue';
-import CardImage from '@/Components/CardImage.vue';
+import CardImageResponsive from '@/Components/CardImageResponsive.vue';
 import InputSearch from '@/Components/InputSearch.vue';
 import FormPoliticsModal from './Modals/FormPoliticsModal.vue';
 import { Inertia } from '@inertiajs/inertia';
@@ -89,11 +89,8 @@ const updateHoverState = (isHover) =>
    console.log(hoverState.value);
 } 
 
-const isDownload = computed(() => {
-    if (props.file.endsWith('.pdf')) {
-        return false
-    }
-    return true
+const isDownload = computed((file) => {
+   console.log(file);
 })
 
 
@@ -208,10 +205,11 @@ const isDownload = computed(() => {
                 <div style="overflow-x:scroll;  display: -webkit-box ;  ">
                     <div v-for="politica in politicas" :key="politica.id">
                          <AnimationCard v-if="politica.type_politic == tipoPolitica.id">
-                           <CardImage  style=" height: 20rem; width:16rem;"> 
+                           <CardImageResponsive  style=" height: 20rem; width:16rem;"> 
                               <div class="row">
                                    <div class="col-lg-3 col-md-4">
-                                    <a v-if="isDownload" target="_blank" :href="politica.pdf" download>
+                                    
+                                    <a v-if="!politica.pdf.endsWith('.pdf') >0" target="_blank" :href="politica.pdf" download>
                                       <img class="h-48"  style="width:50rem;" :src="politica.imagePolitic" />
                                     </a>
                                     <a v-else>
@@ -241,7 +239,7 @@ const isDownload = computed(() => {
                                    </svg>
                   
                                </div>
-                           </CardImage>
+                           </CardImageResponsive>
                          </AnimationCard>
                          <div v-else style="display:none">
                             
