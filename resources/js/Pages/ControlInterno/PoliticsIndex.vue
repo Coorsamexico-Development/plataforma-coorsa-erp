@@ -199,7 +199,7 @@ const updateHoverState = (isHover) =>
                     <h1 class="text-xl font-bold ml-4" :style="{color:'#'+tipoPolitica.color}">{{ tipoPolitica.name }}</h1>
                 </div>
                 <!--Politics-->
-                <div style="overflow-x:scroll;  display: flex ; ">
+                <div style="overflow-x:scroll;  display: -webkit-box ;  ">
                     <div v-for="politica in politicas" :key="politica.id"  class="m-3">
                          <AnimationCard v-if="politica.type_politic == tipoPolitica.id">
                            <CardImage  style=" height: 20rem; width:16rem;" :file="politica.pdf"> 
