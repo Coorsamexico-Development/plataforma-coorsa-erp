@@ -38,28 +38,33 @@ const closeModalAgregarNoticia = () =>
     <AppLayout title="Dashboard">
       <section class="inicio">
         <div class="inicio_info">
-            <div class="ml-16 mt-20   inicio_info_text">
-              <div>
-                 <h1 class="m-5 text-2xl sm:text-6xl font-bold sm:font-semibold text-white" style="font-family: 'Montserrat'; ">Somos más que <br> un TEAM.</h1>
-                 <span style="position:absolute" class="sm:hidden w-32 h-1 ml-6 bg-[#EC2944]"></span>
+            <div class="ml-16 mt-20 sm:mt-0 inicio_info_text">
+              <div class="">
+                <h1 class="m-5 sm:text-6xl text-2xl  sm:font-bold text-white" style="font-family: 'Montserrat'; ">Somos más que <br> un TEAM.</h1>
+                <span style="position:absolute" class="sm:hidden w-32 h-1 ml-6 bg-[#EC2944]"></span>
               </div>
-              <div>
+               <div class="">
                 <h3 class="m-5 mt-10 text-xl sm:text-4xl text-white" style="font-family: 'Montserrat';"><span>Cónoce </span> más sobre coorsa</h3>
                 <span style="position:absolute" class="hidden sm:block w-16 h-1 ml-6 bg-[#EC2944]"></span>
-              </div>
+               </div>
             </div>
         </div>
         <div class="inicio_quienes_somos">
           <div class="inicio_quienes_somos_title">
-            <h3 class="text-[rgb(236,41,68)] font-bold text-4xl sm:text-5xl" style="font-family: 'Montserrat';font-weight:500">QUIENES</h3>
-            <h3 class="text-[#1D2B4E] font-bold text-8xl sm:text-9xl" style=" font-family: 'Montserrat'; font-weight:900"><strong>SOMOS</strong></h3>
+            <div>
+              <img src="img">
+            </div>
+            <div>
+              <h3 class="text-[rgb(236,41,68)] font-bold text-3xl sm:text-5xl" style="font-family: 'Montserrat';font-weight:500">QUIENES</h3>
+              <h3 class="text-[#1D2B4E] font-bold text-4xl sm:text-9xl" style=" font-family: 'Montserrat'; font-weight:900"><strong>SOMOS</strong></h3>
+            </div>
           </div>
           <div class="inicio_quienes_somos_text">
              <p class="text-lg sm:text-2xl" style="font-family: 'Montserrat'; line-height: 1.8;">
-                 <span style="font-weight:600">COORSA</span> es una empresa dedicada a innovar y
-                 mejorar procesos de la cadena de suministros con
-                 más de 10 servicios dentro  del rango del ramo logístico
-                 ubicados en más de 9 estados de la república
+                 <span style="font-weight:600">COORSA</span> es una empresa dedicada a innovar y<br>
+                 mejorar procesos de la cadena de suministros con<br>
+                 más de 10 servicios dentro  del rango del ramo logístico<br>
+                 ubicados en más de 9 estados de la república<br>
                  mexicana.
              </p>
           </div>
@@ -68,9 +73,9 @@ const closeModalAgregarNoticia = () =>
       <section class="inicio_mv">
               <div class="flex flex-col items-center align-middle inicio_m">
                 <img class="sm:mt-24 mt-8 icon_m" src="../../img/Icono_Mision.png">
-                <div class="contain_text_m">
-                   <h3 class="mt-10 text-3xl text-white title_m" style="font-family: 'Montserrat'; ">Misión</h3>
-                   <p class="mt-5 text-2xl text-white text_m" style="font-family: 'Montserrat'; line-height: 1.8;">
+                <div>
+                   <h3 class="mt-10 text-3xl text-white" style="font-family: 'Montserrat'; ">Misión</h3>
+                   <p class="mt-5 text-2xl text-white" style="font-family: 'Montserrat'; line-height: 1.8;">
                      Eficientar los procesos de la cadena de<br>
                      suministros, a través de servicios de alta calidad<br>
                      que generan ambientes de innovación logística, <br>
@@ -107,7 +112,7 @@ const closeModalAgregarNoticia = () =>
           
         </div>
       </section>
-      <section v-if="noticias.length > 0" style="margin-top:-2rem" class="noticias_section">
+      <section v-if="noticias.length > 0" style="margin-top:-2rem">
         <div class="flex flex-col items-center mb-8">
           <h1 class="text-4xl font-bold uppercase" style="font-family: 'Montserrat';">
             <span class="text-[#1A1A22]">Solo, </span>
@@ -121,7 +126,7 @@ const closeModalAgregarNoticia = () =>
       <ButtonAdd v-if="$page.props.can['noticias.create']" style="float:right" class="mr-8"  @click="openModalAgregarNoticia">Agregar</ButtonAdd>
       <ModalAddNoticia :show="modalAddNoticia" @close="closeModalAgregarNoticia "></ModalAddNoticia>
       <section class="grid grid-rows-3 mt-28 quienes_somos">
-        <div class="ml-16 mb-32">
+        <div class="ml-16 ">
            <h2 class="text-[#EC2944] text-5xl font-semibold" style="font-family: 'Montserrat';">ELLOS HABLAN</h2>
            <h1 class="text-[#1A1A22] font-extrabold text-8xl" style="font-family: 'Montserrat'; ">POR NOSOTROS</h1>
         </div>
@@ -158,7 +163,7 @@ const closeModalAgregarNoticia = () =>
                 tengan un crecimiento."</p>
            </div>
         </div>
-        <div class="flex flex-col items-center justify-center mt-8 mb-4">
+        <div class="flex flex-col items-center justify-center">
           <h3 class="text-5xl font-bold" style="font-family: 'Montserrat';">
             <span class="text-[#1A1A22] ">HACIENDO DE LO BUENO, </span>
             <span class="text-[#EC2944]">ALGO MEJOR</span>

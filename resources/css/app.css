@@ -469,6 +469,9 @@ input:checked ~ .tab-content {
     {
         display: none;
     }
+
+
+
 }
 
 @media(min-width: 1080px) {
