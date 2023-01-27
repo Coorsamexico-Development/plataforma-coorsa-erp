@@ -125,8 +125,9 @@ const closeModalAgregarNoticia = () =>
       </section>
       <ButtonAdd v-if="$page.props.can['noticias.create']" style="float:right" class="mr-8"  @click="openModalAgregarNoticia">Agregar</ButtonAdd>
       <ModalAddNoticia :show="modalAddNoticia" @close="closeModalAgregarNoticia "></ModalAddNoticia>
+      
       <section class="grid grid-rows-3 mt-28 quienes_somos">
-        <div class="ml-16 ">
+        <div class="ml-16  sm:mb-32">
            <h2 class="text-[#EC2944] text-5xl font-semibold" style="font-family: 'Montserrat';">ELLOS HABLAN</h2>
            <h1 class="text-[#1A1A22] font-extrabold text-8xl" style="font-family: 'Montserrat'; ">POR NOSOTROS</h1>
         </div>
@@ -163,7 +164,7 @@ const closeModalAgregarNoticia = () =>
                 tengan un crecimiento."</p>
            </div>
         </div>
-        <div class="flex flex-col items-center justify-center">
+        <div class="flex flex-col items-center justify-center mt-8 mb-4">
           <h3 class="text-5xl font-bold" style="font-family: 'Montserrat';">
             <span class="text-[#1A1A22] ">HACIENDO DE LO BUENO, </span>
             <span class="text-[#EC2944]">ALGO MEJOR</span>
