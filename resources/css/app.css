@@ -391,8 +391,20 @@ input:checked ~ .tab-content {
       display: flex;
       flex-direction: column;
       margin-top: 2rem;
-      margin-left: 1rem;
+      margin-left: 0rem;
     }
+
+    .text1-inicio
+    {
+        margin-top: 4rem;
+    }
+
+    .text2-inicio
+    {
+        margin-top: -2rem;
+        margin-bottom: -4rem;
+    }
+    
 
     .inicio_quienes_somos{
         padding-top: 3rem;
@@ -487,10 +499,20 @@ input:checked ~ .tab-content {
         margin-top: 28rem;
     }
 
-
+   .noticias_desp
+   {
+     overflow-x: scroll;
+     display: -webkit-box ;
+   }
 }
 
 @media(min-width: 1080px) {
+
+    .img_somos
+    {
+        display: none;
+    }
+
     .inicio {
         background-image: url("../img/HOME.png");
         background-repeat: no-repeat;
@@ -683,6 +705,13 @@ input:checked ~ .tab-content {
     display: block;
 }
 
+.noticias_desp
+{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  margin: 4rem;
+  column-gap: 4rem;
+}
 
 }
 

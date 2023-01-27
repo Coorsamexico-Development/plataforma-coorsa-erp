@@ -401,7 +401,7 @@ const logout = () => {
                             Roles
                         </ResponsiveNavLink>
                     </div>
-                    <div v-if="$page.props.can['roles.manager']" class="pt-2 pb-3 space-y-1">
+                    <div  class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('control-interno.politics.index')"  :active="route().current('control-interno.politics.index')">
                             Control Interno
                         </ResponsiveNavLink>

@@ -38,12 +38,12 @@ const closeModalAgregarNoticia = () =>
     <AppLayout title="Dashboard">
       <section class="inicio">
         <div class="inicio_info">
-            <div class="sm:ml-16  sm:mt-0 inicio_info_text">
-              <div class="p-0">
-                <h1 class="sm:m-5 sm:text-6xl text-2xl font-semibold   sm:font-bold text-white" style="font-family: 'Montserrat'; ">Somos más que <br> un TEAM.</h1>
-                <span style="position:absolute" class="sm:hidden w-32 h-1 ml-6 bg-[#EC2944]"></span>
+            <div class="sm:ml-16  sm:mt-0  inicio_info_text">
+              <div class="text1-inicio">
+                <h1 class="sm:m-5 ml-6 sm:text-6xl text-2xl font-semibold   sm:font-bold text-white" style="font-family: 'Montserrat'; ">Somos más que <br> un TEAM.</h1>
+                <span style="position:absolute" class="sm:hidden  w-32 h-1 ml-6 bg-[#EC2944]"></span>
               </div>
-               <div class="">
+               <div class="text2-inicio">
                 <h3 class="m-5 mt-10 text-xl sm:text-4xl text-white" style="font-family: 'Montserrat';"><span>Cónoce </span> más sobre coorsa</h3>
                 <span style="position:absolute" class="hidden sm:block w-16 h-1 ml-6 bg-[#EC2944]"></span>
                </div>
@@ -52,7 +52,7 @@ const closeModalAgregarNoticia = () =>
         <div class="inicio_quienes_somos">
           <div class="inicio_quienes_somos_title">
             <div>
-              <img src="img">
+              <img class="img_somos" src="../../img/icono-lineas.png">
             </div>
             <div>
               <h3 class="text-[rgb(236,41,68)] font-bold text-3xl sm:text-5xl" style="font-family: 'Montserrat';font-weight:500">QUIENES</h3>
@@ -60,7 +60,7 @@ const closeModalAgregarNoticia = () =>
             </div>
           </div>
           <div class="inicio_quienes_somos_text">
-             <p class="text-lg sm:text-2xl" style="font-family: 'Montserrat'; line-height: 1.8;">
+             <p class="text-base sm:text-2xl" style="font-family: 'Montserrat'; line-height: 1.8;">
                  <span style="font-weight:600">COORSA</span> es una empresa dedicada a innovar y
                  mejorar procesos de la cadena de suministros con
                  más de 10 servicios dentro  del rango del ramo logístico
@@ -119,7 +119,7 @@ const closeModalAgregarNoticia = () =>
             <span class="text-[#EC2944]"> lo más reciente</span>
           </h1>
         </div>
-        <div class="grid grid-cols-3 m-4 gap-x-8">
+        <div class="noticias_desp">
            <CardNoticias  v-for="noticia in noticias" :key="noticia.id" :noticia="noticia"></CardNoticias> 
         </div>
       </section>
