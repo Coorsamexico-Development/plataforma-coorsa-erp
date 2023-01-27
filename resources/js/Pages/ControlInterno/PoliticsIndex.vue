@@ -89,6 +89,12 @@ const updateHoverState = (isHover) =>
    console.log(hoverState.value);
 } 
 
+const isDownload = computed(() => {
+    if (props.file.endsWith('.pdf')) {
+        return false
+    }
+    return true
+})
 
 
 </script>
@@ -202,10 +208,15 @@ const updateHoverState = (isHover) =>
                 <div style="overflow-x:scroll;  display: -webkit-box ;  ">
                     <div v-for="politica in politicas" :key="politica.id">
                          <AnimationCard v-if="politica.type_politic == tipoPolitica.id">
-                           <CardImage  style=" height: 20rem; width:16rem;" :file="politica.pdf"> 
+                           <CardImage  style=" height: 20rem; width:16rem;"> 
                               <div class="row">
                                    <div class="col-lg-3 col-md-4">
-                                       <img class="h-48" style="width:50rem;" :src="politica.imagePolitic" />
+                                    <a v-if="isDownload" target="_blank" :href="politica.pdf" download>
+                                      <img class="h-48"  style="width:50rem;" :src="politica.imagePolitic" />
+                                    </a>
+                                    <a v-else>
+                                        <img class="h-48" :href="politica.pdf" data-fancybox data-type="pdf" style="width:50rem;" :src="politica.imagePolitic" />
+                                    </a> 
                                    </div>
                                </div>
                   
