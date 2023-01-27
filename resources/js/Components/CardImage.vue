@@ -29,10 +29,8 @@ const isDownload = computed(() => {
     height: 14rem;"
     >
         <div class="relative flex flex-col justify-center font-bold text-gray-400 mt-11 h-1/4">
-            <slot />
-        </div>
-        <div style="" class="sm:absolute  z-40 float-left w-6 h-6 py-1 transition duration-300 bg-white rounded-full group-hover:scale-125 hover:bg-green-500 hover:text-white">
-            <a v-if="isDownload" target="_blank" :href="file" download>
+            <div style="" class="sm:absolute  z-40 float-left w-6 h-6 py-1 transition duration-300 bg-white rounded-full group-hover:scale-125 hover:bg-green-500 hover:text-white">
+            <a class="" v-if="isDownload" target="_blank" :href="file" download>
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mx-auto" fill="currentColor"
                     viewBox="0 0 16 16">
                     <path fill-rule="evenodd"
@@ -49,5 +47,8 @@ const isDownload = computed(() => {
                 </svg>
             </a>
         </div>
+            <slot />
+        </div>
+
     </div>
 </template>

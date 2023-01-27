@@ -215,7 +215,7 @@ const updateHoverState = (isHover) =>
                            
                                </div>
            
-                               <div class="pb-12 row">
+                               <div class="pb-12 row ">
                                    <span class="font-light text-[#1D2B4E]" style="font-size:0.8rem;  margin-left: 2rem;  font-family: 'Montserrat';">{{ politica.nombre +' '+politica.apellido_paterno+' '+politica.apellido_materno }}</span>
                                </div>
                   
