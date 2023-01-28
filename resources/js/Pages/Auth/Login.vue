@@ -12,10 +12,11 @@ import ButtonAdd from "@/Components/ButtonAdd.vue";
 import $ from "jquery";
 
 onMounted(() => {
-    /*
+    
     $(".info-item .btn").click(function () {
         $(".container").toggleClass("log-in");
     });
+    /*
     $(".container-form .btn").click(function () {
         $(".container").addClass("active");
     });
@@ -119,7 +120,7 @@ const submitReset = () => {
                             </div>
                         </div>
                         <div class="info-item s log-in">
-                            <div class="table sm:ml-8">
+                            <div class="table sm:ml-8 ml-10">
                                 <div class="table-cell">
                                     <p
                                         style="
@@ -175,7 +176,7 @@ const submitReset = () => {
                             </div>
                         </div>
                         <div class="info-item log-in">
-                            <div class="table" style="margin-left: 2rem">
+                            <div class="table">
                                 <div class="table-cell">
                                     <p
                                         class="hidden sm:block"
@@ -183,6 +184,7 @@ const submitReset = () => {
                                             color: white;
                                             margin: 0;
                                             font-size: 1rem;
+                                          
                                         "
                                     >
                                         ¿Olvidaste tu <br />contraseña?
@@ -193,6 +195,7 @@ const submitReset = () => {
                                             color: white;
                                             margin: 0;
                                             font-size: 1rem;
+                                          
                                         "
                                     >
                                         ¿Olvidaste tu contraseña?
@@ -261,6 +264,7 @@ const submitReset = () => {
                                     </div>
                                     <div class="m-8">
                                         <form>
+                                            
                                             <div class="mt-10">
                                                 <TextInput
                                                     id="email"
@@ -370,13 +374,19 @@ const submitReset = () => {
                                         </h1>
                                     </div>
                                     <div class="ml-2 mr-2">
+                                      <div class="sm:hidden static mt-8 ml-2">
+                                        <span class="bg-[#EC2944] absolute w-2 h-12"></span>
+                                        <h1 class="text-xl ml-4">Reestablece<br>
+                                            <span class="uppercase font-bold">Tu contraseña</span>
+                                        </h1>
+                                      </div>
                                         <form>
-                                            <div class="mt-10">
+                                            <div class="mt-10 ml-6">
                                                 <TextInput
                                                     id="email"
                                                     v-model="formReset.email"
                                                     type="email"
-                                                    class="block w-full mt-1 text-gray-500 opacity-80"
+                                                    class="block w-full  mt-1 text-gray-500 opacity-80"
                                                     required
                                                     autofocus
                                                     placeholder="Usuario"
@@ -408,6 +418,7 @@ const submitReset = () => {
                                                     }"
                                                     :disabled="form.processing"
                                                 >
+                                                
                                                     Enviar
                                                 </button>
                                             </div>
@@ -430,8 +441,8 @@ const submitReset = () => {
             font-family: 'Montserrat';
         "
     >
-        <h2 class="text-white text-xs sm:text-xl" style="letter-spacing: 1rem">
-            <a href="https://coorsamexico.com/">WWW.COORSAMEXICO.COM</a>
+        <h2 class="text-white">
+            <a class="text-xs sm:xl  text_link" href="https://coorsamexico.com/">WWW.COORSAMEXICO.COM</a>
         </h2>
     </div>
 </template>

@@ -314,7 +314,7 @@ input:checked ~ .tab-content {
     background-size: cover;
     background-position: center;
     font-family: var(--fuentePrincipal);
-    height: 100%;
+    height:200%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(5, 1fr);
@@ -520,6 +520,13 @@ input:checked ~ .tab-content {
    .documentos{
     display: none;
    }
+
+   .text_link
+   {
+     letter-spacing: 0.4rem 
+   }
+
+
 }
 
 @media(min-width: 1080px) {
@@ -732,6 +739,11 @@ input:checked ~ .tab-content {
   grid-template-columns: repeat(3,1fr);
   margin: 4rem;
   column-gap: 4rem;
+}
+
+.text_link
+{
+  letter-spacing: 1rem 
 }
 
 }
