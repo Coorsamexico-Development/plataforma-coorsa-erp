@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="35" viewBox="0 0 32 35">
+  <defs>
+    <clipPath id="clip-Icono-eliminar">
+      <rect width="32" height="35"/>
+    </clipPath>
+  </defs>
+  <g id="Icono-eliminar" clip-path="url(#clip-Icono-eliminar)">
+    <rect width="32" height="35" fill="rgba(255,255,255,0)"/>
+    <g id="eliminar" transform="translate(7.003 6.001)">
+      <path id="Trazado_318" data-name="Trazado 318" d="M222.939,154.7a.541.541,0,0,0-.541.541v10.221a.541.541,0,0,0,1.082,0V155.244A.541.541,0,0,0,222.939,154.7Zm0,0" transform="translate(-210.374 -146.338)" fill="#fff"/>
+      <path id="Trazado_319" data-name="Trazado 319" d="M104.939,154.7a.541.541,0,0,0-.541.541v10.221a.541.541,0,0,0,1.082,0V155.244A.541.541,0,0,0,104.939,154.7Zm0,0" transform="translate(-98.756 -146.338)" fill="#fff"/>
+      <path id="Trazado_320" data-name="Trazado 320" d="M1.533,6.873V20.2a2.984,2.984,0,0,0,.793,2.058,2.663,2.663,0,0,0,1.932.835H14.49a2.663,2.663,0,0,0,1.932-.835,2.984,2.984,0,0,0,.793-2.058V6.873a2.066,2.066,0,0,0-.53-4.063H13.917V2.135A2.124,2.124,0,0,0,11.775,0h-4.8A2.124,2.124,0,0,0,4.832,2.135v.676H2.063a2.066,2.066,0,0,0-.53,4.063ZM14.49,22.009H4.258A1.713,1.713,0,0,1,2.614,20.2V6.921h13.52V20.2A1.713,1.713,0,0,1,14.49,22.009ZM5.913,2.135A1.042,1.042,0,0,1,6.973,1.08h4.8a1.042,1.042,0,0,1,1.06,1.055v.676H5.913ZM2.063,3.893H16.686a.973.973,0,1,1,0,1.947H2.063a.973.973,0,1,1,0-1.947Zm0,0" transform="translate(0 0)" fill="#fff"/>
+      <path id="Trazado_321" data-name="Trazado 321" d="M163.939,154.7a.541.541,0,0,0-.541.541v10.221a.541.541,0,0,0,1.082,0V155.244A.541.541,0,0,0,163.939,154.7Zm0,0" transform="translate(-154.565 -146.338)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

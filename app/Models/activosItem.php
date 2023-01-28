@@ -19,4 +19,9 @@ class activosItem extends Model
     {
        return $this->belongsTo('App\tipos_activo');
     }
+
+    public function valor_campos_activos ()
+    {
+        return $this->hasMany(valorCampoActivo::class,'activo_id');
+    }
 }

@@ -156,11 +156,16 @@ const isDownload = computed((file) => {
         </div>
         <div class="documentos_view">
            <!-- Files Section -->
-          <AnimationCard  >
+          <AnimationCard>
                  <CardImage  style="margin:1.8rem; height: 20rem; width:16rem; margin-top: 4rem;" v-for="politica in politicas" :key="politica.id" :file="politica.pdf"> 
                     <div class="row">
                          <div class="col-lg-3 col-md-4">
-                             <img class="h-48" style="width:50rem;" :src="politica.imagePolitic" />
+                            <a v-if="!politica.pdf.endsWith('.pdf') >0" target="_blank" :href="politica.pdf" download>
+                                <img class="h-48"  style="width:50rem;" :src="politica.imagePolitic" />
+                            </a>
+                            <a v-else>
+                                <img class="h-48" :href="politica.pdf" data-fancybox data-type="pdf" style="width:50rem;" :src="politica.imagePolitic" />
+                            </a> 
                          </div>
                      </div>
        
@@ -175,7 +180,7 @@ const isDownload = computed((file) => {
                      </div>
        
                      <div v-if="$page.props.can['politics.update']" style="white-space: normal; "
-                         class="absolute z-10 w-6 h-6 py-1 bg-white rounded-full shadow -bottom-2 -right-1 hover:bg-gray-500 hover:text-white"
+                         class="z-10 w-6 h-6 py-1 -mt-20 bg-white rounded-full shadow  -right-1 hover:bg-gray-500 hover:text-white"
                          @click="showFormPolitic('update', politica)">
        
                          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 m-auto" fill="currentColor"

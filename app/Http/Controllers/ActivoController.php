@@ -34,6 +34,7 @@ class ActivoController extends Controller
     {
        return activosItem::select('activos_items.*')
        ->where('tipo_activo','=', $idTipo)
+       ->with('valor_campos_activos')
        ->get();
     }
 
