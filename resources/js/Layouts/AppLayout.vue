@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { Head, Link, usePage } from '@inertiajs/inertia-vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
@@ -27,6 +27,23 @@ const logout = () => {
     Inertia.post(route('logout'));
 };
 
+let show = ref(false);
+
+const cambio = () =>
+{
+    //console.log("hola")
+    show.value = !show.value;
+    //console.log(show.value)
+}
+
+let show2 = ref(false);
+
+const cambio2 = () =>
+{
+    //console.log("hola")
+    show2.value = !show2.value;
+    //console.log(show.value)
+}
 
 </script>
 
@@ -407,14 +424,44 @@ const logout = () => {
                         </ResponsiveNavLink>
                     </div>
                     <div  class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('control-interno.politics.index')"  :active="route().current('control-interno.politics.index')">
+                        <button @click="cambio" class="ml-4">
                             Control Interno
-                        </ResponsiveNavLink>
+                        </button>
+                        <div class="ml-8" v-if="show" >
+                          <ResponsiveNavLink :href="route('control-interno.politics.index')"  :active="route().current('control-interno.politics.index')">
+                             Documentos Generales
+                          </ResponsiveNavLink>
+                          <ResponsiveNavLink v-if="$page.props.can['documentos-internos.show']"  :href="route('control-interno.documentos-internos.index')"  :active="route().current('control-interno.documentos-internos.index')">
+                             Documentos Internos
+                          </ResponsiveNavLink>
+                          <ResponsiveNavLink :href="route('control-interno.departamentos-aditorias.index')"  :active="route().current('control-interno.departamentos-aditorias.index')">
+                             Auditorias
+                          </ResponsiveNavLink>
+                        </div>
+                        
                     </div>
                     <div v-if="$page.props.can['rh.manager']" class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('roles.index')" :active="route().current('roles.index')">
+                        <button @click="cambio2" class="ml-4">
                             Recursos Humanos
-                        </ResponsiveNavLink>
+                        </button>
+                        <div class="ml-8" v-if="show2" >
+                          <ResponsiveNavLink v-if="$page.props.can['user-activos.show']"
+                                            :href="route('empleado.indexmanual', { activo: 'activo' })" :active="route().current('empleado.indexmanual')">
+                             Empleados Activos
+                          </ResponsiveNavLink>
+                          <ResponsiveNavLink v-if="$page.props.can['user-inactivos.show']"
+                                            :href="route('empleado.indexmanual', { activo: 'inactivo' })"   :active="route().current('empleado.indexmanual')">
+                             Empleados Inactivos
+                          </ResponsiveNavLink>
+                          <ResponsiveNavLink v-if="$page.props.can['plantilla-autorizada.show']"
+                                            :href="route('rh.plantillas-autorizadas.index')"  :active="route().current('rh.plantillas-autorizadas.index')">
+                             Plantillas Autorizadas  
+                          </ResponsiveNavLink>
+                          <ResponsiveNavLink v-if="$page.props.can['departamentos.show']"
+                                            :href="route('departamentos.index')" :active="route().current('departamentos.index')">
+                            DPTOS. y Puestos
+                          </ResponsiveNavLink>
+                        </div>
                     </div>
                     <div class="flex justify-center mb-2 mt-2">
                         <h2 style="font-family: 'Montserrat'; letter-spacing:0.5rem; font-size:0.6rem" 
