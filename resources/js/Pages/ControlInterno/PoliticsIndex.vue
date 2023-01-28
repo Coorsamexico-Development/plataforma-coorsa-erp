@@ -101,7 +101,7 @@ const isDownload = computed((file) => {
       <section class="objetivo p-4">
             <div class="text-center pt-14 objetivos" style="font-family: 'Montserrat';">
                 <h1 class="text-xl mr-12  sm:mr-16 sm:text-4xl font-semibold text-white">Objetivo de documentos</h1>
-                <span  class="w-16 h-1 bg-[#EC2944] mt-4 sm:ml-96 ml-2" style="display:block;"></span>
+                <span  class="w-16 h-1 bg-[#EC2944] mt-4 sm:mr-96 ml-2" style="display:block;"></span>
             </div>
                 <p class="sm:mt-6 mt-4 mb-4 sm:mb-16 text-sm sm:text-xl sm:ml-96 text-white" style=" font-family: 'Montserrat'; line-height: 1.8;">
                        En esta sección tendrás acceso a toda la documentación normativa de la empresa de
