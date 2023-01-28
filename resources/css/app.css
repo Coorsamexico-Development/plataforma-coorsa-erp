@@ -517,6 +517,13 @@ input:checked ~ .tab-content {
     background-size: cover;
    }
 
+   .objetivo_auditoria
+   {
+    background-image: url('../img/Fondo-dashboard-auditorias.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+   }
+
    .documentos{
     display: none;
    }
@@ -680,6 +687,14 @@ input:checked ~ .tab-content {
     display: flex;
     align-items: center;
     flex-direction: column;
+}
+
+
+.objetivo_auditoria
+{
+ background-image: url('../img/DASHBOARD_AUDITORIAS.jpg');
+ background-repeat: no-repeat;
+ background-size: cover;
 }
 
 .objetivos {

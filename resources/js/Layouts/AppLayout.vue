@@ -330,6 +330,11 @@ const logout = () => {
                                 <div class="text-sm font-medium text-gray-500">
                                     {{ $page.props.user.email }}
                                 </div>
+                                <div>
+                                    <h1 class="font-semibold mt-2" style="font-family:'Montserrat'; font-size: 1.8rem; margin-left:-8rem">
+                                                Encuentra lo <br>que buscas.
+                                     </h1>
+                                </div>
                             </div>
                         </div>
 
