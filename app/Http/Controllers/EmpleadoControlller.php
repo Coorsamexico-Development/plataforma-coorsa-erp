@@ -470,24 +470,39 @@ class EmpleadoControlller extends Controller
 
 
 
-        if (!empty($request->puesto_id) && !empty($request->departamento_id)) {
+        if (!empty($request->puesto_id) && !empty($request->departamento_id))
+         {
             $exist_empleados_puesto = empleados_puesto::select('*')
                 ->where('empleado_id', '=', $request['id'])
-                ->get();;
+                ->get();
 
-            if ($exist_empleados_puesto[0]->empleado_id == $request['id']) {
-                empleados_puesto::where('empleado_id', '=', $request['id'])
-                    ->update([
-                        'puesto_id' => $request['puesto_id'],
-                        'departamento_id' => $request['departamento_id']
-                    ]);
-            } else {
+            if(count($exist_empleados_puesto) > 0)
+            {
+                if ($exist_empleados_puesto[0]->empleado_id == $request['id'])
+                {
+                   empleados_puesto::where('empleado_id', '=', $request['id'])
+                       ->update([
+                           'puesto_id' => $request['puesto_id'],
+                           'departamento_id' => $request['departamento_id']
+                       ]);
+               } else 
+               {
+                   empleados_puesto::create([
+                       'empleado_id' => $request['id'],
+                       'puesto_id' => $request['puesto_id'],
+                       'departamento_id' => $request['departamento_id']
+                   ]);
+               }
+            }
+            else
+            {
                 empleados_puesto::create([
                     'empleado_id' => $request['id'],
                     'puesto_id' => $request['puesto_id'],
                     'departamento_id' => $request['departamento_id']
                 ]);
             }
+
         }
 
 
