@@ -10,15 +10,48 @@ import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import ButtonAdd from '../../Components/ButtonAdd.vue';
 import ActivoConteo from '../Activos/Partials/ActivoConteo.vue';
 import ModalAddCategoria from './Partials/ModalAddCategoria.vue';
+import { prop } from 'dom7';
 
 var props = defineProps(
     {
         tipo_activos:Object,
-        tipo_inputs:Object
+        tipo_inputs:Object,
+        tipo_evidencias:Object,
     }
 );
 
 /*Comentario*/
+const params = reactive({
+    search: '',
+})
+
+let newArreglotipoItems = ref(props.tipo_activos);
+
+watch(params, (newParams) => {
+
+ if(newParams.search.length > 0)
+ {
+    for (let index = 0; index < newArreglotipoItems.value.length; index++)
+     {
+        let tipo_activo = newArreglotipoItems.value[index];
+        let items = tipo_activo.activos_items;
+        console.log(items)
+        //let filterItems = items.filter(item => item.valor_campos_activos);
+  //FALTA FILTAR
+        const filterItems = items.filter(item => {
+          return item.valor_campos_activos.includes('Q1') ;
+         });
+       
+        console.log(filterItems);
+        
+     }
+ }
+ else
+ {
+    newArreglotipoItems.value = props.tipo_activos;
+ }
+
+});
 
 const modalNewCategory = ref(false);
 
@@ -31,6 +64,7 @@ const closeModalNewCategory = () =>
 {
     modalNewCategory.value = false;
 }
+
 
 </script>
 
@@ -45,10 +79,9 @@ const closeModalNewCategory = () =>
             <p class="text-xl text-white" style="font-family: 'Montserrat';">En esta sección tendrás acceso a la información de los activos asignados.</p>
          </div>
        </div>
-
        <div class="grid grid-cols-5 mt-8"> <!--Seccion buscador-->
           <div class="flex justify-center col-start-5">
-            <InputSearch class=""></InputSearch>
+            <InputSearch class="" v-model="params.search" ></InputSearch>
           </div>
        </div>
 
@@ -58,7 +91,7 @@ const closeModalNewCategory = () =>
           <ModalAddCategoria :tipo_inputs="tipo_inputs" :show="modalNewCategory" @close="closeModalNewCategory"></ModalAddCategoria>
        </div>
        <div class="grid grid-cols-7">
-          <ActivoConteo v-for="tipoActivo in tipo_activos" :key="tipoActivo.id" :tipoActivo="tipoActivo"></ActivoConteo>
+          <ActivoConteo v-for="tipoActivo in newArreglotipoItems" :key="tipoActivo.id" :tipoActivo="tipoActivo" :tipo_evidencias="tipo_evidencias" ></ActivoConteo>
        </div>
     </AppLayout>
 </template>

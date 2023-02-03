@@ -139,6 +139,7 @@ Route::middleware([
         Route::get('/empleados/edit/{id}', 'edit')->name('empleado.edit');
         Route::post('empleados/update', 'update')->name('empleado.update');
         Route::get('empleados/{activo}', 'index')->name('empleado.indexmanual');
+        Route::get('empleadosData' , 'empleadosData')->name('empleados.data'); 
     });
 });
 
@@ -148,6 +149,16 @@ Route::controller(ActivoController::class)->group(function () {
     Route::get('/activosxtipo/{idTipo}', 'activos');
     Route::post('/storeCategory', 'storeCategory')->name('storeCategory');
     Route::post('/storeItem', 'storeItem')->name('storeItem');
+    Route::post('/storeTipoEvidencia', 'storeTipoEvidencia')->name('storeTipoEvidencia');
+    Route::get('/getTipoEvidencia', 'getTipoEvidencia')->name('getTipoEvidencia');
+    Route::post('/EvidenciaActivoUser', 'EvidenciaActivoUser')->name('EvidenciaActivoUser');
+    Route::get('/getImages/{id}','getImages')->name('getImages');
+    Route::get('/getInfoEmpleado/{id}', 'getInfoEmpleado')->name('getInfoEmpleado');
+    Route::post('/changeStatusActivoEmpleado/{id}', 'changeStatusActivoEmpleado')->name('changeStatusActivoEmpleado');
+    Route::post('/changeStatusActivoItem/{id}','changeStatusActivoItem')->name('changeStatusActivoItem');
+    Route::get('/getAllCampos/{id}', 'getAllCampos')->name('getAllCampos');
+    Route::post('/saveEditCampos/{id}','saveEditCampos')->name('saveEditCampos');
+    Route::post('/changeStatusActivoItemLibre/{id}', 'changeStatusActivoItemLibre')->name('changeStatusActivoItemLibre');
 });
 
 

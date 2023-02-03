@@ -533,4 +533,12 @@ class EmpleadoControlller extends Controller
         }
         return redirect()->back();
     }
+    
+
+    public function empleadosData () 
+    {
+        return $empleados = User::select(
+            'users.*',
+        )->get();
+    }
 }

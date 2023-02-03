@@ -8,31 +8,20 @@ import TextInput from '@/Components/TextInput.vue';
 import { usePage } from '@inertiajs/inertia-vue3'
 import SelectComponent from '@/Components/SelectComponent.vue';
 import Checkbox from '@/Components/Checkbox.vue';
-import ButtonAdd from '@/Components/ButtonAdd.vue';
-import { Inertia } from "@inertiajs/inertia";
-
-const emit = defineEmits(["close"]);
 
 var props = defineProps(
     {
-       campos:Object,
-       tipoActivo:Object
+       
     }
 );
 
-const arregloItems = ref([]);
-
+const emit = defineEmits(["close"])
 const close = () => {
         
         emit('close');
     };
 
-const statusReactivo =  ref(true);
-const changeStatus = () =>
-{
-  //console.log(statusReactivo.value);
-  statusReactivo.value  = !statusReactivo.value; 
-}
+
 
 const formatDate = new Date();
 let dia = formatDate.getDate();
@@ -75,72 +64,34 @@ if(mesToString.length < 2)
       } 
   }
 
-//console.log(fechaCompleta)
-  const AddItem = () => 
-  {
-  let newObjItem = 
-  {
-    fecha_alta: fechaCompleta,
-    tipoActivo_id: props.tipoActivo.id,
-    status:true,
-    status_activo_id:2,
-    campos:[]
-  };
-  for (let index = 0; index < props.campos.length; index++) 
-  {
-     let nombreCampo = props.campos[index].campo;
-     let tipoCampo = props.campos[index].input;
-     let campos = {};
 
-     campos.campo = nombreCampo;
-     campos.type = tipoCampo;
-     campos.campo_id = props.campos[index].idCampo;
-     campos.valor = null;
-     newObjItem.campos.push(campos);
+const tipoEvidenciaForm = useForm({
+   nombre:null,
+   fecha: fechaCompleta
+});
 
-     //newObj[`${tipoCampo}`] = "";
-     //console.log(`Fifteen is ${nombreCampo} andnot ${tipoCampo}.`);
-  }
-  arregloItems.value.push(newObjItem); 
-  //console.log(arregloItems.value)
-}
-
-const saveItems = () => 
+const saveTipoEvidencia = () => 
 {
-   Inertia.post(route('storeItem'), {arreglo:arregloItems.value},{
-      preserveScroll:true,
-      preserveState:true,
-      onFinish: close()
-   });
-   
+    tipoEvidenciaForm.post(route('storeTipoEvidencia'),
+    {
+       onFinish: () => tipoEvidenciaForm.reset(),
+       onSuccess: () =>  close() 
+    });
 }
 
 </script>
 <template>
          <DialogModal  @close="close()">
            <template #title>
-               <h2 style="font-weight:bolder">Nuevo activo</h2>
+               <h2 style="font-weight:bolder">Nuevo tipo de evidencia.</h2>
             </template>
-            <template #content>  
-              <ButtonAdd @click="AddItem">Agregar nuevo activo</ButtonAdd>
-              <div  class="mt-8">
-                <InputLabel>Categoria de activo</InputLabel>
-                <TextInput  :value="tipoActivo.nombre"  :placeholder="tipoActivo.nombre"></TextInput> 
-              </div>
-              <div class="h-72" style="overflow-y:scroll;">     
-                  <div class="flex flex-row w-full p-8 mt-2 border-b-2" style="overflow-x:scroll; " v-for="item in arregloItems" :key="item.id"> <!--Recorremos el arreglo para agregar nuevos items-->
-                        <div class="mr-2">
-                          <InputLabel>Fecha de alta</InputLabel>
-                          <TextInput type="date" v-model="item.fecha_alta"></TextInput>
-                        </div>
-                        <div class="m-2" v-for="campo in item.campos" :key="campo">
-                            <InputLabel>{{ campo.campo }}</InputLabel>
-                            <TextInput :type="campo.type" v-model="campo.valor"></TextInput>
-                        </div>
-                     </div>
-              </div>
-              <div class="flex flex-row-reverse">
-                        <button @click="saveItems" style="" class="p-2 bg-blue-500 rounded-lg hover:opacity-50">
+            <template #content>
+                <div>
+                    <InputLabel>Nombre de tipo de evidencia.</InputLabel>
+                    <TextInput type="text" v-model="tipoEvidenciaForm.nombre"></TextInput>
+                </div>
+                <div class="flex flex-row-reverse">
+                        <button @click="saveTipoEvidencia" style="" class="p-2 bg-blue-500 rounded-lg hover:opacity-50">
                             <svg style="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 30 30">
                                 <defs>
                                   <clipPath id="clip-Icono-guardar">
@@ -159,7 +110,7 @@ const saveItems = () =>
                                 </g>
                             </svg>
                         </button>
-              </div>
+                    </div>
             </template>
             
             <template #footer>

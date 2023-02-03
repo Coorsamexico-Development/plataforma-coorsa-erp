@@ -31,11 +31,13 @@
         "datatables.net-select": "^1.4.0",
         "datatables.net-vue3": "^1.0.0",
         "flowbite": "^1.6.3",
+        "izitoast": "^1.4.0",
         "jquery": "^3.6.3",
         "mdb-vue-ui-kit": "^3.1.0",
         "moment": "^2.29.4",
         "sweetalert": "^2.1.2",
         "swiper": "^8.4.5",
+        "vue-izitoast": "^1.2.1",
         "vue-nav-tabs": "^0.5.7",
         "vue3-easy-data-table": "^1.5.10",
         "vue3-tabs-component": "^1.1.1"

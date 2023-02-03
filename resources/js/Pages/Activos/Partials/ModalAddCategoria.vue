@@ -31,14 +31,14 @@ const addCampo = () =>
 {
     CantidadCampos.value.push({
         nombre:null,
-        tipo_input_id:-1
+        tipo_input_id:-1,
+        principal:false,
     });
 }
 
 const CategoryForm = useForm({
    nombre:null,
    imagen:null,
-   principal:null,
    arregloCampos: CantidadCampos.value
 });
 

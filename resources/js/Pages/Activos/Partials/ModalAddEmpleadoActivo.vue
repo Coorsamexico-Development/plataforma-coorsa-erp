@@ -1,37 +1,34 @@
 <script setup>
 import { ref } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
+import axios from 'axios';
 import DialogModal from '@/Components/DialogModal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { usePage } from '@inertiajs/inertia-vue3'
-import SelectComponent from '@/Components/SelectComponent.vue';
 import Checkbox from '@/Components/Checkbox.vue';
+import SelectComponent from '@/Components/SelectComponent.vue';
 import ButtonAdd from '@/Components/ButtonAdd.vue';
-import { Inertia } from "@inertiajs/inertia";
+import ModalAddTipoEvidencia from '../Partials/ModalAddTipoEvidencia.vue';
+import UploadFile from './UploadFile.vue';
 
-const emit = defineEmits(["close"]);
 
 var props = defineProps(
     {
-       campos:Object,
-       tipoActivo:Object
+       activo_id:Number
     }
 );
 
-const arregloItems = ref([]);
+const emit = defineEmits(["close", "axios" ])
+const close = () => 
+{      
+   emit('close');
+};
 
-const close = () => {
-        
-        emit('close');
-    };
-
-const statusReactivo =  ref(true);
-const changeStatus = () =>
+const emitAxios = () =>
 {
-  //console.log(statusReactivo.value);
-  statusReactivo.value  = !statusReactivo.value; 
+    emit('axios');
 }
 
 const formatDate = new Date();
@@ -64,7 +61,7 @@ if(mesToString.length < 2)
   }
   else
   {
-    if(diaToString.length < 2)
+     if(diaToString.length < 2)
       {
         newDia = cero+diaToString;
         fechaCompleta = año+ '-' + mes + '-' +newDia
@@ -75,72 +72,93 @@ if(mesToString.length < 2)
       } 
   }
 
-//console.log(fechaCompleta)
-  const AddItem = () => 
-  {
-  let newObjItem = 
-  {
-    fecha_alta: fechaCompleta,
-    tipoActivo_id: props.tipoActivo.id,
-    status:true,
-    status_activo_id:2,
-    campos:[]
-  };
-  for (let index = 0; index < props.campos.length; index++) 
-  {
-     let nombreCampo = props.campos[index].campo;
-     let tipoCampo = props.campos[index].input;
-     let campos = {};
 
-     campos.campo = nombreCampo;
-     campos.type = tipoCampo;
-     campos.campo_id = props.campos[index].idCampo;
-     campos.valor = null;
-     newObjItem.campos.push(campos);
+const EmpleadoActivoForm = useForm({
+   empleado_id: -1,
+   activo_item_id: props.activo_id,
+   fechaAlta: fechaCompleta,
+   activo:1,
+   imagen:null
+});
 
-     //newObj[`${tipoCampo}`] = "";
-     //console.log(`Fifteen is ${nombreCampo} andnot ${tipoCampo}.`);
-  }
-  arregloItems.value.push(newObjItem); 
-  //console.log(arregloItems.value)
-}
-
-const saveItems = () => 
+const saveEmpleadoActivo = () => 
 {
-   Inertia.post(route('storeItem'), {arreglo:arregloItems.value},{
-      preserveScroll:true,
-      preserveState:true,
-      onFinish: close()
-   });
-   
+     EmpleadoActivoForm.post(route('EvidenciaActivoUser'),
+    {
+       onFinish: () => 
+       {
+         EmpleadoActivoForm.reset(),
+         emitAxios();
+       },
+       onSuccess: () =>  close() 
+    });
+    
+    
 }
+
+const modalTipoEvidencia = ref (false);
+const openModalTipoEvidencia = () =>
+{
+   modalTipoEvidencia.value = true
+}
+
+const closeModalTipoEvidencia = () =>
+{
+   modalTipoEvidencia.value = false
+}
+
+
+const retornarFile = (file)  =>
+{
+   //console.log(file);
+   EmpleadoActivoForm.imagen = file;
+   //console.log(file);
+}
+
+const empleados  = ref ([]);
+axios.get('/empleadosData').then((response)=> 
+  {
+      //console.log(response);
+      empleados.value = response.data;
+   });
+
+const tipoEvidencias  = ref ([]);
+axios.get('/getTipoEvidencia').then((response)=> 
+  {
+      //console.log(response);
+      tipoEvidencias.value = response.data;
+   });
+
 
 </script>
 <template>
          <DialogModal  @close="close()">
            <template #title>
-               <h2 style="font-weight:bolder">Nuevo activo</h2>
+               <h2 style="font-weight:bolder">Agregar empleado a activo.</h2>
             </template>
-            <template #content>  
-              <ButtonAdd @click="AddItem">Agregar nuevo activo</ButtonAdd>
-              <div  class="mt-8">
-                <InputLabel>Categoria de activo</InputLabel>
-                <TextInput  :value="tipoActivo.nombre"  :placeholder="tipoActivo.nombre"></TextInput> 
-              </div>
-              <div class="h-72" style="overflow-y:scroll;">     
-                  <div class="flex flex-row w-full p-8 mt-2 border-b-2" style="overflow-x:scroll; " v-for="item in arregloItems" :key="item.id"> <!--Recorremos el arreglo para agregar nuevos items-->
-                        <div class="mr-2">
-                          <InputLabel>Fecha de alta</InputLabel>
-                          <TextInput type="date" v-model="item.fecha_alta"></TextInput>
+            <template #content>
+                <div class="flex mb-4">
+                        <div class="flex-initial w-64 m-2 ">
+                           <InputLabel>Empleado</InputLabel>
+                           <input v-model="EmpleadoActivoForm.empleado_id" list="lisEmpleados" class="w-full py-2 text-sm text-black bg-white border-2 border-black rounded-md shadow-sm focus:border-black focus:ring focus:ring-gray-200 focus:ring-opacity-50 disabled:bg-gray-300" >
+                             <datalist id="lisEmpleados">
+                             <option v-for="empleado in empleados" :key="empleado.id" :value="empleado.id">
+                               {{ empleado.name + ' ' + empleado.apellido_paterno + ' ' +   empleado.apellido_materno  }} 
+                             </option>
+                           </datalist>
                         </div>
-                        <div class="m-2" v-for="campo in item.campos" :key="campo">
-                            <InputLabel>{{ campo.campo }}</InputLabel>
-                            <TextInput :type="campo.type" v-model="campo.valor"></TextInput>
+                        <div class="flex-initial w-64 m-2 ">
+                          <InputLabel>Fecha de asignación</InputLabel>
+                          <TextInput class="w-full" type="date" :required="true"  v-model="EmpleadoActivoForm.fechaAlta"></TextInput>
                         </div>
-                     </div>
-              </div>
-              <div class="flex flex-row-reverse">
-                        <button @click="saveItems" style="" class="p-2 bg-blue-500 rounded-lg hover:opacity-50">
+                </div>
+                <div class="flex mb-4">
+                    <div class="w-7/12">
+                      <UploadFile @retornar="retornarFile" />
+                    </div>
+                </div>
+                <div class="flex flex-row-reverse">
+                        <button @click="saveEmpleadoActivo" style="" class="p-2 bg-blue-500 rounded-lg hover:opacity-50">
                             <svg style="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 30 30">
                                 <defs>
                                   <clipPath id="clip-Icono-guardar">
@@ -159,7 +177,7 @@ const saveItems = () =>
                                 </g>
                             </svg>
                         </button>
-              </div>
+                    </div>
             </template>
             
             <template #footer>
