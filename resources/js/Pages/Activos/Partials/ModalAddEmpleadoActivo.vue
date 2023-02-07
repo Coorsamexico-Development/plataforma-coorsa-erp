@@ -74,11 +74,11 @@ if(mesToString.length < 2)
 
 
 const EmpleadoActivoForm = useForm({
-   empleado_id: -1,
+   empleado_id: null,
    activo_item_id: props.activo_id,
    fechaAlta: fechaCompleta,
    activo:1,
-   imagen:null
+   imagenes:null
 });
 
 const saveEmpleadoActivo = () => 
@@ -107,6 +107,14 @@ const closeModalTipoEvidencia = () =>
    modalTipoEvidencia.value = false
 }
 
+
+let imagesArray = ref([]);
+const setPhotoFiles = (fieldName, fileList) => 
+{
+   imagesArray.value = fileList;
+   EmpleadoActivoForm.imagenes = imagesArray.value;
+   //console.log(imagesArray);
+}
 
 const retornarFile = (file)  =>
 {
@@ -154,7 +162,11 @@ axios.get('/getTipoEvidencia').then((response)=>
                 </div>
                 <div class="flex mb-4">
                     <div class="w-7/12">
+                      <!--
                       <UploadFile @retornar="retornarFile" />
+                      -->
+                       <InputLabel>Evidencias</InputLabel>
+                       <input type="file" multiple  @change="setPhotoFiles($event.target.name, $event.target.files)" />
                     </div>
                 </div>
                 <div class="flex flex-row-reverse">

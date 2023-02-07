@@ -17,6 +17,10 @@ var props = defineProps(
         tipo_activos:Object,
         tipo_inputs:Object,
         tipo_evidencias:Object,
+        filters: {
+           type: Object,
+           required: true,
+       },
     }
 );
 
@@ -25,32 +29,16 @@ const params = reactive({
     search: '',
 })
 
-let newArreglotipoItems = ref(props.tipo_activos);
 
 watch(params, (newParams) => {
-
- if(newParams.search.length > 0)
- {
-    for (let index = 0; index < newArreglotipoItems.value.length; index++)
-     {
-        let tipo_activo = newArreglotipoItems.value[index];
-        let items = tipo_activo.activos_items;
-        console.log(items)
-        //let filterItems = items.filter(item => item.valor_campos_activos);
-  //FALTA FILTAR
-        const filterItems = items.filter(item => {
-          return item.valor_campos_activos.includes('Q1') ;
-         });
-       
-        console.log(filterItems);
-        
-     }
- }
- else
- {
-    newArreglotipoItems.value = props.tipo_activos;
- }
-
+    Inertia.visit(route("activo.index"),
+        {
+            data: pickBy(newParams),
+            replace: true,
+            only: ['tipo_activos'],
+            preserveScroll: true,
+            preserveState: true,
+        });
 });
 
 const modalNewCategory = ref(false);
@@ -91,7 +79,7 @@ const closeModalNewCategory = () =>
           <ModalAddCategoria :tipo_inputs="tipo_inputs" :show="modalNewCategory" @close="closeModalNewCategory"></ModalAddCategoria>
        </div>
        <div class="grid grid-cols-7">
-          <ActivoConteo v-for="tipoActivo in newArreglotipoItems" :key="tipoActivo.id" :tipoActivo="tipoActivo" :tipo_evidencias="tipo_evidencias" ></ActivoConteo>
+          <ActivoConteo v-for="tipoActivo in props.tipo_activos" :key="tipoActivo.id" :tipoActivo="tipoActivo" :tipo_evidencias="tipo_evidencias" ></ActivoConteo>
        </div>
     </AppLayout>
 </template>

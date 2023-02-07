@@ -23,45 +23,58 @@ class ActivoController extends Controller
     public function index(Request $request)
     {
         //traemos todos los tipos de activos
-        $tipo_activos = tipos_activo::query()
+        $tipo_activos = tipos_activo::select('tipos_activos.*')
         ->with([
-           'activos_items' => function($query) use ($request)
-           {
-              return $query->select(
-                'activos_items.*',
-              )
-              ->with([
-               'activos_empleados'  => function ($query1)  
-               {
-                   return   $query1->select(
-                     'activos_empleados.*',
-                     'users.numero_empleado',
-                     'users.name',
-                     'users.apellido_paterno',
-                     'users.apellido_materno',
-                     'users.email',
-                     'users.fotografia',
-                     'users.profile_photo_path',
-                     'puestos.name AS puesto',
-                     'cecos.nombre AS departamento',
-                     'ubicaciones.name AS ubicacion'
-                     )
-                   ->join('users','activos_empleados.empleado_id', 'users.id')
-                   ->join('empleados_puestos','empleados_puestos.empleado_id','users.id')
-                   ->leftjoin('puestos','empleados_puestos.puesto_id','puestos.id')
-                   ->leftjoin('cecos','empleados_puestos.departamento_id','cecos.id')
-                   ->leftJoin('ubicaciones','cecos.ubicacione_id','ubicaciones.id')
-                   ->where('activos_empleados.status','=',1);
-                   ;
-               },
-               'valor_campos_activos' =>function ($query2) use ($request)
-                {
-                   $query2->select('valor_campo_activos.*')
-                   ->join('tipo_activo_campos','valor_campo_activos.tipo_activo_campo_id','tipo_activo_campos.id')
-                   ->where('tipo_activo_campos.principal','=',1);
-                },
-               'evidencias_activo']);
-           } 
+         'activos_items' => function($query) use ($request)
+         {
+            $query->select(
+              'activos_items.*',
+            )
+            //->where('valor_campo_activos.valor','LIKE','%Q3%')
+            ->with([
+             'activos_empleados'  => function ($query1)  
+             {
+                  $query1->select(
+                   'activos_empleados.*',
+                   'users.numero_empleado',
+                   'users.name',
+                   'users.apellido_paterno',
+                   'users.apellido_materno',
+                   'users.email',
+                   'users.fotografia',
+                   'users.profile_photo_path',
+                   'puestos.name AS puesto',
+                   'cecos.nombre AS departamento',
+                   'ubicaciones.name AS ubicacion'
+                   )
+                 ->join('users','activos_empleados.empleado_id', 'users.id')
+                 ->join('empleados_puestos','empleados_puestos.empleado_id','users.id')
+                 ->leftjoin('puestos','empleados_puestos.puesto_id','puestos.id')
+                 ->leftjoin('cecos','empleados_puestos.departamento_id','cecos.id')
+                 ->leftJoin('ubicaciones','cecos.ubicacione_id','ubicaciones.id')
+                 ->where('activos_empleados.status','=',1);
+                 ;
+             },
+             'valor_campos_activos' =>function ($query2)
+              {
+                 $query2->select('valor_campo_activos.*')
+                 ->join('tipo_activo_campos','valor_campo_activos.tipo_activo_campo_id','tipo_activo_campos.id')
+                 ->where('tipo_activo_campos.principal','=',1);
+              },
+             'evidencias_activo'])
+             ->join('valor_campo_activos','valor_campo_activos.activo_id','activos_items.id')
+             //->where('valor_campo_activos.valor','LIKE','%Q3%')
+             ->groupBy('activos_items.id');
+
+             //$query->where('valor_campo_activos.valor','LIKE','%Q3%');
+          
+             if ($request->has("search"))
+             {
+               $search = strtr($request->search, array("'" => "\\'", "%" => "\\%"));
+               $query->where("valor_campo_activos.valor", "LIKE", "%" . $search . "%");
+             }
+             
+         } 
          ]);
 
         $tipo_inputs = TipoInput::all();
@@ -70,6 +83,7 @@ class ActivoController extends Controller
         [
            'tipo_activos' => fn () => $tipo_activos->get(),
            'tipo_inputs' => $tipo_inputs,
+           'filters' => fn () => request()->all(['search']),
         ]);
     }
 
@@ -205,6 +219,7 @@ class ActivoController extends Controller
   
     public function EvidenciaActivoUser (Request $request)
     {
+      
        $activos_empleado = activos_empleado::updateOrCreate([
           'empleado_id' => $request['empleado_id'], 
           'activo_id' => $request['activo_item_id'],
@@ -214,27 +229,30 @@ class ActivoController extends Controller
 
        activosItem::where('id','=', $request['activo_item_id'])
        ->update(['status_activo_id' =>1]);
-
-       if($request['imagen'] !== null)
+       
+       if($request['imagenes'] !== null)
        {
-
-           $imagen = request('imagen');
-           $nombre_original = $imagen->getClientOriginalName();
-           $ruta_foto = $imagen->storeAs('evidencias/fotos', $nombre_original, 'gcs'); //guardamos el archivo en el storage
-           $urlFoto = Storage::disk('gcs')->url($ruta_foto);
-
-          EvientregaActivoempleado::updateOrCreate([
-           'activo_empleado_id' => $activos_empleado->id,
-           'foto' =>  $urlFoto
-         ]);
+          for ($i=0; $i < count($request['imagenes']) ; $i++)
+          { 
+             $imagen = $request['imagenes'][$i];
+             $nombre_original = $imagen->getClientOriginalName();
+             $nombre_original = $imagen->getClientOriginalName();
+             $ruta_foto = $imagen->storeAs('evidencias/fotos', $nombre_original, 'gcs'); //guardamos el archivo en el storage
+             $urlFoto = Storage::disk('gcs')->url($ruta_foto);
+  
+            EvientregaActivoempleado::updateOrCreate([
+             'activo_empleado_id' => $activos_empleado->id,
+             'foto' =>  $urlFoto
+           ]);
+             
+          }
        }
        else
        {
+        
         EvientregaActivoempleado::updateOrCreate([
           'activo_empleado_id' => $activos_empleado->id,
         ]);
-
-
        }
     }
 

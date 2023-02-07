@@ -208,7 +208,7 @@ const recuperarArchivo = () =>
             		<p class="modal__message">Selecciona el archivo que deseas subir.</p>
                 
             		<div class="modal__actions">
-            			<input @click="uploadFile();" @change="recuperarArchivo(); "  ref="fileUpload" class="modal__button modal__button--upload"  id="file" type="file" > <!--class="modal__button modal__button--upload" ref="fileUpload" @change="uploadFile"-->
+            			<input @click="uploadFile();" @change="recuperarArchivo(); " multiple ref="fileUpload" class="modal__button modal__button--upload"  id="file" type="file" > <!--class="modal__button modal__button--upload" ref="fileUpload" @change="uploadFile"-->
             		</div>
             		<div class="modal__actions" hidden>
             			<svg class="modal__file-icon" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
