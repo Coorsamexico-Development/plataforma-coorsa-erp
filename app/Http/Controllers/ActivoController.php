@@ -236,7 +236,6 @@ class ActivoController extends Controller
           { 
              $imagen = $request['imagenes'][$i];
              $nombre_original = $imagen->getClientOriginalName();
-             $nombre_original = $imagen->getClientOriginalName();
              $ruta_foto = $imagen->storeAs('evidencias/fotos', $nombre_original, 'gcs'); //guardamos el archivo en el storage
              $urlFoto = Storage::disk('gcs')->url($ruta_foto);
   
