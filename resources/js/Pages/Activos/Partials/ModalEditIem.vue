@@ -45,9 +45,11 @@ const activoEditForm = useForm(
 
 const totalEvidencias = ref([]);
 
-const consultarInfo = () =>
+const consultarInfo = (id) =>
 {
-    axios.get('/getAllCampos/'+props.activo.id).then((response)=> 
+    valores.value = [];
+    campos.value = [];
+    axios.get('/getAllCampos/'+id).then((response)=> 
     {
       totalEvidencias.value = response.data[1];
       //console.log(response.data);
@@ -112,7 +114,7 @@ const closeTipoEvidencia = () =>
                <h2 style="font-weight:bolder">Editar Activo</h2>
             </template>
             <template #content>
-                <ButtonAdd @click="consultarInfo">Consultar información</ButtonAdd>
+                <ButtonAdd @click="consultarInfo(activo.id)">Consultar información</ButtonAdd>
                 <div class="grid grid-cols-2 mt-4 gap-4 w-82" v-if="campos.length>0">
                     <div class="mr-4 row-start-auto row-end-auto" v-for="campo in campos" :key="campo.id">
                         <InputLabel>{{ campo.label }}</InputLabel>

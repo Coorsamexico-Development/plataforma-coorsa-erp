@@ -54,7 +54,7 @@ const emitAxios = () =>
 
  axios.get('/getImages/'+props.usuario.empleado_id+'/'+props.usuario.activo_id).then((response)=> 
      {
-      console.log(response);
+      //console.log(response);
       images.value = response.data;
      });
 </script>

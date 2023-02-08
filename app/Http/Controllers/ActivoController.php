@@ -79,10 +79,13 @@ class ActivoController extends Controller
 
         $tipo_inputs = TipoInput::all();
 
+        $tipo_evidencias = tipoEvidencia::all();
+
         return Inertia::render('Activos/ActivosIndex',
         [
            'tipo_activos' => fn () => $tipo_activos->get(),
            'tipo_inputs' => $tipo_inputs,
+           'tipo_evidencias' =>$tipo_evidencias,
            'filters' => fn () => request()->all(['search']),
         ]);
     }

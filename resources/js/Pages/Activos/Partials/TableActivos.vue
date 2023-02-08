@@ -46,8 +46,10 @@ const desactivarItem = (activos_empleados,id) =>
 
 
 const modalEditItem = ref(false);
-const openModalEditItem = () =>
+let activoModal = ref(null);
+const openModalEditItem = (activo) =>
 {
+   activoModal.value = activo;
    modalEditItem.value = true;
 }
 
@@ -96,7 +98,7 @@ const emitAxios = (id) =>
                           </g>
                         </svg>
                     </button>
-                    <button @click="openModalEditItem" class="bg-[#f28c00] m-2 rounded-2xl pl-2 pr-2">
+                    <button @click="openModalEditItem(activo)" class="bg-[#f28c00] m-2 rounded-2xl pl-2 pr-2">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="35" height="33" viewBox="0 0 35 33">
                           <defs>
                             <clipPath id="clip-Icono-editar">
@@ -122,7 +124,7 @@ const emitAxios = (id) =>
                           </g>
                         </svg>
                     </button>
-                    <ModalEditItem :show="modalEditItem" :activo="activo"  @close="closeModalEditItem" :tipo_evidencias="tipo_evidencias" />
+
                   </div>
                </td>
                <td>
@@ -203,4 +205,5 @@ const emitAxios = (id) =>
             </tr>
         </tbody>
     </table>
+    <ModalEditItem :activo="activoModal"  :show="modalEditItem"  @close="closeModalEditItem"></ModalEditItem>
 </template>

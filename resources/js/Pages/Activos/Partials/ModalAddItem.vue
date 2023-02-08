@@ -117,7 +117,7 @@ const saveItems = () =>
 
 </script>
 <template>
-         <DialogModal  @close="close()">
+         <DialogModal @close="close()" :maxWidth="'5xl'">
            <template #title>
                <h2 style="font-weight:bolder">Nuevo activo</h2>
             </template>
