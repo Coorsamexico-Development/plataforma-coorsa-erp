@@ -255,13 +255,14 @@ class ActivoController extends Controller
        }
     }
 
-    public function getImages ($id)
+    public function getImages ($id, $activo_id)
     {
         return activos_empleado::select('evientrega_activoempleados.foto')
         ->join('evientrega_activoempleados','evientrega_activoempleados.activo_empleado_id','activos_empleados.id')
+        ->join('activos_items','activos_items.id','activos_empleados.activo_id')
         ->where('activos_empleados.empleado_id','=', $id)
+        ->where('activos_items.id','=', $activo_id)
         ->get();
-        
     }
 
     public function getInfoEmpleado($id)

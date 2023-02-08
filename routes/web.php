@@ -152,7 +152,7 @@ Route::controller(ActivoController::class)->group(function () {
     Route::post('/storeTipoEvidencia', 'storeTipoEvidencia')->name('storeTipoEvidencia');
     Route::get('/getTipoEvidencia', 'getTipoEvidencia')->name('getTipoEvidencia');
     Route::post('/EvidenciaActivoUser', 'EvidenciaActivoUser')->name('EvidenciaActivoUser');
-    Route::get('/getImages/{id}','getImages')->name('getImages');
+    Route::get('/getImages/{id}/{activoid}','getImages')->name('getImages');
     Route::get('/getInfoEmpleado/{id}', 'getInfoEmpleado')->name('getInfoEmpleado');
     Route::post('/changeStatusActivoEmpleado/{id}', 'changeStatusActivoEmpleado')->name('changeStatusActivoEmpleado');
     Route::post('/changeStatusActivoItem/{id}','changeStatusActivoItem')->name('changeStatusActivoItem');
