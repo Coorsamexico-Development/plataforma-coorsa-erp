@@ -71,7 +71,9 @@ const emitAxios = (id) =>
                 <th>Acciones</th>
                 <th>Fecha de alta</th>
                 <th>Status</th>
-                <th v-for="campo in campos" :key="campo.id">{{ campo.campo }}</th>
+                <th v-for="campo in campos" :key="campo.id">
+                  {{ campo.campo }}
+                </th>
                 <th>Documento</th>
                 <th>Usuarios</th>
             </tr>
@@ -140,8 +142,17 @@ const emitAxios = (id) =>
                     </span>
                   </p>
                </td>
-               <td v-for="campo in activo.valor_campos_activos" :key="campo.id">
-                  {{ campo.valor }}
+               <td v-for="campo in campos" :key="campo.id">
+                  <div v-if="activo.valor_campos_activos.length > 0"> <!--Si existen uno o mas-->
+                     <div v-for="valor in activo.valor_campos_activos" :key="valor.id">
+                          <div v-if="valor.tipo_activo_campo_id  === campo.idCampo"> 
+                              {{ valor.valor }}
+                          </div>
+                     </div>
+                  </div>
+                  <div v-else>
+                      
+                  </div>
                </td>
                <td>
                  <div class="flex justify-center" v-if="activo.evidencias_activo.length > 0 " >
@@ -205,5 +216,5 @@ const emitAxios = (id) =>
             </tr>
         </tbody>
     </table>
-    <ModalEditItem :activo="activoModal"  :show="modalEditItem"  @close="closeModalEditItem"></ModalEditItem>
+    <ModalEditItem :activo="activoModal" :campos="campos" :show="modalEditItem"  @close="closeModalEditItem"></ModalEditItem>
 </template>

@@ -62,7 +62,7 @@ class ActivoController extends Controller
                  ->where('tipo_activo_campos.principal','=',1);
               },
              'evidencias_activo'])
-             ->join('valor_campo_activos','valor_campo_activos.activo_id','activos_items.id')
+             ->leftjoin('valor_campo_activos','valor_campo_activos.activo_id','activos_items.id')
              //->where('valor_campo_activos.valor','LIKE','%Q3%')
              ->groupBy('activos_items.id');
 
@@ -164,42 +164,13 @@ class ActivoController extends Controller
 
     public function storeItem (Request $request) 
     {
-        //return $request;
+        activosItem::create([
+          'tipo_activo' => $request['tipo_activo'],
+          'fecha' => $request['fecha'],
+          'status' => $request['status'],
+          'status_activo_id' => $request['status_activo_id']
+        ]);
 
-        for ($i=0; $i < count($request['arreglo']) ; $i++) //recorremos las propiedades del objeto
-        { 
-            $item = $request['arreglo'][$i];
-            $activoItem = activosItem::create([
-              'tipo_activo' => $item['tipoActivo_id'],
-              'fecha' => $item['fecha_alta'],
-              'status' => $item['status'],
-              'status_activo_id' => $item['status_activo_id']
-            ]);
-
-            $arregloCampos = $item['campos'];
-          
-            //recorremos los campos por objeto
-            for ($x=0; $x < count($arregloCampos) ; $x++) 
-            { 
-               $campo = $arregloCampos[$x]; //recuperamos el campo por item
-               if($campo['valor'] === null)
-               {
-                  valorCampoActivo::create([
-                    "valor" => "",
-                    "tipo_activo_campo_id" => $campo['campo_id'],
-                    "activo_id" => $activoItem->id
-                  ]);
-               }
-               else
-               {
-                   valorCampoActivo::create([
-                     "valor" => $campo['valor'],
-                     "tipo_activo_campo_id" => $campo['campo_id'],
-                     "activo_id" => $activoItem->id
-                   ]);
-               }
-            }    
-        }
         return  redirect()->back(); 
     }
 

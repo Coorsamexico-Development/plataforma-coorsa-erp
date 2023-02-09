@@ -1,9 +1,9 @@
 <script setup>
 import { Inertia } from '@inertiajs/inertia';
+import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import { computed, reactive, watch, ref } from 'vue';
 import axios from 'axios';
 import TableActivos from '../Partials/TableActivos.vue';
-import ModalAddItem from '../Partials/ModalAddItem.vue';
 import { value } from 'dom7';
 
 var props = defineProps(
@@ -45,17 +45,63 @@ const open = (id) =>
         });}
     */
 }
-/*Funciones modal*/
-const itemModal = ref(false);
 
-const openItemModal = () => 
+const addNewItem = () => 
 {
-   itemModal.value = true;
-}
+    const formatDate = new Date();
+    let dia = formatDate.getDate();
+    let mes = (formatDate.getMonth() + 1);
+    const año = formatDate.getFullYear();
+    mes = mes < 10 ? '0' + mes : mes;
+    dia = dia < 10 ? '0' + dia : dia;
+    let mesToString =mes.toString();
+    let diaToString = dia.toString();
+    
+    let cero = "0"; 
+    let newMes = "";
+    let newDia = "";
+    let fechaCompleta = "";
+    
+    if(mesToString.length < 2)
+      {
+        //console.log(cero+mesToString)
+        newMes =  cero+mesToString;
+        if(diaToString.length < 2)
+          {
+            newDia = cero+diaToString;
+            fechaCompleta = año+ '-' + newMes + '-' +newDia
+          }
+          else
+          {
+            fechaCompleta = año + '-' + newMes + '-' + dia; 
+          }
+      }
+      else
+      {
+        if(diaToString.length < 2)
+          {
+            newDia = cero+diaToString;
+            fechaCompleta = año+ '-' + mes + '-' +newDia
+          }
+           else
+          {
+            fechaCompleta = año + '-' + mes + '-' + dia; 
+          } 
+      }
+    
+    const ItemForm = useForm({
+       tipo_activo:props.tipoActivo.id,
+       fecha: fechaCompleta,
+       status:true,
+       status_activo_id:2
+    });
 
-const closeItemModal = () =>
-{
-    itemModal.value = false;
+    ItemForm.post(route('storeItem'),
+    {
+       onFinish: () => ItemForm.reset(),
+       preserveScroll:true,
+       preserveState:true
+    });
 }
 
 const axiosOpen = (id) =>
@@ -98,8 +144,7 @@ const changeStatus = (id)  =>
                             <td class="pr-4 pl-4 text-center text-4xl border-r-8 border-[#EC2944]">{{ tipoActivo.totalLibre[0].Libre }}</td>
                             <td class="pl-4 text-4xl text-center">{{ tipoActivo.totalBaja[0].Baja }}</td>
                             <td class="pl-4">
-                                <button @click="openItemModal" class="bg-[#EC2944] text-white rounded-full w-10">+</button>
-                                <ModalAddItem :show="itemModal" :tipoActivo="tipoActivo" :campos="tipoActivo.camposAllInput" @close="closeItemModal"></ModalAddItem>
+                                <button @click="addNewItem" class="bg-[#EC2944] text-white rounded-full w-10">+</button>
                             </td>
                         </tr>
                     </tbody>
