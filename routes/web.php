@@ -158,7 +158,10 @@ Route::controller(ActivoController::class)->group(function () {
     Route::post('/changeStatusActivoItem/{id}','changeStatusActivoItem')->name('changeStatusActivoItem');
     Route::get('/getAllCampos/{id}', 'getAllCampos')->name('getAllCampos');
     Route::post('/saveEditCampos/{id}','saveEditCampos')->name('saveEditCampos');
+    Route::post('/saveEvidencias','saveEvidencias')->name('saveEvidencias');
     Route::post('/changeStatusActivoItemLibre/{id}', 'changeStatusActivoItemLibre')->name('changeStatusActivoItemLibre');
+
+    Route::get('/valorCampo/{id}', 'valorCampo')->name('valorCampo');
 });
 
 

@@ -9,6 +9,7 @@ import 'izitoast/dist/css/iziToast.css';
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox.css";
 import { index } from "d3-array";
+import axios from "axios";
 
 const emit = defineEmits(["axios" ])
 
@@ -16,7 +17,8 @@ var props = defineProps(
     {
         activos:Object,
         campos:Object,
-        tipo_evidencias:Object
+        tipo_evidencias:Object,
+        allcampos:Object
     }
 );
 
@@ -47,15 +49,23 @@ const desactivarItem = (activos_empleados,id) =>
 
 const modalEditItem = ref(false);
 let activoModal = ref(null);
+let valores_activos = ref([]);
 const openModalEditItem = (activo) =>
 {
    activoModal.value = activo;
+   /*
+   axios.get('/valorCampo/'+activo.id).then((response)=> 
+    {
+        valores_activos.value = response.data
+    });
+  */
    modalEditItem.value = true;
 }
 
 const closeModalEditItem = () =>
 {
   modalEditItem.value = false;
+  valores_activos.value = [];
 }
 
 const emitAxios = (id) => 
@@ -216,5 +226,5 @@ const emitAxios = (id) =>
             </tr>
         </tbody>
     </table>
-    <ModalEditItem :activo="activoModal" :campos="campos" :show="modalEditItem"  @close="closeModalEditItem"></ModalEditItem>
+    <ModalEditItem :tipo_evidencias="tipo_evidencias"  :activo="activoModal" :campos="allcampos" :show="modalEditItem"  @close="closeModalEditItem"></ModalEditItem>
 </template>

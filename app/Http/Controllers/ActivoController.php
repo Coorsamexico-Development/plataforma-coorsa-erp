@@ -78,7 +78,7 @@ class ActivoController extends Controller
          ]);
 
         $tipo_inputs = TipoInput::all();
-
+       
         $tipo_evidencias = tipoEvidencia::all();
 
         return Inertia::render('Activos/ActivosIndex',
@@ -88,6 +88,12 @@ class ActivoController extends Controller
            'tipo_evidencias' =>$tipo_evidencias,
            'filters' => fn () => request()->all(['search']),
         ]);
+    }
+
+    public function valorCampo ($id)
+    {
+        //Labels edit campos
+       // return tipoActivoCampo
     }
 
     public function activos( Request $request, $idTipo)
@@ -306,48 +312,20 @@ class ActivoController extends Controller
 
     public function saveEditCampos(Request $request, $id)
     {
-         if($request['evidencia'] !== null)
-         {
-            $evidencia = request('evidencia');
-            $nombre_original = $evidencia->getClientOriginalName();
-            $ruta_evidencia = $evidencia->storeAs('evidencias/evidenciasItems', $nombre_original, 'gcs'); //guardamos el archivo en el storage
-            $urlEvidencia = Storage::disk('gcs')->url($ruta_evidencia);
+      if(request()->has('file'))
+      {
+          valorCampoActivo::updateOrCreate(
+            ['tipo_activo_campo_id' => request('tipo_activo_campo_id')],
+            ['activo_id' =>  request('activo_id')],
+            ['valor' =>  request('file')],
+        );
+      }
+      else
+      {
 
+      }
 
-             evidenciasActivo::create([
-                'nombre' => $request['nombre_evidencia'],
-                'tipo_evidencia_id' => $request['tipo_evidencia_id'],
-                'user_id' => $request['user'],
-                'imagen' => $urlEvidencia,
-                'activo_id' => $id
-             ]);
-
-             for ($i=0; $i < count($request['valores']) ; $i++) 
-             { 
-                $campoValor = $request['valores'][$i];
-                valorCampoActivo::where('valor_campo_activos.activo_id','=', $id)
-                ->where('valor_campo_activos.tipo_activo_campo_id' , '=', $campoValor['tipoInputId'])
-                ->update(
-                  [
-                    'valor' => $campoValor['valor']
-                  ]
-                );
-             }   
-         }
-         else //actualizas sin evidencia
-         {
-            for ($i=0; $i < count($request['valores']) ; $i++) 
-            { 
-               $campoValor = $request['valores'][$i];
-               valorCampoActivo::where('valor_campo_activos.activo_id','=', $id)
-               ->where('valor_campo_activos.tipo_activo_campo_id' , '=', $campoValor['tipoInputId'])
-               ->update(
-                 [
-                   'valor' => $campoValor['valor']
-                 ]
-               );
-            }    
-         }
+      
     }
 
     public function changeStatusActivoItemLibre ($id)
@@ -357,6 +335,26 @@ class ActivoController extends Controller
          'status' => true,
          'status_activo_id' => 2
       ]);
+    }
+
+    public function saveEvidencias (Request $request)
+    {
+
+       for ($i=0; $i < count($request['imagenes']) ; $i++) 
+       { 
+            $imagen = $request['imagenes'][$i];
+            $nombre_original = $imagen->getClientOriginalName();
+            $ruta_foto = $imagen->storeAs('evidencias/evidenciasItems', $nombre_original, 'gcs'); //guardamos el archivo en el storage
+            $urlFoto = Storage::disk('gcs')->url($ruta_foto);
+
+             evidenciasActivo::create([
+             'nombre' => $request['nombre'],
+             'imagen' => $urlFoto,
+             'tipo_evidencia_id' => $request['tipoEvidencia'], 
+             'user_id' => $request['usuario'],
+             'activo_id' => $request['activo_id']
+            ]);
+       }
     }
 }
 
