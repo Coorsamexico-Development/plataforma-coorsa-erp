@@ -312,20 +312,21 @@ class ActivoController extends Controller
 
     public function saveEditCampos(Request $request, $id)
     {
-      if(request()->has('file'))
+      $busquedaPor = ['activo_id' => request('activo_id'), 'tipo_activo_campo_id' => request('tipo_activo_campo_id')];
+      if(request()->has('file'))  //falta funcionalidad para guardar la imagen como tal y no el temp
       {
           valorCampoActivo::updateOrCreate(
-            ['tipo_activo_campo_id' => request('tipo_activo_campo_id')],
-            ['activo_id' =>  request('activo_id')],
+            $busquedaPor,
             ['valor' =>  request('file')],
         );
       }
-      else
-      {
-
+      else //si es tipo texto o numero
+      {   
+          valorCampoActivo::updateOrCreate(
+            $busquedaPor,
+            ['valor' =>  request('valor')],
+        );
       }
-
-      
     }
 
     public function changeStatusActivoItemLibre ($id)
@@ -355,6 +356,34 @@ class ActivoController extends Controller
              'activo_id' => $request['activo_id']
             ]);
        }
+    }
+
+    public function storeColum(Request $request)
+    {
+        tipoActivoCampo::create([
+          'tipo_activo_id' => $request['tipo_activo_id'],
+          'campo' => $request['campo'],
+          'principal' => $request['principal'],
+          'tipo_input_id' => $request['tipo_input_id'],
+          'tabla_id' => $request['tabla_id']
+        ]);
+    }
+
+    public function getCampos($idCampo, $idTipoActivo)
+    {
+       
+     return tipoActivoCampo::select(
+        'tipo_activo_campos.id AS id',
+        'tipo_activo_campos.campo AS campo',
+        'tipo_inputs.nombre',
+        'valor_campo_activos.valor'
+      )
+      ->join('tipo_inputs','tipo_activo_campos.tipo_input_id','tipo_inputs.id')
+      ->leftjoin('valor_campo_activos','valor_campo_activos.tipo_activo_campo_id','valor_campo_activos.id')
+      ->where('tipo_activo_campos.tabla_id','=', $idCampo)
+      ->where('tipo_activo_campos.tipo_activo_id', '=', $idTipoActivo)
+      ->get();
+     
     }
 }
 

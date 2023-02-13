@@ -10,6 +10,7 @@ var props = defineProps(
     {
         tipoActivo:Object,
         tipo_evidencias:Object,
+        tipo_inputs:Object
     }
 );
 
@@ -152,7 +153,8 @@ const changeStatus = (id)  =>
             </div>
          </div>
          <div class="w-full mt-2 mb-8"  :class="{ 'visible': visible, 'invisible': !visible }">
-           <TableActivos :tipo_evidencias="tipo_evidencias" :activos="tipoActivo.activos_items" :allcampos="tipoActivo.camposAllInput" :campos="tipoActivo.camposInput" @axios="axiosOpen"></TableActivos>
+           <TableActivos :tipo_inputs="tipo_inputs" :tipoActivo="tipoActivo"
+            :tipo_evidencias="tipo_evidencias" :activos="tipoActivo.activos_items" :allcampos="tipoActivo.camposAllInput" :campos="tipoActivo.camposInput" @axios="axiosOpen"></TableActivos>
         </div>
     </div>
 </template>

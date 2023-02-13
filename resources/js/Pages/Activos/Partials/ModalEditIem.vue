@@ -15,7 +15,10 @@ import InputText from '../Partials/InputText.vue'
 import ModalAddTipoEvidencia from '../Partials/ModalAddTipoEvidencia.vue';
 import axios from 'axios';
 import { value } from 'dom7';
-
+import InputError from '@/Components/InputError.vue';
+import TableButton from '../Partials/TableButton.vue';
+import ModalTableItems from '../Partials/ModalTableItems.vue';
+ 
 const emit = defineEmits(["close"]);
 
 var props = defineProps(
@@ -23,21 +26,24 @@ var props = defineProps(
         activo:Object,
         tipo_evidencias:Object,
         //
-        campos:Object
+        campos:Object,
+        tipo_inputs:Object,
+        tipoActivo:Object
     }
 );
 
 const components = 
 {
    UploadFile: UploadFile,
-   InputText:InputText
+   InputText:InputText,
+   TableButton:TableButton
 }
 
 const setComponent = (campoType) =>
 {
   switch (campoType) {
-      case "tabla":
-        
+      case "table":
+          return components.TableButton
         break;
       case "file":
            return components.UploadFile
@@ -52,7 +58,7 @@ const setComponent = (campoType) =>
 const campo_valor_id = ref(null);
 const putId = (valor_id) => 
 {
-  console.log(valor_id);
+  //console.log(valor_id);
   campo_valor_id.value = valor_id;
 }
 
@@ -67,20 +73,32 @@ const setFile = (file) =>
 
   fileForm.post(route('saveEditCampos',props.activo.id),{
     preserveScroll:true,
-    preserveState:true
+    preserveState:true,
+    onSuccess:() => fileForm.reset()
   });
 }
 
-const newValue = ref(null);
-const putvalue = (valor) =>  //si se hace por un watch este va a detectar cada cambio..
+let message = ref('error');
+//Otros tipo campo
+const updateCampo = (valor) => 
 {
-   //console.log(newValue.value)
-}
+  //console.log(props.activo.id);
+  const valorForm = useForm(
+   {
+      valor:valor.value,
+      tipo_activo_campo_id: campo_valor_id.value,
+      activo_id: props.activo.id
+   }
+  )
+   //console.log(valorForm);
+   valorForm.post(route('saveEditCampos',props.activo.id),{
+    preserveScroll:true,
+    preserveState:true,
+    onSuccess:() => valorForm.reset(),
+    onError: () => message.value = "hay errores"
+  });
+} 
 
-const update = () => 
-{
-  console.log("hola");
-}
 /*Subida de evidencias*/ 
 const user = usePage().props.value.user;
 const EvidenciasForm = useForm({
@@ -120,6 +138,22 @@ const closeTipoEvidencia = () =>
 {
     modalTipoEvidencia.value = false;
 }
+
+//MODAL TABLE CAMPOS
+const tableModal = ref(false);
+let campoName = ref(null);
+let idCampoR = ref(null);
+const openTableModal = (campo,idCampo) => 
+{
+  campoName.value = campo;
+  idCampoR.value = idCampo;
+  //console.log(campoName);
+  tableModal.value = true;
+}
+const closeTableModal = () => 
+{
+  tableModal.value = false;
+}
 </script>
 <template>
          <DialogModal  @close="close()">
@@ -128,26 +162,36 @@ const closeTipoEvidencia = () =>
             </template>
             <template #content>
                <div class="mt-4 border-b-2">
-                {{  pruebaReactiva}}
                 <h2 class="mr-4">Campos</h2>
                 <div v-if="activo.valor_campos_activos.length > 0"> <!--Si existen valores se setean en los inputs-->
                   <div v-for="campo in campos" :key="campo.id"> 
                     <InputLabel>{{ campo.campo }}</InputLabel>
                     <div v-for="valor in activo.valor_campos_activos" :key="valor.id">
-                      <component v-if="valor.tipo_activo_campo_id == campo.idCampo" 
+                    <!--v-if="valor.tipo_activo_campo_id == campo.idCampo" --> 
+                      <component 
                        :is="setComponent(campo.input)" 
-                       @click="putId(valor.tipo_activo_campo_id)" 
-                       @retornar="setFile"/>
-                    </div>
-                    
+                       @input="putId(campo.idCampo)" 
+                       @updateCampo="updateCampo"
+                       @retornar="setFile"
+                       @openModalTableCampos="openTableModal(campo.campo, campo.idCampo)" />
+                    </div> 
                    </div>
                 </div>
                 <div v-else> <!--Si no existen valores estaran vacios los inputs-->
-                  <div v-for="campo in campos" :key="campo.id">  
-                       <component :is="setComponent(campo.input)" @change="putInfo" @retornar="setFile"/>
+                  <div v-for="campo in campos" :key="campo.id">
+                      <InputLabel>{{ campo.campo }}</InputLabel>  
+                       <component 
+                       :is="setComponent(campo.input)" 
+                       @updateCampo="updateCampo" 
+                       @click="putId(campo.idCampo)" 
+                       @retornar="setFile" 
+                       @openModalTableCampos="openTableModal(campo.campo, campo.idCampo)"
+                       />
+                      <!-- <InputError :message="message"></InputError> -->
                    </div>
                 </div>
                </div>
+               <ModalTableItems v-if="campoName !== null" :activo_id="activo.id" :campoName="campoName" :idCampo="idCampoR" :tipoActivo="activo.tipo_activo" :show="tableModal" :tipo_inputs="tipo_inputs"  @close="closeTableModal"/>
                <div class="flex flex-col mt-4">
                    <h2 class="mr-4">Evidencias</h2>
                    <div>

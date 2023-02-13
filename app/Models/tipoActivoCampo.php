@@ -14,7 +14,8 @@ class tipoActivoCampo extends Model
         'tipo_activo_id',
         'campo',
         'principal',
-        'tipo_input_id'
+        'tipo_input_id',
+        'tabla_id'
     ];
 
     public function tipoInput ()

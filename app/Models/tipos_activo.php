@@ -72,6 +72,7 @@ class tipos_activo extends Model
         ->join('tipos_activos','tipo_activo_campos.tipo_activo_id','tipos_activos.id')
         ->join('tipo_inputs','tipo_activo_campos.tipo_input_id','tipo_inputs.id')
         ->where('tipos_activos.id','=',$this->id)
+        ->whereNull('tipo_activo_campos.tabla_id')
         ->get();
         //return $this->hasMany(tipoActivoCampo::class, 'tipo_activo_id')->hasOne(TipoInput::class, 'tipo_input_id');
 

@@ -18,7 +18,9 @@ var props = defineProps(
         activos:Object,
         campos:Object,
         tipo_evidencias:Object,
-        allcampos:Object
+        allcampos:Object,
+        tipo_inputs:Object,
+        tipoActivo:Object
     }
 );
 
@@ -160,8 +162,7 @@ const emitAxios = (id) =>
                           </div>
                      </div>
                   </div>
-                  <div v-else>
-                      
+                  <div v-else>                
                   </div>
                </td>
                <td>
@@ -226,5 +227,5 @@ const emitAxios = (id) =>
             </tr>
         </tbody>
     </table>
-    <ModalEditItem :tipo_evidencias="tipo_evidencias"  :activo="activoModal" :campos="allcampos" :show="modalEditItem"  @close="closeModalEditItem"></ModalEditItem>
+    <ModalEditItem :tipoActivo="tipoActivo" :tipo_evidencias="tipo_evidencias"  :tipo_inputs="tipo_inputs" :activo="activoModal" :campos="allcampos" :show="modalEditItem"  @close="closeModalEditItem"></ModalEditItem>
 </template>

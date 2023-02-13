@@ -79,7 +79,7 @@ const closeModalNewCategory = () =>
           <ModalAddCategoria :tipo_inputs="tipo_inputs" :show="modalNewCategory" @close="closeModalNewCategory"></ModalAddCategoria>
        </div>
        <div class="grid grid-cols-7">
-          <ActivoConteo v-for="tipoActivo in props.tipo_activos" :key="tipoActivo.id" :tipoActivo="tipoActivo" :tipo_evidencias="tipo_evidencias" ></ActivoConteo>
+          <ActivoConteo v-for="tipoActivo in props.tipo_activos" :key="tipoActivo.id" :tipoActivo="tipoActivo" :tipo_evidencias="tipo_evidencias" :tipo_inputs="tipo_inputs"></ActivoConteo>
        </div>
     </AppLayout>
 </template>

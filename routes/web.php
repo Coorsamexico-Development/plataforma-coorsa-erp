@@ -162,6 +162,8 @@ Route::controller(ActivoController::class)->group(function () {
     Route::post('/changeStatusActivoItemLibre/{id}', 'changeStatusActivoItemLibre')->name('changeStatusActivoItemLibre');
 
     Route::get('/valorCampo/{id}', 'valorCampo')->name('valorCampo');
+    Route::post('/storeColum', 'storeColum')->name('storeColum');
+    Route::get('/getCampos/{idCampo}/{tipoActivo}','getCampos')->name('getCampos');
 });
 
 

@@ -1,28 +1,30 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
-defineProps({
-    modelValue: String,
-    disable:Boolean
+const emit = defineEmits(['updateCampo'])
+var props = defineProps({
+   disable:Boolean
 });
 
-defineEmits(['update:modelValue', 'retornar']);
-
-const input = ref(null);
-
-onMounted(() => {
-    if (input.value.hasAttribute('autofocus')) {
-        input.value.focus();
+let campoPivot = ref(
+    {
+        value:""
     }
-});
+)
 
-
-defineExpose({ focus: () => input.value.focus() });
+const editCampo = () =>  //funcion para retornar el valor y actualizar en la BD
+{
+   //console.log("prueba");funciona si el input ya no esta en estado focus
+   emit('updateCampo',campoPivot.value)
+}
 </script>
 
 <template>
     <input ref="input"
         :disabled="disable"
-        class="rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 read-only:bg-gray-300"
-        :value="modelValue" @input="$emit('update:modelValue', $event.target.value)">
+         v-model="campoPivot.value"
+         @blur="editCampo"
+         style="border:1px solid black"
+         class="border-indigo-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 read-only:bg-gray-300"
+        >
 </template>
