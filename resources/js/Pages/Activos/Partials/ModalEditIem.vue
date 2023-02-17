@@ -166,14 +166,14 @@ const closeTableModal = () =>
                 <div v-if="activo.valor_campos_activos.length > 0"> <!--Si existen valores se setean en los inputs-->
                   <div v-for="campo in campos" :key="campo.id"> 
                     <InputLabel>{{ campo.campo }}</InputLabel>
-                    <div v-for="valor in activo.valor_campos_activos" :key="valor.id">
+                    <div>
                     <!--v-if="valor.tipo_activo_campo_id == campo.idCampo" --> 
                       <component 
                        :is="setComponent(campo.input)" 
                        @input="putId(campo.idCampo)" 
                        @updateCampo="updateCampo"
                        @retornar="setFile"
-                       @openModalTableCampos="openTableModal(campo.campo, campo.idCampo)" />
+                       @openModalTableCampos="openTableModal(campo.campo, campo.idCampo)" />   
                     </div> 
                    </div>
                 </div>
@@ -191,7 +191,14 @@ const closeTableModal = () =>
                    </div>
                 </div>
                </div>
-               <ModalTableItems v-if="campoName !== null" :activo_id="activo.id" :campoName="campoName" :idCampo="idCampoR" :tipoActivo="activo.tipo_activo" :show="tableModal" :tipo_inputs="tipo_inputs"  @close="closeTableModal"/>
+               <ModalTableItems v-if="campoName !== null" 
+               :activo_id="activo.id" 
+               :campoName="campoName" 
+               :idCampo="idCampoR"
+               :tipoActivo="activo.tipo_activo" 
+               :show="tableModal" 
+               :tipo_inputs="tipo_inputs"
+               @close="closeTableModal"/>
                <div class="flex flex-col mt-4">
                    <h2 class="mr-4">Evidencias</h2>
                    <div>

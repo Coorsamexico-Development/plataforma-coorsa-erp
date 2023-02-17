@@ -73,9 +73,11 @@ const closeModalNewCategory = () =>
           </div>
        </div>
 
-       <div class="grid grid-cols-5 mt-8">
-          <h1 class="col-start-2 text-xl" style="font-family: 'Montserrat';">Activos</h1>
-          <ButtonAdd class="flex justify-center col-start-4" @click="openModalNewCategory">Agregar categoría</ButtonAdd>
+       <div class="grid grid-cols-5 mt-8 mb-8">
+          <h1 class="col-start-2 text-2xl font-semibold uppercase tracking-wide" style="font-family: 'Montserrat';">Activos</h1>
+          <ButtonAdd class="flex justify-center col-start-4 rounded-none" @click="openModalNewCategory">
+            <span class="text-base" style="letter-spacing:0.25rem" >Agregar categoría</span>
+          </ButtonAdd>
           <ModalAddCategoria :tipo_inputs="tipo_inputs" :show="modalNewCategory" @close="closeModalNewCategory"></ModalAddCategoria>
        </div>
        <div class="grid grid-cols-7">

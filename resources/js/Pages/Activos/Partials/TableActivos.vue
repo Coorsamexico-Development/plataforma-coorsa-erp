@@ -3,6 +3,9 @@ import "@fancyapps/ui/dist/fancybox.css";
 import { Inertia } from "@inertiajs/inertia";
 import CarruselUsers from  '../Partials/CarruselUsers.vue';
 import ModalEditItem from '../Partials/ModalEditIem.vue';
+import TableButton from "./TableButton.vue";
+import ColumText from "./ColumText.vue";
+import ColumFile from "./ColumFile.vue";
 import { ref } from "@vue/reactivity";
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.css';
@@ -10,6 +13,7 @@ import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox.css";
 import { index } from "d3-array";
 import axios from "axios";
+import ModalTableItems from "./ModalTableItems.vue";
 
 const emit = defineEmits(["axios" ])
 
@@ -75,19 +79,62 @@ const emitAxios = (id) =>
    emit("axios", id);
 }
 
+const components = 
+{
+   TableButton:TableButton,
+   ColumText:ColumText,
+   ColumFile:ColumFile
+}
+
+const setComponent = (campoType) =>
+{
+  switch (campoType) {
+      case "table":
+          return components.TableButton
+        break;
+      case "file":
+           return components.ColumFile
+        break;
+      
+      case "text":
+          return components.ColumText
+        break
+
+      case "number":
+          return components.ColumText
+        break
+
+      default:
+          return components.ColumText
+        break;
+     }
+}
+
+const modalTable = ref(false);
+const openModalTable = () => 
+{
+   modalTable.value = true;
+}
+
+const closeModalTable = () => 
+{
+  modalTable.value = false;
+}
 </script>
 <template>
      <table class="w-full table-auto md:table-fixed">
-        <thead class="text-gray-400 border-b-2 border-gray-300 drop-shadow-xl font-extralight" style="font-family: 'Montserrat';">
+        <thead class="border-b-2 border-[#707070]  font-extralight " style="" >
             <tr>
-                <th>Acciones</th>
-                <th>Fecha de alta</th>
-                <th>Status</th>
+                <th><span class="text-sm font-extralight uppercase"></span></th>
+                <th><span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">Fecha de alta</span></th>
+                <th><span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">Status</span></th>
                 <th v-for="campo in campos" :key="campo.id">
-                  {{ campo.campo }}
+                  <span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">
+                    {{ campo.campo }}
+                  </span>
                 </th>
-                <th>Documento</th>
-                <th>Usuarios</th>
+                <th><span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">Documento</span></th>
+                <th><span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">Usuarios</span></th>
             </tr>
         </thead>
         <tbody>
@@ -138,7 +185,6 @@ const emitAxios = (id) =>
                           </g>
                         </svg>
                     </button>
-
                   </div>
                </td>
                <td>
@@ -157,14 +203,14 @@ const emitAxios = (id) =>
                <td v-for="campo in campos" :key="campo.id">
                   <div v-if="activo.valor_campos_activos.length > 0"> <!--Si existen uno o mas-->
                      <div v-for="valor in activo.valor_campos_activos" :key="valor.id">
-                          <div v-if="valor.tipo_activo_campo_id  === campo.idCampo"> 
-                              {{ valor.valor }}
-                          </div>
+                         <component  :is="setComponent(campo.input)" 
+                         @openModalTableCampos="openModalTable" :valor="valor"  :campo="campo" />
                      </div>
                   </div>
                   <div v-else>                
                   </div>
                </td>
+               <ModalTableItems :show="modalTable" @close="closeModalTable" />
                <td>
                  <div class="flex justify-center" v-if="activo.evidencias_activo.length > 0 " >
                   <div v-for="(image,index) in activo.evidencias_activo" :key="image.id">

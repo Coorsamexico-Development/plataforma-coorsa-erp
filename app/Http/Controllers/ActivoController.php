@@ -315,9 +315,14 @@ class ActivoController extends Controller
       $busquedaPor = ['activo_id' => request('activo_id'), 'tipo_activo_campo_id' => request('tipo_activo_campo_id')];
       if(request()->has('file'))  //falta funcionalidad para guardar la imagen como tal y no el temp
       {
+           $file = $request['file'];
+           $nombre_original = $file->getClientOriginalName();
+           $ruta_file = $file->storeAs('activos/archivos', $nombre_original, 'gcs'); //guardamos el archivo en el storage
+           $urlFile = Storage::disk('gcs')->url($ruta_file);
+
           valorCampoActivo::updateOrCreate(
             $busquedaPor,
-            ['valor' =>  request('file')],
+            ['valor' =>  $urlFile],
         );
       }
       else //si es tipo texto o numero

@@ -5,11 +5,15 @@ import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import TableButton from './TableButton.vue';
 import ModalTableItems from './ModalTableItems.vue'
 import { ref } from 'vue';
+import { colorInterpolate } from '@amcharts/amcharts5/.internal/core/util/Animation';
 
 var props = defineProps(
     {
         columns:Object,
-        activoId:Number
+        activoId:Number,
+
+        tipo_inputs:Object,
+        tipoActivo:Number
     }
 );
 
@@ -76,10 +80,13 @@ const setFiles = (files) =>
   });
 }
 
-const dinamicModal = ref(false);
-const openDinamicModal = () =>
+let dinamicModal = ref(false);
+let columNameReactive = ref(-1);
+let idColumReactive = ref(-1);
+const openDinamicModal = (colum) =>
 {
-    //console.log('files');
+    columNameReactive.value = colum.campo;
+    idColumReactive.value = colum.id;
     dinamicModal.value = true;
 }
 const closeDinamicModal = () =>
@@ -111,10 +118,19 @@ const closeDinamicModal = () =>
                 @click="putId(colum.id)"
                 @updateCampo="takeValor"
                 @retornar="setFiles"
-                @openModalTableCampos="openDinamicModal" />
+                @openModalTableCampos="openDinamicModal(colum)" />
+
+                <ModalTableItems 
+                 :campoName="colum.campo"
+                 :idCampo="colum.id"
+                 :activo_id="activoId"
+                 :tipo_inputs="tipo_inputs"
+                 :tipoActivo="tipoActivo"
+                 :show="dinamicModal" 
+                 @close="closeDinamicModal"/>
              </td>
           </tr>
       </tbody>
     </table>
-    <ModalTableItems :show="dinamicModal" @close="closeDinamicModal"/>
+
 </template>

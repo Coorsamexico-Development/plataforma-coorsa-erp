@@ -12,7 +12,6 @@ import ButtonAdd from '@/Components/ButtonAdd.vue';
 import TableCampos from '../Partials/TableCampos.vue'
 import { Inertia } from "@inertiajs/inertia";
 import axios from 'axios';
-import { prop } from 'dom7';
 
 const emit = defineEmits(["close", "axios"]);
 
@@ -22,7 +21,7 @@ var props = defineProps(
         tipoActivo:Number,
         campoName:String,
         idCampo:Number,
-        activo_id:Number
+        activo_id:Number,
     }
 );
 
@@ -30,6 +29,8 @@ const close = () =>
 {
     emit('close');
 };
+
+const idCampoReactive = ref(-1);
 
 const newColumn = useForm(
     {
@@ -57,6 +58,8 @@ axios.get('/getCampos/'+props.idCampo+'/'+props.tipoActivo).then((response)=>
         //console.log(response);
         colums.value = response.data;
      });
+
+console.log(props);
 
 </script>
 <template>
@@ -106,7 +109,7 @@ axios.get('/getCampos/'+props.idCampo+'/'+props.tipoActivo).then((response)=>
                     </form>
                  </div>
                  <div class="col-start-3 col-end-6 border-l-2">
-                    <TableCampos :columns="colums" :activoId="activo_id" />
+                    <TableCampos :tipo_inputs="tipo_inputs" :tipoActivo="tipoActivo" :columns="colums" :activoId="activo_id" />
                  </div>
               </div>
             </template>
