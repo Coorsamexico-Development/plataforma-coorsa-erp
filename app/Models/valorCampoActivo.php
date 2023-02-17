@@ -15,4 +15,5 @@ class valorCampoActivo extends Model
         'tipo_activo_campo_id',
         'activo_id',
     ];
+
 }

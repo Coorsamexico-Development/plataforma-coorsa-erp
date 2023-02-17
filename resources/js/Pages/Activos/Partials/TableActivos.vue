@@ -13,7 +13,7 @@ import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox.css";
 import { index } from "d3-array";
 import axios from "axios";
-import ModalTableItems from "./ModalTableItems.vue";
+import ModalTableShowItems from "./ModalTableShowItems.vue";
 
 const emit = defineEmits(["axios" ])
 
@@ -111,8 +111,16 @@ const setComponent = (campoType) =>
 }
 
 const modalTable = ref(false);
-const openModalTable = () => 
+const campoReactive = ref(null);
+const camposReactive = ref(null);
+const openModalTable = (campo) => 
 {
+   campoReactive.value = campo;
+   axios.get('/columnasxCampo/'+campoReactive.value.idCampo).then((response)=> 
+    {
+        //console.log(response.data);
+        camposReactive.value = response.data;
+    });
    modalTable.value = true;
 }
 
@@ -204,13 +212,13 @@ const closeModalTable = () =>
                   <div v-if="activo.valor_campos_activos.length > 0"> <!--Si existen uno o mas-->
                      <div v-for="valor in activo.valor_campos_activos" :key="valor.id">
                          <component  :is="setComponent(campo.input)" 
-                         @openModalTableCampos="openModalTable" :valor="valor"  :campo="campo" />
+                         @openModalTableCampos="openModalTable(campo)" :valor="valor"  :campo="campo" />
                      </div>
                   </div>
                   <div v-else>                
                   </div>
                </td>
-               <ModalTableItems :show="modalTable" @close="closeModalTable" />
+               <ModalTableShowItems :campo="campoReactive" :campos="camposReactive" :show="modalTable" @close="closeModalTable" />
                <td>
                  <div class="flex justify-center" v-if="activo.evidencias_activo.length > 0 " >
                   <div v-for="(image,index) in activo.evidencias_activo" :key="image.id">

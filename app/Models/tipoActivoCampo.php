@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class tipoActivoCampo extends Model
 {
@@ -21,5 +22,10 @@ class tipoActivoCampo extends Model
     public function tipoInput ()
     {
         return $this->hasOne(TipoInput::class, 'tipo_input_id');
+    }
+
+     public function valores ()
+    {
+        return $this->belongsToMany(valorCampoActivo::class );
     }
 }
