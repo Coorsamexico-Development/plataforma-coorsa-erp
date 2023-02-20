@@ -394,12 +394,15 @@ class ActivoController extends Controller
     public function columasCampos ($campo_id)
     {
         return tipoActivoCampo::select( //columnas con el tipo de input que es
+          'tipo_activo_campos.id AS id',
           'tipo_activo_campos.campo AS campo',
-          'tipo_inputs.nombre AS tipo_input'
+          'tipo_inputs.nombre AS tipo_input',
+          'valor_campo_activos.valor AS valor'
         )
-        ->with('valores')
-        ->join('tipo_inputs','tipo_activo_campos.tipo_input_id','tipo_inputs.id') 
-        ->where('tipo_activo_campos.tabla_id','=',$campo_id)
+        ->join('tipo_inputs','tipo_activo_campos.tipo_input_id','tipo_inputs.id')
+        ->leftjoin('valor_campo_activos', 'valor_campo_activos.tipo_activo_campo_id','tipo_activo_campos.id')
+        ->where('tipo_activo_campos.tabla_id','=', $campo_id)
+       // ->where('tipo_activo_campos.tabla_id','=',$campo_id)
         ->get();
     }
 }

@@ -24,8 +24,5 @@ class tipoActivoCampo extends Model
         return $this->hasOne(TipoInput::class, 'tipo_input_id');
     }
 
-     public function valores ()
-    {
-        return $this->belongsToMany(valorCampoActivo::class );
-    }
+    
 }

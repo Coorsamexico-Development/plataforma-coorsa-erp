@@ -20,25 +20,39 @@ class UsersExport implements FromQuery, WithHeadings
 
     public function query()
     {
-        return DB::table('users')
-        ->select(
-            'id',
-            'numero_empleado',
-            'name',
-            'apellido_paterno',
-            'apellido_materno',
-            'email',
-            'fecha_nacimiento',
-            'fecha_ingreso',
-            'fecha_ingreso_real',
-            'salario_bruto'
+        return User::select(
+            'users.id',
+            'users.numero_empleado',
+            'users.name',
+            'users.apellido_paterno',
+            'users.apellido_materno',
+            'users.email',
+            'users.fecha_nacimiento',
+            'users.fecha_ingreso',
+            'users.fecha_ingreso_real',
+            'users.salario_bruto',
+            'users.fotografia',
+            'expedientes.ruta AS ruta'
             )
-        ->where('activo','=',$this->activo)
+        ->leftjoin('expedientes', 'expedientes.empleado_id', 'users.id')
+        ->where('users.activo','=',$this->activo)
         ->orderBy('users.id');
     }
 
     public function headings(): array
     {
-        return ["ID", "No.Empleado", "Nombre", "Apellido paterno", "Apellido materno", "email", 'Fecha de nacimiento', 'Fecha de ingreso', 'Fecha de ingreso real','Salario bruto'];
+        return ["ID", 
+        "No.Empleado",
+        "Nombre",
+        "Apellido paterno",
+        "Apellido materno",
+        "Email",
+        'Fecha de nacimiento',
+        'Fecha de ingreso',
+        'Fecha de ingreso real',
+        'Salario bruto',
+        'Fotografía',
+        'Documentos'
+     ];
     }
 }

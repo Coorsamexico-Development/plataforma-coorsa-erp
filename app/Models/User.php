@@ -91,7 +91,7 @@ class User extends Authenticatable
         'profile_photo_url',
         'is_admin',
         'expedienteGeneral',
-        'contrato'
+        'contrato',
     ];
 
     //Se crea el atributo is_admin donde el rol con id 1 es admin
@@ -171,4 +171,5 @@ class User extends Authenticatable
     {
         return $this->puestos()->where('empleados_puestos.activo', '=', 1)->first();
     }
+
 }

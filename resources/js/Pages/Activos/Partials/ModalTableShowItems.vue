@@ -11,6 +11,9 @@ import Checkbox from '@/Components/Checkbox.vue';
 import ButtonAdd from '@/Components/ButtonAdd.vue';
 import TableCampos from '../Partials/TableCampos.vue'
 import { Inertia } from "@inertiajs/inertia";
+import TableButton from "./TableButton.vue";
+import ColumText from "./ColumText.vue";
+import ColumFile from "./ColumFile.vue";
 import axios from 'axios';
 
 const emit = defineEmits(["close", "axios"]);
@@ -22,12 +25,56 @@ var props = defineProps(
     }
 );
 
-//console.log(props.campo)
-
 const close = () => 
 {
     emit('close');
 };
+
+const components = 
+{
+    TableButton:TableButton,
+    ColumText:ColumText,
+    ColumFile:ColumFile
+}
+
+const setComponent = (campoType) =>
+{
+  switch (campoType) {
+      case "table":
+          return components.TableButton
+        break;
+
+      case "file":
+           return components.ColumFile
+        break;
+
+      case "text":
+          return components.ColumText
+        break
+
+      case "number":
+          return components.ColumText
+        break
+
+      default:
+          return components.ColumText
+        break;
+    
+     }
+}
+
+const openShow = ref(false);
+
+const openModalShowCampos = (campo_id) =>
+{
+   console.log(campo_id);
+   openShow.value = true;
+}
+
+const closeModalShowCampos = () => 
+{
+  openShow.value = false;
+}
 
 </script>
 <template>
@@ -45,6 +92,13 @@ const close = () =>
                            </th>
                         </tr>
                      </thead>
+                     <tbody>
+                        <tr>
+                          <td class="text-center p-8 pt-0 pb-1" v-for="valore in campos" :key="valore.id">
+                             <component :is="setComponent(valore.tipo_input)" :valore="valore" @openModalTableCampos="openModalShowCampos(valore.id)" />
+                          </td>
+                        </tr>
+                     </tbody>
                   </table>
               </div>
             </template>
