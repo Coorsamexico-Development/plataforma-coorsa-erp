@@ -15,6 +15,7 @@ import TableButton from "./TableButton.vue";
 import ColumText from "./ColumText.vue";
 import ColumFile from "./ColumFile.vue";
 import axios from 'axios';
+import ModalTableShowItems from '../Partials/ModalTableShowItems.vue';
 
 const emit = defineEmits(["close", "axios"]);
 
@@ -64,10 +65,16 @@ const setComponent = (campoType) =>
 }
 
 const openShow = ref(false);
-
-const openModalShowCampos = (campo_id) =>
+const campoReactive = ref(null);
+const camposReactive = ref(null);
+const openModalShowCampos = (campo) =>
 {
-   console.log(campo_id);
+   campoReactive.value = campo;
+   axios.get('/columnasxCampo/'+campo.id).then((response)=> 
+    {
+        console.log(response.data);
+        camposReactive.value = response.data;
+    });
    openShow.value = true;
 }
 
@@ -95,12 +102,13 @@ const closeModalShowCampos = () =>
                      <tbody>
                         <tr>
                           <td class="text-center p-8 pt-0 pb-1" v-for="valore in campos" :key="valore.id">
-                             <component :is="setComponent(valore.tipo_input)" :valore="valore" @openModalTableCampos="openModalShowCampos(valore.id)" />
+                             <component :is="setComponent(valore.tipo_input)" :valore="valore" @openModalTableCampos="openModalShowCampos(valore)" />
                           </td>
                         </tr>
                      </tbody>
                   </table>
               </div>
+              <ModalTableShowItems :campo="campoReactive" :campos="camposReactive" @close="closeModalShowCampos" :show="openShow"/>
             </template>
             <template #footer>
                 <SecondaryButton  @click="close()" class="closeModal1" style="float:right">
