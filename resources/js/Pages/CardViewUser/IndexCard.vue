@@ -37,10 +37,10 @@
         <span class="w-10/12  absolute bg-[#E84A49]" style="height: 2px;"></span>
     </div>
   </div>
-  <div class="flex flex-row mt-8 justify-center">
+  <div class="flex flex-row mt-8 justify-center ">
      <div class="m-2">
         <a href="tel: +52 55 8025 5972">
-            <button class="border rounded-full p-3">
+            <button class="border rounded-full p-3 bg-[#F7F7F7]">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25.001" height="25.128" viewBox="0 0 25.001 25.128">
                   <defs>
                     <clipPath id="clip-path">
@@ -60,7 +60,7 @@
      </div>
      <div class="m-2">
         <a href="https://api.whatsapp.com/send?phone=5580255972">
-            <button class="border rounded-full p-3">
+            <button class="border rounded-full p-3 bg-[#F7F7F7]">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="26.205" height="26.22" viewBox="0 0 26.205 26.22">
                   <defs>
                     <clipPath id="clip-path">
@@ -92,7 +92,7 @@
      </div>
      <div class="m-2">
         <a href="mailto: renato.ortiz@coorsamexico.com">
-          <button class="border rounded-full p-3">
+          <button class="border rounded-full p-3 bg-[#F7F7F7]">
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="21.763" viewBox="0 0 28.7 21.763">
                 <defs>
                  <clipPath id="clip-path">
@@ -124,7 +124,7 @@
      </div>
      <div class="m-2">
        <a href="https://goo.gl/maps/jn9h3GzbkUrTjT168">
-         <button class="border rounded-full p-2 pl-3 pr-3">
+         <button class="border rounded-full p-2 pl-3 pr-3 bg-[#F7F7F7]">
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21.393" height="27.112" viewBox="0 0 21.393 27.112">
                <defs>
                  <clipPath id="clip-path">
