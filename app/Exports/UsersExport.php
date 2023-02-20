@@ -20,7 +20,8 @@ class UsersExport implements FromQuery, WithHeadings
 
     public function query()
     {
-        return User::select(
+        return DB::table('users')
+        ->select(
             'users.id',
             'users.numero_empleado',
             'users.name',
@@ -32,7 +33,7 @@ class UsersExport implements FromQuery, WithHeadings
             'users.fecha_ingreso_real',
             'users.salario_bruto',
             'users.fotografia',
-            'expedientes.ruta AS ruta'
+            'expedientes.ruta'
             )
         ->leftjoin('expedientes', 'expedientes.empleado_id', 'users.id')
         ->where('users.activo','=',$this->activo)
@@ -41,18 +42,6 @@ class UsersExport implements FromQuery, WithHeadings
 
     public function headings(): array
     {
-        return ["ID", 
-        "No.Empleado",
-        "Nombre",
-        "Apellido paterno",
-        "Apellido materno",
-        "Email",
-        'Fecha de nacimiento',
-        'Fecha de ingreso',
-        'Fecha de ingreso real',
-        'Salario bruto',
-        'Fotografía',
-        'Documentos'
-     ];
+        return ["ID", "No.Empleado", "Nombre", "Apellido paterno", "Apellido materno", "email", 'Fecha de nacimiento', 'Fecha de ingreso', 'Fecha de ingreso real','Salario bruto','Fotografía','Documento'];
     }
 }
