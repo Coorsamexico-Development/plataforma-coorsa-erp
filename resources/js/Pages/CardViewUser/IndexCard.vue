@@ -34,7 +34,7 @@
           </div>
     </div>
     <div class="flex justify-center">
-        <span class="w-10/12  absolute bg-[#EC2944]" style="height: 2px;"></span>
+        <span class="w-10/12  absolute bg-[#E84A49]" style="height: 2px;"></span>
     </div>
   </div>
   <div class="flex flex-row mt-8 justify-center">
@@ -123,7 +123,7 @@
         </a>
      </div>
      <div class="m-2">
-       <a href="">
+       <a href="https://goo.gl/maps/jn9h3GzbkUrTjT168">
          <button class="border rounded-full p-2 pl-3 pr-3">
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21.393" height="27.112" viewBox="0 0 21.393 27.112">
                <defs>
