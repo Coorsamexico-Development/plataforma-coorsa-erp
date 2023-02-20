@@ -210,9 +210,12 @@ const closeModalTable = () =>
                </td>
                <td v-for="campo in campos" :key="campo.id">
                   <div v-if="activo.valor_campos_activos.length > 0"> <!--Si existen uno o mas-->
-                     <div v-for="valor in activo.valor_campos_activos" :key="valor.id">
-                         <component  :is="setComponent(campo.input)" 
+                     <div v-for="valor in activo.valor_campos_activos"  :key="valor.id">
+                         <component  :is="setComponent(campo.input)"  v-if="campo.idCampo == valor.tipo_activo_campo_id"
                          @openModalTableCampos="openModalTable(campo)" :valor="valor"  :campo="campo" />
+                         <div v-else>
+                    
+                         </div>
                      </div>
                   </div>
                   <div v-else>                
