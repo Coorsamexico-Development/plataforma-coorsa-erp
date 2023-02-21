@@ -96,7 +96,6 @@ const closeModalShowCampos = () =>
                      <thead>
                         <tr class="border-b ">
                            <th class="text-center p-8 pt-0 pb-1" v-for="campose in campos" :key="campose.id">
-                            {{ campose }}
                              {{ campose.campo }}
                            </th>
                         </tr>

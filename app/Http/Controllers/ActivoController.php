@@ -14,6 +14,7 @@ use App\Models\TipoInput;
 use App\Models\tipos_activo;
 use App\Models\valorCampoActivo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -381,10 +382,10 @@ class ActivoController extends Controller
         'tipo_activo_campos.id AS id',
         'tipo_activo_campos.campo AS campo',
         'tipo_inputs.nombre',
-        'valor_campo_activos.valor'
+  
       )
       ->join('tipo_inputs','tipo_activo_campos.tipo_input_id','tipo_inputs.id')
-      ->leftjoin('valor_campo_activos','valor_campo_activos.tipo_activo_campo_id','valor_campo_activos.id')
+
       ->where('tipo_activo_campos.tabla_id','=', $idCampo)
       ->where('tipo_activo_campos.tipo_activo_id', '=', $idTipoActivo)
       ->get();
@@ -402,10 +403,14 @@ class ActivoController extends Controller
           'valor_campo_activos.valor AS valor'
         )
         ->leftjoin('tipo_inputs','tipo_activo_campos.tipo_input_id','tipo_inputs.id')
-        ->leftjoin('valor_campo_activos', 'valor_campo_activos.tipo_activo_campo_id','tipo_activo_campos.id')
+        ->leftjoin('valor_campo_activos', function ($join) use($idActivo) {
+          $join->on('valor_campo_activos.tipo_activo_campo_id','tipo_activo_campos.id')
+          ->on('valor_campo_activos.activo_id','=', DB::raw($idActivo));
+        })
         ->leftjoin('tipos_activos','tipo_activo_campos.tipo_activo_id','tipos_activos.id')
         ->where('tipo_activo_campos.tabla_id','=', $campo_id)
-        ->where('valor_campo_activos.activo_id','=', $idActivo)
+        // ->where('valor_campo_activos.activo_id','=', $idActivo)
+        //->OrWhere('valor_campo_activos.activo_id','=', null)
        // ->where('tipo_activo_campos.tabla_id','=',$campo_id)
         ->get();
 

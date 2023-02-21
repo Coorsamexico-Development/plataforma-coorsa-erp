@@ -105,7 +105,7 @@ const closeDinamicModal = () =>
           </tr>
       </thead>
       <tbody class="mt-2">
-          <tr v-for="colum in columns" :key="colum.id">
+          <tr v-for="(colum, index) in columns" :key="index">
              <td class="text-center">
                {{ colum.campo }}
              </td>
