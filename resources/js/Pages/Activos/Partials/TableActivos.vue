@@ -113,10 +113,10 @@ const setComponent = (campoType) =>
 const modalTable = ref(false);
 const campoReactive = ref(null);
 const camposReactive = ref(null);
-const openModalTable = (campo) => 
+const openModalTable = (campo, idActivo) => 
 {
    campoReactive.value = campo;
-   axios.get('/columnasxCampo/'+campoReactive.value.idCampo).then((response)=> 
+   axios.get('/columnasxCampo/'+campoReactive.value.idCampo+'/'+idActivo).then((response)=> 
     {
         //console.log(response.data);
         camposReactive.value = response.data;
@@ -213,19 +213,19 @@ const closeModalTable = () =>
                      <div v-for="(valor, index) in activo.valor_campos_activos"  :key="index">
                         <div v-if="index == 0">
                           <component :is="setComponent(campo.input)" v-if="campo.input == 'table'"
-                         @openModalTableCampos="openModalTable(campo)" :valor="valor"  :campo="campo" />
+                         @openModalTableCampos="openModalTable(campo, activo.id)" :valor="valor"  :campo="campo" />
 
                          <component :is="setComponent(campo.input)" v-else
-                          @openModalTableCampos="openModalTable(campo)" :valor="valor"  :campo="campo" />
+                          @openModalTableCampos="openModalTable(campo, activo.id)" :valor="valor"  :campo="campo" />
                         </div>
                         <div v-else class="">
                           <component :is="setComponent(campo.input)" v-if="campo.input !== 'table'"
-                          @openModalTableCampos="openModalTable(campo)" :valor="valor"  :campo="campo" />
+                          @openModalTableCampos="openModalTable(campo, activo.id)" :valor="valor"  :campo="campo" />
                         </div>
                      </div>
                   </div>
                </td>
-               <ModalTableShowItems :campo="campoReactive" :campos="camposReactive" :show="modalTable" @close="closeModalTable" />
+               <ModalTableShowItems :campo="campoReactive" :idActivo="activo.id" :campos="camposReactive" :show="modalTable" @close="closeModalTable" />
                <td>
                  <div class="flex justify-center" v-if="activo.evidencias_activo.length > 0 " >
                   <div v-for="(image,index) in activo.evidencias_activo" :key="image.id">

@@ -22,7 +22,8 @@ const emit = defineEmits(["close", "axios"]);
 var props = defineProps(
     {
         campo:Object,
-        campos:Object
+        campos:Object,
+        idActivo:Number
     }
 );
 
@@ -70,7 +71,7 @@ const camposReactive = ref(null);
 const openModalShowCampos = (campo) =>
 {
    campoReactive.value = campo;
-   axios.get('/columnasxCampo/'+campo.id).then((response)=> 
+   axios.get('/columnasxCampo/'+campo.id +'/'+props.idActivo).then((response)=> 
     {
         console.log(response.data);
         camposReactive.value = response.data;
@@ -95,6 +96,7 @@ const closeModalShowCampos = () =>
                      <thead>
                         <tr class="border-b ">
                            <th class="text-center p-8 pt-0 pb-1" v-for="campose in campos" :key="campose.id">
+                            {{ campose }}
                              {{ campose.campo }}
                            </th>
                         </tr>
@@ -108,7 +110,7 @@ const closeModalShowCampos = () =>
                      </tbody>
                   </table>
               </div>
-              <ModalTableShowItems :campo="campoReactive" :campos="camposReactive" @close="closeModalShowCampos" :show="openShow"/>
+              <ModalTableShowItems :idActivo="idActivo" :campo="campoReactive" :campos="camposReactive" @close="closeModalShowCampos" :show="openShow"/>
             </template>
             <template #footer>
                 <SecondaryButton  @click="close()" class="closeModal1" style="float:right">
