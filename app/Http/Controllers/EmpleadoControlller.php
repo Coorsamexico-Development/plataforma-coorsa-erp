@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class EmpleadoControlller extends Controller
 {
@@ -99,6 +100,43 @@ class EmpleadoControlller extends Controller
 
     public function store(Request $request)
     {
+
+        $request->validate([ //validaciones
+            'correo_electronico' => 'required | unique:users,email',
+            'numero_empleado' => 'required',
+            'nombre' => 'required',
+            'apellido_paterno' => 'required',
+            'apellido_materno' => 'required',
+            'fecha_nacimiento' => 'required',
+            'fecha_ingreso' => 'required',
+            'fecha_ingreso_real' => 'required',
+            'nss' => 'required',
+            'curp' => 'required',
+            'rfc' => 'required',
+            'contacto_emergencia' => 'required',
+            'telefono' => 'required',
+            'hijos' => 'required',
+            'clave_bancaria' => 'required',
+            'numero_cuenta_bancaria' => 'required',
+            'salario_diario' => 'required',
+            'salario_bruto' => 'required',
+            'salario_imss' => 'required',
+            'bono_puntualidad' => 'required',
+            'bono_asistencia' => 'required',
+            'despensa' => 'required',
+            'fondo_ahorro' => 'required',
+            'bono_puntualidad' => 'required',
+            'bono_asistencia' => 'required',
+            'despensa' => 'required',
+            'fondo_ahorro' => 'required',
+            'horario' => 'required',
+            'alergias' => 'required',
+            'enfermedades_cronicas' => 'required',
+            'direccion_id' => 'required',
+            'estado_civil_id' => 'required',
+            
+         ]);
+
         $newEmpleado =  $request;
         $ruta_fotografia = "";
 

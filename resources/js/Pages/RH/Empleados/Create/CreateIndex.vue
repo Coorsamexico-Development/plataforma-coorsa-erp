@@ -1139,6 +1139,7 @@ const fecha_termino = computed(() => {
                                 Regresar
                             </ButtonInfo>
                         </a>
+                        <!--
                         <div class="px-6 py-4 ">
                             <ul v-if="form.hasErrors" class="text-red-500">
                                 <li v-for="(error, index) in form.errors" :key="index">
@@ -1146,6 +1147,7 @@ const fecha_termino = computed(() => {
                                 </li>
                             </ul>
                         </div>
+                    -->
                     </div>
                 </div>
             </div>

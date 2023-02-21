@@ -47,7 +47,11 @@ const saveCategory = () =>
     CategoryForm.post(route('storeCategory'),
     {
        onFinish: () => CategoryForm.reset(),
-       onSuccess: () =>  close() 
+       onSuccess: () =>  close(),
+       onError: (error) => {
+                    console.log(error.response);
+                    swal("Error al crear", "Favor de validar los datos", "error");
+                }
     });
 }
 
@@ -70,6 +74,7 @@ const retornarFile = (file)  =>
                         <div class="">
                           <InputLabel>Nombre de categoría</InputLabel>
                           <TextInput v-model="CategoryForm.nombre" class="mr-2 border border-slate-400"></TextInput>
+                          <InputError :message="CategoryForm.errors.nombre"></InputError>
                         </div>
                         <div class="col-start-2 col-end-4">
                           <UploadFile @retornar="retornarFile"></UploadFile>
