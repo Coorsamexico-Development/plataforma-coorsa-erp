@@ -141,7 +141,7 @@ const closeModalTable = () =>
                     {{ campo.campo }}
                   </span>
                 </th>
-                <th><span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">Documento</span></th>
+                <th class="pl-8"><span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">Documento</span></th>
                 <th><span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">Usuarios</span></th>
             </tr>
         </thead>
@@ -208,17 +208,21 @@ const closeModalTable = () =>
                     </span>
                   </p>
                </td>
-               <td v-for="campo in campos" :key="campo.id">
+               <td v-for="(campo, i) in campos" :key="campo.id">
                   <div v-if="activo.valor_campos_activos.length > 0"> <!--Si existen uno o mas-->
-                     <div v-for="valor in activo.valor_campos_activos"  :key="valor.id">
-                         <component  :is="setComponent(campo.input)"  v-if="campo.idCampo == valor.tipo_activo_campo_id"
+                     <div v-for="(valor, index) in activo.valor_campos_activos"  :key="index">
+                        <div v-if="index == 0">
+                          <component :is="setComponent(campo.input)" v-if="campo.input == 'table'"
                          @openModalTableCampos="openModalTable(campo)" :valor="valor"  :campo="campo" />
-                         <div v-else>
-                    
-                         </div>
+
+                         <component :is="setComponent(campo.input)" v-else
+                          @openModalTableCampos="openModalTable(campo)" :valor="valor"  :campo="campo" />
+                        </div>
+                        <div v-else class="">
+                          <component :is="setComponent(campo.input)" v-if="campo.input !== 'table'"
+                          @openModalTableCampos="openModalTable(campo)" :valor="valor"  :campo="campo" />
+                        </div>
                      </div>
-                  </div>
-                  <div v-else>                
                   </div>
                </td>
                <ModalTableShowItems :campo="campoReactive" :campos="camposReactive" :show="modalTable" @close="closeModalTable" />
