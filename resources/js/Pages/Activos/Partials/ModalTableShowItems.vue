@@ -71,6 +71,7 @@ const camposReactive = ref(null);
 const openModalShowCampos = (campo) =>
 {
    campoReactive.value = campo;
+   console.log(campo)
    axios.get('/columnasxCampo/'+campo.id +'/'+props.idActivo).then((response)=> 
     {
         console.log(response.data);
@@ -103,7 +104,9 @@ const closeModalShowCampos = () =>
                      <tbody>
                         <tr>
                           <td class="text-center p-8 pt-0 pb-1" v-for="valore in campos" :key="valore.id">
-                             <component :is="setComponent(valore.tipo_input)" :valore="valore" @openModalTableCampos="openModalShowCampos(valore)" />
+                             <component :is="setComponent(valore.tipo_input)" }
+                             :valore="valore"
+                              @openModalTableCampos="openModalShowCampos(valore)" />
                           </td>
                         </tr>
                      </tbody>
