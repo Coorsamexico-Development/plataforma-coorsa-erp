@@ -504,7 +504,7 @@ const fecha_termino = computed(() => {
                                                     <InputError :message="form.errors.password" class="mt-2" />
                                                 </div>
 
-                                                <div class="mt-4">
+                                                <div class="mt-4 ">
                                                     <InputLabel for="cat_estados_civile_id" value="Rol:*" />
                                                     <Select v-model="form.rol_id" class="w-full"
                                                         :disabled="editEmpleadoDisable">
@@ -512,8 +512,9 @@ const fecha_termino = computed(() => {
                                                             {{ rol.nombre }}
                                                         </option>
                                                     </Select>
-                                                    <InputError :message="form.errors.cat_estados_civile_id"
-                                                        class="mt-2" />
+                                                   
+                                                    <InputError :message="form.errors.rol_id"
+                                                        class="mt-0" />
                                                 </div>
 
                                             </div>

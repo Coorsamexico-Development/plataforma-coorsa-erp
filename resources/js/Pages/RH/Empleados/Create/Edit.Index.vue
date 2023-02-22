@@ -647,7 +647,7 @@ const sendEmail = () => {
                                                         {{ rol.nombre }}
                                                     </option>
                                                 </Select>
-                                                <InputError :message="form.errors.cat_estados_civile_id" class="mt-2" />
+                                                <InputError :message="form.errors.rol_id" class="mt-2" />
                                             </div>
 
                                         </div>
