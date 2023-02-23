@@ -59,7 +59,17 @@ axios.get('/getCampos/'+props.idCampo+'/'+props.tipoActivo).then((response)=>
         colums.value = response.data;
      });
 
-console.log(props);
+//console.log(props);
+
+const typeForm = ref('create');
+
+const editarColum = (columna) => 
+{
+   console.log(columna)
+   newColumn.campo = columna.campo;
+   newColumn.tipo_input_id = columna.input_id;
+   typeForm.value = 'update';
+}
 
 </script>
 <template>
@@ -71,7 +81,7 @@ console.log(props);
               <div class="grid grid-cols-5">
                  <div class="col-start-1 col-end-1">
                     Nueva columna
-                    <form>
+                    <form >
                         <div>
                             <InputLabel>Columna</InputLabel>
                             <TextInput v-model="newColumn.campo" />
@@ -86,7 +96,8 @@ console.log(props);
                             </SelectComponent>
                         </div>
                         <div>
-                          <button @click="saveColum" style="" class="p-2 mt-2 bg-blue-500 rounded-lg hover:opacity-50">
+                          <button v-if="typeForm ==='update'" @click="newColumn.reset(), typeForm='create'">Atrás</button>
+                          <button @click="saveColum" style="" class="p-2 mt-2 ml-2 bg-blue-500 rounded-lg hover:opacity-50">
                             <svg style="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 30 30">
                                 <defs>
                                   <clipPath id="clip-Icono-guardar">
@@ -108,8 +119,9 @@ console.log(props);
                         </div>
                     </form>
                  </div>
+                 
                  <div class="col-start-3 col-end-6 border-l-2">
-                    <TableCampos :tipo_inputs="tipo_inputs" :tipoActivo="tipoActivo" :columns="colums" :activoId="activo_id" />
+                    <TableCampos :tipo_inputs="tipo_inputs" :tipoActivo="tipoActivo" :columns="colums" :activoId="activo_id" @editColum="editarColum" />
                  </div>
               </div>
             </template>

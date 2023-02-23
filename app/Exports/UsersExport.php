@@ -28,6 +28,7 @@ class UsersExport implements FromQuery, WithHeadings
             'users.apellido_paterno',
             'users.apellido_materno',
             'users.email',
+            'puestos.name AS puesto',
             'users.fecha_nacimiento',
             'users.fecha_ingreso',
             'users.fecha_ingreso_real',
@@ -36,12 +37,26 @@ class UsersExport implements FromQuery, WithHeadings
             'expedientes.ruta'
             )
         ->leftjoin('expedientes', 'expedientes.empleado_id', 'users.id')
+        ->leftjoin('empleados_puestos','empleados_puestos.empleado_id','users.id')
+        ->leftjoin('puestos','empleados_puestos.puesto_id','puestos.id')
         ->where('users.activo','=',$this->activo)
         ->orderBy('users.id');
     }
 
     public function headings(): array
     {
-        return ["ID", "No.Empleado", "Nombre", "Apellido paterno", "Apellido materno", "email", 'Fecha de nacimiento', 'Fecha de ingreso', 'Fecha de ingreso real','Salario bruto','Fotografía','Documento'];
+        return ["ID", 
+        "No.Empleado", 
+        "Nombre", 
+        "Apellido paterno", 
+        "Apellido materno", 
+        "email", 
+        "Puesto",
+        'Fecha de nacimiento', 
+        'Fecha de ingreso', 
+        'Fecha de ingreso real',
+        'Salario bruto',
+        'Fotografía',
+        'Documento'];
     }
 }

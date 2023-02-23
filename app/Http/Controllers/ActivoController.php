@@ -136,7 +136,7 @@ class ActivoController extends Controller
 
       $request->validate([
         'nombre' => 'required',
-         
+        'imagen' => 'required'
        ]);
 
        $ruta_icono = "";
@@ -372,13 +372,15 @@ class ActivoController extends Controller
 
     public function storeColum(Request $request)
     {
-        tipoActivoCampo::create([
-          'tipo_activo_id' => $request['tipo_activo_id'],
-          'campo' => $request['campo'],
-          'principal' => $request['principal'],
-          'tipo_input_id' => $request['tipo_input_id'],
-          'tabla_id' => $request['tabla_id']
-        ]);
+       $busquedaPor = ['tipo_activo_id' => request('tipo_activo_id'), 
+                       'tipo_input_id' => request('tipo_input_id'),
+                       'tabla_id' => request('tabla_id'),
+                       'principal' => request('principal')];
+
+        tipoActivoCampo::updateOrCreate(
+          $busquedaPor,
+          ['campo' =>  request('campo')]
+        );
     }
 
     public function getCampos($idCampo, $idTipoActivo)
@@ -387,6 +389,7 @@ class ActivoController extends Controller
      return tipoActivoCampo::select(
         'tipo_activo_campos.id AS id',
         'tipo_activo_campos.campo AS campo',
+        'tipo_inputs.id AS input_id',
         'tipo_inputs.nombre',
   
       )
@@ -400,10 +403,10 @@ class ActivoController extends Controller
 
     public function columasCampos ($campo_id, $idActivo)
     {
-
-        return tipoActivoCampo::select( //columnas con el tipo de input que es
+      
+        tipoActivoCampo::select( //columnas con el tipo de input que es
           'valor_campo_activos.activo_id AS idActivo',
-          'tipo_activo_campos.id AS id',
+          'tipo_activo_campos.id AS campoId',
           'tipo_activo_campos.campo AS campo',
           'tipo_inputs.nombre AS tipo_input',
           'valor_campo_activos.valor AS valor'
@@ -420,6 +423,34 @@ class ActivoController extends Controller
        // ->where('tipo_activo_campos.tabla_id','=',$campo_id)
         ->get();
 
+
+        /// Nueva forma -.- ///
+
+      return tipoActivoCampo::select( //columnas
+        'tipo_activo_campos.id AS idCampo',
+        'tipo_activo_campos.campo AS campo',
+        'tipo_inputs.id AS tipo_input_id',
+        'tipo_inputs.nombre AS tipo_input_nombre')
+        ->join('tipo_inputs', 'tipo_activo_campos.tipo_input_id','tipo_inputs.id')
+        ->where('tipo_activo_campos.tabla_id','=',$campo_id)
+        ->get();
+    }
+
+    public function saveNewValorColum(Request $request)
+    {    
+       $request->validate([
+          'valor' => 'required',
+          'tipo_activo_campo_id' => 'required',
+          'activo_id' => 'required'      
+       ]);
+
+       valorCampoActivo::create([
+         'valor' => $request['valor'],
+         'tipo_activo_campo_id' => $request['tipo_activo_campo_id'],
+         'activo_id' => $request['activo_id']
+       ]);
+
+       return  redirect()->back(); 
     }
 }
 

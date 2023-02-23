@@ -10,6 +10,7 @@ import ButtonAdd from '../../../Components/ButtonAdd.vue';
 import SelectComponent from '@/Components/SelectComponent.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import UploadFile from '../Partials/UploadFile.vue'
+import InputError from '@/Components/InputError.vue';
 
 
 var props = defineProps(
@@ -51,7 +52,9 @@ const saveCategory = () =>
        onError: (error) => {
                     console.log(error.response);
                     swal("Error al crear", "Favor de validar los datos", "error");
-                }
+                },
+      preserveScroll:true,
+      preserveState:true,
     });
 }
 
@@ -74,10 +77,11 @@ const retornarFile = (file)  =>
                         <div class="">
                           <InputLabel>Nombre de categoría</InputLabel>
                           <TextInput v-model="CategoryForm.nombre" class="mr-2 border border-slate-400"></TextInput>
-                          <InputError :message="CategoryForm.errors.nombre"></InputError>
+                          <InputError :message="CategoryForm.errors.nombre" />
                         </div>
                         <div class="col-start-2 col-end-4">
                           <UploadFile @retornar="retornarFile"></UploadFile>
+                          <InputError :message="CategoryForm.errors.imagen" />
                         </div>
                         <!-- <TextInput type="file" v-model="CategoryForm.imagen" class="mr-2"></TextInput> -->
                     </div>
