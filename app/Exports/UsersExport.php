@@ -39,6 +39,7 @@ class UsersExport implements FromQuery, WithHeadings
         ->leftjoin('expedientes', 'expedientes.empleado_id', 'users.id')
         ->leftjoin('empleados_puestos','empleados_puestos.empleado_id','users.id')
         ->leftjoin('puestos','empleados_puestos.puesto_id','puestos.id')
+        ->groupBy('users.id')
         ->where('users.activo','=',$this->activo)
         ->orderBy('users.id');
     }
