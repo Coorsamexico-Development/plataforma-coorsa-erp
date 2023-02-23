@@ -404,7 +404,7 @@ class ActivoController extends Controller
     public function columasCampos ($campo_id, $idActivo)
     {
       
-        tipoActivoCampo::select( //columnas con el tipo de input que es
+      return tipoActivoCampo::select( //columnas con el tipo de input que es
           'valor_campo_activos.activo_id AS idActivo',
           'tipo_activo_campos.id AS campoId',
           'tipo_activo_campos.campo AS campo',
@@ -426,14 +426,29 @@ class ActivoController extends Controller
 
         /// Nueva forma -.- ///
 
-      return tipoActivoCampo::select( //columnas
-        'tipo_activo_campos.id AS idCampo',
+      $columnas = tipoActivoCampo::select( //columnas
+        'tipo_activo_campos.id',
         'tipo_activo_campos.campo AS campo',
         'tipo_inputs.id AS tipo_input_id',
         'tipo_inputs.nombre AS tipo_input_nombre')
         ->join('tipo_inputs', 'tipo_activo_campos.tipo_input_id','tipo_inputs.id')
         ->where('tipo_activo_campos.tabla_id','=',$campo_id)
         ->get();
+
+
+       $valores = valorCampoActivo::select(  //valores
+          'valor_campo_activos.valor',
+          'valor_campo_activos.tipo_activo_campo_id',
+          'tipo_inputs.nombre AS tipo_input_nombre',
+          'tipo_activo_campos.id AS idCampo',
+        )
+        ->join('tipo_activo_campos','valor_campo_activos.tipo_activo_campo_id','tipo_activo_campos.id')
+        ->join('tipo_inputs', 'tipo_activo_campos.tipo_input_id','tipo_inputs.id')
+        ->where('tipo_activo_campos.tabla_id','=',$campo_id)
+        ->where('valor_campo_activos.activo_id','=', $idActivo)
+        ->get();
+
+    
     }
 
     public function saveNewValorColum(Request $request)

@@ -113,6 +113,7 @@ const setComponent = (campoType) =>
 const modalTable = ref(false);
 const campoReactive = ref(null);
 const camposReactive = ref(null);
+
 const activo_id = ref(null);
 const openModalTable = (campo, idActivo) => 
 {
@@ -120,8 +121,55 @@ const openModalTable = (campo, idActivo) =>
    campoReactive.value = campo;
    axios.get('/columnasxCampo/'+campoReactive.value.idCampo+'/'+idActivo).then((response)=> 
     {
-        //console.log(response.data);
-        camposReactive.value = response.data;
+             //console.log(response.data);
+            //camposReactive.value = response.data;
+             let arregloTemporal = [];
+             let valorTemporal;
+             for(let x=0; x < response.data.length; x++)
+             {
+                let element = response.data[x];
+                let objeto = {};
+
+                if(element == response.data[0])
+                {
+                   objeto.idActivo = element.idActivo;
+                   objeto.campoId = element.campoId;
+                   objeto.campo = element.campo;
+                   objeto.tipo_input= element.tipo_input;
+                   objeto.valores = [{idActivo: element.idActivo,valor:element.valor, campoId:element.campoId,campo: element.campo}];
+
+                   valorTemporal = element.campoId;
+                   arregloTemporal.push(objeto);
+                }
+                else
+                {
+                  if(valorTemporal !== element.campoId) //ssi es diferente
+                  {
+                     arregloTemporal.push(
+                      {
+                         idActivo: element.idActivo,
+                         campoId:element.campoId,
+                         campo: element.campo,
+                         tipo_input: element.tipo_input,
+                         valores: [{idActivo: element.idActivo,valor:element.valor, campoId:element.campoId,campo: element.campo}]
+                      }
+                     )
+
+                     valorTemporal = element.campoId;
+                  }
+                  else
+                  {
+                    for(let i=0; i < arregloTemporal.length ; i++)
+                    {
+                      if(element.campoId == arregloTemporal[i].campoId)
+                      {
+                        arregloTemporal[i].valores.push({idActivo: element.idActivo,valor:element.valor,campoId:element.campoId,campo: element.campo});
+                      }
+                    }
+                  }
+                } 
+                camposReactive.value=arregloTemporal; 
+             }  
     });
    modalTable.value = true;
 }
@@ -131,20 +179,20 @@ const closeModalTable = () =>
   modalTable.value = false;
 }
 </script>
-<template>
+<template>        
      <table class="w-full table-auto md:table-fixed">
         <thead class="border-b-2 border-[#707070]  font-extralight " style="" >
             <tr>
-                <th><span class="text-sm font-extralight uppercase"></span></th>
-                <th><span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">Fecha de alta</span></th>
-                <th><span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">Status</span></th>
+                <th><span class="text-sm uppercase font-extralight"></span></th>
+                <th><span class="text-sm uppercase font-extralight" style="letter-spacing:0.15rem">Fecha de alta</span></th>
+                <th><span class="text-sm uppercase font-extralight" style="letter-spacing:0.15rem">Status</span></th>
                 <th v-for="campo in campos" :key="campo.id">
-                  <span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">
+                  <span class="text-sm uppercase font-extralight" style="letter-spacing:0.15rem">
                     {{ campo.campo }}
                   </span>
                 </th>
-                <th class="pl-8"><span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">Documento</span></th>
-                <th><span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">Usuarios</span></th>
+                <th class="pl-8"><span class="text-sm uppercase font-extralight" style="letter-spacing:0.15rem">Documento</span></th>
+                <th><span class="text-sm uppercase font-extralight" style="letter-spacing:0.15rem">Usuarios</span></th>
             </tr>
         </thead>
         <tbody>

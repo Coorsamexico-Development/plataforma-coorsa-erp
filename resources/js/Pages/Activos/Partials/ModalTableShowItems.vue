@@ -104,11 +104,58 @@ const camposReactive = ref(null);
 const openModalShowCampos = (campo) =>
 {
    campoReactive.value = campo;
-   console.log(campo)
-   axios.get('/columnasxCampo/'+campo.campoId +'/'+props.idActivo).then((response)=> 
+   console.log(campo);
+   axios.get('/columnasxCampo/'+campo.campoId +'/'+campo.idActivo).then((response)=> 
     {
-        console.log(response.data);
-        camposReactive.value = response.data;
+         //  console.log(response.data);
+            //camposReactive.value = response.data;
+            let arregloTemporal = [];
+             let valorTemporal;
+             for(let x=0; x < response.data.length; x++)
+             {
+                let element = response.data[x];
+                let objeto = {};
+
+                if(element == response.data[0])
+                {
+                   objeto.idActivo = element.idActivo;
+                   objeto.campoId = element.campoId;
+                   objeto.campo = element.campo;
+                   objeto.tipo_input= element.tipo_input;
+                   objeto.valores = [{idActivo: element.idActivo,valor:element.valor, campoId:element.campoId,campo: element.campo}];
+
+                   valorTemporal = element.campoId;
+                   arregloTemporal.push(objeto);
+                }
+                else
+                {
+                  if(valorTemporal !== element.campoId) //ssi es diferente
+                  {
+                     arregloTemporal.push(
+                      {
+                         idActivo: element.idActivo,
+                         campoId:element.campoId,
+                         campo: element.campo,
+                         tipo_input: element.tipo_input,
+                         valores: [{idActivo: element.idActivo,valor:element.valor, campoId:element.campoId,campo: element.campo}]
+                      }
+                     )
+
+                     valorTemporal = element.campoId;
+                  }
+                  else
+                  {
+                    for(let i=0; i < arregloTemporal.length ; i++)
+                    {
+                      if(element.campoId == arregloTemporal[i].campoId)
+                      {
+                        arregloTemporal[i].valores.push({idActivo: element.idActivo,valor:element.valor,campoId:element.campoId,campo: element.campo});
+                      }
+                    }
+                  }
+                } 
+                camposReactive.value=arregloTemporal; 
+             }  
     });
    openShow.value = true;
 }
@@ -171,7 +218,7 @@ const addNewDato = () =>
    // console.log(props.campos);
     for(let i = 0 ; i < props.campos.length; i++)
     {
-         //console.log(props.campos[i]);
+         console.log(props.campos[i]);
          let campoDatos = props.campos[i];
          newValores.valor = 'sin valor';
          newValores.tipo_activo_campo_id = props.campos[i].campoId;
@@ -183,8 +230,9 @@ const addNewDato = () =>
            
          })
     }
-
 }
+
+let arreglo = ref([]);
 
 </script>
 <template>
@@ -194,43 +242,56 @@ const addNewDato = () =>
             </template>
             <template #content>
               <div class="flex flex-col items-center justify-center w-full">
+      
+                 <table class="w-full">
+                    <td class="text-center "  v-for="campo in campos">
+                      <span class="font-bold">{{ campo.campo }}</span>
+                      <tr class="flex justify-center pt-4 pb-4 text-center border-b" v-for ="valore in campo.valores">
+                         <div v-if="campo.tipo_input == 'file'">
+                              <ColumFile :valore="valore" />
+                          </div>
+                          <!--
+                            Permissions
+                            activos.edit.campos
+                            access.control-interno
+                          -->
+                          <component :is="setComponent(campo.tipo_input, $page.props.can['access.control-interno'])" 
+                              :valore="valore"
+                              @updateCampo ="updateCampo"
+                              @retornar="setFiles"
+                              @openModalTableCampos="openModalShowCampos(valore)" />
+                      </tr>
+                    </td>
+                 </table>
+                <!--
                   <table class="w-full">
                      <thead>
-                        <tr class="border-b" v-if="campos">
-                           <th class="p-8 pt-0 pb-1 text-center" v-for="campose in campos[0]" :key="campose.id">
+                        <tr class="border-b ">
+                           <th class="p-8 pt-0 pb-1 text-center" v-for="campose in campos" :key="campose.id">
                              {{ campose.campo }}
                            </th>
                         </tr>
                      </thead>
                      <tbody>
-                        <tr v-if="campos">
-                           <td class="p-8 pt-0 pb-1 text-center" v-for="campose in campos[0]" :key="campose.id">                           
-                                 <component :is="setComponent(campose.tipo_input_nombre, $page.props.can['activos.edit.campos'])" 
-                                 :valore="valore"
-                                  @updateCampo ="updateCampo"
-                                  @retornar="setFiles"
-                                  @openModalTableCampos="openModalShowCampos(valore)" />
-                           </td>
-                          
-                          <!--      
-                          <td class="p-8 pt-0 pb-1 text-center" v-for="valore in campos" :key="valore.id">
-                          
+                        <tr>
+                          <td class="p-8 pt-0 pb-1 text-center" v-for="(valore,index) in campos" :key="valore.id">
                                <div v-if="valore.tipo_input == 'file'">
                                   <ColumFile :valore="valore" />
                               </div>
-                                              
-                             <component :is="setComponent(valore.tipo_input, $page.props.can['activos.edit.campos'])" 
-                             :valore="valore"
+                              <component :is="setComponent(valore.tipo_input, $page.props.can['activos.edit.campos'])" 
+                              :valore="valore"
                               @updateCampo ="updateCampo"
                               @retornar="setFiles"
                               @openModalTableCampos="openModalShowCampos(valore)" />
-                          </td>
-                        --->  
+                          </td>  
                         </tr>
                      </tbody>
                   </table>
                   <button @click="addNewDato" class="mt-4 bg-[#EC2944] text-white rounded-full w-8">+</button>
+                                -->
+                  <button @click="addNewDato" class="mt-4 bg-[#EC2944] text-white rounded-full w-8">+</button>
               </div>
+
               <ModalTableShowItems :idActivo="idActivo" :campo="campoReactive" :campos="camposReactive" @close="closeModalShowCampos" :show="openShow"/>
             </template>
             <template #footer>

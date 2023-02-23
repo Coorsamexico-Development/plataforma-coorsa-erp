@@ -22,7 +22,7 @@ class tipoActivoCampo extends Model
 
 
     protected $appends = [
-        'DistintosValores',
+        //'DistintosValores'
     ];
 
     public function tipoInput ()
@@ -33,8 +33,9 @@ class tipoActivoCampo extends Model
 
     public function getDistintosValoresAttribute()
     {
-        return valorCampoActivo::select('valor_campo_activos.*')
-        ->where('valor_campo_activos.tipo_activo_campo_id','=',1)
+        return valorCampoActivo::select('valor_campo_activos.id',
+        'valor_campo_activos.valor', 'valor_campo_activos.activo_id','valor_campo_activos.tipo_activo_campo_id AS campoId')
+        ->where('valor_campo_activos.tipo_activo_campo_id','=',$this->id)
         ->get();
     }
     

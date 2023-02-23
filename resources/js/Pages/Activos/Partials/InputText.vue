@@ -29,6 +29,7 @@ if (props.valore)
 const editCampo = () =>  //funcion para retornar el valor y actualizar en la BD
 {
    //console.log("prueba");funciona si el input ya no esta en estado focus
+   console.log(props.valore);
    if(props.valore)
    {
       emit('updateCampo',campoPivot.value, props.valore.campoId )
