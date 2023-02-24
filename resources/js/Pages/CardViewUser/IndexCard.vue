@@ -99,7 +99,7 @@ const share = () =>
      </div>
      <div class="m-2">
           <button @click="share()" class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
-              <img class="" src="../../../img/share.png" />
+              <img class="" src="../../../img/Share.png" />
           </button>
 
      </div>
