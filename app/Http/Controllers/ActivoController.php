@@ -372,15 +372,29 @@ class ActivoController extends Controller
 
     public function storeColum(Request $request)
     {
-       $busquedaPor = ['tipo_activo_id' => request('tipo_activo_id'), 
-                       'tipo_input_id' => request('tipo_input_id'),
-                       'tabla_id' => request('tabla_id'),
-                       'principal' => request('principal')];
+      return $request;
+       tipoActivoCampo::create([
+        'tipo_activo_id' => request('tipo_activo_id'), 
+        'tipo_input_id' => request('tipo_input_id'),
+        'tabla_id' => request('tabla_id'),
+        'principal' => request('principal'),
+        'campo' =>  request('campo')
+       ]);
+      
+    }
 
-        tipoActivoCampo::updateOrCreate(
-          $busquedaPor,
-          ['campo' =>  request('campo')]
-        );
+    public function updateColum(Request $request)
+    {
+ 
+       tipoActivoCampo::where('id','=',$request['id'])
+       ->update([
+        'tipo_activo_id' => request('tipo_activo_id'), 
+        'tipo_input_id' => request('tipo_input_id'),
+        'tabla_id' => request('tabla_id'),
+        'principal' => request('principal'),
+        'campo' =>  request('campo')
+       ]);
+      
     }
 
     public function getCampos($idCampo, $idTipoActivo)

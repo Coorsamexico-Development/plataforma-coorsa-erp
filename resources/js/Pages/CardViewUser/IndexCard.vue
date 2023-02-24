@@ -1,5 +1,14 @@
 <script setup>
 
+
+const share = () => 
+{
+   navigator.share({ 
+    title: 'Título para compartir', 
+    text: 'Texto para compartir', 
+    url: 'https://erp.coorsamexico.com/card/user'
+  })
+}
 </script>
 <template>
   <span class="absolute mt-8 ml-8">
@@ -11,13 +20,13 @@
   <div>
      <img src="../../../img/renato.jpg" />
   </div>
-  <div class="bg-white w-full h-32"  style="transform: skewY(-11deg); margin-top: -3rem; ">
+  <div class="w-full h-32 bg-white"  style="transform: skewY(-11deg); margin-top: -3rem; ">
   </div>
   <span class="absolute h-14 bg-[#E84A49] ml-8" style="width:2px; margin-top:-8rem"></span>
-  <div class="flex flex-col  relative" style="font-family: 'Montserrat'; z-index: 5; margin-top: -6rem;">
-    <div class="flex flex-col justify-center items-center">
-        <h1 class="uppercase font-semibold" style="letter-spacing: 4px; font-size: 1.5rem;">RENATO ORTIZ</h1>
-        <h2 class="text-l uppercase" style="letter-spacing: 6px;">CEO</h2>
+  <div class="relative flex flex-col" style="font-family: 'Montserrat'; z-index: 5; margin-top: -6rem;">
+    <div class="flex flex-col items-center justify-center">
+        <h1 class="font-semibold uppercase" style="letter-spacing: 4px; font-size: 1.5rem;">RENATO ORTIZ</h1>
+        <h2 class="uppercase text-l" style="letter-spacing: 6px;">CEO</h2>
     </div>
     <div class="">
           <div class="m-8">
@@ -26,13 +35,13 @@
               <a class="text-sm" href="tel: +52 55 8025 5972">55 8025 5972</a>
           </div>
       </div>
-      <div class="mt-2 m-8">
+      <div class="m-8 mt-2">
           <div class="flex">
               <img class="mr-2" src="../../../img/gmail.svg" />
               <a class="text-sm" href="mailto: renato.ortiz@coorsamexico.com">renato.ortiz@coorsamexico.com</a>
           </div>
       </div>
-      <div class="mt-2 m-8">
+      <div class="m-8 mt-2">
             <div class="flex">
                 <img class="mr-2" src="../../../img/ubicacion.svg" />
                 <a class="text-sm" href="#">Querétaro Corporativo</a>
@@ -44,7 +53,7 @@
         <span class="w-10/12  absolute bg-[#E84A49]" style="height: 2px;"></span>
     </div>
   </div>
-  <div class="flex flex-row mt-8 justify-center ">
+  <div class="flex flex-row justify-center mt-8 ">
      <div class="m-2">
         <a href="tel: +52 55 8025 5972">
             <button class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
@@ -87,6 +96,12 @@
              </svg>
          </button>
        </a>  
+     </div>
+     <div class="m-2">
+          <button @click="share()" class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
+              <img class="" src="../../../img/share.png" />
+          </button>
+
      </div>
   </div>
 </template>

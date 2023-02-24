@@ -34,6 +34,7 @@ const idCampoReactive = ref(-1);
 
 const newColumn = useForm(
     {
+        id:null,
         tipo_activo_id:props.tipoActivo,
         campo:null,
         principal:0,
@@ -42,14 +43,24 @@ const newColumn = useForm(
     }
 )
 
-const saveColum = () => 
+const saveColum = (typeForm) => 
 {
+  if(typeForm == 'create')
+  {
     newColumn.post(route('storeColum'),{
         preserveScroll:true,
         preserveState:true,
-        onFinish:() => close(),
         onSuccess:() => newColumn.reset(),
     })
+  }
+  if(typeForm == 'update')
+  {
+    newColumn.post(route('updateColum'),{
+        preserveScroll:true,
+        preserveState:true,
+        onSuccess:() => newColumn.reset(),
+    })
+  }
 }
 
 const colums = ref([]);
@@ -65,7 +76,8 @@ const typeForm = ref('create');
 
 const editarColum = (columna) => 
 {
-   console.log(columna)
+   //console.log(columna)
+   newColumn.id = columna.id
    newColumn.campo = columna.campo;
    newColumn.tipo_input_id = columna.input_id;
    typeForm.value = 'update';
@@ -81,7 +93,6 @@ const editarColum = (columna) =>
               <div class="grid grid-cols-5">
                  <div class="col-start-1 col-end-1">
                     Nueva columna
-                    <form >
                         <div>
                             <InputLabel>Columna</InputLabel>
                             <TextInput v-model="newColumn.campo" />
@@ -97,7 +108,7 @@ const editarColum = (columna) =>
                         </div>
                         <div>
                           <button v-if="typeForm ==='update'" @click="newColumn.reset(), typeForm='create'">Atrás</button>
-                          <button @click="saveColum" style="" class="p-2 mt-2 ml-2 bg-blue-500 rounded-lg hover:opacity-50">
+                          <button @click="saveColum(typeForm)" style="" class="p-2 mt-2 ml-2 bg-blue-500 rounded-lg hover:opacity-50">
                             <svg style="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 30 30">
                                 <defs>
                                   <clipPath id="clip-Icono-guardar">
@@ -117,7 +128,6 @@ const editarColum = (columna) =>
                             </svg>
                           </button>
                         </div>
-                    </form>
                  </div>
                  
                  <div class="col-start-3 col-end-6 border-l-2">

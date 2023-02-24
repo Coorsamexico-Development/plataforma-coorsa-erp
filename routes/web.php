@@ -163,6 +163,7 @@ Route::controller(ActivoController::class)->group(function () {
 
     Route::get('/valorCampo/{id}', 'valorCampo')->name('valorCampo');
     Route::post('/storeColum', 'storeColum')->name('storeColum');
+    Route::post('/updateColum', 'updateColum')->name('updateColum');
     Route::get('/getCampos/{idCampo}/{tipoActivo}','getCampos')->name('getCampos');
     Route::get('/columnasxCampo/{campo}/{idActivo}','columasCampos')->name('columnas.campo');
 
