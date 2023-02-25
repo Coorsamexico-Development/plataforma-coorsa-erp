@@ -132,9 +132,9 @@ const changeStatus = (id)  =>
                 <table class="" style="font-family: 'Montserrat';">
                     <thead>
                       <tr class="">
-                        <th class="uppercase font-extralight text-center pr-8" style="letter-spacing:0.25rem" >Uso</th>
-                        <th class="uppercase font-extralight text-center pr-8 pl-8 " style="letter-spacing:0.25rem" >Libres</th>
-                        <th class="uppercase font-extralight pl-8" style="letter-spacing:0.25rem" >Baja</th>
+                        <th class="pr-8 text-center uppercase font-extralight" style="letter-spacing:0.25rem" >Uso</th>
+                        <th class="pl-8 pr-8 text-center uppercase font-extralight " style="letter-spacing:0.25rem" >Libres</th>
+                        <th class="pl-8 uppercase font-extralight" style="letter-spacing:0.25rem" >Baja</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -142,7 +142,7 @@ const changeStatus = (id)  =>
                         <tr>
                             <td class="pr-8 text-center text-5xl border-r-8 border-[#EC2944] font-semibold" >{{ tipoActivo.totalUso[0].Uso }}</td>
                             <td class="pr-8 pl-8 text-center text-5xl border-r-8 border-[#EC2944] font-semibold">{{ tipoActivo.totalLibre[0].Libre }}</td>
-                            <td class="pl-8 text-5xl text-center font-semibold">{{ tipoActivo.totalBaja[0].Baja }}</td>
+                            <td class="pl-8 text-5xl font-semibold text-center">{{ tipoActivo.totalBaja[0].Baja }}</td>
                             <Transition name="slide-fade2">
                               <td class="pl-0" v-if="visible">
                                 <button @click="addNewItem" class="bg-[#EC2944] text-white rounded-full" :class="{ 'transition ease-in-out delay-150 w-10 visible': visible, ' transition ease-in-out delay-150 invisible h-0 w-0': !visible }">+</button>
@@ -156,7 +156,10 @@ const changeStatus = (id)  =>
          <Transition name="slide-fade">
             <div v-if="visible" class="w-full mt-2 mb-8">
               <TableActivos :tipo_inputs="tipo_inputs" :tipoActivo="tipoActivo"
-               :tipo_evidencias="tipo_evidencias" :activos="tipoActivo.activos_items" :allcampos="tipoActivo.camposAllInput" :campos="tipoActivo.camposInput" @axios="axiosOpen"></TableActivos>
+               :tipo_evidencias="tipo_evidencias"
+               :activos="tipoActivo.activos_items"
+               :allcampos="tipoActivo.camposAllInput" 
+               :campos="tipoActivo.camposInput" @axios="axiosOpen"></TableActivos>
            </div>
         </Transition>
     </div>

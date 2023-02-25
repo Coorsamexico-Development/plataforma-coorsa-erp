@@ -5,16 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class valorCampoActivo extends Model
+class Fila extends Model
 {
     use HasFactory;
 
-    
     protected $fillable = [
-        'valor',
         'tipo_activo_campo_id',
-        'activo_id',
+        'activos_item_id',
         'fila_id'
     ];
 
+    public function campos()
+    {
+        return $this->hasMany(valorCampoActivo::class , 'fila_id');
+    }
 }

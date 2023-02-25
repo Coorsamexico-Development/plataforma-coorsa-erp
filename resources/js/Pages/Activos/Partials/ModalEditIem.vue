@@ -143,12 +143,20 @@ const closeTipoEvidencia = () =>
 const tableModal = ref(false);
 let campoName = ref(null);
 let idCampoR = ref(null);
+let colums = ref(null);
 const openTableModal = (campo,idCampo) => 
 {
   campoName.value = campo;
   idCampoR.value = idCampo;
   //console.log(campoName);
   tableModal.value = true;
+
+  axios.get('/getCampos/'+props.activo.id+'/'+props.tipoActivo.id).then((response)=> 
+     {
+        //console.log(response);
+        colums.value = response.data;
+     });
+
 }
 const closeTableModal = () => 
 {
@@ -179,6 +187,7 @@ const closeTableModal = () =>
                 </div>
                 <div v-else> <!--Si no existen valores estaran vacios los inputs-->
                   <div v-for="campo in campos" :key="campo.id">
+                  
                       <InputLabel>{{ campo.campo }}</InputLabel>  
                        <component 
                        :is="setComponent(campo.input)" 
@@ -187,6 +196,7 @@ const closeTableModal = () =>
                        @retornar="setFile" 
                        @openModalTableCampos="openTableModal(campo.campo, campo.idCampo)"
                        />
+                  
                       <!-- <InputError :message="message"></InputError> -->
                    </div>
                 </div>
@@ -198,6 +208,7 @@ const closeTableModal = () =>
                :tipoActivo="activo.tipo_activo" 
                :show="tableModal" 
                :tipo_inputs="tipo_inputs"
+               :colums="colums"
                @close="closeTableModal"/>
                <div class="flex flex-col mt-4">
                    <h2 class="mr-4">Evidencias</h2>

@@ -167,6 +167,10 @@ Route::controller(ActivoController::class)->group(function () {
     Route::get('/getCampos/{idCampo}/{tipoActivo}','getCampos')->name('getCampos');
     Route::get('/columnasxCampo/{campo}/{idActivo}','columasCampos')->name('columnas.campo');
 
+    Route::get('/columnasxCampoFila/{campo}/{idActivo}/{fila}','columasCamposFila')->name('columnas.campo.fila');
+
+    Route::post('/newFila','newFila')->name('newFila');
+
     Route::post('/saveNewValorColum','saveNewValorColum')->name('new.valor.campo');
 });
 

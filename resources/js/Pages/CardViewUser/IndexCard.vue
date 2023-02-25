@@ -4,8 +4,8 @@
 const share = () => 
 {
    navigator.share({ 
-    title: 'Título para compartir', 
-    text: 'Texto para compartir', 
+    title: '¡ Te comparto mi tarjeta de presentación digital !', 
+    text: ' ¡ Te comparto mi tarjeta de presentación digital !', 
     url: 'https://erp.coorsamexico.com/card/user'
   })
 }

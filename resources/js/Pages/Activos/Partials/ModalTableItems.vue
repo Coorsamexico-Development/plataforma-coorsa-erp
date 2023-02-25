@@ -22,6 +22,7 @@ var props = defineProps(
         campoName:String,
         idCampo:Number,
         activo_id:Number,
+        colums:Object
     }
 );
 
@@ -31,6 +32,8 @@ const close = () =>
 };
 
 const idCampoReactive = ref(-1);
+
+
 
 const newColumn = useForm(
     {
@@ -61,15 +64,14 @@ const saveColum = (typeForm) =>
         onSuccess:() => newColumn.reset(),
     })
   }
-}
-
+}/*
 const colums = ref([]);
 axios.get('/getCampos/'+props.idCampo+'/'+props.tipoActivo).then((response)=> 
      {
         //console.log(response);
         colums.value = response.data;
      });
-
+*/
 //console.log(props);
 
 const typeForm = ref('create');

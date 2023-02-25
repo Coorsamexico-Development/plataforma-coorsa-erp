@@ -13,7 +13,7 @@ var props = defineProps(
         activoId:Number,
 
         tipo_inputs:Object,
-        tipoActivo:Number
+        tipoActivo:Number,
     }
 );
 
@@ -87,11 +87,17 @@ const setFiles = (files) =>
 let dinamicModal = ref(false);
 let columNameReactive = ref(-1);
 let idColumReactive = ref(-1);
+let colums = ref(null);
 const openDinamicModal = (colum) =>
 {
     columNameReactive.value = colum.campo;
     idColumReactive.value = colum.id;
     dinamicModal.value = true;
+    axios.get('/getCampos/'+colum.id+'/'+props.tipoActivo).then((response)=> 
+     {
+        //console.log(response);
+        colums.value = response.data;
+     });
 }
 const closeDinamicModal = () =>
 {
@@ -107,7 +113,7 @@ const changeEdit = (colum) =>
 <template>
     <table class="w-full">
      <thead class="border-b-2">
-          <tr>
+                <tr>
              <th></th>
              <th class="p-2">Nombre de columna</th>
              <th class="p-2">Tipo de campo</th>
@@ -159,6 +165,7 @@ const changeEdit = (colum) =>
                 @openModalTableCampos="openDinamicModal(colum)" />
 
                 <ModalTableItems 
+                 :colums="colums"
                  :campoName="colum.campo"
                  :idCampo="colum.id"
                  :activo_id="activoId"

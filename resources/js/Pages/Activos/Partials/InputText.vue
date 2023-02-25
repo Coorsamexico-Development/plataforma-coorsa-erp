@@ -4,7 +4,8 @@ import { onMounted, ref } from 'vue';
 const emit = defineEmits(['updateCampo'])
 var props = defineProps({
    disable:Boolean,
-   valore:Object
+   columna:Object,
+   fila:Object
 });
 
 
@@ -14,25 +15,16 @@ let campoPivot = ref(
     }
 )
 
-if (props.valore)
-{
-   if(props.valore.valor == null)
-   {
-     campoPivot.value.value = "";
-   } 
-   else
-    {
-      campoPivot.value.value = props.valore.valor;
-    }
-}
-
 const editCampo = () =>  //funcion para retornar el valor y actualizar en la BD
 {
    //console.log("prueba");funciona si el input ya no esta en estado focus
-   console.log(props.valore);
-   if(props.valore)
+   //console.log(props.valore);
+   if(props.columna)
    {
-      emit('updateCampo',campoPivot.value, props.valore.campoId )
+     if(props.fila)
+     {
+       emit('updateCampo',campoPivot.value, props.columna, props.fila)
+     }
    }
    else
    {

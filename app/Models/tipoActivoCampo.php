@@ -22,7 +22,7 @@ class tipoActivoCampo extends Model
 
 
     protected $appends = [
-        //'DistintosValores'
+        'DistintosValores'
     ];
 
     public function tipoInput ()

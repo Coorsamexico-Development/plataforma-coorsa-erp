@@ -117,60 +117,14 @@ const camposReactive = ref(null);
 const activo_id = ref(null);
 const openModalTable = (campo, idActivo) => 
 {
-  activo_id.value = idActivo;
+    activo_id.value = idActivo;
    campoReactive.value = campo;
    axios.get('/columnasxCampo/'+campoReactive.value.idCampo+'/'+idActivo).then((response)=> 
     {
              //console.log(response.data);
-            //camposReactive.value = response.data;
-             let arregloTemporal = [];
-             let valorTemporal;
-             for(let x=0; x < response.data.length; x++)
-             {
-                let element = response.data[x];
-                let objeto = {};
-
-                if(element == response.data[0])
-                {
-                   objeto.idActivo = element.idActivo;
-                   objeto.campoId = element.campoId;
-                   objeto.campo = element.campo;
-                   objeto.tipo_input= element.tipo_input;
-                   objeto.valores = [{idActivo: element.idActivo,valor:element.valor, campoId:element.campoId,campo: element.campo}];
-
-                   valorTemporal = element.campoId;
-                   arregloTemporal.push(objeto);
-                }
-                else
-                {
-                  if(valorTemporal !== element.campoId) //ssi es diferente
-                  {
-                     arregloTemporal.push(
-                      {
-                         idActivo: element.idActivo,
-                         campoId:element.campoId,
-                         campo: element.campo,
-                         tipo_input: element.tipo_input,
-                         valores: [{idActivo: element.idActivo,valor:element.valor, campoId:element.campoId,campo: element.campo}]
-                      }
-                     )
-
-                     valorTemporal = element.campoId;
-                  }
-                  else
-                  {
-                    for(let i=0; i < arregloTemporal.length ; i++)
-                    {
-                      if(element.campoId == arregloTemporal[i].campoId)
-                      {
-                        arregloTemporal[i].valores.push({idActivo: element.idActivo,valor:element.valor,campoId:element.campoId,campo: element.campo});
-                      }
-                    }
-                  }
-                } 
-                camposReactive.value=arregloTemporal; 
-             }  
+            camposReactive.value = response.data;
     });
+
    modalTable.value = true;
 }
 
@@ -258,20 +212,19 @@ const closeModalTable = () =>
                     </span>
                   </p>
                </td>
-               <td v-for="(campo, i) in campos" :key="campo.id">
-                  <div v-if="activo.valor_campos_activos.length > 0"> <!--Si existen uno o mas-->
+               <td v-for="(campo, index1) in campos" :key="index1">
+                  <div v-if="activo.valor_campos_activos.length > 0"> <!--Si existen uno o mas-->        
                      <div v-for="(valor, index) in activo.valor_campos_activos"  :key="index">
-                        <div v-if="index == 0">
-                          <component :is="setComponent(campo.input)" v-if="campo.input == 'table'"
-                         @openModalTableCampos="openModalTable(campo, activo.id)" :valor="valor"  :campo="campo" />
-
-                         <component :is="setComponent(campo.input)" v-else
-                          @openModalTableCampos="openModalTable(campo, activo.id)" :valor="valor"  :campo="campo" />
-                        </div>
-                        <div v-else class="">
-                          <component :is="setComponent(campo.input)" v-if="campo.input !== 'table'"
-                          @openModalTableCampos="openModalTable(campo, activo.id)" :valor="valor"  :campo="campo" />
-                        </div>
+                         <div v-if="valor.tipo_activo_campo_id == campo.idCampo">
+                             <component :is="setComponent(campo.input)"
+                              @openModalTableCampos="openModalTable(campo, activo.id)" :valore="valor"  :columna="campo" />
+                         </div>
+                         <div v-else>
+                           <div v-if="index == 0" >
+                             <component :is="setComponent(campo.input)" v-if="campo.input == 'table'"
+                              @openModalTableCampos="openModalTable(campo, activo.id)"  :columna="campo" />
+                           </div>
+                         </div>
                      </div>
                   </div>
                </td>
