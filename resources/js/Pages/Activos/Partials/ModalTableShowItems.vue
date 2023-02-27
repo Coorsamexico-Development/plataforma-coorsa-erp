@@ -41,6 +41,7 @@ const close = () =>
 const recargar = () => 
 {
    emit('recargar',props.campo, props.idActivo);
+   closeModalShowCampos();
 }
 
 const components = 
@@ -120,11 +121,10 @@ const filaReactive = ref(null);
 const camposReactive = ref([]);
 const openModalShowCampos = (campo, fila, idActivo) =>
 {
+    camposReactive.value = [];
     filaReactive.value = fila;
     campoReactive.value = campo;
-
-    //console.log(fila.id, campo.id, idActivo);
-
+    console.log(fila.id, campo.id, idActivo);
     if(fila)
     {
       axios.get('/columnasxCampoFila/'+campo.id+'/'+idActivo+'/'+fila.id).then((response)=> 
@@ -239,8 +239,13 @@ const addNewFila = (campo_id, otro_campo_id, fila_id) =>
       filaForm.post(route('newFila'),{
         preserveScroll:true,
         preserveState:true,
+        onStart:() => openShow.value = false,
         onSuccess:() => filaForm.reset(),
-        onFinish:() => openModalShowCampos(props.campo.id, props.filare.id, props.idActivo)
+        onFinish:() => {return Promise.all([
+          openShow.value = false,
+          campoReactive.value = [],
+          openModalShowCampos(props.campo, props.filare, props.idActivo)
+        ])} 
       });
    }
    else if(otro_campo_id)
@@ -254,8 +259,13 @@ const addNewFila = (campo_id, otro_campo_id, fila_id) =>
       filaForm.post(route('newFila'),{
         preserveScroll:true,
         preserveState:true,
+        onStart:() => openShow.value = false,
         onSuccess:() => filaForm.reset(),
-        onFinish:() => openModalShowCampos(props.campo, props.filare, props.idActivo)
+        onFinish:() => {return Promise.all([
+          openShow.value = false,
+          campoReactive.value = [],
+          openModalShowCampos(props.campo, props.filare, props.idActivo)
+        ])} 
       });
    }
   }
@@ -270,6 +280,7 @@ const addNewFila = (campo_id, otro_campo_id, fila_id) =>
       filaForm.post(route('newFila'),{
         preserveScroll:true,
         preserveState:true,
+        onStart:() => openShow.value = false,
         onSuccess:() => filaForm.reset(),
         onFinish:() => recargar()
       });
@@ -284,6 +295,7 @@ const addNewFila = (campo_id, otro_campo_id, fila_id) =>
       filaForm.post(route('newFila'),{
         preserveScroll:true,
         preserveState:true,
+        onStart:() => openShow.value = false,
         onSuccess:() => filaForm.reset(),
         onFinish:() => recargar()
       });
