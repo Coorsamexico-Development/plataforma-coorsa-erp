@@ -116,7 +116,12 @@ const camposReactive = ref([]);
 const activo_id = ref(null);
 const openModalTable = (campo, idActivo) => 
 {
-    activo_id.value = idActivo;
+  console.log('emision')
+  /*
+  console.log(campo);
+  console.log(idActivo);
+ */
+   activo_id.value = idActivo;
    campoReactive.value = campo;
    axios.get('/columnasxCampo/'+campoReactive.value.idCampo+'/'+idActivo).then((response)=> 
     {
@@ -262,7 +267,7 @@ const closeModalTable = () =>
                      </div>
                   </div>
                </td>
-               <ModalTableShowItems :campo="campoReactive" :idActivo="activo_id" :campos="camposReactive" :show="modalTable" @close="closeModalTable" />
+               <ModalTableShowItems @recargar="openModalTable" :campo="campoReactive" :idActivo="activo_id" :campos="camposReactive" :show="modalTable" @close="closeModalTable" />
                <td>
                  <div class="flex justify-center" v-if="activo.evidencias_activo.length > 0 " >
                   <div v-for="(image,index) in activo.evidencias_activo" :key="image.id">

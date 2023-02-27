@@ -44,8 +44,12 @@ const editCampo = () =>  //funcion para retornar el valor y actualizar en la BD
 }
 </script>
 <template>
-    <input class="rounded-xl" 
+    <input v-if="$page.props.can['activos.edit.campos']"  class="rounded-xl text-center" 
     type="date"
     v-model="campoPivot.value"
     @change="editCampo" />
+    <input v-else disabled 
+    class="rounded-xl text-center" 
+    type="date"
+    v-model="campoPivot.value"/>
 </template>
