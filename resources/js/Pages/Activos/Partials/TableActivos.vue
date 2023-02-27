@@ -112,8 +112,7 @@ const setComponent = (campoType) =>
 
 const modalTable = ref(false);
 const campoReactive = ref(null);
-const camposReactive = ref(null);
-
+const camposReactive = ref([]);
 const activo_id = ref(null);
 const openModalTable = (campo, idActivo) => 
 {
@@ -121,8 +120,43 @@ const openModalTable = (campo, idActivo) =>
    campoReactive.value = campo;
    axios.get('/columnasxCampo/'+campoReactive.value.idCampo+'/'+idActivo).then((response)=> 
     {
-             //console.log(response.data);
-            camposReactive.value = response.data;
+       //console.log(response.data);
+       let camposAxios = response.data;     
+       camposReactive.value = response.data;
+       let newValores = [];
+        for (let index = 0; index < camposAxios[1].length; index++)  //recorrido de filas
+        {
+            const fila = camposAxios[1][index];
+            for (let index1 = 0; index1 < camposAxios[0].length; index1++) //recorrido de columnas por fila
+            {
+              let newInterseccion = {};
+              const columna = camposAxios[0][index1];
+              //console.log(fila.id, columna.id)
+              newInterseccion.fila_id = fila.id;
+              newInterseccion.columna_id = columna.id;
+              newInterseccion.valor = null;
+              newValores.push(newInterseccion);
+            }
+        }
+
+        //recorrido para posicionar valor
+        for (let index2 = 0; index2 < newValores.length; index2++) 
+        {
+           const interseccion = newValores[index2];
+           //console.log(interseccion);
+           for (let index3 = 0; index3 < camposAxios[2].length; index3++)  //recorremos valores
+           {
+             const valor = camposAxios[2][index3];
+             if(valor.columna_id == interseccion.columna_id && valor.fila_id == interseccion.fila_id)
+             { 
+                //console.log(valor.valor);
+                interseccion.valor = valor.valor;
+             }
+           }
+        }
+       //console.log(newValores);
+       camposReactive.value.pop();
+       camposReactive.value.push(newValores);
     });
 
    modalTable.value = true;

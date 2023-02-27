@@ -46,8 +46,9 @@ const newColumn = useForm(
     }
 )
 
-const saveColum = (typeForm) => 
+const saveColum = (typeForm, campo_id) => 
 {
+  newColumn.tabla_id = campo_id;
   if(typeForm == 'create')
   {
     newColumn.post(route('storeColum'),{
@@ -87,6 +88,7 @@ const editarColum = (columna) =>
 
 </script>
 <template>
+
          <DialogModal :maxWidth="'5xl'"  @close="close()">
            <template #title>
                <h2 class="text-2xl text-center" style="font-weight:bolder">Campos en <span class="bg-[#EC2944] text-white p-1 rounded-xl">{{campoName}}</span></h2>
@@ -110,7 +112,7 @@ const editarColum = (columna) =>
                         </div>
                         <div>
                           <button v-if="typeForm ==='update'" @click="newColumn.reset(), typeForm='create'">Atrás</button>
-                          <button @click="saveColum(typeForm)" style="" class="p-2 mt-2 ml-2 bg-blue-500 rounded-lg hover:opacity-50">
+                          <button @click="saveColum(typeForm,idCampo)" style="" class="p-2 mt-2 ml-2 bg-blue-500 rounded-lg hover:opacity-50">
                             <svg style="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 30 30">
                                 <defs>
                                   <clipPath id="clip-Icono-guardar">

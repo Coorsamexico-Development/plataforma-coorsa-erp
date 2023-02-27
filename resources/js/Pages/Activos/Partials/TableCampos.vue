@@ -123,6 +123,9 @@ const changeEdit = (colum) =>
       <tbody class="mt-2">
           <tr v-for="(colum, index) in columns" :key="index">
             <td>
+              {{ colum.id }}
+            </td>
+            <td>
                <button @click="changeEdit(colum)" class="bg-[#f28c00] m-2 rounded-2xl pl-2 pr-2">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="35" height="33" viewBox="0 0 35 33">
                    <defs>
@@ -163,19 +166,18 @@ const changeEdit = (colum) =>
                 @updateCampo="takeValor"
                 @retornar="setFiles"
                 @openModalTableCampos="openDinamicModal(colum)" />
-
-                <ModalTableItems 
-                 :colums="colums"
-                 :campoName="colum.campo"
-                 :idCampo="colum.id"
-                 :activo_id="activoId"
-                 :tipo_inputs="tipo_inputs"
-                 :tipoActivo="tipoActivo"
-                 :show="dinamicModal" 
-                 @close="closeDinamicModal"/>
              </td>
           </tr>
       </tbody>
     </table>
+    <ModalTableItems 
+        :colums="colums"
+        :campoName="columNameReactive"
+        :idCampo="idColumReactive"
+        :activo_id="activoId"
+        :tipo_inputs="tipo_inputs"
+        :tipoActivo="tipoActivo"
+        :show="dinamicModal" 
+        @close="closeDinamicModal"/>
 
 </template>

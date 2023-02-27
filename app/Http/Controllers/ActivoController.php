@@ -479,8 +479,6 @@ class ActivoController extends Controller
     public function columasCamposFila ($campo_id, $idActivo, $fila_id)
     {
               /// Nueva forma -.- ///
-            
-           
               $columnas = tipoActivoCampo::select( //columnas
                 'tipo_activo_campos.id',
                 'tipo_activo_campos.campo AS campo',
@@ -502,8 +500,7 @@ class ActivoController extends Controller
                   'valor_campo_activos.tipo_activo_campo_id AS columna_id',
                   'valor_campo_activos.fila_id'
                 )
-                ->join('tipo_activo_campos','valor_campo_activos.tipo_activo_campo_id','tipo_activo_campos.id')
-                ->join('tipo_inputs', 'tipo_activo_campos.tipo_input_id','tipo_inputs.id')
+                ->join('tipo_activo_campos','tipo_activo_campos.id','valor_campo_activos.tipo_activo_campo_id')
                 ->where('tipo_activo_campos.tabla_id','=',$campo_id)
                 ->where('valor_campo_activos.activo_id','=', $idActivo)
                 ->get();
