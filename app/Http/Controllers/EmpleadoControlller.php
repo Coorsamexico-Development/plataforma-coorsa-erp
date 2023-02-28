@@ -151,7 +151,6 @@ class EmpleadoControlller extends Controller
             'alergias' => 'required',
             'enfermedades_cronicas' => 'required',
             'cat_genero_id' => 'required',
-            'password' => 'required',
             'rol_id' => 'required',
          ]);
 
@@ -422,7 +421,6 @@ class EmpleadoControlller extends Controller
             'alergias' => 'required',
             'enfermedades_cronicas' => 'required',
             'cat_genero_id' => 'required',
-            'password' => 'required',
             'rol_id' => 'required',
          ]);
 
