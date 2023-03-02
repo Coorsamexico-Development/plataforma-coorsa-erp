@@ -22,7 +22,7 @@ const emit = defineEmits(["axios" ])
 const open = (id) => 
 {
     visible.value = !visible.value ;
-    emit('axios',id);
+    //emit('axios',id);
 /*
 
     axios.get('/activosxtipo/'+id).then((response)=> 
@@ -107,16 +107,17 @@ const addNewItem = () =>
 const axiosOpen = (id) =>
 {
     visible.value = false;
-    changeStatus(id);
 }
 
 const changeStatus = (id)  =>
 {
+  /*
     Inertia.post(route('changeStatusActivoItemLibre', id),{},{
       preserveScroll:true,
       preserveState:true,
       onSuccess: close()
     });
+    */
 }
 </script>
 <template>

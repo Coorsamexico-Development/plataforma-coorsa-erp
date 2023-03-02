@@ -43,16 +43,15 @@ const emitAxios = () =>
 
  const desactivarEmpleadoActivo = () =>
  {
-    //console.log(props.usuario.id)
-    Inertia.post(route('changeStatusActivoEmpleado', props.usuario.empleado_id),{},{
+    Inertia.post(route('changeStatusActivoEmpleado', [props.usuario.empleado_id , props.usuario.activo_id]),{
       preserveScroll:true,
       preserveState:true,
-      onSuccess: close(),
-      onFinish:emitAxios, close
+      onSuccess:() =>  close(),
+      onFinish:() => emitAxios()
     });
  }
 
- axios.get('/getImages/'+props.usuario.empleado_id+'/'+props.usuario.activo_id).then((response)=> 
+axios.get('/getImages/'+props.usuario.empleado_id+'/'+props.usuario.activo_id).then((response)=> 
      {
       //console.log(response);
       images.value = response.data;

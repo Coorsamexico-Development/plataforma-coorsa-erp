@@ -29,6 +29,7 @@ class UsersExport implements FromQuery, WithHeadings
             'users.apellido_materno',
             'users.email',
             'puestos.name AS puesto',
+            'cecos.nombre  AS departamento',
             'users.fecha_nacimiento',
             'users.fecha_ingreso',
             'users.fecha_ingreso_real',
@@ -39,6 +40,7 @@ class UsersExport implements FromQuery, WithHeadings
         ->leftjoin('expedientes', 'expedientes.empleado_id', 'users.id')
         ->leftjoin('empleados_puestos','empleados_puestos.empleado_id','users.id')
         ->leftjoin('puestos','empleados_puestos.puesto_id','puestos.id')
+        ->leftjoin('cecos', 'empleados_puestos.departamento_id', 'cecos.id')
         ->groupBy('users.id')
         ->where('users.activo','=',$this->activo)
         ->orderBy('users.id');
@@ -53,6 +55,7 @@ class UsersExport implements FromQuery, WithHeadings
         "Apellido materno", 
         "email", 
         "Puesto",
+        'Departamento',
         'Fecha de nacimiento', 
         'Fecha de ingreso', 
         'Fecha de ingreso real',

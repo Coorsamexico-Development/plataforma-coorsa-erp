@@ -139,7 +139,7 @@ export default {
             <button @click="openInfoUser()" class="bg-[#1D2B4E] text-white pl-2 pr-2 rounded-full uppercase">
                 {{ usuario.name.charAt(0) }}
             </button>
-            <ModalInfoUser :show="modalMoreInfo" :usuario="usuario" @close="closeInforUser" @axios="emitAxios"></ModalInfoUser>
+            <ModalInfoUser :show="modalMoreInfo" :activo_id="activo_id" :usuario="usuario" @close="closeInforUser" @axios="emitAxios"></ModalInfoUser>
         </div>
       </swiper-slide>
    </swiper>

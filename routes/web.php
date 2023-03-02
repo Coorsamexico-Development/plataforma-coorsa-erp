@@ -19,6 +19,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideoController;
+use App\Models\DepartamentosAuditoria;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -103,6 +104,14 @@ Route::middleware([
         ->name('departamentos-aditorias.calificacion.store')->middleware('can:calificacion.create');
     Route::delete('documentos-calificacion-mes/{documentosCalificacionMes}', [DocumentosCalificacionMesController::class, 'destroy'])
         ->name('documentos-calificacion-mes.destroy')->middleware('can:calificacion.delete');
+    Route::post('/storeProceso', [DepartamentosAuditoriaController::class, 'storeProceso'])->name('storeProceso');
+    Route::post('/storeDocumento',[DepartamentosAuditoriaController::class, 'storeDocumento'])->name('storeDocumento');
+    Route::get('/getDocumentos/{proceco_id}',[DepartamentosAuditoriaController::class, 'getDocumentos'])->name('getDocumentos');
+    Route::delete('documentos-mes/{documento}',[DepartamentosAuditoriaController::class,'destroyDocumento'])->name('documentos-mes.destroy');
+    Route::post('/storeRubro',[DepartamentosAuditoriaController::class,'storeRubro'])->name('storeRubro');
+    Route::get('/getRubros/{proceso_id}', [DepartamentosAuditoriaController::class,'getRubros'])->name('getRubros');
+    Route::post('/updateRubro/{rubro_id}', [DepartamentosAuditoriaController::class,'updateRubro'])->name('updateRubro');
+    Route::post('/storeCalf', [DepartamentosAuditoriaController::class,'storeCalf'])->name('storeCalf');
 
     Route::apiResource('politics', PoliticController::class)->name('index', 'control-interno.politics.index');
     Route::get('/docinternos', [PoliticController::class, 'docsinternos'])->name('control-interno.documentos-internos.index');
@@ -154,7 +163,7 @@ Route::controller(ActivoController::class)->group(function () {
     Route::post('/EvidenciaActivoUser', 'EvidenciaActivoUser')->name('EvidenciaActivoUser');
     Route::get('/getImages/{id}/{activoid}','getImages')->name('getImages');
     Route::get('/getInfoEmpleado/{id}', 'getInfoEmpleado')->name('getInfoEmpleado');
-    Route::post('/changeStatusActivoEmpleado/{id}', 'changeStatusActivoEmpleado')->name('changeStatusActivoEmpleado');
+    Route::post('/changeStatusActivoEmpleado/{id}/{activo_id}', 'changeStatusActivoEmpleado')->name('changeStatusActivoEmpleado');
     Route::post('/changeStatusActivoItem/{id}','changeStatusActivoItem')->name('changeStatusActivoItem');
     Route::get('/getAllCampos/{id}', 'getAllCampos')->name('getAllCampos');
     Route::post('/saveEditCampos/{id}','saveEditCampos')->name('saveEditCampos');

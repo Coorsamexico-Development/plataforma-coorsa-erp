@@ -49,8 +49,8 @@ class ActivoController extends Controller
                    'cecos.nombre AS departamento',
                    'ubicaciones.name AS ubicacion'
                    )
-                 ->join('users','activos_empleados.empleado_id', 'users.id')
-                 ->join('empleados_puestos','empleados_puestos.empleado_id','users.id')
+                 ->leftjoin('users','activos_empleados.empleado_id', 'users.id')
+                 ->leftjoin('empleados_puestos','empleados_puestos.empleado_id','users.id')
                  ->leftjoin('puestos','empleados_puestos.puesto_id','puestos.id')
                  ->leftjoin('cecos','empleados_puestos.departamento_id','cecos.id')
                  ->leftJoin('ubicaciones','cecos.ubicacione_id','ubicaciones.id')
@@ -270,10 +270,13 @@ class ActivoController extends Controller
     }
 
 
-    public function changeStatusActivoEmpleado($id)
+    public function changeStatusActivoEmpleado($id, $activo_id)
     {
        activos_empleado::where('empleado_id',$id)
+       ->where('activo_id',$activo_id)
        ->update(['status' => false]);
+
+       
     }
 
     public function changeStatusActivoItem($id)
