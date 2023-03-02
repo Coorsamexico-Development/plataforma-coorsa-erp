@@ -344,7 +344,7 @@ const addNewFila = (campo_id, otro_campo_id, fila_id) =>
                                               :fila="fila" />  
                                       </div>
                                       <component v-if="$page.props.can['activos.edit.campos'] && columna.tipo_input_nombre == 'file'" :is="setComponent(columna.tipo_input_nombre, $page.props.can['activos.edit.campos'])" 
-                                        :valore="valore"
+                                        :valore="valore.valor"
                                         :columna="columna"
                                         :fila="fila"
                                         @updateCampo ="updateCampo"
@@ -352,7 +352,7 @@ const addNewFila = (campo_id, otro_campo_id, fila_id) =>
                                         @openModalTableCampos="openModalShowCampos(columna,fila, idActivo)" />  
                                      
                                        <component v-if="columna.tipo_input_nombre !=='file'" :is="setComponent(columna.tipo_input_nombre, $page.props.can['activos.edit.campos'])" 
-                                       :valore="valore"
+                                       :valore="valore.valor"
                                        :columna="columna"
                                        :fila="fila"
                                        @updateCampo ="updateCampo"
@@ -362,7 +362,7 @@ const addNewFila = (campo_id, otro_campo_id, fila_id) =>
                                   </div>
                                   <div v-else>
                                       <component :is="setComponent(columna.tipo_input_nombre, $page.props.can['activos.edit.campos'])" 
-                                        :valore="valore"
+                                        :valore="valore.valor"
                                         :columna="columna"
                                         :fila="fila"
                                         @updateCampo ="updateCampo"
