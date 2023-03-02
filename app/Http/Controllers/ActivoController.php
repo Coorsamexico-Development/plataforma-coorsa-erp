@@ -179,8 +179,9 @@ class ActivoController extends Controller
 
     public function storeItem (Request $request) 
     {
+      
        
-      $activo_item = activosItem::create([
+     activosItem::create([
           'tipo_activo' => $request['tipo_activo'],
           'fecha' => $request['fecha'],
           'status' => $request['status'],
@@ -327,6 +328,12 @@ class ActivoController extends Controller
 
     public function saveEditCampos(Request $request, $id)
     {
+      $request->validate([
+        'activo_id' => 'required',
+        'tipo_activo_campo_id' => 'required',
+        'valor' => 'required'
+       ]);
+
       $busquedaPor = ['activo_id' => request('activo_id'),
        'tipo_activo_campo_id' => request('tipo_activo_campo_id'),
        'fila_id' => request('fila_id')];

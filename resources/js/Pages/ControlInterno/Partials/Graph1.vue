@@ -37,7 +37,7 @@ categoryAxis.renderer.opposite = true;
 // Create value axis
 var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 valueAxis.renderer.inversed = false;
-valueAxis.title.text = "Cantidad";
+valueAxis.title.text = "Valor";
 valueAxis.renderer.minLabelPosition = 0.01;
 
 // Create series

@@ -262,6 +262,17 @@ const arregloCalificaciones = computed(() =>
 const arregloParametros = computed(() => {
 
 });
+
+for (let index = 0; index < meses.length; index++) 
+{
+    const mes = meses[index];
+    for (let index2 = 0; index2 < array.length; index2++) 
+    {
+        const element = array[index2];
+        
+    }
+}
+
 </script>
 
 <template>

@@ -173,21 +173,22 @@ const closeTableModal = () =>
                 <h2 class="mr-4">Campos</h2>
                 <div v-if="activo.valor_campos_activos.length > 0"> <!--Si existen valores se setean en los inputs-->
                   <div v-for="campo in campos" :key="campo.id"> 
-                    <InputLabel>{{ campo.campo }}</InputLabel>
-                    <div>
-                    <!--v-if="valor.tipo_activo_campo_id == campo.idCampo" --> 
-                      <component 
-                       :is="setComponent(campo.input)" 
-                       @input="putId(campo.idCampo)" 
-                       @updateCampo="updateCampo"
-                       @retornar="setFile"
-                       @openModalTableCampos="openTableModal(campo.campo, campo.idCampo)" />   
-                    </div> 
+                     <div v-for="valor in activo.valor_campos_activos" :key="valor.id">
+                        <div v-if="valor.tipo_activo_campo_id == campo.idCampo">
+                           <InputLabel>{{ campo.campo }}</InputLabel>
+                           <component 
+                              :valore="valor.valor"
+                              :is="setComponent(campo.input)" 
+                              @input="putId(campo.idCampo)" 
+                              @updateCampo="updateCampo"
+                              @retornar="setFile"
+                              @openModalTableCampos="openTableModal(campo.campo, campo.idCampo)" />   
+                        </div>
+                      </div>
                    </div>
                 </div>
                 <div v-else> <!--Si no existen valores estaran vacios los inputs-->
                   <div v-for="campo in campos" :key="campo.id">
-                  
                       <InputLabel>{{ campo.campo }}</InputLabel>  
                        <component 
                        :is="setComponent(campo.input)" 

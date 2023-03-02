@@ -18,7 +18,7 @@ let campoPivot = ref(
 
 if(props.valore)
 {
-   campoPivot.value.value = props.valore.valor
+   campoPivot.value.value = props.valore
 }
 else{
   campoPivot.value.value = ""
@@ -44,7 +44,6 @@ const editCampo = () =>  //funcion para retornar el valor y actualizar en la BD
 </script>
 
 <template>
-
     <input ref="input" 
          :disabled="disable"
          v-model="campoPivot.value"
