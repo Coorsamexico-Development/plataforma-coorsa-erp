@@ -23,7 +23,10 @@ const emit = defineEmits(["close"]);
 
 var props = defineProps(
     {
-        activo:Object,
+        activo:{
+         type:Object,
+         required:true
+        },
         tipo_evidencias:Object,
         //
         campos:Object,
@@ -194,6 +197,29 @@ const arregloCampos = computed(() => {
    return arregloAux;
 });
 
+let arregloAux = [];
+   for (let index = 0; index < props.campos.length; index++) 
+   {
+      let objCampo = {};
+      const campo = props.campos[index];
+      objCampo.id = campo.idCampo;
+      objCampo.campo = campo.campo;
+      objCampo.principal = campo.principal;
+      objCampo.input = campo.input;
+      objCampo.valor = null;
+      arregloAux.push(objCampo);
+   }
+   
+   for (let index2 = 0; index2 < arregloAux.length; index2++) 
+   {
+      const campo = arregloAux[index2];
+     // console.log(props.activo.valor_campos_activos);
+      for (let index3 = 0; index3 < props.activo; index3++) 
+      {
+         console.log(props.activo[index3])
+      }
+   }
+console.log(props.activo)
 
 </script>
 <template>
@@ -204,7 +230,6 @@ const arregloCampos = computed(() => {
             <template #content>
                <div class="mt-4 border-b-2">
                 <h2 class="mr-4">Campos</h2>
-                {{arregloCampos}}
                 <div v-for="campo in arregloCampos" :key="campo.id">
                   <InputLabel>{{ campo.campo }}</InputLabel>
                   <component 
