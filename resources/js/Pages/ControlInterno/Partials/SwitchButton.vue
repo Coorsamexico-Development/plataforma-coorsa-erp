@@ -1,6 +1,5 @@
 <template>
     <div class="relative inline-block w-12 mr-2 align-middle transition duration-200 ease-in select-none ">
-  
       <input type="checkbox" :value="value" v-model="proxyChecked"
              class="absolute block w-6 h-6 bg-white border-4 border-white rounded-full appearance-none cursor-pointer toggle-checkbox checked:border-white checked:bg-red-500"/>
       <label

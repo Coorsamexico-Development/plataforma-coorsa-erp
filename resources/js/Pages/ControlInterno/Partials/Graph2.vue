@@ -9,11 +9,12 @@ let chart = null;
 
 export default {
   props: {
-        calificaciones: Array,
+        parametros: Array,
+        procesos:Array
     },
   watch:
   {
-    calificaciones(newData, oldData) 
+    parametros(newData, oldData) 
     {
         chart.data = newData; 
     }
@@ -27,7 +28,7 @@ am4core.useTheme(am4themes_animated);
 chart = am4core.create("chartdiv2", am4charts.XYChart);
 
 // Add data
-chart.data = this.calificaciones;
+chart.data = this.parametros;
 
 // Create category axis
 var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
@@ -36,30 +37,61 @@ categoryAxis.renderer.opposite = true;
 
 // Create value axis
 var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-valueAxis.renderer.inversed = true;
-valueAxis.title.text = "Place taken";
+valueAxis.renderer.inversed = false;
+valueAxis.title.text = "Valor";
 valueAxis.renderer.minLabelPosition = 0.01;
 
+//series dinamicas
+function createSeries(field, name) {
+   var series1 = chart.series.push(new am4charts.LineSeries());
+       series1.dataFields.valueY = field;
+       series1.dataFields.categoryX = "mes";
+       series1.name = name;
+       series1.bullets.push(new am4charts.CircleBullet());
+       series1.tooltipText = "{name} En {categoryX}: {valueY}";
+       series1.legendSettings.valueText = "{valueY}";
+       series1.visible  = false;
+
+   return series1;
+}
+
+for (let index = 0; index < this.procesos.length; index++)
+ {
+    let proceso = this.procesos[index];
+    //console.log(proceso)
+    createSeries(proceso.nombre, proceso.nombre);
+}
 // Create series
+/*
 var series1 = chart.series.push(new am4charts.LineSeries());
-series1.dataFields.valueY = "promedio";
+series1.dataFields.valueY = "Bajas";
 series1.dataFields.categoryX = "mes";
-series1.name = "Promedio";
+series1.name = "Bajas";
 series1.bullets.push(new am4charts.CircleBullet());
 series1.tooltipText = "{name} En {categoryX}: {valueY}";
 series1.legendSettings.valueText = "{valueY}";
 series1.visible  = false;
 
+var series2 = chart.series.push(new am4charts.LineSeries());
+series2.dataFields.valueY = "Reclutar";
+series2.dataFields.categoryX = "mes";
+series2.name = "Reclutar";
+series2.bullets.push(new am4charts.CircleBullet());
+series2.tooltipText = "{name} En {categoryX}: {valueY}";
+series2.legendSettings.valueText = "{valueY}";
+series2.visible  = false;
+*/
 
 // Add chart cursor
 chart.cursor = new am4charts.XYCursor();
 chart.cursor.behavior = "zoomY";
 
 
+/*
 let hs1 = series1.segments.template.states.create("hover")
 hs1.properties.strokeWidth = 5;
 series1.segments.template.strokeWidth = 1;
-
+*/
 
 // Add legend
 chart.legend = new am4charts.Legend();

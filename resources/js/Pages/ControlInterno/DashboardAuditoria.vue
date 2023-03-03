@@ -14,6 +14,8 @@ import ShowDocumentoModal from './Modals/ShowDocumentoModal.vue';
 import ShowCalificacionesModal from './Modals/ShowCalificacionesModal.vue';
 import Graph1 from './Partials/Graph1.vue';
 import Graph2 from './Partials/Graph2.vue';
+import { Fancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox.css";
 
 import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
@@ -29,7 +31,8 @@ let props = defineProps({
 
     procesos:Object,
     usuarios:Object,
-    calificaciones_mes:Object
+    calificaciones_mes:Object,
+    documentos_mes:Object
 
 });
 const params = reactive({
@@ -47,7 +50,7 @@ watch(params, (newParams) => {
         {
             data: newParams,
             replace: true,
-            only: ['calificaciones','procesos', 'calificaciones_mes'],
+            only: ['calificaciones','procesos', 'calificaciones_mes', 'documentos'],
             preserveScroll: true,
             preserveState: true,
         });
@@ -260,30 +263,99 @@ const arregloCalificaciones = computed(() =>
 
 
 const arregloParametros = computed(() => {
+    let arregloMesesAux = [];
+    for (let index = 0; index < meses.length; index++) 
+    {
+        let mes = meses[index];
+        let newObj = {
+            numero_mes:mes.numero,
+            mes:mes.mes,
+        };
+        for (let index2 = 0; index2 < props.procesos.length; index2++) 
+        {
+            let proceso = props.procesos[index2];
+            newObj[`${proceso.nombre}`] = 0;
+            for (let index3 = 0; index3 < props.calificaciones_mes.length; index3++)
+             {
+                const calificacion = props.calificaciones_mes[index3];
+                if(calificacion.proceso_name == proceso.nombre && mes.numero ==calificacion.mes)
+                {
+                    newObj[`${proceso.nombre}`] = calificacion.valor;
+                }
 
+            }
+        }
+      
+        arregloMesesAux.push(newObj);
+    }
+    return arregloMesesAux;
 });
 
-for (let index = 0; index < meses.length; index++) 
+let fecha = new Date();
+let year = ref(null);
+year.value = fecha.getFullYear();
+
+const promedios = computed(() => 
 {
-    const mes = meses[index];
-    for (let index2 = 0; index2 < array.length; index2++) 
+   let arregloAux = [];
+    for (let index = 0; index < meses.length; index++) 
     {
-        const element = array[index2];
-        
+        const fecha = new Date();
+        const año = fecha.getFullYear();
+    
+        const mes = meses[index];
+        let newObjCalf = {
+            numero: mes.numero,
+            mes: mes.mes,
+            año: año,
+            promedio:0
+        };
+        arregloAux.push(newObjCalf);
     }
-}
+    
+    for (let index2 = 0; index2 < arregloAux.length; index2++) 
+    {
+        const objeto = arregloAux[index2];
+        //console.log(objeto);
+        let conteo = []; 
+        let suma = 0;
+        let promedio = 0;
+        for (let index3 = 0; index3 < props.calificaciones_mes.length; index3++) 
+        {
+            const calificacion = props.calificaciones_mes[index3];
+            if(calificacion.mes == objeto.numero)
+            {
+               objeto.promedio += calificacion.valor;
+               suma += calificacion.valor;
+               conteo.push(calificacion);
+            }
+            else
+            {
+               
+            }
+        }
+       //console.log(suma/conteo.length)
+       promedio = suma/conteo.length;
+       //console.log(promedio)
+       objeto.promedio = promedio
+    }
+
+
+   return arregloAux;
+});
+
 
 </script>
 
 <template>
     <AppLayout title="Dashboard">
-      <section class="objetivo_auditoria sm:p-8 p-2 pt-8"  >
-            <div class="sm:text-center mr-0 sm:mr-96 sm:pt-8" style="font-family: 'Montserrat';">
-                <h1 class="sm:text-4xl text-xl font-semibold text-white sm:mr-12 ">Objetivo del área</h1>
+      <section class="p-2 pt-8 objetivo_auditoria sm:p-8"  >
+            <div class="mr-0 sm:text-center sm:mr-96 sm:pt-8" style="font-family: 'Montserrat';">
+                <h1 class="text-xl font-semibold text-white sm:text-4xl sm:mr-12 ">Objetivo del área</h1>
                 <span  class="w-16 h-1 bg-[#EC2944] mt-4 sm:ml-96" style="display:block;"></span>
             </div>
-            <div class="sm:mr-12 mr-0 sm:pl-16">
-                <p class="mt-6 mb-16 sm:text-xl text-base sm:ml-72 text-white" style="font-family: 'Montserrat'; line-height: 1.8;">
+            <div class="mr-0 sm:mr-12 sm:pl-16">
+                <p class="mt-6 mb-16 text-base text-white sm:text-xl sm:ml-72" style="font-family: 'Montserrat'; line-height: 1.8;">
                        Dentro de Control Interno, nos encargamos de la creación  y seguimiento del cumplimiento de los 
                        procesos, políticas, manuales, normas y métodos estratégicos de la empresa, todo con la finalidad de 
                        llegar al plan estratégico de esta, para poder lograrlo se realizan evaluaciones continuamente a las 
@@ -315,18 +387,39 @@ for (let index = 0; index < meses.length; index++)
                 </div>
              </div>
              <div class="mt-4">
-               <section v-if="!cambio" class="grid grid-cols-3 grid-rows-6 gap-4">
+               <section v-if="!cambio" class="grid grid-cols-3 grid-rows-6 gap-12">
                    <div class="col-start-1 col-end-3"> <!--Graficas-->
-                       Graficas
+                       <h2 class="text-lg font-bold">Graficas</h2>
                        <div>
                            <Graph1 :calificaciones = "arregloCalificaciones" />
                        </div>
                        <div>
-                          <Graph2 :calificaciones = "arregloCalificaciones" />
+                          <Graph2 :parametros = "arregloParametros" :procesos="procesos" />
                        </div>
                    </div>
-                   <div> <!--Contadores-->
-                       
+                   <div> <!--Contadores {{ promedios }}-->
+                        <div>
+                            <h2 class="mb-4 text-lg font-bold">Promedio</h2>
+                            <div class="w-full h-full border shadow-lg b-white rounded-2xl">
+                                <div v-for="(calificacion, index) in arregloCalificaciones" :key="calificacion.id" class="bg-[#F8F8F8] m-6 rounded-2xl">
+                                   
+                                </div>
+                             </div>
+                        </div>
+                   </div>
+                   <div class="col-start-1 col-end-4">
+                       <h2 class="mb-4 text-lg font-bold">Documentos que comprueban</h2>
+                       <div  class="grid grid-cols-3 gap-8">
+                          <div v-for="documento in documentos_mes" :key="documento.id" class="border shadow-lg h-72 w-72" > <!--Card Documento-->
+                             <img  v-if="documento.documento.endsWith('.pdf') || documento.documento.endsWith('.png') || documento.documento.endsWith('.jpg') || documento.documento.endsWith('.svg')"   data-fancybox :href="documento.documento" class="w-56 h-56" alt="imagen" src="imagen.png" />
+                             <img v-else class="w-56 h-56" alt="imagen" src="imagen.png"  download :href="documento.documento" />
+                             <div>
+                                <span class="bg-[#EC2944] h-14 w-2 absolute"></span>
+                                <h2 class="ml-4">{{documento.proceso_name}}</h2>}
+                                <h2 class="ml-4 -mt-5">{{ documento.name +' '+ documento.apellido_paterno + ' ' +documento.apellido_materno  }}</h2>
+                             </div>
+                          </div>
+                       </div>
                    </div>
                </section>
                <section v-if="cambio">
@@ -334,13 +427,13 @@ for (let index = 0; index < meses.length; index++)
                    <ButtonAdd class="mt-2" @click="openModalAddProceso">
                       Agregar proceso
                    </ButtonAdd>
-                   <div class="grid grid-cols-3 mt-4 mb-8">
-                      <div class="flex flex-col border rounded-xl items-center drop-shadow-xl" v-for="proceso in  procesos" :key="proceso.id">
+                   <div class="grid grid-cols-3 gap-6 mt-4 mb-8">
+                      <div class="flex flex-col items-center h-64 border shadow-xl rounded-xl" v-for="proceso in  procesos" :key="proceso.id">
                           <div class="flex flex-col items-center mt-2 ">
-                            <img class="w-16" alt="logo" :src="proceso.logo" />
+                            <img class="w-14 h-14" alt="logo" :src="proceso.logo" />
                             <h3 class="mt-4 text-xl">{{ proceso.nombre }}</h3>
                           </div>
-                          <div class="grid grid-cols-2 mt-4 border-t-2 w-full">
+                          <div class="grid w-full grid-cols-2 mt-20 border-t-2">
                             <div @click="openModalAddDoc(proceso.id)" class="w-full p-4 text-center border-r-2">
                                 Documentos
                             </div>
@@ -356,8 +449,8 @@ for (let index = 0; index < meses.length; index++)
 
        </section >
        <!--Docs responsive-->
-       <section class="sm:hidden static" style="font-family: 'Montserrat';">
-           <div class="ml-2 mt-8 flex flex-col">
+       <section class="static sm:hidden" style="font-family: 'Montserrat';">
+           <div class="flex flex-col mt-8 ml-2">
               <h1 class="uppercase font-semibold text-[#1A1A22]">Dashboard Auditorías</h1>
               <div class="flex flex-row p-2">
                  <div class="flex mr-2"
@@ -365,12 +458,12 @@ for (let index = 0; index < meses.length; index++)
                   <Dropdown align="right" width="48">
                       <template #trigger>
                           <ButtonAdd type="button"
-                              class="mt-0 mb-2 inline-flex items-center py-2 text-sm  transition focus:outline-none">
+                              class="inline-flex items-center py-2 mt-0 mb-2 text-sm transition focus:outline-none">
                               <p class="text-black">VER CATEGORIAS</p>
                           </ButtonAdd>
                       </template>
                       <template #content >
-                          <button class="sm:ml-0 ml-2 mr-12" v-for="dep in departamentosAuditoria" :key="'dep' + dep.id">
+                          <button class="ml-2 mr-12 sm:ml-0" v-for="dep in departamentosAuditoria" :key="'dep' + dep.id">
                               <span @click="params.departamento_auditoria_id = dep.id" class="text-xs">
                                 <a  class="font-semibold">{{ dep.nombre  }}</a>
                               </span>

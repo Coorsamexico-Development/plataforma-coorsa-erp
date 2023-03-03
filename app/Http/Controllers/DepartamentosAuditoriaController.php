@@ -23,15 +23,24 @@ class DepartamentosAuditoriaController extends Controller
         $procesos = Proceso::select('procesos.*');
 
         $calificaciones_mes = CalfRubroMe::select('calf_rubro_mes.*',
-        'procesos.id AS proceso_id')
+        'procesos.id AS proceso_id',
+        'procesos.nombre as proceso_name')
         ->join('rubros', 'calf_rubro_mes.rubro_id' , 'rubros.id')
         ->join('procesos', 'rubros.proceso_id', 'procesos.id');
+
+        $documentos_mes = DocumentosMe::select('documentos_mes.documento',
+        'documentos_mes.mes',
+        'procesos.nombre AS proceso_name',
+        'users.name', 'users.apellido_paterno', 'users.apellido_materno')
+        ->join('procesos','documentos_mes.proceso_id','procesos.id')
+        ->join('users', 'documentos_mes.user_id', 'users.id');
 
         if (request()->has('departamento_auditoria_id'))
          {
             $departamento =  DepartamentosAuditoria::find(request('departamento_auditoria_id'));
             $procesos->where('procesos.departamento_auditoria_id','=',request('departamento_auditoria_id'));
             $calificaciones_mes->where('procesos.departamento_auditoria_id','=',request('departamento_auditoria_id'));
+            $documentos_mes ->where('procesos.departamento_auditoria_id','=',request('departamento_auditoria_id'));
             //$calificaciones = $departamento->documentosCalificacionesMes()->orderBy('mes', 'asc');
         }
 
@@ -40,7 +49,8 @@ class DepartamentosAuditoriaController extends Controller
             'procesos' => fn() =>$procesos->get(),
             'filters' => request()->all(['departamento_auditoria_id']),
             'usuarios' => $usuarios,
-            'calificaciones_mes' => fn () => $calificaciones_mes ->get()
+            'calificaciones_mes' => fn () => $calificaciones_mes ->get(),
+            'documentos_mes' => fn() => $documentos_mes ->get()
         ]);
     }
 
