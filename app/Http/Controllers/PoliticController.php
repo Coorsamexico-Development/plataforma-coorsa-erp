@@ -13,16 +13,18 @@ class PoliticController extends Controller
 {
     public function index()
     {
-        $tipoPoliticas = Tipopolitica::orderBy('id', 'asc')->where('seccion_id','=',1);
-        $politicas = Politic::select('politics.*',
-        'users.name AS nombre',
-        'users.apellido_paterno AS apellido_paterno',
-        'users.apellido_materno AS apellido_materno',
-        'tipopoliticas.color')
-        ->join('users','politics.empleado_id','users.id')
-        ->join('tipopoliticas','politics.type_politic','tipopoliticas.id')
-        ->where('id_statu', '=', 1)
-        ->where('tipopoliticas.seccion_id','=',1);
+        $tipoPoliticas = Tipopolitica::orderBy('id', 'asc')->where('seccion_id', '=', 1);
+        $politicas = Politic::select(
+            'politics.*',
+            'users.name AS nombre',
+            'users.apellido_paterno AS apellido_paterno',
+            'users.apellido_materno AS apellido_materno',
+            'tipopoliticas.color'
+        )
+            ->join('users', 'politics.empleado_id', 'users.id')
+            ->join('tipopoliticas', 'politics.type_politic', 'tipopoliticas.id')
+            ->where('id_statu', '=', 1)
+            ->where('tipopoliticas.seccion_id', '=', 1);
 
 
         if (request()->has('search')) {
@@ -41,18 +43,20 @@ class PoliticController extends Controller
     }
 
 
-    public function docsinternos ()
+    public function docsinternos(int $seccion = 2)
     {
-        $tipoPoliticas = Tipopolitica::orderBy('id', 'asc')->where('seccion_id','=',2);
-        $politicas = Politic::select('politics.*',
-        'users.name AS nombre',
-        'users.apellido_paterno AS apellido_paterno',
-        'users.apellido_materno AS apellido_materno',
-        'tipopoliticas.color')
-        ->join('users','politics.empleado_id','users.id')
-        ->join('tipopoliticas','politics.type_politic','tipopoliticas.id')
-        ->where('id_statu', '=', 1)
-        ->where('tipopoliticas.seccion_id','=',2);
+        $tipoPoliticas = Tipopolitica::orderBy('id', 'asc')->where('seccion_id', '=', $seccion);
+        $politicas = Politic::select(
+            'politics.*',
+            'users.name AS nombre',
+            'users.apellido_paterno AS apellido_paterno',
+            'users.apellido_materno AS apellido_materno',
+            'tipopoliticas.color'
+        )
+            ->join('users', 'politics.empleado_id', 'users.id')
+            ->join('tipopoliticas', 'politics.type_politic', 'tipopoliticas.id')
+            ->where('id_statu', '=', 1)
+            ->where('tipopoliticas.seccion_id', '=', $seccion);
 
         if (request()->has('search')) {
             $search = '%' . strtr(request('search'), array("'" => "\\'", "%" => "\\%")) . '%';

@@ -105,16 +105,17 @@ Route::middleware([
     Route::delete('documentos-calificacion-mes/{documentosCalificacionMes}', [DocumentosCalificacionMesController::class, 'destroy'])
         ->name('documentos-calificacion-mes.destroy')->middleware('can:calificacion.delete');
     Route::post('/storeProceso', [DepartamentosAuditoriaController::class, 'storeProceso'])->name('storeProceso');
-    Route::post('/storeDocumento',[DepartamentosAuditoriaController::class, 'storeDocumento'])->name('storeDocumento');
-    Route::get('/getDocumentos/{proceco_id}',[DepartamentosAuditoriaController::class, 'getDocumentos'])->name('getDocumentos');
-    Route::delete('documentos-mes/{documento}',[DepartamentosAuditoriaController::class,'destroyDocumento'])->name('documentos-mes.destroy');
-    Route::post('/storeRubro',[DepartamentosAuditoriaController::class,'storeRubro'])->name('storeRubro');
-    Route::get('/getRubros/{proceso_id}', [DepartamentosAuditoriaController::class,'getRubros'])->name('getRubros');
-    Route::post('/updateRubro/{rubro_id}', [DepartamentosAuditoriaController::class,'updateRubro'])->name('updateRubro');
-    Route::post('/storeCalf', [DepartamentosAuditoriaController::class,'storeCalf'])->name('storeCalf');
+    Route::post('/storeDocumento', [DepartamentosAuditoriaController::class, 'storeDocumento'])->name('storeDocumento');
+    Route::get('/getDocumentos/{proceco_id}', [DepartamentosAuditoriaController::class, 'getDocumentos'])->name('getDocumentos');
+    Route::delete('documentos-mes/{documento}', [DepartamentosAuditoriaController::class, 'destroyDocumento'])->name('documentos-mes.destroy');
+    Route::post('/storeRubro', [DepartamentosAuditoriaController::class, 'storeRubro'])->name('storeRubro');
+    Route::get('/getRubros/{proceso_id}', [DepartamentosAuditoriaController::class, 'getRubros'])->name('getRubros');
+    Route::post('/updateRubro/{rubro_id}', [DepartamentosAuditoriaController::class, 'updateRubro'])->name('updateRubro');
+    Route::post('/storeCalf', [DepartamentosAuditoriaController::class, 'storeCalf'])->name('storeCalf');
 
     Route::apiResource('politics', PoliticController::class)->name('index', 'control-interno.politics.index');
     Route::get('/docinternos', [PoliticController::class, 'docsinternos'])->name('control-interno.documentos-internos.index');
+    Route::get('/docinternos/seccion/{seccion}', [PoliticController::class, 'docsinternos'])->name('documentos-internos.socios.index');
 
     Route::get('users/list', [UserController::class, 'list'])->name('users.list');
     Route::apiResource('roles', RoleController::class)->middleware('can:roles.manager');
@@ -148,7 +149,7 @@ Route::middleware([
         Route::get('/empleados/edit/{id}', 'edit')->name('empleado.edit');
         Route::post('empleados/update', 'update')->name('empleado.update');
         Route::get('empleados/{activo}', 'index')->name('empleado.indexmanual');
-        Route::get('empleadosData' , 'empleadosData')->name('empleados.data'); 
+        Route::get('empleadosData', 'empleadosData')->name('empleados.data');
     });
 });
 
@@ -161,26 +162,26 @@ Route::controller(ActivoController::class)->group(function () {
     Route::post('/storeTipoEvidencia', 'storeTipoEvidencia')->name('storeTipoEvidencia');
     Route::get('/getTipoEvidencia', 'getTipoEvidencia')->name('getTipoEvidencia');
     Route::post('/EvidenciaActivoUser', 'EvidenciaActivoUser')->name('EvidenciaActivoUser');
-    Route::get('/getImages/{id}/{activoid}','getImages')->name('getImages');
+    Route::get('/getImages/{id}/{activoid}', 'getImages')->name('getImages');
     Route::get('/getInfoEmpleado/{id}', 'getInfoEmpleado')->name('getInfoEmpleado');
     Route::post('/changeStatusActivoEmpleado/{id}/{activo_id}', 'changeStatusActivoEmpleado')->name('changeStatusActivoEmpleado');
-    Route::post('/changeStatusActivoItem/{id}','changeStatusActivoItem')->name('changeStatusActivoItem');
+    Route::post('/changeStatusActivoItem/{id}', 'changeStatusActivoItem')->name('changeStatusActivoItem');
     Route::get('/getAllCampos/{id}', 'getAllCampos')->name('getAllCampos');
-    Route::post('/saveEditCampos/{id}','saveEditCampos')->name('saveEditCampos');
-    Route::post('/saveEvidencias','saveEvidencias')->name('saveEvidencias');
+    Route::post('/saveEditCampos/{id}', 'saveEditCampos')->name('saveEditCampos');
+    Route::post('/saveEvidencias', 'saveEvidencias')->name('saveEvidencias');
     Route::post('/changeStatusActivoItemLibre/{id}', 'changeStatusActivoItemLibre')->name('changeStatusActivoItemLibre');
 
     Route::get('/valorCampo/{id}', 'valorCampo')->name('valorCampo');
     Route::post('/storeColum', 'storeColum')->name('storeColum');
     Route::post('/updateColum', 'updateColum')->name('updateColum');
-    Route::get('/getCampos/{idCampo}/{tipoActivo}','getCampos')->name('getCampos');
-    Route::get('/columnasxCampo/{campo}/{idActivo}','columasCampos')->name('columnas.campo');
+    Route::get('/getCampos/{idCampo}/{tipoActivo}', 'getCampos')->name('getCampos');
+    Route::get('/columnasxCampo/{campo}/{idActivo}', 'columasCampos')->name('columnas.campo');
 
-    Route::get('/columnasxCampoFila/{campo}/{idActivo}/{fila}','columasCamposFila')->name('columnas.campo.fila');
+    Route::get('/columnasxCampoFila/{campo}/{idActivo}/{fila}', 'columasCamposFila')->name('columnas.campo.fila');
 
-    Route::post('/newFila','newFila')->name('newFila');
+    Route::post('/newFila', 'newFila')->name('newFila');
 
-    Route::post('/saveNewValorColum','saveNewValorColum')->name('new.valor.campo');
+    Route::post('/saveNewValorColum', 'saveNewValorColum')->name('new.valor.campo');
 });
 
 
