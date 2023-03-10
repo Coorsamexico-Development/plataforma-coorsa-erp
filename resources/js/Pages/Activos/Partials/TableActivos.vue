@@ -112,17 +112,58 @@ const setComponent = (campoType) =>
 
 const modalTable = ref(false);
 const campoReactive = ref(null);
-const camposReactive = ref(null);
+const camposReactive = ref([]);
 const activo_id = ref(null);
 const openModalTable = (campo, idActivo) => 
 {
-  activo_id.value = idActivo;
+  console.log('emision')
+  /*
+  console.log(campo);
+  console.log(idActivo);
+ */
+   activo_id.value = idActivo;
    campoReactive.value = campo;
    axios.get('/columnasxCampo/'+campoReactive.value.idCampo+'/'+idActivo).then((response)=> 
     {
-        //console.log(response.data);
-        camposReactive.value = response.data;
+       //console.log(response.data);
+       let camposAxios = response.data;     
+       camposReactive.value = response.data;
+       let newValores = [];
+        for (let index = 0; index < camposAxios[1].length; index++)  //recorrido de filas
+        {
+            const fila = camposAxios[1][index];
+            for (let index1 = 0; index1 < camposAxios[0].length; index1++) //recorrido de columnas por fila
+            {
+              let newInterseccion = {};
+              const columna = camposAxios[0][index1];
+              //console.log(fila.id, columna.id)
+              newInterseccion.fila_id = fila.id;
+              newInterseccion.columna_id = columna.id;
+              newInterseccion.valor = null;
+              newValores.push(newInterseccion);
+            }
+        }
+
+        //recorrido para posicionar valor
+        for (let index2 = 0; index2 < newValores.length; index2++) 
+        {
+           const interseccion = newValores[index2];
+           //console.log(interseccion);
+           for (let index3 = 0; index3 < camposAxios[2].length; index3++)  //recorremos valores
+           {
+             const valor = camposAxios[2][index3];
+             if(valor.columna_id == interseccion.columna_id && valor.fila_id == interseccion.fila_id)
+             { 
+                //console.log(valor.valor);
+                interseccion.valor = valor.valor;
+             }
+           }
+        }
+       //console.log(newValores);
+       camposReactive.value.pop();
+       camposReactive.value.push(newValores);
     });
+
    modalTable.value = true;
 }
 
@@ -131,20 +172,20 @@ const closeModalTable = () =>
   modalTable.value = false;
 }
 </script>
-<template>
+<template>        
      <table class="w-full table-auto md:table-fixed">
         <thead class="border-b-2 border-[#707070]  font-extralight " style="" >
             <tr>
-                <th><span class="text-sm font-extralight uppercase"></span></th>
-                <th><span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">Fecha de alta</span></th>
-                <th><span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">Status</span></th>
+                <th><span class="text-sm uppercase font-extralight"></span></th>
+                <th><span class="text-sm uppercase font-extralight" style="letter-spacing:0.15rem">Fecha de alta</span></th>
+                <th><span class="text-sm uppercase font-extralight" style="letter-spacing:0.15rem">Status</span></th>
                 <th v-for="campo in campos" :key="campo.id">
-                  <span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">
+                  <span class="text-sm uppercase font-extralight" style="letter-spacing:0.15rem">
                     {{ campo.campo }}
                   </span>
                 </th>
-                <th class="pl-8"><span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">Documento</span></th>
-                <th><span class="text-sm font-extralight uppercase" style="letter-spacing:0.15rem">Usuarios</span></th>
+                <th class="pl-8"><span class="text-sm uppercase font-extralight" style="letter-spacing:0.15rem">Documento</span></th>
+                <th><span class="text-sm uppercase font-extralight" style="letter-spacing:0.15rem">Usuarios</span></th>
             </tr>
         </thead>
         <tbody>
@@ -210,24 +251,23 @@ const closeModalTable = () =>
                     </span>
                   </p>
                </td>
-               <td v-for="(campo, i) in campos" :key="campo.id">
-                  <div v-if="activo.valor_campos_activos.length > 0"> <!--Si existen uno o mas-->
+               <td v-for="(campo, index1) in campos" :key="index1">
+                  <div v-if="activo.valor_campos_activos.length > 0"> <!--Si existen uno o mas-->        
                      <div v-for="(valor, index) in activo.valor_campos_activos"  :key="index">
-                        <div v-if="index == 0">
-                          <component :is="setComponent(campo.input)" v-if="campo.input == 'table'"
-                         @openModalTableCampos="openModalTable(campo, activo.id)" :valor="valor"  :campo="campo" />
-
-                         <component :is="setComponent(campo.input)" v-else
-                          @openModalTableCampos="openModalTable(campo, activo.id)" :valor="valor"  :campo="campo" />
-                        </div>
-                        <div v-else class="">
-                          <component :is="setComponent(campo.input)" v-if="campo.input !== 'table'"
-                          @openModalTableCampos="openModalTable(campo, activo.id)" :valor="valor"  :campo="campo" />
-                        </div>
+                         <div v-if="valor.tipo_activo_campo_id == campo.idCampo">
+                             <component :is="setComponent(campo.input)"
+                              @openModalTableCampos="openModalTable(campo, activo.id)" :valore="valor"  :columna="campo" />
+                         </div>
+                         <div v-else>
+                           <div v-if="index == 0" >
+                             <component :is="setComponent(campo.input)" v-if="campo.input == 'table'"
+                              @openModalTableCampos="openModalTable(campo, activo.id)"  :columna="campo" />
+                           </div>
+                         </div>
                      </div>
                   </div>
                </td>
-               <ModalTableShowItems :campo="campoReactive" :idActivo="activo_id" :campos="camposReactive" :show="modalTable" @close="closeModalTable" />
+               <ModalTableShowItems @recargar="openModalTable" :campo="campoReactive" :idActivo="activo_id" :campos="camposReactive" :show="modalTable" @close="closeModalTable" />
                <td>
                  <div class="flex justify-center" v-if="activo.evidencias_activo.length > 0 " >
                   <div v-for="(image,index) in activo.evidencias_activo" :key="image.id">
@@ -287,8 +327,9 @@ const closeModalTable = () =>
                <td>
                   <CarruselUsers :activo_id="activo.id" :usuarios="activo.activos_empleados" :status="activo.status" @emit-axios="emitAxios(activo.tipo_activo)"></CarruselUsers>
                </td>
+               <ModalEditItem :tipoActivo="tipoActivo" :tipo_evidencias="tipo_evidencias"  :tipo_inputs="tipo_inputs" :activo="activo" :campos="allcampos" :show="modalEditItem"  @close="closeModalEditItem"></ModalEditItem>
             </tr>
         </tbody>
     </table>
-    <ModalEditItem :tipoActivo="tipoActivo" :tipo_evidencias="tipo_evidencias"  :tipo_inputs="tipo_inputs" :activo="activoModal" :campos="allcampos" :show="modalEditItem"  @close="closeModalEditItem"></ModalEditItem>
+
 </template>

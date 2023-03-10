@@ -42,10 +42,19 @@ class UserController extends Controller
         }
     }
 
-    public function viewCard ()
+    public function viewCard ($numero_empleado)
     {
+       $datos_User = User::select('users.*')
+        ->leftjoin('empleados_puestos', 'empleados_puestos.empleado_id','users.id')
+        ->join('puestos','empleados_puestos.puesto_id','puestos.id')
+        ->where('users.numero_empleado' ,'=',$numero_empleado)
+        ->where('users.activo','=',1)
+        ->get();
+
         return Inertia::render('CardViewUser/IndexCard',
-        []);
+        [
+            'datos_usuario' => $datos_User
+        ]);
     }
 
     public function getPuesto($id)

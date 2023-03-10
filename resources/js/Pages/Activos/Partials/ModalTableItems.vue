@@ -22,6 +22,7 @@ var props = defineProps(
         campoName:String,
         idCampo:Number,
         activo_id:Number,
+        colums:Object
     }
 );
 
@@ -32,8 +33,11 @@ const close = () =>
 
 const idCampoReactive = ref(-1);
 
+
+
 const newColumn = useForm(
     {
+        id:null,
         tipo_activo_id:props.tipoActivo,
         campo:null,
         principal:0,
@@ -42,27 +46,49 @@ const newColumn = useForm(
     }
 )
 
-const saveColum = () => 
+const saveColum = (typeForm, campo_id) => 
 {
+  newColumn.tabla_id = campo_id;
+  if(typeForm == 'create')
+  {
     newColumn.post(route('storeColum'),{
         preserveScroll:true,
         preserveState:true,
-        onFinish:() => close(),
         onSuccess:() => newColumn.reset(),
     })
-}
-
+  }
+  if(typeForm == 'update')
+  {
+    newColumn.post(route('updateColum'),{
+        preserveScroll:true,
+        preserveState:true,
+        onSuccess:() => newColumn.reset(),
+    })
+  }
+}/*
 const colums = ref([]);
 axios.get('/getCampos/'+props.idCampo+'/'+props.tipoActivo).then((response)=> 
      {
         //console.log(response);
         colums.value = response.data;
      });
+*/
+//console.log(props);
 
-console.log(props);
+const typeForm = ref('create');
+
+const editarColum = (columna) => 
+{
+   //console.log(columna)
+   newColumn.id = columna.id
+   newColumn.campo = columna.campo;
+   newColumn.tipo_input_id = columna.input_id;
+   typeForm.value = 'update';
+}
 
 </script>
 <template>
+
          <DialogModal :maxWidth="'5xl'"  @close="close()">
            <template #title>
                <h2 class="text-2xl text-center" style="font-weight:bolder">Campos en <span class="bg-[#EC2944] text-white p-1 rounded-xl">{{campoName}}</span></h2>
@@ -71,7 +97,6 @@ console.log(props);
               <div class="grid grid-cols-5">
                  <div class="col-start-1 col-end-1">
                     Nueva columna
-                    <form>
                         <div>
                             <InputLabel>Columna</InputLabel>
                             <TextInput v-model="newColumn.campo" />
@@ -86,7 +111,8 @@ console.log(props);
                             </SelectComponent>
                         </div>
                         <div>
-                          <button @click="saveColum" style="" class="p-2 mt-2 bg-blue-500 rounded-lg hover:opacity-50">
+                          <button v-if="typeForm ==='update'" @click="newColumn.reset(), typeForm='create'">Atrás</button>
+                          <button @click="saveColum(typeForm,idCampo)" style="" class="p-2 mt-2 ml-2 bg-blue-500 rounded-lg hover:opacity-50">
                             <svg style="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 30 30">
                                 <defs>
                                   <clipPath id="clip-Icono-guardar">
@@ -106,10 +132,10 @@ console.log(props);
                             </svg>
                           </button>
                         </div>
-                    </form>
                  </div>
+                 
                  <div class="col-start-3 col-end-6 border-l-2">
-                    <TableCampos :tipo_inputs="tipo_inputs" :tipoActivo="tipoActivo" :columns="colums" :activoId="activo_id" />
+                    <TableCampos :tipo_inputs="tipo_inputs" :tipoActivo="tipoActivo" :columns="colums" :activoId="activo_id" @editColum="editarColum" />
                  </div>
               </div>
             </template>

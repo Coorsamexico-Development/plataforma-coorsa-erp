@@ -14,14 +14,20 @@ import { Inertia } from "@inertiajs/inertia";
 import TableButton from "./TableButton.vue";
 import ColumText from "./ColumText.vue";
 import ColumFile from "./ColumFile.vue";
+import InputText from "./InputText.vue";
+import FileUpload from "./FileUpload.vue";
+import InputDate from './InputDate.vue';
 import axios from 'axios';
 import ModalTableShowItems from '../Partials/ModalTableShowItems.vue';
+import TableRow from '../Partials/TableRow.vue';
+import DangerButton from '@/Components/DangerButton.vue';
 
-const emit = defineEmits(["close", "axios"]);
+const emit = defineEmits(["close", "axios", "recargar"]);
 
 var props = defineProps(
     {
         campo:Object,
+        filare:Object,
         campos:Object,
         idActivo:Number
     }
@@ -32,24 +38,66 @@ const close = () =>
     emit('close');
 };
 
+const recargar = () => 
+{
+   emit('recargar',props.campo, props.idActivo);
+   closeModalShowCampos();
+}
+
 const components = 
 {
     TableButton:TableButton,
+    InputText:InputText,
+    FileUpload:FileUpload,
+    InputDate:InputDate,
+
     ColumText:ColumText,
     ColumFile:ColumFile
 }
 
-const setComponent = (campoType) =>
+const setComponent = (campoType, permiso) =>
 {
-  switch (campoType) {
+  //console.log(permiso)
+  if(permiso == true)
+  {
+    switch (campoType) {
       case "table":
           return components.TableButton
         break;
 
       case "file":
-           return components.ColumFile
+           return components.FileUpload
         break;
 
+      case "text":
+          return components.InputText
+        break
+
+      case "number":
+          return components.InputText
+        break
+
+      case "date":
+          return components.InputDate
+        break
+
+      default:
+          return components.InputText
+        break;
+     }
+  }
+  else
+  {
+    switch (campoType) {
+      case "table":
+          return components.TableButton
+        break;
+
+        
+      case "file":
+           return components.ColumFile
+        break;
+      
       case "text":
           return components.ColumText
         break
@@ -58,26 +106,77 @@ const setComponent = (campoType) =>
           return components.ColumText
         break
 
-      default:
-          return components.ColumText
-        break;
-    
+      case "date":
+          return components.InputDate
+        break
+
      }
+  }
+
 }
 
 const openShow = ref(false);
 const campoReactive = ref(null);
-const camposReactive = ref(null);
-const openModalShowCampos = (campo) =>
+const filaReactive = ref(null);
+const camposReactive = ref([]);
+const openModalShowCampos = (campo, fila, idActivo) =>
 {
-   campoReactive.value = campo;
-   console.log(campo)
-   axios.get('/columnasxCampo/'+campo.id +'/'+props.idActivo).then((response)=> 
+    camposReactive.value = [];
+    filaReactive.value = fila;
+    campoReactive.value = campo;
+    console.log(fila.id, campo.id, idActivo);
+    if(fila)
     {
-        console.log(response.data);
-        camposReactive.value = response.data;
-    });
-   openShow.value = true;
+      axios.get('/columnasxCampoFila/'+campo.id+'/'+idActivo+'/'+fila.id).then((response)=> 
+       {
+                //console.log(response.data);
+                let camposAxios = response.data;   
+                camposReactive.value = response.data;
+                let newValores = [];
+                for (let index = 0; index < camposAxios[1].length; index++)  //recorrido de filas
+                  {
+                      const fila = camposAxios[1][index];
+                      for (let index1 = 0; index1 < camposAxios[0].length; index1++) //recorrido de columnas por fila
+                      {
+                        let newInterseccion = {};
+                        const columna = camposAxios[0][index1];
+                        //console.log(fila.id, columna.id)
+                        newInterseccion.fila_id = fila.id;
+                        newInterseccion.columna_id = columna.id;
+                        newInterseccion.valor = null;
+                        newValores.push(newInterseccion);
+                      }
+                  }
+
+                //recorrido para posicionar valor
+                 for (let index2 = 0; index2 < newValores.length; index2++) 
+                 {
+                    const interseccion = newValores[index2];
+                    //console.log(interseccion);
+                    for (let index3 = 0; index3 < camposAxios[2].length; index3++)  //recorremos valores
+                    {
+                      const valor = camposAxios[2][index3];
+                      if(valor.columna_id == interseccion.columna_id && valor.fila_id == interseccion.fila_id)
+                      { 
+                         //console.log(valor.valor);
+                         interseccion.valor = valor.valor;
+                      }
+                    }
+                 }
+                //console.log(newValores);
+                camposReactive.value.pop();
+                camposReactive.value.push(newValores);
+       });
+    }
+    else
+    {
+      axios.get('/columnasxCampo/'+campoReactive.value.id+'/'+idActivo).then((response)=> 
+       {
+                //console.log(response.data);
+               camposReactive.value = response.data;
+       });
+    }
+    openShow.value = true;
 }
 
 const closeModalShowCampos = () => 
@@ -85,34 +184,204 @@ const closeModalShowCampos = () =>
   openShow.value = false;
 }
 
+const updateCampo = (valor, columna, fila) => 
+{
+  const valorForm = useForm(
+   {
+      valor:valor.value,
+      tipo_activo_campo_id: columna.id,
+      activo_id: props.idActivo,
+      fila_id:fila.id
+   }
+  );
+   valorForm.post(route('saveEditCampos',props.idActivo),{
+    preserveScroll:true,
+    preserveState:true,
+    onSuccess:() => valorForm.reset(),
+    onFinish:()=> recargar()
+  });
+  
+}
+
+const setFiles = (files, campo_id, fila_id) => 
+{
+    console.log(campo_id);
+    console.log(fila_id);
+    console.log(files[0]);
+
+   const fileForm = useForm({
+     file:files[0],
+     tipo_activo_campo_id: campo_id.id,
+     activo_id: props.idActivo,
+     fila_id: fila_id.id
+  });
+ 
+  fileForm.post(route('saveEditCampos',props.idActivo),{
+    preserveScroll:true,
+    preserveState:true,
+    onSuccess:() => fileForm.reset()
+  });
+  
+}
+
+const addNewFila = (campo_id, otro_campo_id, fila_id) => 
+{   
+  if(fila_id)
+  {
+    if(campo_id)
+   {
+        const filaForm = useForm({
+         tipo_activo_campo_id: campo_id,
+         activos_items_id: props.idActivo,
+         fila_id: fila_id
+      });
+    
+      filaForm.post(route('newFila'),{
+        preserveScroll:true,
+        preserveState:true,
+        onStart:() => openShow.value = false,
+        onSuccess:() => filaForm.reset(),
+        onFinish:() => {return Promise.all([
+          openShow.value = false,
+          campoReactive.value = [],
+          openModalShowCampos(props.campo, props.filare, props.idActivo)
+        ])} 
+      });
+   }
+   else if(otro_campo_id)
+   {
+    const filaForm = useForm({
+         tipo_activo_campo_id: otro_campo_id,
+         activos_items_id: props.idActivo,
+         fila_id: fila_id
+      });
+    
+      filaForm.post(route('newFila'),{
+        preserveScroll:true,
+        preserveState:true,
+        onStart:() => openShow.value = false,
+        onSuccess:() => filaForm.reset(),
+        onFinish:() => {return Promise.all([
+          openShow.value = false,
+          campoReactive.value = [],
+          openModalShowCampos(props.campo, props.filare, props.idActivo)
+        ])} 
+      });
+   }
+  }
+  else{
+   if(campo_id)
+   {
+        const filaForm = useForm({
+         tipo_activo_campo_id: campo_id,
+         activos_items_id: props.idActivo
+      });
+    
+      filaForm.post(route('newFila'),{
+        preserveScroll:true,
+        preserveState:true,
+        onStart:() => openShow.value = false,
+        onSuccess:() => filaForm.reset(),
+        onFinish:() => recargar()
+      });
+   }
+   else if(otro_campo_id)
+   {
+    const filaForm = useForm({
+         tipo_activo_campo_id: otro_campo_id,
+         activos_items_id: props.idActivo
+      });
+    
+      filaForm.post(route('newFila'),{
+        preserveScroll:true,
+        preserveState:true,
+        onStart:() => openShow.value = false,
+        onSuccess:() => filaForm.reset(),
+        onFinish:() => recargar()
+      });
+   }
+  }
+}
+
 </script>
 <template>
-         <DialogModal :maxWidth="'3xl'"  @close="close()">
+         <DialogModal :maxWidth="'5xl'"  @close="close()">
            <template #title>
-                 <h1>Campos de {{ campo.campo }}</h1>
+                 <h1 class="text-center" >Campos de <span class="font-bold">{{ campo.campo }}</span></h1>
             </template>
             <template #content>
-              <div class="flex justify-center w-full">
-                  <table class="w-full">
-                     <thead>
-                        <tr class="border-b ">
-                           <th class="text-center p-8 pt-0 pb-1" v-for="campose in campos" :key="campose.id">
-                             {{ campose.campo }}
-                           </th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        <tr>
-                          <td class="text-center p-8 pt-0 pb-1" v-for="valore in campos" :key="valore.id">
-                             <component :is="setComponent(valore.tipo_input)" }
-                             :valore="valore"
-                              @openModalTableCampos="openModalShowCampos(valore)" />
-                          </td>
-                        </tr>
-                     </tbody>
-                  </table>
+              <div class="flex flex-col items-center justify-center w-full">
+                 <table class="w-full" v-if="campos">
+                    <thead>
+                      <tr class="text-center">
+                        <th></th>
+                        <th v-for="(columna,index) in campos[0]" :key="index" >
+                            {{ columna.campo }}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="text-center border-b" v-for="(fila, index2) in campos[1]" :key="index2">
+                       <td>
+                        <!--
+                        <DangerButton>
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                 <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                             </svg>
+                        </DangerButton>
+                      -->
+                       </td>
+                       <td v-for="(columna,index3) in campos[0]" :key="index3" >
+                          <div v-if="campos[2].length > 0 "> <!--Validamos si trae valores-->
+                            <div v-for="(valore, index4) in campos[2]" :key="index4">
+                               <div v-if="valore.columna_id == columna.id  && valore.fila_id == fila.id">
+                                  <div v-if="valore.valor">
+                                      <div v-if="columna.tipo_input_nombre == 'file' &&  $page.props.can['activos.edit.campos']">
+                                        <ColumFile  
+                                              :valore="valore"
+                                              :columna="columna"
+                                              :fila="fila" />  
+                                      </div>
+                                      <component v-if="$page.props.can['activos.edit.campos'] && columna.tipo_input_nombre == 'file'" :is="setComponent(columna.tipo_input_nombre, $page.props.can['activos.edit.campos'])" 
+                                        :valore="valore.valor"
+                                        :columna="columna"
+                                        :fila="fila"
+                                        @updateCampo ="updateCampo"
+                                        @retornar="setFiles"
+                                        @openModalTableCampos="openModalShowCampos(columna,fila, idActivo)" />  
+                                     
+                                       <component v-if="columna.tipo_input_nombre !=='file'" :is="setComponent(columna.tipo_input_nombre, $page.props.can['activos.edit.campos'])" 
+                                       :valore="valore.valor"
+                                       :columna="columna"
+                                       :fila="fila"
+                                       @updateCampo ="updateCampo"
+                                       @retornar="setFiles"
+                                       @openModalTableCampos="openModalShowCampos(columna,fila, idActivo)" />  
+                                                        
+                                  </div>
+                                  <div v-else>
+                                      <component :is="setComponent(columna.tipo_input_nombre, $page.props.can['activos.edit.campos'])" 
+                                        :valore="valore.valor"
+                                        :columna="columna"
+                                        :fila="fila"
+                                        @updateCampo ="updateCampo"
+                                        @retornar="setFiles"
+                                        @openModalTableCampos="openModalShowCampos(columna,fila, idActivo)" /> 
+                                  </div>
+                               </div>          
+                            </div>
+                          </div>
+                       </td>
+                      </tr>
+                    </tbody>
+                 </table>
+                 <div v-if="$page.props.can['activos.edit.campos']">
+                   <button v-if="filare" @click="addNewFila(campo.idCampo, campo.id, filare.id)" class="mt-4 bg-[#EC2944] text-white rounded-full w-8">+</button>
+                   <button v-else @click="addNewFila(campo.idCampo, campo.id)" class="mt-4 bg-[#EC2944] text-white rounded-full w-8">+</button>
+                 </div>
               </div>
-              <ModalTableShowItems :idActivo="idActivo" :campo="campoReactive" :campos="camposReactive" @close="closeModalShowCampos" :show="openShow"/>
+              <ModalTableShowItems :idActivo="idActivo" :campo="campoReactive" :filare="filaReactive" :campos="camposReactive" @close="closeModalShowCampos" :show="openShow"/>
             </template>
             <template #footer>
                 <SecondaryButton  @click="close()" class="closeModal1" style="float:right">

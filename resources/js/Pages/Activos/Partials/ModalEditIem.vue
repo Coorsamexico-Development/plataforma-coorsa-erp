@@ -23,7 +23,10 @@ const emit = defineEmits(["close"]);
 
 var props = defineProps(
     {
-        activo:Object,
+        activo:{
+         type:Object,
+         required:true
+        },
         tipo_evidencias:Object,
         //
         campos:Object,
@@ -143,17 +146,81 @@ const closeTipoEvidencia = () =>
 const tableModal = ref(false);
 let campoName = ref(null);
 let idCampoR = ref(null);
+let colums = ref(null);
 const openTableModal = (campo,idCampo) => 
 {
   campoName.value = campo;
   idCampoR.value = idCampo;
   //console.log(campoName);
   tableModal.value = true;
+
+  axios.get('/getCampos/'+props.activo.id+'/'+props.tipoActivo.id).then((response)=> 
+     {
+        //console.log(response);
+        colums.value = response.data;
+     });
+
 }
 const closeTableModal = () => 
 {
   tableModal.value = false;
 }
+
+const arregloCampos = computed(() => {
+   let arregloAux = [];
+   for (let index = 0; index < props.campos.length; index++) 
+   {
+      let objCampo = {};
+      const campo = props.campos[index];
+      objCampo.id = campo.idCampo;
+      objCampo.campo = campo.campo;
+      objCampo.principal = campo.principal;
+      objCampo.input = campo.input;
+      objCampo.valor = null;
+      arregloAux.push(objCampo);
+   }
+   
+   for (let index2 = 0; index2 < arregloAux.length; index2++) 
+   {
+      const campo = arregloAux[index2];
+     // console.log(props.activo.valor_campos_activos);
+      for (let index3 = 0; index3 < props.activo.valor_campos_activos; index3++) 
+      {
+         const valor = props.activo.valor_campos_activos[index3];
+         if(valor.tipo_activo_campo_id == campo.id)
+         {
+            campo.valor = valor.valor
+         }
+      }
+   }
+
+   return arregloAux;
+});
+
+let arregloAux = [];
+   for (let index = 0; index < props.campos.length; index++) 
+   {
+      let objCampo = {};
+      const campo = props.campos[index];
+      objCampo.id = campo.idCampo;
+      objCampo.campo = campo.campo;
+      objCampo.principal = campo.principal;
+      objCampo.input = campo.input;
+      objCampo.valor = null;
+      arregloAux.push(objCampo);
+   }
+   
+   for (let index2 = 0; index2 < arregloAux.length; index2++) 
+   {
+      const campo = arregloAux[index2];
+     // console.log(props.activo.valor_campos_activos);
+      for (let index3 = 0; index3 < props.activo; index3++) 
+      {
+         console.log(props.activo[index3])
+      }
+   }
+console.log(props.activo)
+
 </script>
 <template>
          <DialogModal  @close="close()">
@@ -163,32 +230,14 @@ const closeTableModal = () =>
             <template #content>
                <div class="mt-4 border-b-2">
                 <h2 class="mr-4">Campos</h2>
-                <div v-if="activo.valor_campos_activos.length > 0"> <!--Si existen valores se setean en los inputs-->
-                  <div v-for="campo in campos" :key="campo.id"> 
-                    <InputLabel>{{ campo.campo }}</InputLabel>
-                    <div>
-                    <!--v-if="valor.tipo_activo_campo_id == campo.idCampo" --> 
-                      <component 
+                <div v-for="campo in arregloCampos" :key="campo.id">
+                  <InputLabel>{{ campo.campo }}</InputLabel>
+                  <component 
                        :is="setComponent(campo.input)" 
-                       @input="putId(campo.idCampo)" 
+                       @input="putId(campo.id)" 
                        @updateCampo="updateCampo"
                        @retornar="setFile"
-                       @openModalTableCampos="openTableModal(campo.campo, campo.idCampo)" />   
-                    </div> 
-                   </div>
-                </div>
-                <div v-else> <!--Si no existen valores estaran vacios los inputs-->
-                  <div v-for="campo in campos" :key="campo.id">
-                      <InputLabel>{{ campo.campo }}</InputLabel>  
-                       <component 
-                       :is="setComponent(campo.input)" 
-                       @updateCampo="updateCampo" 
-                       @click="putId(campo.idCampo)" 
-                       @retornar="setFile" 
-                       @openModalTableCampos="openTableModal(campo.campo, campo.idCampo)"
-                       />
-                      <!-- <InputError :message="message"></InputError> -->
-                   </div>
+                       @openModalTableCampos="openTableModal(campo.campo, campo.id)" />  
                 </div>
                </div>
                <ModalTableItems v-if="campoName !== null" 
@@ -198,6 +247,7 @@ const closeTableModal = () =>
                :tipoActivo="activo.tipo_activo" 
                :show="tableModal" 
                :tipo_inputs="tipo_inputs"
+               :colums="colums"
                @close="closeTableModal"/>
                <div class="flex flex-col mt-4">
                    <h2 class="mr-4">Evidencias</h2>

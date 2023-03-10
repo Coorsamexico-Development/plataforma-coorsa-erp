@@ -6,10 +6,16 @@ import ButtonSeccion from '../../Components/ButtonSeccion.vue';
 import Title from '../../Components/Title.vue';
 import GraficaSection from './Partials/GraficaSection.vue';
 import DocumentosSection from './Partials/DocumentosSection.vue';
-import FormCalificacionModal from './Modals/FormCalificacionModal.vue';
-
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
+import SwitchButton from './Partials/SwitchButton.vue';
+import AddProcesoModal from './Modals/AddProcesoModal.vue';
+import ShowDocumentoModal from './Modals/ShowDocumentoModal.vue';
+import ShowCalificacionesModal from './Modals/ShowCalificacionesModal.vue';
+import Graph1 from './Partials/Graph1.vue';
+import Graph2 from './Partials/Graph2.vue';
+import { Fancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox.css";
 
 import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
@@ -22,18 +28,16 @@ let props = defineProps({
         type: Object,
         required: true,
     },
-    calificaciones: {
-        type: Object,
-        required: true,
-    }
+
+    procesos:Object,
+    usuarios:Object,
+    calificaciones_mes:Object,
+    documentos_mes:Object
+
 });
-
-
-const showingFormCalificacion = ref(false);
 const params = reactive({
     departamento_auditoria_id: props.filters.departamento_auditoria_id
 })
-
 
 const departamento = computed(() => {
     return props.departamentosAuditoria.find((dep) => dep.id == params.departamento_auditoria_id)
@@ -41,28 +45,317 @@ const departamento = computed(() => {
 
 watch(params, (newParams) => {
 
+    //console.log(newParams);
     Inertia.visit(route("control-interno.departamentos-aditorias.index"),
         {
             data: newParams,
             replace: true,
-            only: ['calificaciones'],
+            only: ['calificaciones','procesos', 'calificaciones_mes', 'documentos'],
             preserveScroll: true,
             preserveState: true,
         });
 })
+
+const cambio = ref(false);
+const cambioSwitch = () => 
+{
+    //console.log("gola");
+    cambio.value = !cambio.value;
+}
+
+const modalAddProceso =  ref(false);
+const openModalAddProceso = () => 
+{
+   modalAddProceso.value = true;
+}
+
+const closeModalAddProceso = () => 
+{
+    modalAddProceso.value = false;
+}
+
+const modalAddDocumento = ref(false);
+const procesoReactive = ref(-1);
+const openModalAddDoc = (proceso_id) => 
+{
+    procesoReactive.value = proceso_id;
+    consultarDocumentos(proceso_id);
+    modalAddDocumento.value = true;
+}
+const closeModalAddDoc = () =>
+{
+    modalAddDocumento.value = false;
+}
+
+const documentos = ref([]);
+const consultarDocumentos = (proceso_id) => 
+{
+    //console.log(proceso_id);
+    axios.get('/getDocumentos/'+proceso_id).then((response)=> 
+       {
+                //console.log(response.data);
+                documentos.value = response.data;
+               
+       });
+}
+
+const modalAdCalf = ref(false);
+const openModalShowCalif = (proceso_id) =>
+{ 
+    consultarRubros(proceso_id);
+    procesoReactive.value = proceso_id;
+    modalAdCalf.value = true;
+}
+
+const closeModalShowCalif = () =>
+{ 
+    calificaciones.value = [];
+   modalAdCalf.value = false;
+
+}
+
+const rubros = ref([]);
+const calificaciones = ref([]);
+const meses = [
+  {
+    numero: '1',
+    mes: 'Ene'
+  },
+  {
+    numero: '2',
+    mes: 'Feb'
+  },
+  {
+    numero: '3',
+    mes: 'Mar'
+  },
+  {
+    numero: '4',
+    mes: 'Abr'
+  },
+  {
+    numero: '5',
+    mes: 'May'
+  },
+  {
+    numero: '6',
+    mes: 'Jun'
+  },
+  {
+    numero: '7',
+    mes: 'Jul'
+  },
+  {
+    numero: '8',
+    mes: 'Ago'
+  },
+  {
+    numero: '9',
+    mes: 'Sep'
+  },
+  {
+    numero: '10',
+    mes: 'Oct'
+  },
+  {
+    numero: '11',
+    mes: 'Nov'
+  },
+  {
+    numero: '12',
+    mes: 'Dic'
+  }
+];
+
+const consultarRubros = (proceso_id) =>
+{
+    axios.get('/getRubros/'+proceso_id).then((response)=> 
+       {
+          rubros.value = response.data;
+
+          for (let index = 0; index < rubros.value.length; index++) 
+          {
+            const rubro = rubros.value[index];
+           // console.log(rubro);
+            for (let index2 = 0; index2 < meses.length; index2++) 
+              {
+                  const mes = meses[index2];
+                  let newInterseccion = {};
+                  //console.log(mes);
+                  newInterseccion.mes = mes.numero;
+                  newInterseccion.rubro = rubro.id;
+                  newInterseccion.valor= null;
+
+                  calificaciones.value.push(newInterseccion);
+              }  
+          }
+
+          for (let index3 = 0; index3 < calificaciones.value.length; index3++) 
+          {
+            const interseccion = calificaciones.value[index3];
+            //console.log(interseccion);
+            for (let index4 = 0; index4 < rubros.value.length; index4++) 
+            {
+                const rubro = rubros.value[index4];
+                for (let index5 = 0; index5 < rubro.calificaciones.length; index5++) 
+                {
+                    const calificaion = rubro.calificaciones[index5];
+                    //console.log(calificaion);
+                    if(calificaion.mes == interseccion.mes && calificaion.rubro_id == interseccion.rubro)
+                    {
+                        interseccion.valor = calificaion.valor;
+                    } 
+                }
+            }
+          }
+
+       });
+}
+
+const arregloCalificaciones = computed(() =>
+{
+    let arregloAux = [];
+    for (let index = 0; index < meses.length; index++) 
+    {
+        const fecha = new Date();
+        const año = fecha.getFullYear();
+    
+        const mes = meses[index];
+        let newObjCalf = {
+            numero: mes.numero,
+            mes: mes.mes,
+            año: año,
+            promedio:0
+        };
+        arregloAux.push(newObjCalf);
+    }
+    
+    for (let index2 = 0; index2 < arregloAux.length; index2++) 
+    {
+        const objeto = arregloAux[index2];
+        //console.log(objeto);
+        let conteo = []; 
+        let suma = 0;
+        let promedio = 0;
+        for (let index3 = 0; index3 < props.calificaciones_mes.length; index3++) 
+        {
+            const calificacion = props.calificaciones_mes[index3];
+            if(calificacion.mes == objeto.numero)
+            {
+               objeto.promedio += calificacion.valor;
+               suma += calificacion.valor;
+               conteo.push(calificacion);
+            }
+            else
+            {
+               
+            }
+        }
+       //console.log(suma/conteo.length)
+       promedio = suma/conteo.length;
+       //console.log(promedio)
+       objeto.promedio = promedio
+    }
+    //console.log(arregloAux);
+    return arregloAux
+   
+});
+
+
+const arregloParametros = computed(() => {
+    let arregloMesesAux = [];
+    for (let index = 0; index < meses.length; index++) 
+    {
+        let mes = meses[index];
+        let newObj = {
+            numero_mes:mes.numero,
+            mes:mes.mes,
+        };
+        for (let index2 = 0; index2 < props.procesos.length; index2++) 
+        {
+            let proceso = props.procesos[index2];
+            newObj[`${proceso.nombre}`] = 0;
+            for (let index3 = 0; index3 < props.calificaciones_mes.length; index3++)
+             {
+                const calificacion = props.calificaciones_mes[index3];
+                if(calificacion.proceso_name == proceso.nombre && mes.numero ==calificacion.mes)
+                {
+                    newObj[`${proceso.nombre}`] = calificacion.valor;
+                }
+
+            }
+        }
+      
+        arregloMesesAux.push(newObj);
+    }
+    return arregloMesesAux;
+});
+
+let fecha = new Date();
+let year = ref(null);
+year.value = fecha.getFullYear();
+
+const promedios = computed(() => 
+{
+   let arregloAux = [];
+    for (let index = 0; index < meses.length; index++) 
+    {
+        const fecha = new Date();
+        const año = fecha.getFullYear();
+    
+        const mes = meses[index];
+        let newObjCalf = {
+            numero: mes.numero,
+            mes: mes.mes,
+            año: año,
+            promedio:0
+        };
+        arregloAux.push(newObjCalf);
+    }
+    
+    for (let index2 = 0; index2 < arregloAux.length; index2++) 
+    {
+        const objeto = arregloAux[index2];
+        //console.log(objeto);
+        let conteo = []; 
+        let suma = 0;
+        let promedio = 0;
+        for (let index3 = 0; index3 < props.calificaciones_mes.length; index3++) 
+        {
+            const calificacion = props.calificaciones_mes[index3];
+            if(calificacion.mes == objeto.numero)
+            {
+               objeto.promedio += calificacion.valor;
+               suma += calificacion.valor;
+               conteo.push(calificacion);
+            }
+            else
+            {
+               
+            }
+        }
+       //console.log(suma/conteo.length)
+       promedio = suma/conteo.length;
+       //console.log(promedio)
+       objeto.promedio = promedio
+    }
+
+
+   return arregloAux;
+});
 
 
 </script>
 
 <template>
     <AppLayout title="Dashboard">
-      <section class="objetivo_auditoria sm:p-8 p-2 pt-8"  >
-            <div class="sm:text-center mr-0 sm:mr-96 sm:pt-8" style="font-family: 'Montserrat';">
-                <h1 class="sm:text-4xl text-xl font-semibold text-white sm:mr-12 ">Objetivo del área</h1>
+      <section class="p-2 pt-8 objetivo_auditoria sm:p-8"  >
+            <div class="mr-0 sm:text-center sm:mr-96 sm:pt-8" style="font-family: 'Montserrat';">
+                <h1 class="text-xl font-semibold text-white sm:text-4xl sm:mr-12 ">Objetivo del área</h1>
                 <span  class="w-16 h-1 bg-[#EC2944] mt-4 sm:ml-96" style="display:block;"></span>
             </div>
-            <div class="sm:mr-12 mr-0 sm:pl-16">
-                <p class="mt-6 mb-16 sm:text-xl text-base sm:ml-72 text-white" style="font-family: 'Montserrat'; line-height: 1.8;">
+            <div class="mr-0 sm:mr-12 sm:pl-16">
+                <p class="mt-6 mb-16 text-base text-white sm:text-xl sm:ml-72" style="font-family: 'Montserrat'; line-height: 1.8;">
                        Dentro de Control Interno, nos encargamos de la creación  y seguimiento del cumplimiento de los 
                        procesos, políticas, manuales, normas y métodos estratégicos de la empresa, todo con la finalidad de 
                        llegar al plan estratégico de esta, para poder lograrlo se realizan evaluaciones continuamente a las 
@@ -76,23 +369,88 @@ watch(params, (newParams) => {
             <ul class="menuVert" v-for="dep in departamentosAuditoria" :key="'dep' + dep.id">
                <span class="absolute w-2 h-8 mt-2" style="float: left;" ></span>
                <li @click="params.departamento_auditoria_id = dep.id">
-                 <a  class="font-semibold" :style="hover" @mouseenter="updateHoverState(true)" @mouseleave="updateHoverState(false)" >{{ dep.nombre  }}</a>
+                 <a  class="font-semibold"  >{{ dep.nombre  }}</a>
                </li>
             </ul> 
         </div>
-        <div class="documentos_view" style="margin-right:5rem">
-            <GraficaSection :calificaciones="calificaciones" class="sm:px-6" style="align-items:center">
-                <ButtonAdd v-if="$page.props.can['calificacion.create'] && departamento != undefined"
-                    @click="showingFormCalificacion = true">
-                     AGREGAR
-                </ButtonAdd>
-            </GraficaSection>
-            <DocumentosSection :documentos="calificaciones" class="my-3"></DocumentosSection>
+        <div v-if="params.departamento_auditoria_id !== null" class="documentos_view" style="margin-right:5rem">
+             <div class="grid grid-cols-2" style="font-family: 'Montserrat';">
+                <div class="flex justify-start">
+                    <div v-for="departamento in departamentosAuditoria" :key="departamento.id">
+                       <div  v-if="departamento.id == params.departamento_auditoria_id ">
+                          <h1 class="text-xl">{{departamento.nombre}}</h1>
+                       </div>
+                    </div>
+                </div>
+                <div class="flex justify-end">
+                    <SwitchButton  @click="cambioSwitch" :checked="cambio"/>
+                </div>
+             </div>
+             <div class="mt-4">
+               <section v-if="!cambio" class="grid grid-cols-3 grid-rows-6 gap-12">
+                   <div class="col-start-1 col-end-3"> <!--Graficas-->
+                       <h2 class="text-lg font-bold">Graficas</h2>
+                       <div>
+                           <Graph1 :calificaciones = "arregloCalificaciones" />
+                       </div>
+                       <div>
+                          <Graph2 :parametros = "arregloParametros" :procesos="procesos" />
+                       </div>
+                   </div>
+                   <div> <!--Contadores {{ promedios }}-->
+                        <div>
+                            <h2 class="mb-4 text-lg font-bold">Promedio</h2>
+                            <div class="w-full h-full border shadow-lg b-white rounded-2xl">
+                                <div v-for="(calificacion, index) in arregloCalificaciones" :key="calificacion.id" class="bg-[#F8F8F8] m-6 rounded-2xl">
+                                   
+                                </div>
+                             </div>
+                        </div>
+                   </div>
+                   <div class="col-start-1 col-end-4">
+                       <h2 class="mb-4 text-lg font-bold">Documentos que comprueban</h2>
+                       <div  class="grid grid-cols-3 gap-8">
+                          <div v-for="documento in documentos_mes" :key="documento.id" class="border shadow-lg h-72 w-72" > <!--Card Documento-->
+                             <img  v-if="documento.documento.endsWith('.pdf') || documento.documento.endsWith('.png') || documento.documento.endsWith('.jpg') || documento.documento.endsWith('.svg')"   data-fancybox :href="documento.documento" class="w-56 h-56" alt="imagen" src="imagen.png" />
+                             <img v-else class="w-56 h-56" alt="imagen" src="imagen.png"  download :href="documento.documento" />
+                             <div>
+                                <span class="bg-[#EC2944] h-14 w-2 absolute"></span>
+                                <h2 class="ml-4">{{documento.proceso_name}}</h2>}
+                                <h2 class="ml-4 -mt-5">{{ documento.name +' '+ documento.apellido_paterno + ' ' +documento.apellido_materno  }}</h2>
+                             </div>
+                          </div>
+                       </div>
+                   </div>
+               </section>
+               <section v-if="cambio">
+                   <h1 class="text-sm font-bold">Procesos</h1>
+                   <ButtonAdd class="mt-2" @click="openModalAddProceso">
+                      Agregar proceso
+                   </ButtonAdd>
+                   <div class="grid grid-cols-3 gap-6 mt-4 mb-8">
+                      <div class="flex flex-col items-center h-64 border shadow-xl rounded-xl" v-for="proceso in  procesos" :key="proceso.id">
+                          <div class="flex flex-col items-center mt-2 ">
+                            <img class="w-14 h-14" alt="logo" :src="proceso.logo" />
+                            <h3 class="mt-4 text-xl">{{ proceso.nombre }}</h3>
+                          </div>
+                          <div class="grid w-full grid-cols-2 mt-20 border-t-2">
+                            <div @click="openModalAddDoc(proceso.id)" class="w-full p-4 text-center border-r-2">
+                                Documentos
+                            </div>
+                            <div @click="openModalShowCalif(proceso.id)" class="w-full p-4 text-center">
+                                Calificaciones
+                            </div>
+                          </div>
+                      </div>
+                   </div>
+               </section>
+             </div>
         </div>
+
        </section >
        <!--Docs responsive-->
-       <section class="sm:hidden static" style="font-family: 'Montserrat';">
-           <div class="ml-2 mt-8 flex flex-col">
+       <section class="static sm:hidden" style="font-family: 'Montserrat';">
+           <div class="flex flex-col mt-8 ml-2">
               <h1 class="uppercase font-semibold text-[#1A1A22]">Dashboard Auditorías</h1>
               <div class="flex flex-row p-2">
                  <div class="flex mr-2"
@@ -100,12 +458,12 @@ watch(params, (newParams) => {
                   <Dropdown align="right" width="48">
                       <template #trigger>
                           <ButtonAdd type="button"
-                              class="mt-0 mb-2 inline-flex items-center py-2 text-sm  transition focus:outline-none">
+                              class="inline-flex items-center py-2 mt-0 mb-2 text-sm transition focus:outline-none">
                               <p class="text-black">VER CATEGORIAS</p>
                           </ButtonAdd>
                       </template>
                       <template #content >
-                          <button class="sm:ml-0 ml-2 mr-12" v-for="dep in departamentosAuditoria" :key="'dep' + dep.id">
+                          <button class="ml-2 mr-12 sm:ml-0" v-for="dep in departamentosAuditoria" :key="'dep' + dep.id">
                               <span @click="params.departamento_auditoria_id = dep.id" class="text-xs">
                                 <a  class="font-semibold">{{ dep.nombre  }}</a>
                               </span>
@@ -124,15 +482,19 @@ watch(params, (newParams) => {
               </div>
            </div>
            <div class="p-4">
-              <GraficaSection :calificaciones="calificaciones" class="sm:px-6" style="align-items:center">         
-              </GraficaSection>
-              <DocumentosSection :documentos="calificaciones" class="my-3"></DocumentosSection>
+                
            </div>
        </section>
+         <!-- Modal Procesos -->
+         <AddProcesoModal :departamento="params.departamento_auditoria_id" :show="modalAddProceso" @close="closeModalAddProceso" />
+          <!-- End Modal Procesos -->
 
-        <!-- Modal Form Calificaciones -->
-        <FormCalificacionModal v-if="departamento != undefined" :departamento="departamento"
-            :show="showingFormCalificacion" @close="showingFormCalificacion = false" />
+          <!-- Modal Documentos -->
+         <ShowDocumentoModal  :documentos="documentos" :usuarios="usuarios" :procesoId = "procesoReactive"  :show="modalAddDocumento" @close="closeModalAddDoc" />  
+          <!--End Modal Documentos -->
 
+          <!-- Modal Calificaciones -->
+          <ShowCalificacionesModal :calificaciones="calificaciones" :rubros="rubros" :procesoId="procesoReactive" :show="modalAdCalf" @close="closeModalShowCalif" />
+          <!--End Modal Calificaciones -->
     </AppLayout>
 </template>

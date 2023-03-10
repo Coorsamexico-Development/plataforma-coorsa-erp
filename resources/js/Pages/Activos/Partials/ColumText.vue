@@ -4,19 +4,23 @@ import { object } from "@amcharts/amcharts5";
 
 var props = defineProps(
     {
-        valor:Object,
-        campo:Object,
-        valore:Object
+        columna:Object,
+        valore:Object,
+        fila:Object
     }
 );
 </script>
 <template>
-    <div v-if="valor && campo">
-        <p v-if="campo.idCampo == valor.tipo_activo_campo_id">
-          {{valor.valor}}
-        </p>
+    <div v-if="columna && fila">
+       <div v-if="valore">
+          <div v-if="columna.id == valore.columna_id && fila.id == valore.fila_id">
+           {{ valore.valor }}
+          </div>
+       </div>
     </div>
-    <div v-if="valore">
-        {{ valore.valor }}
+    <div v-else>
+       <div v-if="valore"> 
+          {{ valore.valor }}
+       </div>
     </div>
 </template>

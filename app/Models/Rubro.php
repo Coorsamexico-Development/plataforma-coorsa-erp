@@ -5,20 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Proceso extends Model
+class Rubro extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'nombre',
         'descripcion',
-        'logo',
-        'departamento_auditoria_id',
+        'proceso_id',
         'activo'
     ];
 
-    public function rubros()
+    public function calificaciones ()
     {
-        return $this->hasMany(Rubro::class, 'proceso_id');
+        return $this->hasMany(CalfRubroMe::class, 'rubro_id');
     }
 }
