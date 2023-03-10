@@ -92,14 +92,22 @@ const updateHoverState = (isHover) => {
     <AppLayout title="Dashboard">
         <section class="objetivo ">
             <div class="text-center pt-14 objetivos" style="font-family: 'Montserrat';">
-                <h1 class="ml-32 text-4xl font-semibold text-white">Objetivo de documentos internos</h1>
+                <h1 v-if="route().current('control-interno.documentos-internos.index')"
+                    class="ml-32 text-4xl font-semibold text-white">Objetivo de documentos internos</h1>
+                <h1 v-else class="ml-32 text-4xl font-semibold text-white">DOCUMENTOS PARA SOCIOS</h1>
                 <span class="w-16 h-1 bg-[#EC2944] mt-4" style="display:block; margin-left: 27.5rem;"></span>
             </div>
-            <p class="mt-6 mb-16 text-xl text-white"
+            <p v-if="route().current('control-interno.documentos-internos.index')" class="mt-6 mb-16 text-xl text-white"
                 style="margin-left: 27.5rem; font-family: 'Montserrat'; line-height: 1.8;">
                 En esta sección tendrás acceso a toda la documentación normativa de la empresa de<br>
-                manera organizada para su revisión, lo cual te permitirá cumplir con los procesos y <br>
+                manera organizada para su revisión, lo cual te permitirá cumplir con los procesos y<br>
                 optimizar tus tiempos.
+            </p>
+            <p v-else class="mt-6 mb-16 text-xl text-white"
+                style="margin-left: 27.5rem; font-family: 'Montserrat'; line-height: 1.8;">
+                En esta sección encontraremos los estados de resultados con la<br>
+                información relevante de la empresa, para la correcta toma de<br>
+                decisiones y planeación estratégica.
             </p>
         </section>
         <!-- Politics Section -->
@@ -140,15 +148,18 @@ const updateHoverState = (isHover) => {
                         <li @click="params.type_politic = tipoPoliticas.id">
                             <a class="font-semibold" @mouseenter="updateHoverState(true)"
                                 @mouseleave="updateHoverState(false)">
-                                <p v-if="params.type_politic == tipoPoliticas.id" :style="{ color: '#' + tipoPoliticas.color }">
+                                <p v-if="params.type_politic == tipoPoliticas.id"
+                                    :style="{ color: '#' + tipoPoliticas.color }">
                                     <span class="absolute w-2 h-8 mt-0" style="float: left; margin-left: -1rem;"
                                         :style="{ backgroundColor: '#' + tipoPoliticas.color }"></span>
-                                    <span v-if="hoverState" :style="{ color: '#' + tipoPoliticas.color }">{{ tipoPoliticas.name
+                                    <span v-if="hoverState" :style="{ color: '#' + tipoPoliticas.color }">{{
+                                        tipoPoliticas.name
                                     }}</span>
                                     <span v-if="!hoverState">{{ tipoPoliticas.name }}</span>
                                 </p>
                                 <p v-else>
-                                    <span v-if="hoverState" :style="{ color: '#' + tipoPoliticas.color }">{{ tipoPoliticas.name
+                                    <span v-if="hoverState" :style="{ color: '#' + tipoPoliticas.color }">{{
+                                        tipoPoliticas.name
                                     }}</span>
                                     <span v-if="!hoverState">{{ tipoPoliticas.name }}</span>
                                 </p>
@@ -195,13 +206,14 @@ const updateHoverState = (isHover) => {
                                     d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
                             </svg>
 
-                    </div>
-                </CardImage>
-            </AnimationCard>
-            <!-- End Files Section -->
-        </div>
-    </section>
-    <FormDocsInternosModal :show="showingFormPolitics" :tipoPoliticas="tipoPoliticas" :politic="politic"
-        :typeForm="typeFormPolitic" @close="closeFormPolitics()" />
-</AppLayout></template>
+                        </div>
+                    </CardImage>
+                </AnimationCard>
+                <!-- End Files Section -->
+            </div>
+        </section>
+        <FormDocsInternosModal :show="showingFormPolitics" :tipoPoliticas="tipoPoliticas" :politic="politic"
+            :typeForm="typeFormPolitic" @close="closeFormPolitics()" />
+    </AppLayout>
+</template>
 <style scoped></style>
