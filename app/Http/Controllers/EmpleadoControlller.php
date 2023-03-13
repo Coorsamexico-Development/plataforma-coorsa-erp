@@ -248,7 +248,7 @@ class EmpleadoControlller extends Controller
                 $curp = $request['curp'];
                 $contrato = $request['contrato'];
                 /*Guardamos*/
-                $rutaContrato = $contrato->storeAs('expedientes/contratos/', $curp . '_contrato.' . $contrato->extension(), 'gcs');
+                $rutaContrato = $contrato->storeAs('expedientes/contratos', $curp . '_contrato.' . $contrato->extension(), 'gcs');
                 $urlContrato = Storage::disk('gcs')->url($rutaContrato);
 
                 expediente::updateOrCreate(
