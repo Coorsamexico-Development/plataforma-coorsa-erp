@@ -275,7 +275,6 @@ const arregloCalificaciones = computed(() =>
     for (let index = 0; index < meses2.length; index++) 
     {
         const fecha = new Date();
-    
         const mes = meses2[index];
         let newObjCalf = {
             numero: mes.numero,
@@ -298,9 +297,9 @@ const arregloCalificaciones = computed(() =>
             const calificacion = props.calificaciones_mes[index3];
             if(calificacion.mes == objeto.numero)
             {
+              console.log(calificacion.año)
               if (calificacion.año == año)
               {
-                //console.log(calificacion.año)
                 objeto.promedio += calificacion.valor;
                 suma += calificacion.valor;
                 conteo.push(calificacion); 

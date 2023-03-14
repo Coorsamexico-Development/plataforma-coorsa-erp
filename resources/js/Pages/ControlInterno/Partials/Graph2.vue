@@ -138,8 +138,9 @@ segments.each(function(segment){
          series1.tooltipText = "{name} En {categoryX}: {valueY}";
          series1.legendSettings.valueText = "{valueY}";
          series1.visible  = false;
+         series1.strokeWidth = 3;
    
-   return series1;
+         return series1;
      }
   },
 
