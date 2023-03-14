@@ -33,7 +33,6 @@ chart.data = this.calificaciones;
 var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
 categoryAxis.dataFields.category = "mes";
 categoryAxis.renderer.opposite = true;
-categoryAxis.renderer.grid.template.location = 0;
 // Create value axis
 var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 valueAxis.renderer.inversed = false;
@@ -50,8 +49,6 @@ series1.tooltipText = "{name} En {categoryX}: {valueY}";
 series1.legendSettings.valueText = "{valueY}";
 series1.visible  = false;
 series1.strokeWidth = 3;
-
-series1.startLocation = 0;
 
 // Add chart cursor
 chart.cursor = new am4charts.XYCursor();
