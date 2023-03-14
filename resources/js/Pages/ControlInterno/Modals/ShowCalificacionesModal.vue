@@ -9,7 +9,7 @@ import SpinProgress from "@/Components/SpinProgress.vue";
 import DialogModal from "@/Components/DialogModal.vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import ButtonAdd  from "@/Components/ButtonAdd.vue";
-import TableCalificaciones from '../Partials/TableCalificaciones.vue'
+import TableCalificaciones from '../Partials/TableCalificaciones.vue';
 
 const emit = defineEmits(["close", "messageError"]);
 const props = defineProps({
@@ -25,6 +25,8 @@ const props = defineProps({
 const close = () => {
     emit('close');
 }
+
+let date = ref(null);
 </script>
 
 <template>
@@ -32,7 +34,7 @@ const close = () => {
         <template #title>
           <div class="grid grid-cols-2">
              <div class="flex justify-start">
-                <h2 class="font-bold tracking-widest text-md uppercase">
+                <h2 class="font-bold tracking-widest uppercase text-md">
                    Calificaciones
                 </h2>
             </div>

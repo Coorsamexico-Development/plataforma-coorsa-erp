@@ -78,6 +78,7 @@ segments.each(function(segment){
 })
   },
 
+
   beforeDestroy() {
     if (this.chart) {
       this.chart.dispose();

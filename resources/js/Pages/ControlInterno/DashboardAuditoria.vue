@@ -100,9 +100,9 @@ const consultarDocumentos = (proceso_id) =>
 }
 
 const modalAdCalf = ref(false);
-const openModalShowCalif = (proceso_id) =>
+const openModalShowCalif = (proceso_id, year) =>
 { 
-    consultarRubros(proceso_id);
+    consultarRubros(proceso_id, year);
     procesoReactive.value = proceso_id;
     modalAdCalf.value = true;
 }
@@ -118,6 +118,57 @@ const rubros = ref([]);
 const calificaciones = ref([]);
 const meses = [
   {
+    numero: '12',
+    mes: 'Dic'
+  },
+  {
+    numero: '11',
+    mes: 'Nov'
+  },
+  {
+    numero: '10',
+    mes: 'Oct'
+  },
+  {
+    numero: '9',
+    mes: 'Sep'
+  },
+  {
+    numero: '8',
+    mes: 'Ago'
+  },
+  {
+    numero: '7',
+    mes: 'Jul'
+  },
+  {
+    numero: '6',
+    mes: 'Jun'
+  },
+  {
+    numero: '5',
+    mes: 'May'
+  },
+  {
+    numero: '4',
+    mes: 'Abr'
+  },
+  {
+    numero: '3',
+    mes: 'Mar'
+  },
+  {
+    numero: '2',
+    mes: 'Feb'
+  },
+  {
+    numero: '1',
+    mes: 'Ene'
+  }
+];
+
+let meses2 = [
+{
     numero: '1',
     mes: 'Ene'
   },
@@ -167,9 +218,9 @@ const meses = [
   }
 ];
 
-const consultarRubros = (proceso_id) =>
+const consultarRubros = (proceso_id, year) =>
 {
-    axios.get('/getRubros/'+proceso_id).then((response)=> 
+    axios.get('/getRubros/'+proceso_id+'/'+year).then((response)=> 
        {
           rubros.value = response.data;
 
@@ -215,12 +266,12 @@ const consultarRubros = (proceso_id) =>
 const arregloCalificaciones = computed(() =>
 {
     let arregloAux = [];
-    for (let index = 0; index < meses.length; index++) 
+    const año = fecha.getFullYear();
+    for (let index = 0; index < meses2.length; index++) 
     {
         const fecha = new Date();
-        const año = fecha.getFullYear();
     
-        const mes = meses[index];
+        const mes = meses2[index];
         let newObjCalf = {
             numero: mes.numero,
             mes: mes.mes,
@@ -242,9 +293,13 @@ const arregloCalificaciones = computed(() =>
             const calificacion = props.calificaciones_mes[index3];
             if(calificacion.mes == objeto.numero)
             {
-               objeto.promedio += calificacion.valor;
-               suma += calificacion.valor;
-               conteo.push(calificacion);
+              if (calificacion.año == año)
+              {
+                //console.log(calificacion.año)
+                objeto.promedio += calificacion.valor;
+                suma += calificacion.valor;
+                conteo.push(calificacion); 
+              }
             }
             else
             {
@@ -264,9 +319,10 @@ const arregloCalificaciones = computed(() =>
 
 const arregloParametros = computed(() => {
     let arregloMesesAux = [];
-    for (let index = 0; index < meses.length; index++) 
+    const año = fecha.getFullYear();
+    for (let index = 0; index < meses2.length; index++) 
     {
-        let mes = meses[index];
+        let mes = meses2[index];
         let newObj = {
             numero_mes:mes.numero,
             mes:mes.mes,
@@ -278,9 +334,13 @@ const arregloParametros = computed(() => {
             for (let index3 = 0; index3 < props.calificaciones_mes.length; index3++)
              {
                 const calificacion = props.calificaciones_mes[index3];
+                //console.log(calificacion);
                 if(calificacion.proceso_name == proceso.nombre && mes.numero ==calificacion.mes)
                 {
-                    newObj[`${proceso.nombre}`] = calificacion.valor;
+                    if(calificacion.año == año)
+                    {
+                        newObj[`${proceso.nombre}`] = calificacion.valor;
+                    }   
                 }
 
             }
@@ -294,6 +354,9 @@ const arregloParametros = computed(() => {
 let fecha = new Date();
 let year = ref(null);
 year.value = fecha.getFullYear();
+
+let mes = ref(null);
+mes.value = fecha.getMonth()+1;
 
 const promedios = computed(() => 
 {
@@ -401,10 +464,44 @@ const promedios = computed(() =>
                         <div>
                             <h2 class="mb-4 text-lg font-bold">Promedio</h2>
                             <div class="w-full h-full border shadow-lg b-white rounded-2xl">
-                                <div v-for="(calificacion, index) in arregloCalificaciones" :key="calificacion.id" class="bg-[#F8F8F8] m-6 rounded-2xl">
-                                   
+                                <div v-for="(calificacion, index) in arregloCalificaciones" :key="index" class="bg-[#F8F8F8] m-6 rounded-2xl">
+                                    <div v-if="mes > calificacion.numero ">
+                                        <div class="flex items-center p-2 m-2">
+                                            <h1 class="ml-8 mr-16 text-6xl font-bold">
+                                                <span class="text-[#EC2944]" v-if="calificacion.promedio <= 25">{{ calificacion.promedio }}</span>
+                                                <span class="text-[#F7B815]" v-if="calificacion.promedio >=26 && calificacion.promedio <= 70">{{ calificacion.promedio }}</span>
+                                                <span class="text-[#00CB83]" v-if="calificacion.promedio > 70">{{ calificacion.promedio }}</span>
+                                            </h1>
+                                            <h2 class="text-3xl uppercase font-extralight" style="letter-spacing: 0.2rem;">{{ calificacion.mes }}</h2>
+                                        </div>
+                                    </div>
                                 </div>
                              </div>
+                        </div>
+
+                        <div class="mt-16">
+                            <div class="w-full h-full border shadow-lg b-white rounded-2xl">
+                               <div class="grid grid-cols-2 m-2 text-center border-b" style="font-family: 'Montserrat'; letter-spacing: 0.2rem;">
+                                  <h1 class="uppercase font-extralight">Parametros</h1>
+                                  <h1 class="uppercase font-extralight">Calif.</h1>
+                               </div>
+                               <div>
+                                  <div v-for="parametro in arregloParametros" :key="parametro.id">
+                                     <div v-if="parametro.numero_mes == mes-1">
+                                        <div v-for="(dato, index) in parametro" :key="index">
+                                            <div v-if="index !== 'numero_mes' && index !== 'mes'" class="grid grid-cols-2 m-2 text-center">
+                                                <h1 v-if="dato <=70">{{ index }} </h1>
+                                                <h1 v-if="dato <=70">  
+                                                    <span class="text-[#EC2944]" v-if="dato <= 25">{{ dato }}</span>
+                                                    <span class="text-[#F7B815]" v-if="dato >=26 && dato <= 70">{{ dato }}</span>
+                                                    <span class="text-[#00CB83]" v-if="dato > 70">{{ dato }}</span>
+                                                </h1>
+                                            </div>
+                                        </div>
+                                     </div>
+                                  </div>
+                               </div>
+                            </div>
                         </div>
                    </div>
                    <div class="col-start-1 col-end-4">
@@ -415,8 +512,8 @@ const promedios = computed(() =>
                              <img v-else class="w-56 h-56" alt="imagen" src="imagen.png"  download :href="documento.documento" />
                              <div>
                                 <span class="bg-[#EC2944] h-14 w-2 absolute"></span>
-                                <h2 class="ml-4">{{documento.proceso_name}}</h2>}
-                                <h2 class="ml-4 -mt-5">{{ documento.name +' '+ documento.apellido_paterno + ' ' +documento.apellido_materno  }}</h2>
+                                <h2 class="ml-4">{{documento.proceso_name}}</h2>
+                                <h2 class="ml-4 ">{{ documento.name +' '+ documento.apellido_paterno + ' ' +documento.apellido_materno  }}</h2>
                              </div>
                           </div>
                        </div>
@@ -437,7 +534,8 @@ const promedios = computed(() =>
                             <div @click="openModalAddDoc(proceso.id)" class="w-full p-4 text-center border-r-2">
                                 Documentos
                             </div>
-                            <div @click="openModalShowCalif(proceso.id)" class="w-full p-4 text-center">
+            
+                            <div @click="openModalShowCalif(proceso.id, year)" class="w-full p-4 text-center">
                                 Calificaciones
                             </div>
                           </div>

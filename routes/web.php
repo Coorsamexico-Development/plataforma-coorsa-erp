@@ -109,9 +109,10 @@ Route::middleware([
     Route::get('/getDocumentos/{proceco_id}', [DepartamentosAuditoriaController::class, 'getDocumentos'])->name('getDocumentos');
     Route::delete('documentos-mes/{documento}', [DepartamentosAuditoriaController::class, 'destroyDocumento'])->name('documentos-mes.destroy');
     Route::post('/storeRubro', [DepartamentosAuditoriaController::class, 'storeRubro'])->name('storeRubro');
-    Route::get('/getRubros/{proceso_id}', [DepartamentosAuditoriaController::class, 'getRubros'])->name('getRubros');
+    Route::get('/getRubros/{proceso_id}/{año}', [DepartamentosAuditoriaController::class, 'getRubros'])->name('getRubros');
     Route::post('/updateRubro/{rubro_id}', [DepartamentosAuditoriaController::class, 'updateRubro'])->name('updateRubro');
     Route::post('/storeCalf', [DepartamentosAuditoriaController::class, 'storeCalf'])->name('storeCalf');
+    Route::get('/recuperarRubro/{categoria}/{mes}', [DepartamentosAuditoriaController::class, 'recuperarRubros'])->name('recuperarRubros');
 
     Route::apiResource('politics', PoliticController::class)->name('index', 'control-interno.politics.index');
     Route::get('/docinternos', [PoliticController::class, 'docsinternos'])->name('control-interno.documentos-internos.index');
