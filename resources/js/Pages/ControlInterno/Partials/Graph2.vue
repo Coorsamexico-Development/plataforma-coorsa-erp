@@ -7,9 +7,8 @@ import ShowModalInfoCalif from '../Modals/ShowModalInfoCalif.vue'
 am4core.useTheme(am4themes_animated);
 
 let chart = null;
-
+let newProcesos = null;
 export default {
-  expose: ['openInfoModal'],
   data() {
     return {
              modalInfo : false,
@@ -28,6 +27,25 @@ export default {
     parametros(newData, oldData) 
     {
         chart.data = newData; 
+    }
+    ,
+    procesos(newData, oldData) 
+    {
+       newProcesos = [];
+       newProcesos = newData;
+       //console.log(newProcesos);
+       for (let index2 = 0; index2 < oldData.length; index2++) 
+       {
+          chart.series.pop();
+       }
+
+       for (let index = 0; index < newProcesos.length; index++)
+        {
+           let proceso = newProcesos[index];
+           let funcion = this.openInfoModal;
+           this.createSeries(proceso.nombre, proceso.nombre, funcion);
+        }
+
     }
   },
   mounted() {
@@ -53,69 +71,18 @@ valueAxis.title.text = "Valor";
 valueAxis.renderer.minLabelPosition = 0.01;
 
 //series dinamicas
-
-function createSeries(field, name , funcion) 
-{
-  
-   var series1 = chart.series.push(new am4charts.LineSeries());
-       series1.dataFields.valueY = field;
-       series1.dataFields.categoryX = "mes";
-       series1.name = name;
-       var bullet = series1.bullets.push(new am4charts.CircleBullet());
-       bullet.events.on("hit", function(ev)
-       {
-          //console.log(ev.target.dataItem.component.dataFields.valueY);
-          //console.log(ev.target.dataItem.categoryX)
-          funcion(ev.target.dataItem.component.dataFields.valueY, ev.target.dataItem.categoryX );
-       });
-       series1.tooltipText = "{name} En {categoryX}: {valueY}";
-       series1.legendSettings.valueText = "{valueY}";
-       series1.visible  = false;
-
-
-   return series1;
-}
-
-for (let index = 0; index < this.procesos.length; index++)
+newProcesos = [];
+newProcesos = this.procesos;
+for (let index = 0; index < newProcesos.length; index++)
  {
-    let proceso = this.procesos[index];
+    let proceso = newProcesos[index];
     let funcion = this.openInfoModal;
-    //console.log(proceso)
-    createSeries(proceso.nombre, proceso.nombre, funcion);
+    this.createSeries(proceso.nombre, proceso.nombre, funcion);
 }
-
-
-// Create series
-/*
-var series1 = chart.series.push(new am4charts.LineSeries());
-series1.dataFields.valueY = "Bajas";
-series1.dataFields.categoryX = "mes";
-series1.name = "Bajas";
-series1.bullets.push(new am4charts.CircleBullet());
-series1.tooltipText = "{name} En {categoryX}: {valueY}";
-series1.legendSettings.valueText = "{valueY}";
-series1.visible  = false;
-
-var series2 = chart.series.push(new am4charts.LineSeries());
-series2.dataFields.valueY = "Reclutar";
-series2.dataFields.categoryX = "mes";
-series2.name = "Reclutar";
-series2.bullets.push(new am4charts.CircleBullet());
-series2.tooltipText = "{name} En {categoryX}: {valueY}";
-series2.legendSettings.valueText = "{valueY}";
-series2.visible  = false;
-*/
 
 // Add chart cursor
 chart.cursor = new am4charts.XYCursor();
 chart.cursor.behavior = "zoomY";
-
-
-/*
-let hs1 = series1.segments.template.states.create("hover")
-hs1.properties.strokeWidth = 5;
-series1.segments.template.strokeWidth = 1;
-*/
 
 // Add legend
 chart.legend = new am4charts.Legend();
@@ -154,6 +121,25 @@ segments.each(function(segment){
         this.modalInfo = false;
         this.rubros = [];
         this.valores = [];
+     },
+     createSeries(field, name , funcion)
+     {
+         var series1 = chart.series.push(new am4charts.LineSeries());
+         series1.dataFields.valueY = field;
+         series1.dataFields.categoryX = "mes";
+         series1.name = name;
+         var bullet = series1.bullets.push(new am4charts.CircleBullet());
+         bullet.events.on("hit", function(ev)
+         {
+            //console.log(ev.target.dataItem.component.dataFields.valueY);
+            //console.log(ev.target.dataItem.categoryX)
+            funcion(ev.target.dataItem.component.dataFields.valueY, ev.target.dataItem.categoryX );
+         });
+         series1.tooltipText = "{name} En {categoryX}: {valueY}";
+         series1.legendSettings.valueText = "{valueY}";
+         series1.visible  = false;
+   
+   return series1;
      }
   },
 

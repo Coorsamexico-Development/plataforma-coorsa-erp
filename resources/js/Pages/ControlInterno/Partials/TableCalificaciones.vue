@@ -13,9 +13,13 @@ const props = defineProps({
     calificaciones:Array
 });
 
+const emit = defineEmits(["close", "reConsultarCalif"]);
+
 const newParametro = () => 
 {
+  
     //console.log(props.procesoId);
+
     const formParam = useForm({
        nombre:null ,
        proceso_id: props.procesoId,
@@ -23,7 +27,8 @@ const newParametro = () =>
 
    formParam.post(route('storeRubro'),{
     preserveScroll:true,
-    preserveState:true
+    preserveState:true,
+    onSuccess:() => {reConsultarCalif()}
    })
 }
 
@@ -92,10 +97,16 @@ const updateForm = (campo, rubro, mes) =>
 
    formSetCalf.post(route('storeCalf'),{
       preserveScroll:true,
-      preserveState:true
+      preserveState:true,
+      onSuccess:() => {reConsultarCalif()}
    });
-
 } 
+
+const reConsultarCalif = () => 
+{
+   emit('reConsultarCalif');
+   nuevoAño(year.value);
+}
 
 const updateRubroName = (campo, rubro) =>
 {
@@ -106,7 +117,8 @@ const updateRubroName = (campo, rubro) =>
 
    formActualizarRubro.post(route('updateRubro', rubro.id),{
       preserveScroll:true,
-      preserveState:true
+      preserveState:true,
+      onSuccess:() => reConsultarCalif()
    });
 }
 

@@ -11,7 +11,7 @@ import { useForm } from "@inertiajs/inertia-vue3";
 import ButtonAdd  from "@/Components/ButtonAdd.vue";
 import TableCalificaciones from '../Partials/TableCalificaciones.vue';
 
-const emit = defineEmits(["close", "messageError"]);
+const emit = defineEmits(["close", "messageError", 'consultarRubros']);
 const props = defineProps({
     show: {
         type: Boolean,
@@ -27,6 +27,14 @@ const close = () => {
 }
 
 let date = ref(null);
+
+let fecha = new Date();
+let year = ref(null);
+year.value = fecha.getFullYear();
+const reConsultar = () => 
+{
+   emit('consultarRubros', props.procesoId, year.value)
+}
 </script>
 
 <template>
@@ -51,7 +59,7 @@ let date = ref(null);
           </div>
         </template>
         <template #content>
-            <TableCalificaciones :calificaciones="calificaciones" :rubros="rubros" :procesoId="procesoId" />
+            <TableCalificaciones @reConsultarCalif="reConsultar" :calificaciones="calificaciones" :rubros="rubros" :procesoId="procesoId" />
         </template>
     </DialogModal>
 </template>

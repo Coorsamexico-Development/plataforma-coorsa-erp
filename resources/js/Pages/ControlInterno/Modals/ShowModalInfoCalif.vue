@@ -30,9 +30,13 @@ const arregloGrafica = computed(() => {
    var chart = am4core.create("chartdiv3", am4charts.XYChart);
    chart.scrollbarX = new am4core.Scrollbar();
    // Add data
-   chart.data = [{
-     "country": "USA",
-     "visits": 3025
+
+
+
+   chart.data = props.valores;
+   /*[{
+     "rubro_nombre": "USA",
+     "valor": 3025
    }, {
      "country": "China",
      "visits": 1882
@@ -67,11 +71,11 @@ const arregloGrafica = computed(() => {
      "country": "Canada",
      "visits": 441
    }];
-   
+   */
    
    // Create axes
    var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-   categoryAxis.dataFields.category = "country";
+   categoryAxis.dataFields.category = "rubro_nombre";
    categoryAxis.renderer.grid.template.location = 0;
    categoryAxis.renderer.minGridDistance = 30;
    categoryAxis.renderer.labels.template.horizontalCenter = "right";
@@ -86,8 +90,8 @@ const arregloGrafica = computed(() => {
    // Create series
    var series = chart.series.push(new am4charts.ColumnSeries());
    series.sequencedInterpolation = true;
-   series.dataFields.valueY = "visits";
-   series.dataFields.categoryX = "country";
+   series.dataFields.valueY = "valor";
+   series.dataFields.categoryX = "rubro_nombre";
    series.tooltipText = "[{categoryX}: bold]{valueY}[/]";
    series.columns.template.strokeWidth = 0;
    
@@ -124,7 +128,7 @@ const arregloGrafica = computed(() => {
             <div class="grid grid-cols-2">
              <div class="flex justify-start">
                 <h2 class="text-lg tracking-widest uppercase font-extralight">
-                   Calificaciones en el mes de <span class="font-bold">{{ mes }}</span>
+                   Calificaciones en el mes de <span class="font-bold">{{ mes }}</span> del proceso <span class="font-bold">{{ proceso }}</span>
                 </h2>
             </div>
             <div class="flex justify-end">
@@ -140,8 +144,6 @@ const arregloGrafica = computed(() => {
           </div>
         </template>
         <template #content> 
-            {{ rubros }}
-            {{ valores }}
             <div class="hello" id="chartdiv3" ref="chartdiv3">
             </div>
         </template>

@@ -28,11 +28,13 @@ let props = defineProps({
         type: Object,
         required: true,
     },
-
     procesos:Object,
     usuarios:Object,
     calificaciones_mes:Object,
-    documentos_mes:Object
+    documentos_mes:{
+      type:Object,
+      required:true
+    }
 
 });
 const params = reactive({
@@ -50,7 +52,7 @@ watch(params, (newParams) => {
         {
             data: newParams,
             replace: true,
-            only: ['calificaciones','procesos', 'calificaciones_mes', 'documentos'],
+            only: [,'documentos_mes','procesos', 'calificaciones_mes'],
             preserveScroll: true,
             preserveState: true,
         });
@@ -220,8 +222,11 @@ let meses2 = [
 
 const consultarRubros = (proceso_id, year) =>
 {
+    rubros.value = [];
+    calificaciones.value = [];
     axios.get('/getRubros/'+proceso_id+'/'+year).then((response)=> 
        {
+          // console.log(response.data);
           rubros.value = response.data;
 
           for (let index = 0; index < rubros.value.length; index++) 
@@ -454,6 +459,7 @@ const promedios = computed(() =>
                    <div class="col-start-1 col-end-3"> <!--Graficas-->
                        <h2 class="text-lg font-bold">Graficas</h2>
                        <div>
+                         
                            <Graph1 :calificaciones = "arregloCalificaciones" />
                        </div>
                        <div>
@@ -466,13 +472,13 @@ const promedios = computed(() =>
                             <div class="w-full h-full border shadow-lg b-white rounded-2xl">
                                 <div v-for="(calificacion, index) in arregloCalificaciones" :key="index" class="bg-[#F8F8F8] m-6 rounded-2xl">
                                     <div v-if="mes > calificacion.numero ">
-                                        <div class="flex items-center p-2 m-2">
-                                            <h1 class="ml-8 mr-16 text-6xl font-bold">
+                                        <div class="grid items-center max-w-md grid-cols-2 p-2 m-2">
+                                            <h1 class="ml-8 text-5xl font-bold">
                                                 <span class="text-[#EC2944]" v-if="calificacion.promedio <= 25">{{ calificacion.promedio }}</span>
                                                 <span class="text-[#F7B815]" v-if="calificacion.promedio >=26 && calificacion.promedio <= 70">{{ calificacion.promedio }}</span>
                                                 <span class="text-[#00CB83]" v-if="calificacion.promedio > 70">{{ calificacion.promedio }}</span>
                                             </h1>
-                                            <h2 class="text-3xl uppercase font-extralight" style="letter-spacing: 0.2rem;">{{ calificacion.mes }}</h2>
+                                            <h2 class="text-3xl text-center uppercase font-extralight" style="letter-spacing: 0.2rem;">{{ calificacion.mes }}</h2>
                                         </div>
                                     </div>
                                 </div>
@@ -490,8 +496,8 @@ const promedios = computed(() =>
                                      <div v-if="parametro.numero_mes == mes-1">
                                         <div v-for="(dato, index) in parametro" :key="index">
                                             <div v-if="index !== 'numero_mes' && index !== 'mes'" class="grid grid-cols-2 m-2 text-center">
-                                                <h1 v-if="dato <=70">{{ index }} </h1>
-                                                <h1 v-if="dato <=70">  
+                                                <h1 v-if="dato">{{ index }} </h1>
+                                                <h1 v-if="dato">  
                                                     <span class="text-[#EC2944]" v-if="dato <= 25">{{ dato }}</span>
                                                     <span class="text-[#F7B815]" v-if="dato >=26 && dato <= 70">{{ dato }}</span>
                                                     <span class="text-[#00CB83]" v-if="dato > 70">{{ dato }}</span>
@@ -544,7 +550,6 @@ const promedios = computed(() =>
                </section>
              </div>
         </div>
-
        </section >
        <!--Docs responsive-->
        <section class="static sm:hidden" style="font-family: 'Montserrat';">
@@ -592,7 +597,7 @@ const promedios = computed(() =>
           <!--End Modal Documentos -->
 
           <!-- Modal Calificaciones -->
-          <ShowCalificacionesModal :calificaciones="calificaciones" :rubros="rubros" :procesoId="procesoReactive" :show="modalAdCalf" @close="closeModalShowCalif" />
+          <ShowCalificacionesModal :calificaciones="calificaciones" :rubros="rubros" :procesoId="procesoReactive" :show="modalAdCalf" @close="closeModalShowCalif" @consultarRubros="openModalShowCalif" />
           <!--End Modal Calificaciones -->
     </AppLayout>
 </template>

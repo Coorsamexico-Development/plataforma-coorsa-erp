@@ -40,7 +40,9 @@ class DepartamentosAuditoriaController extends Controller
             $departamento =  DepartamentosAuditoria::find(request('departamento_auditoria_id'));
             $procesos->where('procesos.departamento_auditoria_id','=',request('departamento_auditoria_id'));
             $calificaciones_mes->where('procesos.departamento_auditoria_id','=',request('departamento_auditoria_id'));
+
             $documentos_mes ->where('procesos.departamento_auditoria_id','=',request('departamento_auditoria_id'));
+            
             //$calificaciones = $departamento->documentosCalificacionesMes()->orderBy('mes', 'asc');
         }
 
@@ -50,7 +52,7 @@ class DepartamentosAuditoriaController extends Controller
             'filters' => request()->all(['departamento_auditoria_id']),
             'usuarios' => $usuarios,
             'calificaciones_mes' => fn () => $calificaciones_mes ->get(),
-            'documentos_mes' => fn() => $documentos_mes ->get()
+            'documentos_mes' => fn() => $documentos_mes -> get()
         ]);
     }
 
@@ -130,7 +132,6 @@ class DepartamentosAuditoriaController extends Controller
 
     public function storeRubro (Request $request)
     {
-
        Rubro::create([
          'proceso_id' => $request['proceso_id'],
        ]);
@@ -156,6 +157,9 @@ class DepartamentosAuditoriaController extends Controller
     public function updateRubro(Request $request, $rubro_id)
     {
        //return $rubro_id;
+       $request->validate([
+        'nombre' =>  ['required']
+       ]);
        Rubro::where('id','=',$rubro_id)
        ->update([
           'nombre'=> $request['nombre'],
@@ -166,6 +170,11 @@ class DepartamentosAuditoriaController extends Controller
 
     public function storeCalf (Request $request)
     {
+        $request->validate([
+            'rubro_id' =>  ['required'],
+            'valor' =>  ['required'],
+           ]);
+           
        CalfRubroMe::updateOrCreate(
          ['rubro_id' => $request['rubro_id'], 'mes' => $request['mes'], 'año' => $request['año']],
          ['valor' => $request['valor']]
