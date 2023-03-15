@@ -16,6 +16,7 @@ import Graph1 from './Partials/Graph1.vue';
 import Graph2 from './Partials/Graph2.vue';
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox.css";
+import moment from 'moment';
 
 import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
@@ -34,7 +35,8 @@ let props = defineProps({
     documentos_mes:{
       type:Object,
       required:true
-    }
+    },
+    rubros_mes:Object
 
 });
 const params = reactive({
@@ -52,7 +54,7 @@ watch(params, (newParams) => {
         {
             data: newParams,
             replace: true,
-            only: [,'documentos_mes','procesos', 'calificaciones_mes'],
+            only: ['documentos_mes','procesos', 'calificaciones_mes','rubros_mes'],
             preserveScroll: true,
             preserveState: true,
         });
@@ -270,55 +272,87 @@ const consultarRubros = (proceso_id, year) =>
 
 const arregloCalificaciones = computed(() =>
 {
-    let arregloAux = [];
-    const año = fecha.getFullYear();
-    for (let index = 0; index < meses2.length; index++) 
-    {
-        const fecha = new Date();
-        const mes = meses2[index];
-        let newObjCalf = {
-            numero: mes.numero,
-            mes: mes.mes,
-            año: año,
-            promedio:0
-        };
-        arregloAux.push(newObjCalf);
+       /***/
+   let arregloAñoMes = [];
+    let fechaTemp = '' ;
+    let conteo = []; 
+    let suma = 0;
+    let promedio = 0;
+   // console.log(props.calificaciones_mes)
+    for (let index = 0; index < props.calificaciones_mes.length; index++)
+    {    
+       const element = props.calificaciones_mes[index];
+       let fechaActual = element.año+'-'+element.mes;
+       //console.log(element.año+'-'+element.mes);
+       if(element == props.calificaciones_mes[0])
+       {
+           arregloAñoMes.push(fechaActual);
+           fechaTemp = fechaActual
+       }
+       else
+       {
+          if(fechaTemp !== fechaActual)
+          {
+            arregloAñoMes.push(fechaActual);
+            fechaTemp = fechaActual
+          } 
+       }
+         
     }
-    
-    for (let index2 = 0; index2 < arregloAux.length; index2++) 
+
+    let arregloFechasTotales = [];
+    const first = arregloAñoMes[0];
+    const fechaInicio = moment(first);
+    const last = _.last(arregloAñoMes);
+    const fechaFinal = moment(last);
+ 
+    while (fechaInicio.isSameOrBefore(fechaFinal))
+     {
+      let Obj = {
+        date: fechaInicio.format('YYYY-MM'),
+        promedio:10
+      }
+    	arregloFechasTotales.push(Obj);
+   		fechaInicio.add(1, 'months');
+  	}
+
+    let arregloAux = [];
+
+    for (let index2 = 0; index2 < arregloFechasTotales.length; index2++) 
     {
-        const objeto = arregloAux[index2];
-        //console.log(objeto);
-        let conteo = []; 
-        let suma = 0;
-        let promedio = 0;
+        const fecha = arregloFechasTotales[index2];
         for (let index3 = 0; index3 < props.calificaciones_mes.length; index3++) 
         {
-            const calificacion = props.calificaciones_mes[index3];
-            if(calificacion.mes == objeto.numero)
-            {
-              console.log(calificacion.año)
-              if (calificacion.año == año)
-              {
-                objeto.promedio += calificacion.valor;
-                suma += calificacion.valor;
-                conteo.push(calificacion); 
-              }
-            }
-            else
-            {
-               
-            }
+          const calificacion = props.calificaciones_mes[index3];
+          console.log(calificacion);
+          let fechaActual = calificacion.año +'-'+calificacion.mes;
+          let fechaActual2 = moment(fechaActual);
+          let fechaActual3 = fechaActual2.format('YYYY-MM');
+
+          if(fechaActual3 === fecha.date)
+          {
+            fecha.promedio += calificacion.valor
+            suma += calificacion.valor;
+            conteo.push(calificacion); 
+          }
+          else
+          {
+
+          }
+            //console.log(suma/conteo.length)
+            promedio = suma/conteo.length;
+            //console.log(promedio)
+            fecha.promedio = promedio
         }
-       //console.log(suma/conteo.length)
-       promedio = suma/conteo.length;
-       //console.log(promedio)
-       objeto.promedio = promedio
     }
-    //console.log(arregloAux);
-    return arregloAux
+    
+   return arregloFechasTotales;
    
 });
+
+
+
+
 
 
 const arregloParametros = computed(() => {
@@ -344,6 +378,7 @@ const arregloParametros = computed(() => {
                     if(calificacion.año == año)
                     {
                         newObj[`${proceso.nombre}`] = calificacion.valor;
+                        newObj.rubro = calificacion.rubro_name
                     }   
                 }
 
@@ -412,6 +447,40 @@ const promedios = computed(() =>
 });
 
 
+const rubrosCalculados = computed(() => 
+{
+    let arregloMesesAux = [];
+    const año = fecha.getFullYear();
+    for (let index = 0; index < meses2.length; index++) 
+    {
+        let mes = meses2[index];
+        let newObj = {
+            numero_mes:mes.numero,
+            mes:mes.mes,
+        };
+
+        for (let index2 = 0; index2 < props.rubros_mes.length; index2++)
+         {
+            const rubro = props.rubros_mes[index2];
+            for (let index3 = 0; index3 < props.calificaciones_mes.length; index3++)
+             {
+                const calificacion = props.calificaciones_mes[index3];
+                //console.log(calificacion);
+                if(calificacion.rubro_id == rubro.rubro_id && mes.numero ==calificacion.mes)
+                {
+                    if(calificacion.año == año)
+                    {
+                        newObj[`${rubro.rubro_name}`] = calificacion.valor;
+                    }   
+                }
+            }
+        }
+        arregloMesesAux.push(newObj);
+    }
+  return arregloMesesAux;
+});
+
+
 </script>
 
 <template>
@@ -458,7 +527,6 @@ const promedios = computed(() =>
                    <div class="col-start-1 col-end-3"> <!--Graficas-->
                        <h2 class="text-lg font-bold">Graficas</h2>
                        <div>
-                         
                            <Graph1 :calificaciones = "arregloCalificaciones" />
                        </div>
                        <div>
@@ -491,16 +559,18 @@ const promedios = computed(() =>
                                   <h1 class="uppercase font-extralight">Calif.</h1>
                                </div>
                                <div>
-                                  <div v-for="parametro in arregloParametros" :key="parametro.id">
+                                  <div v-for="parametro in rubrosCalculados" :key="parametro.id">
                                      <div v-if="parametro.numero_mes == mes-1">
-                                        <div v-for="(dato, index) in parametro" :key="index">
-                                            <div v-if="index !== 'numero_mes' && index !== 'mes'" class="grid grid-cols-2 m-2 text-center">
-                                                <h1 v-if="dato">{{ index }} </h1>
-                                                <h1 v-if="dato">  
-                                                    <span class="text-[#EC2944]" v-if="dato <= 25">{{ dato }}</span>
-                                                    <span class="text-[#F7B815]" v-if="dato >=26 && dato <= 70">{{ dato }}</span>
-                                                    <span class="text-[#00CB83]" v-if="dato > 70">{{ dato }}</span>
-                                                </h1>
+                                        <div v-for="(dato,name, index) in parametro" :key="index">
+                                            <div v-if="index <=6">
+                                                <div v-if="name !== 'numero_mes' && name !== 'mes'" class="grid grid-cols-2 m-2 text-center">
+                                                  <h1 v-if="dato">{{ name }} </h1>
+                                                  <h1 v-if="dato">  
+                                                      <span class="text-[#EC2944]" v-if="dato <= 25">{{ dato }}</span>
+                                                      <span class="text-[#F7B815]" v-if="dato >=26 && dato <= 70">{{ dato }}</span>
+                                                      <span class="text-[#00CB83]" v-if="dato > 70">{{ dato }}</span>
+                                                  </h1>
+                                               </div>
                                             </div>
                                         </div>
                                      </div>

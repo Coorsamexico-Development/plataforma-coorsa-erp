@@ -29,52 +29,139 @@ chart = am4core.create("chartdiv", am4charts.XYChart);
 // Add data
 chart.data = this.calificaciones;
 
-// Create category axis
-var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-categoryAxis.dataFields.category = "mes";
-categoryAxis.renderer.opposite = true;
-// Create value axis
+chart.paddingRight = 20;
+
+/*
+var popup = chart.openPopup("<div>Click on plot area to add points<br>Drag bullets to change values<br>Double click on bullet to remove</div>");
+popup.top = 60;
+popup.right = 30;
+popup.defaultStyles = false;
+*/
+
+var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+dateAxis.renderer.grid.template.location = 0;
+dateAxis.renderer.minGridDistance = 60;
+
 var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-valueAxis.renderer.inversed = false;
-valueAxis.title.text = "Valor";
-valueAxis.renderer.minLabelPosition = 0.01;
+//valueAxis.tooltip.disabled = true;
+valueAxis.renderer.minWidth = 35;
 
-// Create series
-var series1 = chart.series.push(new am4charts.LineSeries());
-series1.dataFields.valueY = "promedio";
-series1.dataFields.categoryX = "mes";
-series1.name = "Promedio";
-series1.bullets.push(new am4charts.CircleBullet());
-series1.tooltipText = "{name} En {categoryX}: {valueY}";
-series1.legendSettings.valueText = "{valueY}";
-series1.visible  = false;
-series1.strokeWidth = 3;
+var series = chart.series.push(new am4charts.LineSeries());
+series.dataFields.dateX = "date";
+series.dataFields.valueY = "promedio";
+//series.tooltipText = "{valueY}";
+series.tooltip.pointerOrientation = "vertical";
+series.tooltip.background.fillOpacity = 0.5;
+series.strokeWidth = 3;
 
-// Add chart cursor
 chart.cursor = new am4charts.XYCursor();
-chart.cursor.behavior = "zoomY";
+chart.cursor.xAxis = dateAxis;
+chart.cursor.behavior = "none";
+
+var scrollbarX = new am4core.Scrollbar();
+chart.scrollbarX = scrollbarX;
+
+var newSeries;
+var addingPointsDisabled = false;
+
+addSeries();
+
+function addSeries() {
+  newSeries = chart.series.push(new am4charts.LineSeries())
+  newSeries.data = []
+  newSeries.dataFields.dateX = "date";
+  newSeries.dataFields.valueY = "newValue";
+  newSeries.interpolationDuration = 0;
 
 
-let hs1 = series1.segments.template.states.create("hover")
-hs1.properties.strokeWidth = 5;
-series1.segments.template.strokeWidth = 1;
+  var bullet = newSeries.bullets.push(new am4charts.CircleBullet());
+  bullet.draggable = true;
+
+  bullet.events.on("dragged", function(event) {
+    var bullet = event.target;
+            
+    var x = bullet.pixelX; 
+    //x = dateAxis.getX(bullet.dataItem, "dateX"); //  uncomment this line if you want to allow draggin bullets only along y axis
+
+    bullet.moveTo({ x: x, y: bullet.pixelY }, undefined, undefined, true);
+    bullet.dataItem.valueY = valueAxis.yToValue(bullet.pixelY);
+    bullet.dataItem.dataContext.newValue = bullet.dataItem.valueY;
+
+    // remove the following three lines if you want to allow draggin bullets only along y axis
+    bullet.dataItem.dateX = dateAxis.xToValue(bullet.pixelX);    
+    bullet.dataItem.dataContext.date = bullet.dataItem.dateX;    
+    dateAxis.postProcessSeriesDataItem(bullet.dataItem);
+  })
+
+  bullet.events.on("down", function(event) {
+    addingPointsDisabled = true;
+
+    chart.cursor.triggerMove(
+      { x: series.tooltipX, y: series.tooltipY },
+      "hard"
+    ); // sticks cursor to the point
+
+  })
 
 
-// Add legend
-chart.legend = new am4charts.Legend();
-chart.legend.itemContainers.template.events.on("over", function(event){
-var segments = event.target.dataItem.dataContext.segments;
-segments.each(function(segment){
-  segment.isHover = true;
+  bullet.events.on("dragstop", function(event) {
+
+    var bullet = event.target;
+
+    chart.cursor.triggerMove(
+      { x: series.tooltipX, y: series.tooltipY },
+      "none"
+    ); // enables mouse following again
+
+    addingPointsDisabled = false;
+  })
+
+  bullet.events.on("doublehit", function(event) {
+    addingPointsDisabled = false;
+    var dataItem = event.target.dataItem;
+    var dataContext = dataItem.dataContext;
+    newSeries.data.splice(newSeries.data.indexOf(dataContext), 1);
+    newSeries.invalidateData();
+
+    chart.cursor.triggerMove(
+      { x: series.tooltipX, y: series.tooltipY },
+      "none"
+    ); // enables mouse following again    
+  })
+}
+
+
+var interaction = am4core.getInteraction();
+
+interaction.events.on("up", function(event) {
+  if (newSeries && !addingPointsDisabled && chart.cursor.visible) {
+    var date = series.tooltipDataItem.dateX;
+    var point = am4core.utils.documentPointToSprite(event.pointer.point, chart.seriesContainer);
+    var value = valueAxis.yToValue(point.y);
+    if (value > valueAxis.min && value < valueAxis.max) {
+      newSeries.data.push({ date: date, newValue: value });
+      sortData();
+      newSeries.invalidateData();
+    }
+  }
 })
-})
 
-chart.legend.itemContainers.template.events.on("out", function(event){
-var segments = event.target.dataItem.dataContext.segments;
-segments.each(function(segment){
-  segment.isHover = false;
-})
-})
+function sortData() {
+  newSeries.data.sort(function(a, b) {
+    var atime = a.date.getTime();
+    var btime = b.date.getTime();
+
+    if (atime < btime) {
+      return -1;
+    }
+    else if (atime == btime) {
+      return 0;
+    }
+    else {
+      return 1;
+    }
+  })
+}
   },
 
 

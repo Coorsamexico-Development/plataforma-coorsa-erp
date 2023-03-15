@@ -24,8 +24,17 @@ class DepartamentosAuditoriaController extends Controller
 
         $calificaciones_mes = CalfRubroMe::select('calf_rubro_mes.*',
         'procesos.id AS proceso_id',
-        'procesos.nombre as proceso_name')
+        'procesos.nombre as proceso_name',
+        'rubros.nombre as rubro_name'
+        )
         ->join('rubros', 'calf_rubro_mes.rubro_id' , 'rubros.id')
+        ->join('procesos', 'rubros.proceso_id', 'procesos.id')
+        ->orderBy('año', 'ASC')
+        ->orderBy('mes', 'ASC');
+
+        $rubros = Rubro::select(
+            'rubros.id AS rubro_id',
+            'rubros.nombre AS rubro_name')
         ->join('procesos', 'rubros.proceso_id', 'procesos.id');
 
         $documentos_mes = DocumentosMe::select('documentos_mes.documento',
@@ -35,13 +44,14 @@ class DepartamentosAuditoriaController extends Controller
         ->join('procesos','documentos_mes.proceso_id','procesos.id')
         ->join('users', 'documentos_mes.user_id', 'users.id');
 
+
         if (request()->has('departamento_auditoria_id'))
          {
             $departamento =  DepartamentosAuditoria::find(request('departamento_auditoria_id'));
             $procesos->where('procesos.departamento_auditoria_id','=',request('departamento_auditoria_id'));
             $calificaciones_mes->where('procesos.departamento_auditoria_id','=',request('departamento_auditoria_id'));
-
             $documentos_mes ->where('procesos.departamento_auditoria_id','=',request('departamento_auditoria_id'));
+            $rubros ->where('procesos.departamento_auditoria_id','=',request('departamento_auditoria_id'));
             
             //$calificaciones = $departamento->documentosCalificacionesMes()->orderBy('mes', 'asc');
         }
@@ -52,7 +62,8 @@ class DepartamentosAuditoriaController extends Controller
             'filters' => request()->all(['departamento_auditoria_id']),
             'usuarios' => $usuarios,
             'calificaciones_mes' => fn () => $calificaciones_mes ->get(),
-            'documentos_mes' => fn() => $documentos_mes -> get()
+            'documentos_mes' => fn() => $documentos_mes -> get(),
+            'rubros_mes' => fn() => $rubros -> get()
         ]);
     }
 
