@@ -17,7 +17,8 @@ const share = () =>
 </script>
 <template>
   <div v-if="datos_usuario.length > 0">
-       <span class="absolute mt-8 ml-8">
+    <div v-for="(dato, index) in datos_usuario" :key="index">
+      <span class="absolute mt-8 ml-8">
        <svg xmlns="http://www.w3.org/2000/svg" width="15.786" height="25.659" viewBox="0 0 15.786 25.659">
          <path id="Trazado_3" data-name="Trazado 3" d="M18.949,76.591l-2.671-2.828,10.182-9.62L16.219,53.651,19,50.932l13,13.324Z" transform="translate(-16.219 -50.932)" fill="#e84a49"/>
        </svg>
@@ -28,10 +29,10 @@ const share = () =>
      </div>
      <div class="w-full h-32 bg-white"  style="transform: skewY(-11deg); margin-top: -3rem; ">
      </div>
-     <span class="absolute h-14 bg-[#E84A49] ml-8" style="width:2px; margin-top:-8rem"></span>
+     <span class="absolute h-14 bg-[#E84A49] ml-8" style="width:2px; margin-top:-9rem"></span>
      <div class="relative flex flex-col" style="font-family: 'Montserrat'; z-index: 5; margin-top: -6rem;">
        <div class="flex flex-col items-center justify-center">
-           <h1 class="font-semibold uppercase" style="letter-spacing: 4px; font-size: 1.5rem;">RENATO ORTIZ</h1>
+           <h1 class="font-semibold uppercase" style="letter-spacing: 4px; font-size: 1.2rem;">{{dato.name + ' ' + dato.apellido_paterno + ' '+dato.apellido_materno}}</h1>
            <h2 class="uppercase text-l" style="letter-spacing: 6px;">CEO</h2>
        </div>
        <div class="">
@@ -44,7 +45,7 @@ const share = () =>
          <div class="m-8 mt-2">
              <div class="flex">
                  <img class="mr-2" src="../../../img/gmail.svg" />
-                 <a class="text-sm" href="mailto: renato.ortiz@coorsamexico.com">renato.ortiz@coorsamexico.com</a>
+                 <a class="text-sm" :href="'mailto:'+dato.email">{{ dato.email }}</a>
              </div>
          </div>
          <div class="m-8 mt-2">
@@ -107,9 +108,9 @@ const share = () =>
              <button @click="share()" class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
                  <img class="" src="../../../img/Share.png" />
              </button>
-    
         </div>
-     </div>
+      </div>
+    </div>
   </div>
   <div v-else>
       NO HAY INFORMACIÓN.
