@@ -340,7 +340,7 @@ const arregloCalificaciones = computed(() =>
 
         }
         promedio = suma/conteo.length;
-        fecha.promedio = promedio;
+        fecha.promedio = promedio.toFixed(2);
         //console.log(promedio)
     }
 
@@ -389,7 +389,16 @@ let year = ref(null);
 year.value = fecha.getFullYear();
 
 let mes = ref(null);
-mes.value = fecha.getMonth()+1;
+
+
+if(fecha.getMonth.length  < 1)
+{
+  mes.value = '0' + fecha.getMonth();
+}
+else
+{
+  mes.value = fecha.getMonth();
+}
 
 const promedios = computed(() => 
 {
@@ -532,9 +541,20 @@ const rubrosCalculados = computed(() =>
                             <h2 class="mb-4 text-lg font-bold">Promedio</h2>
                             <div class="w-full h-full border shadow-lg b-white rounded-2xl">
                                 <div v-for="(calificacion, index) in arregloCalificaciones" :key="index" class="bg-[#F8F8F8] m-6 rounded-2xl">
-                                    <div class="grid grid-cols-2 p-3">
+                                    <div class="grid grid-cols-2 p-3" v-if="index < 4">
                                         <div class="flex justify-center">
-                                           <h1 class="text-3xl font-semibold">{{calificacion.date}}</h1> 
+                                           <h1 v-if="calificacion.date.slice(5,7) == '01' " class="text-3xl font-semibold">Enero</h1> 
+                                           <h1 v-if="calificacion.date.slice(5,7) == '02' " class="text-3xl font-semibold">Febrero</h1> 
+                                           <h1 v-if="calificacion.date.slice(5,7) == '03' " class="text-3xl font-semibold">Marzo</h1> 
+                                           <h1 v-if="calificacion.date.slice(5,7) == '04' " class="text-3xl font-semibold">Abril</h1> 
+                                           <h1 v-if="calificacion.date.slice(5,7) == '05' " class="text-3xl font-semibold">Mayo</h1> 
+                                           <h1 v-if="calificacion.date.slice(5,7) == '06' " class="text-3xl font-semibold">Junio</h1> 
+                                           <h1 v-if="calificacion.date.slice(5,7) == '07' " class="text-3xl font-semibold">Julio</h1> 
+                                           <h1 v-if="calificacion.date.slice(5,7) == '08' " class="text-3xl font-semibold">Agosto</h1> 
+                                           <h1 v-if="calificacion.date.slice(5,7) == '09' " class="text-3xl font-semibold">Septiembre</h1> 
+                                           <h1 v-if="calificacion.date.slice(5,7) == '10' " class="text-3xl font-semibold">Octubre</h1> 
+                                           <h1 v-if="calificacion.date.slice(5,7) == '11' " class="text-3xl font-semibold">Noviembre</h1> 
+                                           <h1 v-if="calificacion.date.slice(5,7) == '12' " class="text-3xl font-semibold">Diciembre</h1> 
                                         </div>
                                        <div class="flex justify-center">
                                            <h1 class="text-3xl font-semibold text-[#D9435E]" v-if="calificacion.promedio <= 30" >{{calificacion.promedio}}</h1>
