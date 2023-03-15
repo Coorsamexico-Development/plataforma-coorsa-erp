@@ -44,7 +44,10 @@ class UserController extends Controller
 
     public function viewCard ($numero_empleado)
     {
-       $datos_User = User::select('users.*')
+       $datos_User = User::select(
+        'users.*',
+        'puestos.name AS puesto_name'
+       )
         ->leftjoin('empleados_puestos', 'empleados_puestos.empleado_id','users.id')
         ->leftjoin('puestos','empleados_puestos.puesto_id','puestos.id')
         ->where('users.numero_empleado' ,'=',$numero_empleado)
