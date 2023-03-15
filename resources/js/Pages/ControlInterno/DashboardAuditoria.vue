@@ -274,10 +274,8 @@ const arregloCalificaciones = computed(() =>
 {
        /***/
    let arregloAñoMes = [];
-    let fechaTemp = '' ;
-    let conteo = []; 
-    let suma = 0;
-    let promedio = 0;
+   let fechaTemp = '' ;
+
    // console.log(props.calificaciones_mes)
     for (let index = 0; index < props.calificaciones_mes.length; index++)
     {    
@@ -310,16 +308,17 @@ const arregloCalificaciones = computed(() =>
      {
       let Obj = {
         date: fechaInicio.format('YYYY-MM'),
-        promedio:10
+        promedio:0
       }
     	arregloFechasTotales.push(Obj);
    		fechaInicio.add(1, 'months');
   	}
 
-    let arregloAux = [];
-
     for (let index2 = 0; index2 < arregloFechasTotales.length; index2++) 
     {
+        let conteo = []; 
+        let suma = 0;
+        let promedio = 0;
         const fecha = arregloFechasTotales[index2];
         for (let index3 = 0; index3 < props.calificaciones_mes.length; index3++) 
         {
@@ -331,28 +330,23 @@ const arregloCalificaciones = computed(() =>
 
           if(fechaActual3 === fecha.date)
           {
-            fecha.promedio += calificacion.valor
             suma += calificacion.valor;
             conteo.push(calificacion); 
           }
           else
           {
-
+            fecha.promedio = 0;
           }
-            //console.log(suma/conteo.length)
-            promedio = suma/conteo.length;
-            //console.log(promedio)
-            fecha.promedio = promedio
+
         }
+        promedio = suma/conteo.length;
+        fecha.promedio = promedio;
+        //console.log(promedio)
     }
-    
+
    return arregloFechasTotales;
    
 });
-
-
-
-
 
 
 const arregloParametros = computed(() => {
@@ -538,15 +532,15 @@ const rubrosCalculados = computed(() =>
                             <h2 class="mb-4 text-lg font-bold">Promedio</h2>
                             <div class="w-full h-full border shadow-lg b-white rounded-2xl">
                                 <div v-for="(calificacion, index) in arregloCalificaciones" :key="index" class="bg-[#F8F8F8] m-6 rounded-2xl">
-                                    <div v-if="mes > calificacion.numero ">
-                                        <div class="grid items-center max-w-md grid-cols-2 p-2 m-2">
-                                            <h1 class="ml-8 text-5xl font-bold">
-                                                <span class="text-[#EC2944]" v-if="calificacion.promedio <= 25">{{ calificacion.promedio }}</span>
-                                                <span class="text-[#F7B815]" v-if="calificacion.promedio >=26 && calificacion.promedio <= 70">{{ calificacion.promedio }}</span>
-                                                <span class="text-[#00CB83]" v-if="calificacion.promedio > 70">{{ calificacion.promedio }}</span>
-                                            </h1>
-                                            <h2 class="text-3xl text-center uppercase font-extralight" style="letter-spacing: 0.2rem;">{{ calificacion.mes }}</h2>
+                                    <div class="grid grid-cols-2 p-3">
+                                        <div class="flex justify-center">
+                                           <h1 class="text-3xl font-semibold">{{calificacion.date}}</h1> 
                                         </div>
+                                       <div class="flex justify-center">
+                                           <h1 class="text-3xl font-semibold text-[#D9435E]" v-if="calificacion.promedio <= 30" >{{calificacion.promedio}}</h1>
+                                           <h1 class="text-3xl font-semibold text-[#F28C20]" v-if="calificacion.promedio > 30 && calificacion.promedio <= 60 " >{{calificacion.promedio}}</h1>
+                                           <h1 class="text-3xl font-semibold text-[#00CB83]" v-if="calificacion.promedio > 60 " >{{calificacion.promedio}}</h1>
+                                       </div>
                                     </div>
                                 </div>
                              </div>
