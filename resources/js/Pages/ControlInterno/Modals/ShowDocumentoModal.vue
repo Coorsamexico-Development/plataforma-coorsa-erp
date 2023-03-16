@@ -12,7 +12,7 @@ import ButtonAdd  from "../../../Components/ButtonAdd.vue";
 import TableDocumentos from "../Partials/TableDocumentos.vue";
 import AddDocumentoModal from "../Modals/AddDocumentoModal.vue";
 
-const emit = defineEmits(["close", "messageError"]);
+const emit = defineEmits(["close", "messageError", 'recargarDocs']);
 const props = defineProps({
     show: {
         type: Boolean,
@@ -41,7 +41,10 @@ const close = () => {
     emit('close');
 }
 
-
+const recargarDocumentos = () => 
+{
+  emit('recargarDocs', props.procesoId)
+}
 </script>
 
 <template>
@@ -49,7 +52,7 @@ const close = () => {
         <template #title>
           <div class="grid grid-cols-2">
              <div class="flex justify-start">
-                <h2 class="font-bold tracking-widest text-md uppercase">
+                <h2 class="font-bold tracking-widest uppercase text-md">
                    Documentos
                 </h2>
             </div>
@@ -67,12 +70,12 @@ const close = () => {
         </template>
         <template #content>
          <div class="mt-2 mb-8">
-            <TableDocumentos  :documentos="documentos" />
+            <TableDocumentos :usuarios="usuarios"  :procesoId="procesoId" @recargarDocs="recargarDocumentos" :documentos="documentos" />
          </div>
          <div class="flex justify-end">
              <ButtonAdd @click="openAddDocumentoModal">Agregar</ButtonAdd>
          </div> 
-         <AddDocumentoModal  :procesoId="procesoId" :usuarios="usuarios" :show="addDocumentoModal" @close="closeDocumentoModal" />
+         <AddDocumentoModal @recargarDocs="recargarDocumentos" :procesoId="procesoId" :usuarios="usuarios" :show="addDocumentoModal" @close="closeDocumentoModal" />
         </template>
     </DialogModal>
 </template>

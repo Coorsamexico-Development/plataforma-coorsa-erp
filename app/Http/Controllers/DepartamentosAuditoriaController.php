@@ -39,6 +39,7 @@ class DepartamentosAuditoriaController extends Controller
 
         $documentos_mes = DocumentosMe::select('documentos_mes.documento',
         'documentos_mes.mes',
+        'documentos_mes.portada AS portada',
         'procesos.nombre AS proceso_name',
         'users.name', 'users.apellido_paterno', 'users.apellido_materno')
         ->join('procesos','documentos_mes.proceso_id','procesos.id')
@@ -103,22 +104,51 @@ class DepartamentosAuditoriaController extends Controller
 
     public function storeDocumento (Request $request)
     {
-
           $documento = request('documento');
           $nombre_documento =  $documento->getClientOriginalName(); //rescatamos el nombre original
           $ruta_documento= $documento->storeAs('procesos/documentos', $nombre_documento, 'gcs'); //guardamos el archivo en el storage
           $urlDocumento = Storage::disk('gcs')->url($ruta_documento);
 
+          $portada = request('portada');
+          $nombre_portada = $portada->getClientOriginalName();
+          $ruta_portada = $portada->storeAs('procesos/documentos/portadas', $nombre_portada, 'gcs');
+          $urlPortada = Storage::disk('gcs')->url($ruta_portada);
 
         DocumentosMe::create([
             'user_id' => $request['user_id'],
             'proceso_id' => $request['proceso_id'],
             'mes' => $request['mes'],
-            'documento' => $urlDocumento
+            'documento' => $urlDocumento,
+            'portada' => $urlPortada
         ]);
 
         return redirect()->back();
     }
+
+    public function updateDocumento(Request $request, $idDocumento)
+    { 
+
+        $documento = request('documento');
+        $nombre_documento =  $documento->getClientOriginalName(); //rescatamos el nombre original
+        $ruta_documento= $documento->storeAs('procesos/documentos', $nombre_documento, 'gcs'); //guardamos el archivo en el storage
+        $urlDocumento = Storage::disk('gcs')->url($ruta_documento);
+
+        $portada = request('portada');
+        $nombre_portada = $portada->getClientOriginalName();
+        $ruta_portada = $portada->storeAs('procesos/documentos/portadas', $nombre_portada, 'gcs');
+        $urlPortada = Storage::disk('gcs')->url($ruta_portada);
+
+        DocumentosMe::where('documentos_mes.id','=', $idDocumento)
+        ->update([
+            'user_id' => $request['user_id'],
+            'proceso_id' => $request['proceso_id'],
+            'mes' => $request['mes'],
+            'documento' => $urlDocumento,
+            'portada' => $urlPortada
+        ]);
+
+        return redirect()->back();
+    }  
 
 
     public function getDocumentos ($proceso_id) 

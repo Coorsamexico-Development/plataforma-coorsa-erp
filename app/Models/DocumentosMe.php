@@ -13,6 +13,7 @@ class DocumentosMe extends Model
     ['user_id',
      'proceso_id',
      'documento',
-     'mes'
+     'mes',
+     'portada'
     ];
 }

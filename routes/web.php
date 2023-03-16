@@ -106,6 +106,7 @@ Route::middleware([
         ->name('documentos-calificacion-mes.destroy')->middleware('can:calificacion.delete');
     Route::post('/storeProceso', [DepartamentosAuditoriaController::class, 'storeProceso'])->name('storeProceso');
     Route::post('/storeDocumento', [DepartamentosAuditoriaController::class, 'storeDocumento'])->name('storeDocumento');
+    Route::post('/updateDocumento/{idDocumento}', [DepartamentosAuditoriaController::class, 'updateDocumento'])->name('updateDocumento');
     Route::get('/getDocumentos/{proceco_id}', [DepartamentosAuditoriaController::class, 'getDocumentos'])->name('getDocumentos');
     Route::delete('documentos-mes/{documento}', [DepartamentosAuditoriaController::class, 'destroyDocumento'])->name('documentos-mes.destroy');
     Route::post('/storeRubro', [DepartamentosAuditoriaController::class, 'storeRubro'])->name('storeRubro');

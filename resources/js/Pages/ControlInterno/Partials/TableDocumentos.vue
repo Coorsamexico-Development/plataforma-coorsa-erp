@@ -2,23 +2,43 @@
 import { Inertia } from '@inertiajs/inertia';
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox.css";
+import EditDocumentoModal from '../Modals/EditDocumentoModal.vue'
+import { ref } from "vue";
+
 const props = defineProps({
-    documentos:Object
+    documentos:Object,
+    procesoId:Number,
+    usuarios:Object
 });
 
+const emit = defineEmits(['recargarDocs']);
 const borrarDoc = (documento_id) => 
 {
   //console.log(documento_id);
   Inertia.delete(route('documentos-mes.destroy', documento_id), {
         preserveScroll: true,
         preserveState: true,
+        onFinish:()=> recargarDocumentos()
     })
 }
 
+const recargarDocumentos = () => 
+{
+   emit('recargarDocs');
+}
+
+let openEditDocument = ref(false);
 const editarDoc = () =>
 {
-
+  openEditDocument.value = true;
 }
+
+const closeEditDocument = () => 
+{
+  openEditDocument.value = false;
+}
+
+let documento_id_reactive = ref(-1);
 
 </script>
 <template>
@@ -26,8 +46,8 @@ const editarDoc = () =>
         <thead class="border-b">
             <tr >
                 <th></th>
-                <th><span class="text-sm uppercase font-extralight text-center" style="letter-spacing:0.15rem">Autor</span></th>
-                <th><span class="text-sm uppercase font-extralight text-center" style="letter-spacing:0.15rem">Ver</span></th>
+                <th><span class="text-sm text-center uppercase font-extralight" style="letter-spacing:0.15rem">Autor</span></th>
+                <th><span class="text-sm text-center uppercase font-extralight" style="letter-spacing:0.15rem">Ver</span></th>
             </tr>
         </thead>
         <tbody>
@@ -52,7 +72,7 @@ const editarDoc = () =>
                           </g>
                         </svg>
                     </button>
-                    <button @click="editarDoc(documento.id)"  class="bg-[#f28c00] m-2 rounded-2xl pl-2 pr-2">
+                    <button @click="editarDoc(documento.id), documento_id_reactive = documento.id"  class="bg-[#f28c00] m-2 rounded-2xl pl-2 pr-2">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="35" height="33" viewBox="0 0 35 33">
                           <defs>
                             <clipPath id="clip-Icono-editar">
@@ -140,4 +160,5 @@ const editarDoc = () =>
             </tr>
         </tbody>
     </table>
+    <EditDocumentoModal @recargarDocs="recargarDocumentos" :documentoId="documento_id_reactive" :show="openEditDocument" @close="closeEditDocument" :procesoId="procesoId" :usuarios="usuarios" />
 </template>

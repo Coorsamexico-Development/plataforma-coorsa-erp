@@ -11,14 +11,17 @@ import { useForm } from "@inertiajs/inertia-vue3";
 import ButtonAdd from '@/Components/ButtonAdd.vue';
 
 const emit = defineEmits(["close", "messageError", 'recargarDocs']);
+
 const props = defineProps({
     show: {
         type: Boolean,
         default: false,
     },
     procesoId:Number,
-    usuarios:Object
+    usuarios:Object, 
+    documentoId:Number
 });
+
 
 const fecha = new Date();
 const mesActual = fecha.getMonth()+1;
@@ -62,7 +65,7 @@ const close = () => {
 
 const save = () => 
 {
-   documentoForm.post(route('storeDocumento'),
+   documentoForm.post(route('updateDocumento', props.documentoId),
    {
     preserveScroll:true,
     preserveState:true,
@@ -76,16 +79,14 @@ const recargarDocs = () =>
 {
    emit('recargarDocs')
 }
-
 </script>
-
 <template>
-    <DialogModal :show="show" maxWidth="2xl" @close="close()">
+        <DialogModal :show="show" maxWidth="2xl" @close="close()">
         <template #title>
           <div class="grid grid-cols-2">
              <div class="flex justify-start">
                 <h2 class="font-bold tracking-widest uppercase text-md">
-                   Agregar documento
+                   Editar documento
                 </h2>
             </div>
             <div class="flex justify-end">

@@ -597,8 +597,8 @@ const rubrosCalculados = computed(() =>
                        <h2 class="mb-4 text-lg font-bold">Documentos que comprueban</h2>
                        <div  class="grid grid-cols-3 gap-8">
                           <div v-for="documento in documentos_mes" :key="documento.id" class="border shadow-lg h-72 w-72" > <!--Card Documento-->
-                             <img  v-if="documento.documento.endsWith('.pdf') || documento.documento.endsWith('.png') || documento.documento.endsWith('.jpg') || documento.documento.endsWith('.svg')"   data-fancybox :href="documento.documento" class="w-56 h-56" alt="imagen" src="imagen.png" />
-                             <img v-else class="w-56 h-56" alt="imagen" src="imagen.png"  download :href="documento.documento" />
+                             <img v-if="documento.documento.endsWith('.pdf') || documento.documento.endsWith('.png') || documento.documento.endsWith('.jpg') || documento.documento.endsWith('.svg')"   data-fancybox :href="documento.documento" class="w-full h-56" alt="imagen" :src="documento.portada" />
+                             <img v-else class="w-full h-56" alt="imagen" :src="documento.portada"  download :href="documento.documento" />
                              <div>
                                 <span class="bg-[#EC2944] h-14 w-2 absolute"></span>
                                 <h2 class="ml-4">{{documento.proceso_name}}</h2>
@@ -673,11 +673,11 @@ const rubrosCalculados = computed(() =>
           <!-- End Modal Procesos -->
 
           <!-- Modal Documentos -->
-         <ShowDocumentoModal  :documentos="documentos" :usuarios="usuarios" :procesoId = "procesoReactive"  :show="modalAddDocumento" @close="closeModalAddDoc" />  
+         <ShowDocumentoModal  @recargarDocs="consultarDocumentos" :documentos="documentos" :usuarios="usuarios" :procesoId = "procesoReactive"  :show="modalAddDocumento" @close="closeModalAddDoc" />  
           <!--End Modal Documentos -->
 
           <!-- Modal Calificaciones -->
-          <ShowCalificacionesModal :calificaciones="calificaciones" :rubros="rubros" :procesoId="procesoReactive" :show="modalAdCalf" @close="closeModalShowCalif" @consultarRubros="openModalShowCalif" />
+          <ShowCalificacionesModal   :calificaciones="calificaciones" :rubros="rubros" :procesoId="procesoReactive" :show="modalAdCalf" @close="closeModalShowCalif" @consultarRubros="openModalShowCalif" />
           <!--End Modal Calificaciones -->
     </AppLayout>
 </template>
