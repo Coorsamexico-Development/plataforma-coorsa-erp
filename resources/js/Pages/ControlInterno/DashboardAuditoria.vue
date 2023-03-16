@@ -323,7 +323,7 @@ const arregloCalificaciones = computed(() =>
         for (let index3 = 0; index3 < props.calificaciones_mes.length; index3++) 
         {
           const calificacion = props.calificaciones_mes[index3];
-          console.log(calificacion);
+          //console.log(calificacion);
           let fechaActual = calificacion.año +'-'+calificacion.mes;
           let fechaActual2 = moment(fechaActual);
           let fechaActual3 = fechaActual2.format('YYYY-MM');
@@ -526,7 +526,7 @@ const rubrosCalculados = computed(() =>
                 </div>
              </div>
              <div class="mt-4">
-               <section v-if="!cambio" class="grid grid-cols-3 grid-rows-6 gap-12">
+               <section v-if="!cambio" class="grid grid-cols-3 gap-12">
                    <div class="col-start-1 col-end-3"> <!--Graficas-->
                        <h2 class="text-lg font-bold">Graficas</h2>
                        <div>
@@ -666,9 +666,6 @@ const rubrosCalculados = computed(() =>
                     </p>
                 </ButtonAdd>
               </div>
-           </div>
-           <div class="p-4">
-                
            </div>
        </section>
          <!-- Modal Procesos -->
