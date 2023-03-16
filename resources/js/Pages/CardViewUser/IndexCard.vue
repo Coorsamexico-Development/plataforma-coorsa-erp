@@ -41,13 +41,15 @@ const share = () =>
              <div class="m-8">
              <div class="flex">
                  <img class="mr-2" src="../../../img/telefono.svg" />
-                 <a class="text-sm" :href="'tel:+52'+ dato.telefono_empresarial">{{dato.telefono_empresarial}}</a>
+                 <a v-if="dato.telefono_empresarial" class="text-sm" :href="'tel:+52'+ dato.telefono_empresarial">{{dato.telefono_empresarial}}</a>
+                 <a v-else class="text-sm" :href="'tel:+52'+ dato.telefono">{{dato.telefono}}</a>
              </div>
          </div>
          <div class="m-8 mt-2">
              <div class="flex">
                  <img class="mr-2" src="../../../img/gmail.svg" />
-                 <a class="text-sm" :href="'mailto:'+dato.correo_empresarial">{{ dato.correo_empresarial }}</a>
+                 <a v-if="dato.correo_empresarial" class="text-sm" :href="'mailto:'+dato.correo_empresarial">{{ dato.correo_empresarial }}</a>
+                 <a v-else class="text-sm" :href="'mailto:'+dato.email">{{ dato.email }}</a>
              </div>
          </div>
          <div class="m-8 mt-2">
