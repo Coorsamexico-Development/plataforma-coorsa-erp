@@ -32,7 +32,7 @@ const share = () =>
      <span class="absolute h-14 bg-[#E84A49] ml-8" style="width:2px; margin-top:-9rem"></span>
      <div class="relative flex flex-col" style="font-family: 'Montserrat'; z-index: 5; margin-top: -6rem;">
        <div class="flex flex-col items-center justify-center">
-           <h1 class="font-semibold uppercase" style="letter-spacing: 4px; font-size: 1.2rem;">{{dato.name + ' ' + dato.apellido_paterno + ' '+dato.apellido_materno}}</h1>
+           <h1 class="font-semibold text-center uppercase" style="letter-spacing: 4px; font-size: 1.2rem;">{{dato.name + ' ' + dato.apellido_paterno + ' '+dato.apellido_materno}}</h1>
            <h2 class="uppercase text-l" style="letter-spacing: 6px;">{{dato.puesto_name}}</h2>
        </div>
        <div class="">

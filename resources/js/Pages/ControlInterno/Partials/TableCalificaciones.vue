@@ -98,7 +98,6 @@ const updateForm = (campo, rubro, mes) =>
    formSetCalf.post(route('storeCalf'),{
       preserveScroll:true,
       preserveState:true,
-      onSuccess:() => {reConsultarCalif()}
    });
 } 
 
