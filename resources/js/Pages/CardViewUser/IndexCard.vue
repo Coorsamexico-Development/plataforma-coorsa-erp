@@ -11,7 +11,7 @@ const share = () =>
    navigator.share({ 
     title: '¡ Te comparto mi tarjeta de presentación digital !', 
     text: ' ¡ Te comparto mi tarjeta de presentación digital !', 
-    url: 'https://erp.coorsamexico.com/card/user'
+    url: 'https://erp.coorsamexico.com/card/user/'+props.datos_usuario.numero_empleado
   })
 }
 </script>
