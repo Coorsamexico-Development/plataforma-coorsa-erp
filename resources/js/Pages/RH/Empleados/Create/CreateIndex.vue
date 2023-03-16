@@ -99,7 +99,12 @@ const form = useForm
         'monto_finiquito': 0,
         'finiquito_pagado': false,
         'password': "12345678",
-        'rol_id': ''
+        'rol_id': '',
+
+        /*Datos coorporativos*/ 
+        'correo_empresarial':null,
+        'foto_empresarial':null,
+        'telefono_empresarial':null
     });
 
 
@@ -516,6 +521,14 @@ const fecha_termino = computed(() => {
                                                     <InputError :message="form.errors.rol_id"
                                                         class="mt-0" />
                                                 </div>
+                                                <div class="mt-4">
+                                                   <InputLabel value="Correo Empresarial:*" />
+                                                   <TextInput class="block w-full mt-1" v-model="form.correo_empresarial" />
+                                               </div>
+                                               <div class="mt-4">
+                                                   <InputLabel value="Telefono Empresarial:*" />
+                                                   <TextInput class="block w-full mt-1" v-model="form.telefono_empresarial" />
+                                               </div>
 
                                             </div>
                                         </div>

@@ -92,7 +92,7 @@ else {
 
 const fotografia = ref(null);
 
-
+const fotografia_empresarial = ref(null);
 
 if (empleado.value.apellido_paterno === null) {
     empleado.value.apellido_paterno = "";
@@ -109,7 +109,7 @@ if (empleado.value.fecha_nacimiento === null) {
 
 let expediente = ref(null);
 
-console.log(props.documentos)
+//console.log(props.documentos)
 
 if (props.documentos.length > 0) {
     if (props.documentos[0].cat_tipos_documento_id == 25) {
@@ -186,7 +186,11 @@ const form = useForm
         'monto_finiquito': 0,
         'finiquito_pagado': false,
         'password': '',
-        'rol_id': empleado.value.role_id
+        'rol_id': empleado.value.role_id,
+        /*Datos coorporativos*/ 
+        'correo_empresarial':empleado.value.correo_empresarial,
+        'foto_empresarial':empleado.value.foto_empresarial,
+        'telefono_empresarial':empleado.value.telefono_empresarial
     });
 
 
@@ -214,6 +218,10 @@ const createOrUpdate = () => {
 
     if (form.contrato == undefined) {
         form.contrato = null;
+    }
+
+    if (form.foto_empresarial == undefined) {
+        form.foto_empresarial = null;
     }
 
     form.post(route('empleado.update'),
@@ -649,7 +657,14 @@ const sendEmail = () => {
                                                 </Select>
                                                 <InputError :message="form.errors.rol_id" class="mt-2" />
                                             </div>
-
+                                            <div class="mt-4">
+                                                <InputLabel value="Correo Empresarial:*" />
+                                                <TextInput class="block w-full mt-1" v-model="form.correo_empresarial" />
+                                            </div>
+                                            <div class="mt-4">
+                                                <InputLabel value="Telefono Empresarial:*" />
+                                                <TextInput class="block w-full mt-1" v-model="form.telefono_empresarial" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1111,6 +1126,11 @@ const sendEmail = () => {
                                                     <InputError :message="form.errors.fotografia" class="mt-2" />
                                                 </div>
                                                 <div class="mt-4">
+                                                    <InputLabel for="foto_empresarial" value="Foto Empresarial:" />
+                                                    <DropZone id="foto_empresarial" v-model="form.foto_empresarial" ref="fotografia_empresarial"
+                                                        accept="image/x-png,image/jpeg" />
+                                                </div>
+                                                <div class="mt-4">
                                                     <InputLabel for="expediente" value="Expediente:" />
                                                     <DropZone id="expediente" v-model="form.expediente"
                                                         accept="application/pdf" />
@@ -1237,27 +1257,35 @@ const sendEmail = () => {
                                                 <InputError :message="form.errors.finiquito_pagado" class="mt-2" />
                                             </div>
                                         </div>
+                                        hola
                                     </div>
+                                    
                                 </div>
+                                
                             </div>
+                    
                         </div>
+                        
+                        
                     </div>
                     <!-- Fin Finiquitos -->
-                    <ButtonAdd @click="createOrUpdate" style="float:right; margin:2rem; justify-content: center;">
-                        Guardar
-                    </ButtonAdd>
-                    <a :href="route('empleado.indexmanual', { activo: 'activo' })">
-                        <ButtonInfo style="float:right; margin:2rem; justify-content: center;">
-                            Regresar
-                        </ButtonInfo>
-                    </a>
-                    <div class="px-6 py-4 ">
-                        <ul v-if="form.hasErrors" class="text-red-500">
-                            <li v-for="(error, index) in form.errors" :key="index">
-                                *{{ error }}
-                            </li>
-                        </ul>
-                    </div>
+                   <div class="p-16 pt-0">
+                      <ButtonAdd @click="createOrUpdate" style="float:right; margin:2rem; justify-content: center;">
+                          Guardar
+                      </ButtonAdd>
+                      <a :href="route('empleado.indexmanual', { activo: 'activo' })">
+                          <ButtonInfo style="float:right; margin:2rem; justify-content: center;">
+                              Regresar
+                          </ButtonInfo>
+                      </a>
+                      <div class="px-6 py-4 ">
+                          <ul v-if="form.hasErrors" class="text-red-500">
+                              <li v-for="(error, index) in form.errors" :key="index">
+                                  *{{ error }}
+                              </li>
+                          </ul>
+                      </div>
+                   </div>
                 </div>
             </div>
         </div>

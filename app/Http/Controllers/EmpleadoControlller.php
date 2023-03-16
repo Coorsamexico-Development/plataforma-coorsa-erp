@@ -369,7 +369,6 @@ class EmpleadoControlller extends Controller
 
     public function update(Request $request, User $empleado)
     {
-
         $request->validate([ //validaciones
             'correo_electronico' => 'required',
             'numero_empleado' => 'required',
@@ -427,6 +426,7 @@ class EmpleadoControlller extends Controller
         $urlFoto = '';
         $urlExpediente = '';
         $urlContrato = '';
+        $urlFotografiaEmpresarial = '';
 
 
         /*Guardado de imagnes, expedientes, contrato*/
@@ -451,6 +451,29 @@ class EmpleadoControlller extends Controller
                 $urlFoto = Storage::disk('gcs')->url($rutaFoto);
             }
         }
+
+       /*Guardado de foto empresarial*/
+       if ($request->has('foto_empresarial') && $request['foto_empresarial'] !== null) {
+           if (is_file($request['foto_empresarial'])) {
+               $foto_empresarial =  $request['foto_empresarial'];
+               $nombre_original_empresarial = $foto_empresarial->getClientOriginalName();
+               /*Guardamos*/
+               $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial, 'gcs');
+               $urlFotografiaEmpresarial = Storage::disk('gcs')->url($rutaFotoEmpresarial);
+           } else {
+               $urlFotografiaEmpresarial = $request['foto_empresarial'];
+           }
+       } else {
+           if ($request['foto_empresarial'] == null) {
+               $urlFotografiaEmpresarial = null;
+           } else {
+               $foto_empresarial =  $request['foto_empresarial'];
+               $nombre_original_empresarial = $foto_empresarial->getClientOriginalName();
+               /*Guardamos*/
+               $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial, 'gcs');
+               $urlFotografiaEmpresarial = Storage::disk('gcs')->url($rutaFotoEmpresarial);
+           }
+       }
 
         $newEmpleado =  $request;
 
@@ -532,7 +555,11 @@ class EmpleadoControlller extends Controller
                 'cat_tipo_sangre_id' => $newEmpleado['cat_tipos_sangre_id'],
                 'fotografia' => $urlFoto,
                 'password' =>  $password,
-                'role_id' => $newEmpleado['rol_id']
+                'role_id' => $newEmpleado['rol_id'],
+                /*Datos empresariales */
+                'foto_empresarial' => $urlFotografiaEmpresarial,
+                'correo_empresarial' => $newEmpleado['correo_empresarial'],
+                'telefono_empresarial' => $newEmpleado['telefono_empresarial']
             ]);
 
         // Store expediente

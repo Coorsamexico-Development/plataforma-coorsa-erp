@@ -58,7 +58,11 @@ class User extends Authenticatable
         'cat_genero_id',
         'cat_tipo_sangre_id',
         'password',
-        'role_id'
+        'role_id',
+         /*Datos coorporativos*/ 
+        'correo_empresarial',
+        'foto_empresarial',
+        'telefono_empresarial'
     ];
 
     /**
