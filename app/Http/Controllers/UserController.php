@@ -46,10 +46,15 @@ class UserController extends Controller
     {
        $datos_User = User::select(
         'users.*',
-        'puestos.name AS puesto_name'
+        'puestos.name AS puesto_name',
+        'cecos.nombre AS cecos_name',
+        'ubicaciones.name AS ubicacion_name',
+        'ubicaciones.ubicacion_google'
        )
         ->leftjoin('empleados_puestos', 'empleados_puestos.empleado_id','users.id')
         ->leftjoin('puestos','empleados_puestos.puesto_id','puestos.id')
+        ->leftjoin('cecos', 'empleados_puestos.departamento_id', 'cecos.id')
+        ->leftjoin('ubicaciones', 'cecos.ubicacione_id', 'ubicaciones.id')
         ->where('users.numero_empleado' ,'=',$numero_empleado)
         ->where('users.activo','=',1)
         ->get();
