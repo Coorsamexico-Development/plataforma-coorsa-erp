@@ -66,21 +66,36 @@ const share = () =>
      </div>
      <div class="flex flex-row justify-center mt-8 ">
         <div class="m-2">
-           <a href="tel: +52 55 8025 5972">
+           <a v-if="dato.telefono_empresarial"  :href="'tel: +52' + dato.telefono_empresarial">
+               <button class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
+                 <img src="../../../img/telefono.svg" />
+               </button>
+           </a>
+           <a v-else :href="'tel: +52' + dato.telefono">
                <button class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
                  <img src="../../../img/telefono.svg" />
                </button>
            </a>
         </div>
         <div class="m-2">
-           <a href="https://api.whatsapp.com/send?phone=5580255972">
+           <a v-if="dato.telefono_empresarial"  :href="'https://api.whatsapp.com/send?phone='+dato.telefono_empresarial">
+               <button class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
+                   <img src="../../../img/whatsapp.svg" />
+               </button>
+           </a>
+           <a v-else :href="'https://api.whatsapp.com/send?phone='+dato.telefono">
                <button class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
                    <img src="../../../img/whatsapp.svg" />
                </button>
            </a>
         </div>
         <div class="m-2">
-           <a href="mailto: renato.ortiz@coorsamexico.com">
+           <a v-if="dato.correo_empresarial" :href="'mailto:'+dato.correo_empresarial">
+             <button class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
+                 <img class="" src="../../../img/gmail.svg" />
+             </button>
+           </a>
+           <a v-else :href="'mailto:'+dato.email">
              <button class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
                  <img class="" src="../../../img/gmail.svg" />
              </button>
