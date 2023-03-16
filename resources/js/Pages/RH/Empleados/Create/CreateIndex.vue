@@ -1003,6 +1003,11 @@ const fecha_termino = computed(() => {
                                                         <InputError :message="form.errors.fotografia" class="mt-2" />
                                                     </div>
                                                     <div class="mt-4">
+                                                        <InputLabel for="foto_empresarial" value="Foto Empresarial:" />
+                                                        <DropZone id="foto_empresarial" v-model="form.foto_empresarial"
+                                                            @change="setFile" accept="image/x-png,image/jpeg" />
+                                                    </div>
+                                                    <div class="mt-4">
                                                         <InputLabel for="expediente" value="Expediente:" />
                                                         <DropZone id="expediente" v-model="form.expediente"
                                                             accept="application/pdf" />

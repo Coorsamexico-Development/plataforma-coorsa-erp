@@ -172,6 +172,21 @@ class EmpleadoControlller extends Controller
             $urlFotografia = "";
         }
 
+        $ruta_fotografia_empresarial = "";
+          if (empty($request['foto_empresarial'])) {
+              if ($request->has('foto_empresarial')) {
+                  if ($request['foto_empresarial'] != null) {
+                      $fotografia_Empresarial = request('foto_empresarial');
+                      $nombre_fotografia_empresarial =  $fotografia_Empresarial->getClientOriginalName(); //rescatamos el nombre original
+                      $ruta_fotografia_empresarial = $fotografia_Empresarial->storeAs('expedientes/fotografia/', $nombre_fotografia_empresarial, 'gcs'); //guardamos el archivo en el storage
+                      $urlFotografia_Empresarial = Storage::disk('gcs')->url($ruta_fotografia_empresarial);
+                  } else {
+                      $urlFotografia_Empresarial = "";
+                  }
+              }
+          } else {
+              $urlFotografia_Empresarial = "";
+          }
 
         //creamos la direccion
         $direccion = direccione::create([
@@ -221,7 +236,11 @@ class EmpleadoControlller extends Controller
             'cat_tipo_sangre_id' => $newEmpleado['cat_tipos_sangre_id'],
             'fotografia' => $urlFotografia,
             'password' => Hash::make($newEmpleado['password']),
-            'role_id' => $newEmpleado['rol_id']
+            'role_id' => $newEmpleado['rol_id'],
+            /*Datos enmpresariales*/ 
+            'correo_empresarial' => $newEmpleado['correo_empresarial'],
+            'telefono_empresarial' => $newEmpleado['telefono_empresarial'],
+            'foto_empresarial' => $urlFotografia_Empresarial
         ]); //creamos el usuario
 
 
