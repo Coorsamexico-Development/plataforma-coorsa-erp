@@ -247,8 +247,9 @@ class DepartamentosAuditoriaController extends Controller
     }
  */
 
- public function recuperarRubros ($categoria, $mes) 
+ public function recuperarRubros ($categoria, $mes , $año) 
  {
+    /*
      $mesBuscado = 0;
      switch ($mes) 
      {
@@ -290,6 +291,7 @@ class DepartamentosAuditoriaController extends Controller
           break;
         
      }
+     */
 
      $rubros = Rubro::select(
         'rubros.nombre AS rubro_name'
@@ -305,7 +307,8 @@ class DepartamentosAuditoriaController extends Controller
       ->join('rubros', 'calf_rubro_mes.rubro_id', 'rubros.id')
       ->join('procesos', 'rubros.proceso_id', 'procesos.id')
       ->where('procesos.nombre','LIKE','%'.$categoria.'%')
-      ->where('calf_rubro_mes.mes','=', $mesBuscado)
+      ->where('calf_rubro_mes.mes','=', $mes)
+      ->where('calf_rubro_mes.año','=', $año)
       ->get();
 
       return [$rubros, $valores];

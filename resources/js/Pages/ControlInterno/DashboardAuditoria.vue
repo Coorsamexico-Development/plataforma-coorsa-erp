@@ -350,7 +350,73 @@ const arregloCalificaciones = computed(() =>
 
 
 const arregloParametros = computed(() => {
-    let arregloMesesAux = [];
+       /***/
+   let arregloAñoMes = [];
+   let fechaTemp = '' ;
+
+   // console.log(props.calificaciones_mes)
+    for (let index = 0; index < props.calificaciones_mes.length; index++)
+    {    
+       const element = props.calificaciones_mes[index];
+
+       let fechaActual = element.año+'-'+element.mes;
+       //console.log(element.año+'-'+element.mes);
+       if(element == props.calificaciones_mes[0])
+       {
+           arregloAñoMes.push(fechaActual);
+           fechaTemp = fechaActual
+       }
+       else
+       {
+          if(fechaTemp !== fechaActual)
+          {
+            arregloAñoMes.push(fechaActual);
+            fechaTemp = fechaActual
+          } 
+       }
+         
+    }
+
+    let arregloFechasTotales = [];
+    const first = arregloAñoMes[0];
+    const fechaInicio = moment(first);
+    const last = _.last(arregloAñoMes);
+    const fechaFinal = moment(last);
+ 
+    while (fechaInicio.isSameOrBefore(fechaFinal))
+     {
+      let Obj = {
+        date: fechaInicio.format('YYYY-MM'),
+      }
+
+      for (let index = 0; index < props.procesos.length; index++) 
+      {
+        const proceso = props.procesos[index];
+        Obj[`${proceso.nombre}`] = 0;
+        // console.log(proceso)
+        for (let index2 = 0; index2 < props.calificaciones_mes.length; index2++) 
+        {
+          const calificacion = props.calificaciones_mes[index2];
+           if(calificacion.proceso_name == proceso.nombre)
+                {
+                   let fechaActual = calificacion.año +'-'+calificacion.mes;
+                   let fechaActual2 = moment(fechaActual);
+                   let fechaActual3 = fechaActual2.format('YYYY-MM');
+                   //console.log(fechaActual3);
+                   if(fechaActual3 == Obj.date)
+                   {
+                     Obj[`${proceso.nombre}`] = calificacion.valor;       
+                   }   
+                }
+        }
+      }
+
+    	arregloFechasTotales.push(Obj);
+   		fechaInicio.add(1, 'months');
+  	}
+
+
+    /*
     const año = fecha.getFullYear();
     for (let index = 0; index < meses2.length; index++) 
     {
@@ -381,7 +447,8 @@ const arregloParametros = computed(() => {
       
         arregloMesesAux.push(newObj);
     }
-    return arregloMesesAux;
+    */
+    return arregloFechasTotales;
 });
 
 let fecha = new Date();

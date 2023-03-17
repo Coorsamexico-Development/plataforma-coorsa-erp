@@ -18,10 +18,6 @@ const close = () => {
     emit('close');
 }
 
-const arregloGrafica = computed(() => {
-   
-});
-
  onUpdated (() => {
    // Themes begin
    am4core.useTheme(am4themes_animated);
@@ -128,7 +124,7 @@ const arregloGrafica = computed(() => {
             <div class="grid grid-cols-2">
              <div class="flex justify-start">
                 <h2 class="text-lg tracking-widest uppercase font-extralight">
-                   Calificaciones en el mes de <span class="font-bold">{{ mes }}</span> del proceso <span class="font-bold">{{ proceso }}</span>
+                   Calificaciones en el mes <span class="font-bold">{{ mes }}</span> del proceso <span class="font-bold">{{ proceso }}</span>
                 </h2>
             </div>
             <div class="flex justify-end">
