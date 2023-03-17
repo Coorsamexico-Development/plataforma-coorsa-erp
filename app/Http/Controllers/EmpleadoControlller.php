@@ -433,8 +433,6 @@ class EmpleadoControlller extends Controller
             'tipos_contrato_id' => 'required',
             'horario' => 'required',
             'cat_estados_civile_id' => 'required',
-            'expediente' => 'required',
-            'contrato' => 'required',
             'cat_tipos_sangre_id' => 'required',
             'alergias' => 'required',
             'enfermedades_cronicas' => 'required',
