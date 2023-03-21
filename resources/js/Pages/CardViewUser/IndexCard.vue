@@ -25,7 +25,7 @@ const share = () =>
          <path id="Trazado_3" data-name="Trazado 3" d="M18.949,76.591l-2.671-2.828,10.182-9.62L16.219,53.651,19,50.932l13,13.324Z" transform="translate(-16.219 -50.932)" fill="#e84a49"/>
        </svg>
      </span>
-     <span class="absolute h-12 bg-[#E84A49] ml-72" style="width:2px;"></span>
+     <span class="absolute h-12 bg-[#E84A49] ml-80" style="width:2px;"></span>
      <div>
         <img v-if="dato.foto_empresarial" class="w-full h-66" :src="dato.foto_empresarial" alt="fotografia"  />
         <img v-else-if="dato.fotografia" class="w-full h-66" :src="dato.fotografia"  alt="fotografia" />
@@ -36,7 +36,7 @@ const share = () =>
      <span class="absolute h-14 bg-[#E84A49] ml-8" style="width:2px; margin-top:-9rem"></span>
      <div class="relative flex flex-col" style="font-family: 'Montserrat'; z-index: 5; margin-top: -6rem;">
        <div class="flex flex-col items-center justify-center">
-           <h1 class="font-semibold text-center uppercase" style="letter-spacing: 4px; font-size: 1.2rem;">{{dato.name + ' ' + dato.apellido_paterno + ' '+dato.apellido_materno}}</h1>
+           <h1 class="font-bold text-center uppercase" style="letter-spacing: 4px; font-size: 1.2rem;">{{dato.name + ' ' + dato.apellido_paterno}}</h1>
            <h2 class="mt-2 text-center uppercase text-l" style="letter-spacing: 6px;">{{dato.puesto_name}}</h2>
        </div>
        <div class="">
