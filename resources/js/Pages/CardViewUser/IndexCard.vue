@@ -57,7 +57,8 @@ const share = () =>
          <div class="m-8 mt-2">
                <div class="flex">
                    <img class="mr-2" src="../../../img/ubicacion.svg" />
-                   <a class="text-sm" href="#">{{ dato.ubicacion_name }}</a>
+                   <a v-if="dato.ubicacion_name" class="text-sm" href="#">{{ dato.ubicacion_name }}</a>
+                   <a class="text-sm" v-else>Querétaro Corporativo.</a>
                </div>
     
              </div>
@@ -69,36 +70,36 @@ const share = () =>
      <div class="flex flex-row justify-center mt-8 ">
         <div class="m-2">
            <a v-if="dato.telefono_empresarial"  :href="'tel: +52' + dato.telefono_empresarial">
-               <button class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
+               <button class="rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
                  <img src="../../../img/telefono.svg" />
                </button>
            </a>
            <a v-else :href="'tel: +52' + dato.telefono">
-               <button class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
+               <button class="rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
                  <img src="../../../img/telefono.svg" />
                </button>
            </a>
         </div>
         <div class="m-2">
            <a v-if="dato.telefono_empresarial"  :href="'https://api.whatsapp.com/send?phone='+dato.telefono_empresarial">
-               <button class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
+               <button class="rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
                    <img src="../../../img/whatsapp.svg" />
                </button>
            </a>
            <a v-else :href="'https://api.whatsapp.com/send?phone='+dato.telefono">
-               <button class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
+               <button class="rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
                    <img src="../../../img/whatsapp.svg" />
                </button>
            </a>
         </div>
         <div class="m-2">
            <a v-if="dato.correo_empresarial" :href="'mailto:'+dato.correo_empresarial">
-             <button class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
+             <button class="rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
                  <img class="" src="../../../img/gmail.svg" />
              </button>
            </a>
            <a v-else :href="'mailto:'+dato.email">
-             <button class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
+             <button class="rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
                  <img class="" src="../../../img/gmail.svg" />
              </button>
            </a>
