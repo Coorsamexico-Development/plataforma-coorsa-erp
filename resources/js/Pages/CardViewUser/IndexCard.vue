@@ -106,7 +106,7 @@ const share = () =>
         </div>
         <div class="m-2">
           <a v-if="dato.ubicacion_google" :href=" dato.ubicacion_google">
-            <button class="border rounded-full p-2 pl-3 pr-3 bg-[#F7F7F7] drop-shadow-xl">
+            <button class="rounded-full p-2 pl-3 pr-3 bg-[#F7F7F7] drop-shadow-xl">
                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21.393" height="27.112" viewBox="0 0 21.393 27.112">
                   <defs>
                     <clipPath id="clip-path">
@@ -126,7 +126,7 @@ const share = () =>
             </button>
           </a>
           <a v-else href="https://goo.gl/maps/jn9h3GzbkUrTjT168">
-            <button class="border rounded-full p-2 pl-3 pr-3 bg-[#F7F7F7] drop-shadow-xl">
+            <button class="rounded-full p-2 pl-3 pr-3 bg-[#F7F7F7] drop-shadow-xl">
                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21.393" height="27.112" viewBox="0 0 21.393 27.112">
                   <defs>
                     <clipPath id="clip-path">
@@ -147,7 +147,7 @@ const share = () =>
           </a>  
         </div>
         <div class="m-2">
-             <button @click="share()" class="border rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
+             <button @click="share()" class="rounded-full p-3 bg-[#F7F7F7] drop-shadow-xl">
                  <img class="" src="../../../img/Share.png" />
              </button>
         </div>
