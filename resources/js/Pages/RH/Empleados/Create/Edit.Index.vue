@@ -1257,7 +1257,6 @@ const sendEmail = () => {
                                                 <InputError :message="form.errors.finiquito_pagado" class="mt-2" />
                                             </div>
                                         </div>
-                                        hola
                                     </div>
                                     
                                 </div>
