@@ -176,50 +176,29 @@ const arregloCampos = computed(() => {
       objCampo.campo = campo.campo;
       objCampo.principal = campo.principal;
       objCampo.input = campo.input;
-      objCampo.valor = null;
+      objCampo.valor = "";
       arregloAux.push(objCampo);
    }
+
    
    for (let index2 = 0; index2 < arregloAux.length; index2++) 
    {
       const campo = arregloAux[index2];
-     // console.log(props.activo.valor_campos_activos);
-      for (let index3 = 0; index3 < props.activo.valor_campos_activos; index3++) 
+      //console.log(campo);
+      //console.log(props.activo.valor_campos_activos);
+      for (let index3 = 0; index3 < props.activo.valor_campos_activos.length; index3++) 
       {
          const valor = props.activo.valor_campos_activos[index3];
-         if(valor.tipo_activo_campo_id == campo.id)
-         {
-            campo.valor = valor.valor
-         }
+        if(campo.id == valor.tipo_activo_campo_id)
+        {
+          campo.valor = valor.valor;
+        }
       }
    }
 
    return arregloAux;
 });
 
-let arregloAux = [];
-   for (let index = 0; index < props.campos.length; index++) 
-   {
-      let objCampo = {};
-      const campo = props.campos[index];
-      objCampo.id = campo.idCampo;
-      objCampo.campo = campo.campo;
-      objCampo.principal = campo.principal;
-      objCampo.input = campo.input;
-      objCampo.valor = null;
-      arregloAux.push(objCampo);
-   }
-   
-   for (let index2 = 0; index2 < arregloAux.length; index2++) 
-   {
-      const campo = arregloAux[index2];
-     // console.log(props.activo.valor_campos_activos);
-      for (let index3 = 0; index3 < props.activo; index3++) 
-      {
-         console.log(props.activo[index3])
-      }
-   }
-console.log(props.activo)
 
 </script>
 <template>
@@ -233,6 +212,7 @@ console.log(props.activo)
                 <div v-for="campo in arregloCampos" :key="campo.id">
                   <InputLabel>{{ campo.campo }}</InputLabel>
                   <component 
+                        :valore="campo.valor"
                        :is="setComponent(campo.input)" 
                        @input="putId(campo.id)" 
                        @updateCampo="updateCampo"

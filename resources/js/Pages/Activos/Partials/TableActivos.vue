@@ -59,12 +59,12 @@ let valores_activos = ref([]);
 const openModalEditItem = (activo) =>
 {
    activoModal.value = activo;
-   /*
+   
    axios.get('/valorCampo/'+activo.id).then((response)=> 
     {
         valores_activos.value = response.data
     });
-  */
+  
    modalEditItem.value = true;
 }
 
@@ -327,7 +327,7 @@ const closeModalTable = () =>
                <td>
                   <CarruselUsers :activo_id="activo.id" :usuarios="activo.activos_empleados" :status="activo.status" @emit-axios="emitAxios(activo.tipo_activo)"></CarruselUsers>
                </td>
-               <ModalEditItem :tipoActivo="tipoActivo" :tipo_evidencias="tipo_evidencias"  :tipo_inputs="tipo_inputs" :activo="activo" :campos="allcampos" :show="modalEditItem"  @close="closeModalEditItem"></ModalEditItem>
+               <ModalEditItem :tipoActivo="tipoActivo" :tipo_evidencias="tipo_evidencias"  :tipo_inputs="tipo_inputs" :activo="activoModal" :campos="allcampos" :show="modalEditItem"  @close="closeModalEditItem"></ModalEditItem>
             </tr>
         </tbody>
     </table>
