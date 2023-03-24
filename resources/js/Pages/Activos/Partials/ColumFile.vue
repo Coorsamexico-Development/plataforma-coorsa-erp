@@ -15,7 +15,7 @@ var props = defineProps(
        <div v-if="valore">
           <div v-if="columna.id == valore.columna_id && fila.id == valore.fila_id">
             <div v-if="valore.valor !==null">
-               <a v-if="valore.valor.endsWith('.pdf') || valore.valor.endsWith('.png') || valore.valor.endsWith('.jpg')" 
+               <a v-if="valore.valor.endsWith('.pdf') || valore.valor.endsWith('.png') || valore.valor.endsWith('.jpg') || valore.valor.endsWith('.svg')" 
                   data-fancybox :href="valore.valor" >
                   <button class="bg-[#0097F2] m-2 rounded-2xl pl-2 pr-2 p-1">
                      <img class="w-8" src="../../../../img/archivo.svg" />
@@ -38,7 +38,7 @@ var props = defineProps(
     </div>
     <div v-else>
       <div v-if="valore.valor !==null">
-               <a v-if="valore.valor.endsWith('.pdf') || valore.valor.endsWith('.png') || valore.valor.endsWith('.jpg')" 
+               <a v-if="valore.valor.endsWith('.pdf') || valore.valor.endsWith('.png') || valore.valor.endsWith('.jpg') || valore.valor.endsWith('.svg')" 
                   data-fancybox :href="valore.valor" >
                   <button class="bg-[#0097F2] m-2 rounded-2xl pl-2 pr-2 p-1">
                      <img class="w-8" src="../../../../img/archivo.svg" />
