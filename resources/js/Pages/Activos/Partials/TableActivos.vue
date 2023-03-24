@@ -190,7 +190,7 @@ const closeModalTable = () =>
         </thead>
         <tbody>
             <tr class="text-center" v-for="activo in activos" :key="activo.id" :class="{'bg-gray-300': !activo.status , 'bg-gray-100': activo.status }">
-               <td class="">
+              <td class="">
                   <div class="flex flex-row justify-center">
                     <button @click=" desactivarItem(activo.activos_empleados,activo.id)"  class="bg-[#ec677e] m-2 rounded-2xl pl-2 pr-2">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="35" viewBox="0 0 32 35">

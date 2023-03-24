@@ -74,6 +74,7 @@ const setFile = (file) =>
    activo_id: props.activo.id
 });
 
+
   fileForm.post(route('saveEditCampos',props.activo.id),{
     preserveScroll:true,
     preserveState:true,

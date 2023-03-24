@@ -201,7 +201,7 @@ class ActivoController extends Controller
             'fecha' => $request['fecha']
           ] 
         );
-        
+        return  redirect()->back(); 
     }
 
     public function getTipoEvidencia ()
@@ -330,7 +330,6 @@ class ActivoController extends Controller
       $request->validate([
         'activo_id' => 'required',
         'tipo_activo_campo_id' => 'required',
-        'valor' => 'required'
        ]);
 
       $busquedaPor = ['activo_id' => request('activo_id'),
@@ -356,6 +355,7 @@ class ActivoController extends Controller
             ['valor' =>  request('valor')],
         );
       }
+      return  redirect()->back(); 
     }
 
     public function changeStatusActivoItemLibre ($id)
