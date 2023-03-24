@@ -60,9 +60,8 @@ class ActivoController extends Controller
              'valor_campos_activos' =>function ($query2)
               {
                  $query2->select('valor_campo_activos.*')
-                 ->join('tipo_activo_campos','valor_campo_activos.tipo_activo_campo_id','tipo_activo_campos.id')
-                 ->leftjoin('filas', 'valor_campo_activos.fila_id','filas.id')
-                 ->where('tipo_activo_campos.principal','=',1);
+                 ->leftjoin('tipo_activo_campos','valor_campo_activos.tipo_activo_campo_id','tipo_activo_campos.id')
+                 ->leftjoin('filas', 'valor_campo_activos.fila_id','filas.id');
               },
              'evidencias_activo'])
              ->leftjoin('valor_campo_activos','valor_campo_activos.activo_id','activos_items.id')
