@@ -58,7 +58,13 @@ class EmpleadoControlller extends Controller
                 'users.name',
                 'LIKE',
                 '%' . $busqueda . '%'
-            );
+            )
+            ->orWhere('users.apellido_paterno','LIKE','%'.$busqueda.'%')
+            ->orWhere('users.apellido_materno','LIKE','%'.$busqueda.'%')
+            ->orWhere('users.numero_empleado','LIKE','%'.$busqueda.'%')
+            ->orWhere('cecos.nombre','LIKE','%'.$busqueda.'%')
+            ->orWhere('puestos.name','LIKE','%'.$busqueda.'%');
+           
         }
 
 
