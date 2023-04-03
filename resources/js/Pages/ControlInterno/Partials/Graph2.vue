@@ -161,6 +161,7 @@ export default {
          {
             //console.log(ev.target.dataItem.component.dataFields.valueY);
             //console.log(ev.target.dataItem.categoryX)
+            console.log("hola")
             funcion(ev.target.dataItem.component.dataFields.valueY, ev.target.dataItem.dateX );
          });
 

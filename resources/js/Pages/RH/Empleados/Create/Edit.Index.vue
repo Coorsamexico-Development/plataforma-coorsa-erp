@@ -302,6 +302,16 @@ const getLocalidades = () => {
     }
 }
 
+getEstados();
+if(form.direccion_estado_id)
+{
+   getMunicipios();
+   if(form.direccion_municipio_id)
+   {
+      getLocalidades();
+   }
+}
+
 /*OBTENCION DE PUESTOS*/
 const getPuestos = () => {
     axios.get(route('departamento.puestos.list', form.departamento_id))
@@ -405,7 +415,7 @@ const sendEmail = () => {
                 Actualizar Empleado
             </h2>
         </template>
-
+        {{ form }}
         <div class="space">
             <div class="pb-1 pr-1">
                 <div class="grid grid-cols-4 gap-1">
@@ -752,7 +762,7 @@ const sendEmail = () => {
                                             </div>
                                             <div class="mt-4">
                                                 <InputLabel for="direccion_municipio_id" value="Municipio:*" />
-                                                <ListInputVue v-if="form.direccion_estado_id != 0"
+                                                <ListInputVue v-if="form.direccion_estado_id !== 0"
                                                     list="listaMunicipios" :disabled="false"
                                                     v-model="form.direccion_municipio_id"
                                                     :options="catalogos.municipiosDireccion" class="block w-full mt-1"

@@ -369,6 +369,9 @@ class ActivoController extends Controller
 
     public function saveEvidencias (Request $request)
     {
+      $request->validate([
+        'nombre' => 'required',
+       ]);
 
        for ($i=0; $i < count($request['imagenes']) ; $i++) 
        { 
