@@ -415,7 +415,6 @@ const sendEmail = () => {
                 Actualizar Empleado
             </h2>
         </template>
-        {{ form }}
         <div class="space">
             <div class="pb-1 pr-1">
                 <div class="grid grid-cols-4 gap-1">
