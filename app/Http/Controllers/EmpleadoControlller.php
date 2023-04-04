@@ -64,11 +64,16 @@ class EmpleadoControlller extends Controller
                     'LIKE',
                     '%' . $busqueda . '%'
                 )
-                ->orWhere('users.apellido_paterno','LIKE','%'.$busqueda.'%')
-                ->orWhere('users.apellido_materno','LIKE','%'.$busqueda.'%')
-                ->orWhere('users.numero_empleado','LIKE','%'.$busqueda.'%')
-                ->orWhere('cecos.nombre','LIKE','%'.$busqueda.'%')
-                ->orWhere('puestos.name','LIKE','%'.$busqueda.'%');    
+                ->orWhere('users.apellido_paterno','LIKE','%'.$busqueda.'%');
+                $empleados->where('users.activo', 1);
+                $empleados->orWhere('users.apellido_materno','LIKE','%'.$busqueda.'%');
+                $empleados->where('users.activo', 1);
+                $empleados ->orWhere('users.numero_empleado','LIKE','%'.$busqueda.'%');
+                $empleados->where('users.activo', 1);
+                $empleados->orWhere('cecos.nombre','LIKE','%'.$busqueda.'%');
+                $empleados->where('users.activo', 1);
+                $empleados->orWhere('puestos.name','LIKE','%'.$busqueda.'%');    
+                $empleados->where('users.activo', 1);
             }
         } else if ($activo === 'inactivo')
         {
@@ -88,8 +93,17 @@ class EmpleadoControlller extends Controller
                     'users.name',
                     'LIKE',
                     '%' . $busqueda . '%'
-                );
-                
+                )
+                ->orWhere('users.apellido_paterno','LIKE','%'.$busqueda.'%');
+                $empleados->where('users.activo', 0);
+                $empleados->orWhere('users.apellido_materno','LIKE','%'.$busqueda.'%');
+                $empleados->where('users.activo', 0);
+                $empleados ->orWhere('users.numero_empleado','LIKE','%'.$busqueda.'%');
+                $empleados->where('users.activo', 0);
+                $empleados->orWhere('cecos.nombre','LIKE','%'.$busqueda.'%');
+                $empleados->where('users.activo', 0);
+                $empleados->orWhere('puestos.name','LIKE','%'.$busqueda.'%');    
+                $empleados->where('users.activo', 0);
             }
         }
 
