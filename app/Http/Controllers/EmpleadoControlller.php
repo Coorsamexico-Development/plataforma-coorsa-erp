@@ -58,7 +58,8 @@ class EmpleadoControlller extends Controller
 
             if (request('search')) {
                 $busqueda = request('search');
-                $empleados->where(
+                $empleados->where('users.activo', 1)
+                ->where(
                     'users.name',
                     'LIKE',
                     '%' . $busqueda . '%'
@@ -71,7 +72,6 @@ class EmpleadoControlller extends Controller
             }
         } else if ($activo === 'inactivo')
         {
-
             $this->authorize('user-inactivos.show');
             $empleados->where('users.activo', 0);
             if(request('sortBy'))
@@ -83,16 +83,13 @@ class EmpleadoControlller extends Controller
 
             if (request('search')) {
                 $busqueda = request('search');
-                $empleados->where(
+                $empleados
+                ->where(
                     'users.name',
                     'LIKE',
                     '%' . $busqueda . '%'
-                )
-                ->orWhere('users.apellido_paterno','LIKE','%'.$busqueda.'%')
-                ->orWhere('users.apellido_materno','LIKE','%'.$busqueda.'%')
-                ->orWhere('users.numero_empleado','LIKE','%'.$busqueda.'%')
-                ->orWhere('cecos.nombre','LIKE','%'.$busqueda.'%')
-                ->orWhere('puestos.name','LIKE','%'.$busqueda.'%');    
+                );
+                
             }
         }
 
