@@ -6,14 +6,17 @@ import ButtonPhoto from '@/Components/ButtonPhoto.vue';
 import ButtonPDF from '@/Components/ButtonPDF.vue';
 import ButtonContrato from '@/Components/ButtonContrato.vue';
 import { Link, usePage } from '@inertiajs/inertia-vue3';
+import { Inertia } from '@inertiajs/inertia';
 
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox.css";
+import { change } from 'dom7';
 
 var props = defineProps(
     {
         empleados: Object,
-        permission: String
+        permission: String,
+        activo:String
     }
 );
 
@@ -21,11 +24,50 @@ const canEdit = computed(() => {
     return usePage().props.value.can[props.permission + '.update'];
 })
 
+let changeDirection = ref(false);
+let direccion = ref('asc');
+const sort =  (field) => 
+{
+   changeDirection.value = !changeDirection.value;
+
+   if(changeDirection.value == true)
+   {
+      Inertia.visit(route('empleado.indexmanual', { activo: props.activo }),
+       {
+                 data: {
+                     sortBy:field,
+                     direccion:direccion.value
+                 },
+                 replace: true,
+                 preserveScroll: true,
+                 preserveState: true,
+       });
+   }
+   else
+   {
+    direccion.value = 'desc';
+    Inertia.visit(route('empleado.indexmanual', { activo: props.activo }),
+       {
+                 data: {
+                     sortBy:field,
+                     direccion:direccion.value
+                 },
+                 replace: true,
+                 preserveScroll: true,
+                 preserveState: true,
+       });
+   }
+
+
+
+  
+}
 
 </script>
 
 
 <template>
+    {{ changeDirection }}
     <DataTable>
         <template #table-header>
             <tr class="text-center">
@@ -34,32 +76,32 @@ const canEdit = computed(() => {
                         EXPEDIENTE
                     </span>
                 </th>
-                <th scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
+                <th @click="sort('numero_empleado')" scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
                     <span class="">
                         NO. EMPLEADO
                     </span>
                 </th>
-                <th scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
+                <th @click="sort('departamento')"  scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
                     <span class="">
                         DEPARTAMENTO
                     </span>
                 </th>
-                <th scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
+                <th @click="sort('puesto')"  scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
                     <span class="">
                         PUESTO
                     </span>
                 </th>
-                <th scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
+                <th @click="sort('nombre')" scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
                     <span class="">
                         NOMBRE
                     </span>
                 </th>
-                <th scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
+                <th @click="sort('apellido_paterno')" scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
                     <span class="">
                         APELLIDO PATERNO
                     </span>
                 </th>
-                <th scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
+                <th @click="sort('apellido_materno')" scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
                     <span class="">
                         APELLIDO MATERNO
                     </span>

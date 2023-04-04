@@ -52,6 +52,8 @@ class EmpleadoControlller extends Controller
             $this->authorize('user-inactivos.show');
             $empleados->where('users.activo', 0);
         }
+
+
         if (request('search')) {
             $busqueda = request('search');
             $empleados->where(
@@ -65,6 +67,13 @@ class EmpleadoControlller extends Controller
             ->orWhere('cecos.nombre','LIKE','%'.$busqueda.'%')
             ->orWhere('puestos.name','LIKE','%'.$busqueda.'%');
            
+        }
+
+        if(request('sortBy'))
+        {
+           $order = request('sortBy');
+           $direction = request('direccion');
+           $empleados->orderBy($order, $direction);
         }
 
 

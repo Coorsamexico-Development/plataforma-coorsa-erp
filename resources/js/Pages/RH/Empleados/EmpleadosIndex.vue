@@ -88,7 +88,7 @@ const permission = computed(() => {
         <div class="py-12">
             <div class="mx-auto sm:px-6 lg:px-8 ">
                 <div class="overflow-hidden bg-white shadow-xl sm:rounded-lg">
-                    <TableEmpleados :empleados="empleados" :permission="permission" />
+                    <TableEmpleados :activo="activo" :empleados="empleados" :permission="permission" />
                 </div>
             </div>
         </div>
