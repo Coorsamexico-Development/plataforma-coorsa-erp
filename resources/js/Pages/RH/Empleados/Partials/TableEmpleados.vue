@@ -1,73 +1,83 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { computed, reactive, watch } from 'vue';
 import DataTable from '@/Components/DataTable.vue';
+import ShortInput from '@/Components/ShortInput.vue';
 import ButtonInfo from '@/Components/Buttoninfo.vue';
 import ButtonPhoto from '@/Components/ButtonPhoto.vue';
 import ButtonPDF from '@/Components/ButtonPDF.vue';
 import ButtonContrato from '@/Components/ButtonContrato.vue';
 import { Link, usePage } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
+import { throttle, pickBy } from 'lodash'
 
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox.css";
-import { change } from 'dom7';
 
 var props = defineProps(
     {
         empleados: Object,
         permission: String,
-        activo:String
+        activo: String,
+        filters: {
+            type: Object,
+            required: true,
+        }
     }
 );
+
+const params = reactive({
+    searchs: {
+        numero_empleado: '',
+        'cecos.nombre': '',
+        'puestos.name': '',
+        'users.name': '',
+        apellido_paterno: '',
+        apellido_materno: '',
+        ...props.filters.searchs
+    },
+    fields: props.filters.fields
+})
+
+
 
 const canEdit = computed(() => {
     return usePage().props.value.can[props.permission + '.update'];
 })
 
-let changeDirection = ref(false);
-let direccion = ref('asc');
-const sort =  (field) => 
-{
-   changeDirection.value = !changeDirection.value;
 
-   if(changeDirection.value == true)
-   {
-      Inertia.visit(route('empleado.indexmanual', { activo: props.activo }),
-       {
-                 data: {
-                     sortBy:field,
-                     direccion:direccion.value
-                 },
-                 replace: true,
-                 preserveScroll: true,
-                 preserveState: true,
-       });
-   }
-   else
-   {
-    direccion.value = 'desc';
-    Inertia.visit(route('empleado.indexmanual', { activo: props.activo }),
-       {
-                 data: {
-                     sortBy:field,
-                     direccion:direccion.value
-                 },
-                 replace: true,
-                 preserveScroll: true,
-                 preserveState: true,
-       });
-   }
+const sort = (field) => {
+    if (params.fields === null) {
+        params.fields = {};// para que no falle hasOwnProperty
+    }
+    if (params.fields.hasOwnProperty(field)) {
+        params.fields[field] = params.fields[field] === 'asc' ? 'desc' : 'asc';
+    } else {
+        params.fields[field] = 'asc';
+    }
 
-
-
-  
 }
+
+watch(params, throttle((newParams) => {
+
+    const searchs = pickBy(newParams.searchs)
+    const clearParams = pickBy({ fields: newParams.fields, searchs: Object.keys(searchs).length === 0 ? null : searchs });
+    Inertia.visit(route("empleado.indexmanual", { activo: props.activo }), {
+        data: clearParams,
+        replace: true,
+        only: ['empleados', 'errors'],
+        preserveScroll: true,
+        preserveState: true,
+    });
+
+}, 150), {
+    deep: true
+})
+
 
 </script>
 
 
 <template>
-    {{ changeDirection }}
     <DataTable>
         <template #table-header>
             <tr class="text-center">
@@ -76,35 +86,114 @@ const sort =  (field) =>
                         EXPEDIENTE
                     </span>
                 </th>
-                <th @click="sort('numero_empleado')" scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
-                    <span class="">
+                <th scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
+                    <span class="block my-1" @click="sort('numero_empleado')">
                         NO. EMPLEADO
+                        <template v-if="params.fields && params.fields['numero_empleado']">
+                            <svg v-if="params.fields['numero_empleado'] === 'asc'" xmlns="http://www.w3.org/2000/svg"
+                                class="inline w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path
+                                    d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="inline w-4 h-4" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path
+                                    d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
+                            </svg>
+                        </template>
                     </span>
+                    <ShortInput type="search" v-model="params.searchs.numero_empleado" />
                 </th>
-                <th @click="sort('departamento')"  scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
-                    <span class="">
+                <th scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
+                    <span class="block my-1" @click="sort('cecos.nombre')">
                         DEPARTAMENTO
+                        <template v-if="params.fields && params.fields['cecos.nombre']">
+                            <svg v-if="params.fields['cecos.nombre'] === 'asc'" xmlns="http://www.w3.org/2000/svg"
+                                class="inline w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path
+                                    d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="inline w-4 h-4" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path
+                                    d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
+                            </svg>
+                        </template>
                     </span>
+                    <ShortInput type="search" v-model="params.searchs['cecos.nombre']" />
                 </th>
-                <th @click="sort('puesto')"  scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
-                    <span class="">
+                <th scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
+                    <span class="block my-1" @click="sort('puestos.name')">
                         PUESTO
+                        <template v-if="params.fields && params.fields['puestos.name']">
+                            <svg v-if="params.fields['puestos.name'] === 'asc'" xmlns="http://www.w3.org/2000/svg"
+                                class="inline w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path
+                                    d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="inline w-4 h-4" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path
+                                    d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
+                            </svg>
+                        </template>
                     </span>
+                    <ShortInput type="search" v-model="params.searchs['puestos.name']" />
                 </th>
-                <th @click="sort('nombre')" scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
-                    <span class="">
+                <th scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
+                    <span class="block my-1" @click="sort('users.name')">
                         NOMBRE
+                        <template v-if="params.fields && params.fields['users.name']">
+                            <svg v-if="params.fields['users.name'] === 'asc'" xmlns="http://www.w3.org/2000/svg"
+                                class="inline w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path
+                                    d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="inline w-4 h-4" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path
+                                    d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
+                            </svg>
+                        </template>
                     </span>
+                    <ShortInput type="search" v-model="params.searchs['users.name']" />
                 </th>
-                <th @click="sort('apellido_paterno')" scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
-                    <span class="">
+                <th scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
+                    <span class="block my-1" @click="sort('apellido_paterno')">
                         APELLIDO PATERNO
+                        <template v-if="params.fields && params.fields['apellido_paterno']">
+                            <svg v-if="params.fields['apellido_paterno'] === 'asc'" xmlns="http://www.w3.org/2000/svg"
+                                class="inline w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path
+                                    d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="inline w-4 h-4" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path
+                                    d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
+                            </svg>
+                        </template>
                     </span>
+                    <ShortInput type="search" v-model="params.searchs.apellido_paterno" />
                 </th>
-                <th @click="sort('apellido_materno')" scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
-                    <span class="">
+                <th scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
+                    <span class="block my-1" @click="sort('apellido_materno')">
                         APELLIDO MATERNO
+                        <template v-if="params.fields && params.fields['apellido_materno']">
+                            <svg v-if="params.fields['apellido_materno'] === 'asc'" xmlns="http://www.w3.org/2000/svg"
+                                class="inline w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path
+                                    d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="inline w-4 h-4" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path
+                                    d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
+                            </svg>
+                        </template>
                     </span>
+
+                    <ShortInput type="search" v-model="params.searchs.apellido_materno" />
                 </th>
                 <th scope="col" class="w-1/12 px-6 py-3 text-xs font-semibold tracking-wider uppercase cursor-pointer ">
                     <span class="">
@@ -122,9 +211,8 @@ const sort =  (field) =>
             <tr v-for="empleado in empleados" :key="empleado.id">
                 <td class="px-2 whitespace-nowrap">
                     <div class="buttons_table">
-                        <ButtonPhoto style="width:3rem; justify-content: center; margin:0.5rem"
-                            v-if="empleado.fotografia" :data-fancybox="'single' + empleado.id"
-                            :data-src="empleado.fotografia">
+                        <ButtonPhoto style="width:3rem; justify-content: center; margin:0.5rem" v-if="empleado.fotografia"
+                            :data-fancybox="'single' + empleado.id" :data-src="empleado.fotografia">
                             <svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg"
                                 style="color:white; fill:white;" viewBox="0 0 15.5 15">
                                 <g id="Grupo_48" data-name="Grupo 48">
@@ -155,8 +243,7 @@ const sort =  (field) =>
                             style="width:3rem; justify-content: center; fill:white; margin:0.5rem"
                             :data-fancybox="'contrato' + empleado.id" :data-src="empleado.contrato.ruta" data-type="pdf"
                             data-caption="Contrato">
-                            <svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 15.5 18">
+                            <svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.5 18">
                                 <path id="Trazado_65" data-name="Trazado 65" class="cls-1"
                                     d="M.58,9.01V4.27c-.04-1.62,1.11-3.02,2.66-3.24,.17-.02,.35-.04,.52-.03h6.27c.89-.02,1.74,.35,2.35,1.01,.4,.42,.8,.83,1.2,1.25,.6,.61,.93,1.45,.91,2.32V13.77c.03,1.64-1.14,3.04-2.71,3.24-.12,.02-.24,.02-.36,.02-2.59,0-5.18,.01-7.77,0-1.48,0-2.75-1.09-3.02-2.59-.04-.22-.06-.45-.06-.67,0-1.59,0-3.17,0-4.76Zm6.95-3.4h3.1c.31,.01,.57-.24,.58-.56,0,0,0-.02,0-.02,0-.33-.24-.6-.56-.61H4.59c-.07,0-.13,0-.2,0-.32,.04-.54,.34-.5,.67,.04,.31,.3,.54,.6,.52,1.01,0,2.03,0,3.04,0h0Zm0,4.01h3.08c.32,.02,.59-.23,.61-.56,0-.04,0-.08,0-.12-.04-.32-.31-.55-.62-.53H4.47c-.32-.01-.59,.25-.6,.58-.01,.33,.24,.61,.56,.62,.02,0,.04,0,.06,0,1.01,0,2.02,0,3.04,0h0Zm-1.53,2.81h-1.47c-.1,0-.19,0-.28,.04-.27,.1-.43,.38-.37,.67,.06,.3,.32,.51,.62,.49h2.98c.32,.03,.6-.21,.63-.55,.03-.33-.21-.63-.53-.66-.04,0-.07,0-.11,0-.49,0-.99,0-1.48,0h0Z" />
                             </svg>

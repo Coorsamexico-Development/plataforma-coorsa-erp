@@ -2,12 +2,13 @@
 import { computed, reactive, watch } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { Inertia } from '@inertiajs/inertia';
-import { throttle, pickBy } from 'lodash'
+import { pickBy } from 'lodash'
 import TableEmpleados from './Partials/TableEmpleados.vue';
 import InputSearch from '@/Components/InputSearch.vue';
+import Pagination from '@/Components/Pagination.vue';
 import ButtonAdd from '../../../Components/ButtonAdd.vue';
 import ButtonInfo from '@/Components/Buttoninfo.vue';
-import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
+import { Link } from '@inertiajs/inertia-vue3';
 
 var props = defineProps(
     {
@@ -21,13 +22,11 @@ const params = reactive({
     search: props.filters.search
 })
 
-watch(params, (newValue) => {
-    console.log(newValue.search);
+watch(params, () => {
+    const clearParams = pickBy({ ...params });
     Inertia.visit(route("empleado.indexmanual", { activo: props.activo }),
         {
-            data: {
-                search: newValue.search
-            },
+            data: clearParams,
             replace: true,
             preserveScroll: true,
             preserveState: true,
@@ -88,7 +87,9 @@ const permission = computed(() => {
         <div class="py-12">
             <div class="mx-auto sm:px-6 lg:px-8 ">
                 <div class="overflow-hidden bg-white shadow-xl sm:rounded-lg">
-                    <TableEmpleados :activo="activo" :empleados="empleados" :permission="permission" />
+                    <TableEmpleados :activo="activo" :empleados="props.empleados.data" :filters="props.filters"
+                        :permission="permission" />
+                    <Pagination :pagination="props.empleados" />
                 </div>
             </div>
         </div>

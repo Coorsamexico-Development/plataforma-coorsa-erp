@@ -23,12 +23,16 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\Calculation\Logical\Boolean;
 
 class EmpleadoControlller extends Controller
 {
     //
     public function index($activo)
     {
+        request()->validate([
+            'fields' => ['nullable', 'array']
+        ]);
         $empleados = User::select(
             'users.id',
             'users.fotografia',
@@ -45,75 +49,56 @@ class EmpleadoControlller extends Controller
             ->leftjoin('cecos', 'empleados_puestos.departamento_id', 'cecos.id')
             ->leftjoin('puestos', 'empleados_puestos.puesto_id', 'puestos.id');
 
-        if ($activo === 'activo') 
-        {
+
+
+        if ($activo === 'activo') {
             $this->authorize('user-activos.show');
             $empleados->where('users.activo', 1);
-            if(request('sortBy'))
-            {
-               $order = request('sortBy');
-               $direction = request('direccion');
-               $empleados->orderBy($order, $direction);
-            }
-
-            if (request('search')) {
-                $busqueda = request('search');
-                $empleados->where('users.activo', 1)
-                ->where(
-                    'users.name',
-                    'LIKE',
-                    '%' . $busqueda . '%'
-                )
-                ->orWhere('users.apellido_paterno','LIKE','%'.$busqueda.'%');
-                $empleados->where('users.activo', 1);
-                $empleados->orWhere('users.apellido_materno','LIKE','%'.$busqueda.'%');
-                $empleados->where('users.activo', 1);
-                $empleados ->orWhere('users.numero_empleado','LIKE','%'.$busqueda.'%');
-                $empleados->where('users.activo', 1);
-                $empleados->orWhere('cecos.nombre','LIKE','%'.$busqueda.'%');
-                $empleados->where('users.activo', 1);
-                $empleados->orWhere('puestos.name','LIKE','%'.$busqueda.'%');    
-                $empleados->where('users.activo', 1);
-            }
-        } else if ($activo === 'inactivo')
-        {
+        } else if ($activo === 'inactivo') {
             $this->authorize('user-inactivos.show');
             $empleados->where('users.activo', 0);
-            if(request('sortBy'))
-            {
-               $order = request('sortBy');
-               $direction = request('direccion');
-               $empleados->orderBy($order, $direction);
-            }
+        }
 
-            if (request('search')) {
-                $busqueda = request('search');
-                $empleados
-                ->where(
+
+        if (request()->has('search')) {
+            $search = '%' . strtr(request('search'), array("'" => "\\'", "%" => "\\%")) . '%';
+            $empleados->where(function ($query) use ($search) {
+                $query->where(
                     'users.name',
                     'LIKE',
-                    '%' . $busqueda . '%'
-                )
-                ->orWhere('users.apellido_paterno','LIKE','%'.$busqueda.'%');
-                $empleados->where('users.activo', 0);
-                $empleados->orWhere('users.apellido_materno','LIKE','%'.$busqueda.'%');
-                $empleados->where('users.activo', 0);
-                $empleados ->orWhere('users.numero_empleado','LIKE','%'.$busqueda.'%');
-                $empleados->where('users.activo', 0);
-                $empleados->orWhere('cecos.nombre','LIKE','%'.$busqueda.'%');
-                $empleados->where('users.activo', 0);
-                $empleados->orWhere('puestos.name','LIKE','%'.$busqueda.'%');    
-                $empleados->where('users.activo', 0);
+                    $search
+                )->orWhere('users.apellido_paterno', 'LIKE',  $search)
+                    ->orWhere('users.apellido_materno', 'LIKE',  $search)
+                    ->orWhere('users.numero_empleado', 'LIKE',  $search)
+                    ->orWhere('cecos.nombre', 'LIKE',  $search)
+                    ->orWhere('puestos.name', 'LIKE',  $search);
+            });
+        }
+
+        //Busquedas por campo
+        if (request()->has('searchs')) {
+            $empleados->where(function ($query) {
+                foreach (request('searchs') as $field => $search) {
+                    $searchLike = '%' . strtr($search, array("'" => "\\'", "%" => "\\%")) . '%';
+                    $query->where($field, 'LIKE', $searchLike);
+                }
+            });
+        }
+
+        if (request()->has('fields')) {
+            foreach (request('fields') as $field => $direccion) {
+                $empleados->orderBy($field, $direccion);
             }
         }
+
 
 
         return Inertia::render(
             'RH/Empleados/EmpleadosIndex',
             [
-                'empleados' => fn () => $empleados->get(),
+                'empleados' => fn () => $empleados->paginate(10),
                 'activo' => $activo,
-                'filters' => request()->all(['search'])
+                'filters' => request()->all(['search', 'fields', 'searchs'])
             ]
         );
     }
@@ -198,7 +183,7 @@ class EmpleadoControlller extends Controller
             'enfermedades_cronicas' => 'required',
             'cat_genero_id' => 'required',
             'rol_id' => 'required',
-         ]);
+        ]);
 
         $newEmpleado =  $request;
         $ruta_fotografia = "";
@@ -219,20 +204,20 @@ class EmpleadoControlller extends Controller
         }
 
         $ruta_fotografia_empresarial = "";
-          if (empty($request['foto_empresarial'])) {
-              if ($request->has('foto_empresarial')) {
-                  if ($request['foto_empresarial'] != null) {
-                      $fotografia_Empresarial = request('foto_empresarial');
-                      $nombre_fotografia_empresarial =  $fotografia_Empresarial->getClientOriginalName(); //rescatamos el nombre original
-                      $ruta_fotografia_empresarial = $fotografia_Empresarial->storeAs('expedientes/fotografia/', $nombre_fotografia_empresarial, 'gcs'); //guardamos el archivo en el storage
-                      $urlFotografia_Empresarial = Storage::disk('gcs')->url($ruta_fotografia_empresarial);
-                  } else {
-                      $urlFotografia_Empresarial = "";
-                  }
-              }
-          } else {
-              $urlFotografia_Empresarial = "";
-          }
+        if (empty($request['foto_empresarial'])) {
+            if ($request->has('foto_empresarial')) {
+                if ($request['foto_empresarial'] != null) {
+                    $fotografia_Empresarial = request('foto_empresarial');
+                    $nombre_fotografia_empresarial =  $fotografia_Empresarial->getClientOriginalName(); //rescatamos el nombre original
+                    $ruta_fotografia_empresarial = $fotografia_Empresarial->storeAs('expedientes/fotografia/', $nombre_fotografia_empresarial, 'gcs'); //guardamos el archivo en el storage
+                    $urlFotografia_Empresarial = Storage::disk('gcs')->url($ruta_fotografia_empresarial);
+                } else {
+                    $urlFotografia_Empresarial = "";
+                }
+            }
+        } else {
+            $urlFotografia_Empresarial = "";
+        }
 
         //creamos la direccion
         $direccion = direccione::create([
@@ -283,7 +268,7 @@ class EmpleadoControlller extends Controller
             'fotografia' => $urlFotografia,
             'password' => Hash::make($newEmpleado['password']),
             'role_id' => $newEmpleado['rol_id'],
-            /*Datos enmpresariales*/ 
+            /*Datos enmpresariales*/
             'correo_empresarial' => $newEmpleado['correo_empresarial'],
             'telefono_empresarial' => $newEmpleado['telefono_empresarial'],
             'foto_empresarial' => $urlFotografia_Empresarial
@@ -484,7 +469,7 @@ class EmpleadoControlller extends Controller
             'enfermedades_cronicas' => 'required',
             'cat_genero_id' => 'required',
             'rol_id' => 'required',
-         ]);
+        ]);
 
         $urlFoto = '';
         $urlExpediente = '';
@@ -515,28 +500,28 @@ class EmpleadoControlller extends Controller
             }
         }
 
-       /*Guardado de foto empresarial*/
-       if ($request->has('foto_empresarial') && $request['foto_empresarial'] !== null) {
-           if (is_file($request['foto_empresarial'])) {
-               $foto_empresarial =  $request['foto_empresarial'];
-               $nombre_original_empresarial = $foto_empresarial->getClientOriginalName();
-               /*Guardamos*/
-               $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial, 'gcs');
-               $urlFotografiaEmpresarial = Storage::disk('gcs')->url($rutaFotoEmpresarial);
-           } else {
-               $urlFotografiaEmpresarial = $request['foto_empresarial'];
-           }
-       } else {
-           if ($request['foto_empresarial'] == null) {
-               $urlFotografiaEmpresarial = null;
-           } else {
-               $foto_empresarial =  $request['foto_empresarial'];
-               $nombre_original_empresarial = $foto_empresarial->getClientOriginalName();
-               /*Guardamos*/
-               $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial, 'gcs');
-               $urlFotografiaEmpresarial = Storage::disk('gcs')->url($rutaFotoEmpresarial);
-           }
-       }
+        /*Guardado de foto empresarial*/
+        if ($request->has('foto_empresarial') && $request['foto_empresarial'] !== null) {
+            if (is_file($request['foto_empresarial'])) {
+                $foto_empresarial =  $request['foto_empresarial'];
+                $nombre_original_empresarial = $foto_empresarial->getClientOriginalName();
+                /*Guardamos*/
+                $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial, 'gcs');
+                $urlFotografiaEmpresarial = Storage::disk('gcs')->url($rutaFotoEmpresarial);
+            } else {
+                $urlFotografiaEmpresarial = $request['foto_empresarial'];
+            }
+        } else {
+            if ($request['foto_empresarial'] == null) {
+                $urlFotografiaEmpresarial = null;
+            } else {
+                $foto_empresarial =  $request['foto_empresarial'];
+                $nombre_original_empresarial = $foto_empresarial->getClientOriginalName();
+                /*Guardamos*/
+                $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial, 'gcs');
+                $urlFotografiaEmpresarial = Storage::disk('gcs')->url($rutaFotoEmpresarial);
+            }
+        }
 
         $newEmpleado =  $request;
 
@@ -670,39 +655,32 @@ class EmpleadoControlller extends Controller
 
 
 
-        if (!empty($request->puesto_id) && !empty($request->departamento_id))
-         {
+        if (!empty($request->puesto_id) && !empty($request->departamento_id)) {
             $exist_empleados_puesto = empleados_puesto::select('*')
                 ->where('empleado_id', '=', $request['id'])
                 ->get();
 
-            if(count($exist_empleados_puesto) > 0)
-            {
-                if ($exist_empleados_puesto[0]->empleado_id == $request['id'])
-                {
-                   empleados_puesto::where('empleado_id', '=', $request['id'])
-                       ->update([
-                           'puesto_id' => $request['puesto_id'],
-                           'departamento_id' => $request['departamento_id']
-                       ]);
-               } else 
-               {
-                   empleados_puesto::create([
-                       'empleado_id' => $request['id'],
-                       'puesto_id' => $request['puesto_id'],
-                       'departamento_id' => $request['departamento_id']
-                   ]);
-               }
-            }
-            else
-            {
+            if (count($exist_empleados_puesto) > 0) {
+                if ($exist_empleados_puesto[0]->empleado_id == $request['id']) {
+                    empleados_puesto::where('empleado_id', '=', $request['id'])
+                        ->update([
+                            'puesto_id' => $request['puesto_id'],
+                            'departamento_id' => $request['departamento_id']
+                        ]);
+                } else {
+                    empleados_puesto::create([
+                        'empleado_id' => $request['id'],
+                        'puesto_id' => $request['puesto_id'],
+                        'departamento_id' => $request['departamento_id']
+                    ]);
+                }
+            } else {
                 empleados_puesto::create([
                     'empleado_id' => $request['id'],
                     'puesto_id' => $request['puesto_id'],
                     'departamento_id' => $request['departamento_id']
                 ]);
             }
-
         }
 
 
@@ -733,9 +711,9 @@ class EmpleadoControlller extends Controller
         }
         return redirect()->back();
     }
-    
 
-    public function empleadosData () 
+
+    public function empleadosData()
     {
         return $empleados = User::select(
             'users.*',
