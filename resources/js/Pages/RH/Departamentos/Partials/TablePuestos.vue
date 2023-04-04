@@ -178,7 +178,7 @@
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                class="w-6 h-6 absolute z-10 left-[10%] py-1"
+                                class="w-6 h-6 absolute z-10 left-[13%] py-1"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
