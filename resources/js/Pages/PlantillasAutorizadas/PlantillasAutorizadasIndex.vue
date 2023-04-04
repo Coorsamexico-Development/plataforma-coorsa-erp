@@ -271,7 +271,7 @@ const totalGlobal = computed(() => {
                             >
                                 <PlantillaAutorizadaRowEdit
                                     v-for="puesto in puestos"
-                                    class="even:bg-gray-100"
+                                    class="even:bg-gray-100 odd:bg-white"
                                     :key="'p' + puesto.id"
                                     :ubicaciones="ubicaciones"
                                     :puesto="puesto"
