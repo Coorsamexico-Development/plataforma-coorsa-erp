@@ -59,7 +59,7 @@ class User extends Authenticatable
         'cat_tipo_sangre_id',
         'password',
         'role_id',
-         /*Datos coorporativos*/ 
+        /*Datos coorporativos*/
         'correo_empresarial',
         'foto_empresarial',
         'telefono_empresarial'
@@ -94,7 +94,7 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
         'is_admin',
-        'expedienteGeneral',
+        // 'expedienteGeneral',
         'contrato',
     ];
 
@@ -149,20 +149,21 @@ class User extends Authenticatable
     }
 
 
-    public function expediente()
+    public function expedientes()
     {
         return $this->hasMany(expediente::class, 'empleado_id', 'id');
     }
 
+
     public function getExpedienteGeneralAttribute()
     {
-        return $this->expediente()->select('id', 'ruta', 'cat_tipos_documento_id')
+        return $this->expedientes()->select('id', 'ruta', 'cat_tipos_documento_id')
             ->where('cat_tipos_documento_id', 25)->first();
     }
 
     public function getContratoAttribute()
     {
-        return $this->expediente()->select('id', 'ruta', 'cat_tipos_documento_id')
+        return $this->expedientes()->select('id', 'ruta', 'cat_tipos_documento_id')
             ->where('cat_tipos_documento_id', 26)->first();
     }
 
@@ -175,5 +176,4 @@ class User extends Authenticatable
     {
         return $this->puestos()->where('empleados_puestos.activo', '=', 1)->first();
     }
-
 }

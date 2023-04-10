@@ -187,10 +187,10 @@ const form = useForm
         'finiquito_pagado': false,
         'password': '',
         'rol_id': empleado.value.role_id,
-        /*Datos coorporativos*/ 
-        'correo_empresarial':empleado.value.correo_empresarial,
-        'foto_empresarial':empleado.value.foto_empresarial,
-        'telefono_empresarial':empleado.value.telefono_empresarial
+        /*Datos coorporativos*/
+        'correo_empresarial': empleado.value.correo_empresarial,
+        'foto_empresarial': empleado.value.foto_empresarial,
+        'telefono_empresarial': empleado.value.telefono_empresarial
     });
 
 
@@ -303,13 +303,11 @@ const getLocalidades = () => {
 }
 
 getEstados();
-if(form.direccion_estado_id)
-{
-   getMunicipios();
-   if(form.direccion_municipio_id)
-   {
-      getLocalidades();
-   }
+if (form.direccion_estado_id) {
+    getMunicipios();
+    if (form.direccion_municipio_id) {
+        getLocalidades();
+    }
 }
 
 /*OBTENCION DE PUESTOS*/
@@ -375,6 +373,32 @@ const edad = computed(() => {
 
 const generateCurp = computed(() => {
     return ObtenerCurp(form.nombre, form.apellido_paterno, form.apellido_materno, form.fecha_nacimiento);
+});
+
+
+const messageCurp = computed(() => {
+    if (form.curp != '') {
+        if (form.curp.length === 18 && form.curp.startsWith(generateCurp)) {
+            form.errors.curp = '';
+            return 'CURP VALIDA';
+        } else {
+            form.errors.curp = 'CURP INVALIDA.';
+            return '';
+        }
+    }
+    return '';
+});
+const messageRFC = computed(() => {
+    if (form.rfc != '') {
+        if (form.rfc.length >= 12 && form.rfc.startsWith(generateCurp)) {
+            form.errors.rfc = '';
+            return 'RCF VALIDO';
+        } else {
+            form.errors.rfc = 'RFC INVALIDO.';
+            return '';
+        }
+    }
+    return '';
 });
 
 const fecha_termino = computed(() => {
@@ -507,9 +531,8 @@ const sendEmail = () => {
                                         <div class="grid grid-cols-3 gap-4">
                                             <div class="mt-4">
                                                 <InputLabel for="numero_empleado" value="ID de Empleado:*" />
-                                                <TextInput id="numero_empleado" type="text"
-                                                    v-model="form.numero_empleado" class="block w-full mt-1"
-                                                    :placeholder="empleado.numero_empleado" />
+                                                <TextInput id="numero_empleado" type="text" v-model="form.numero_empleado"
+                                                    class="block w-full mt-1" :placeholder="empleado.numero_empleado" />
                                                 <InputError :message="form.errors.numero_empleado" class="mt-2" />
                                             </div>
                                             <div class="mt-4">
@@ -521,25 +544,22 @@ const sendEmail = () => {
                                             </div>
                                             <div class="mt-4">
                                                 <InputLabel for="apellido_paterno" value="Apellido Paterno:*" />
-                                                <TextInput id="apellido_paterno" type="text"
-                                                    v-model="form.apellido_paterno" class="block w-full mt-1"
-                                                    :placeholder="empleado.apellido_paterno"
+                                                <TextInput id="apellido_paterno" type="text" v-model="form.apellido_paterno"
+                                                    class="block w-full mt-1" :placeholder="empleado.apellido_paterno"
                                                     :disabled="editEmpleadoDisable" />
                                                 <InputError :message="form.errors.apellido_paterno" class="mt-2" />
                                             </div>
                                             <div class="mt-4">
                                                 <InputLabel for="apellido_materno" value="Apellido Materno:*" />
-                                                <TextInput id="apellido_materno" type="text"
-                                                    v-model="form.apellido_materno" class="block w-full mt-1"
-                                                    :placeholder="empleado.apellido_materno"
+                                                <TextInput id="apellido_materno" type="text" v-model="form.apellido_materno"
+                                                    class="block w-full mt-1" :placeholder="empleado.apellido_materno"
                                                     :disabled="editEmpleadoDisable" />
                                                 <InputError :message="form.errors.apellido_materno" class="mt-2" />
                                             </div>
                                             <div class="mt-4">
                                                 <InputLabel for="fecha_nacimiento" value="Fecha de Nacimiento:*" />
-                                                <TextInput id="fecha_nacimiento" type="date"
-                                                    v-model="form.fecha_nacimiento" class="block w-full mt-1"
-                                                    :disabled="editEmpleadoDisable" />
+                                                <TextInput id="fecha_nacimiento" type="date" v-model="form.fecha_nacimiento"
+                                                    class="block w-full mt-1" :disabled="editEmpleadoDisable" />
                                                 <InputError :message="form.errors.fecha_nacimiento" class="mt-2" />
                                             </div>
                                             <div class="mt-4">
@@ -564,9 +584,8 @@ const sendEmail = () => {
                                             </div>
                                             <div class="mt-4">
                                                 <InputLabel for="rfc" value="RFC:*" />
-                                                <TextInput id="rfc" type="text" v-model="form.rfc"
-                                                    class="block w-full mt-1" placeholder="RFC" maxlength="13"
-                                                    :disabled="editEmpleadoDisable" />
+                                                <TextInput id="rfc" type="text" v-model="form.rfc" class="block w-full mt-1"
+                                                    placeholder="RFC" maxlength="13" :disabled="editEmpleadoDisable" />
                                                 <InputError :message="form.errors.rfc" class="mt-2" />
                                                 <InputSuccess :message="messageRFC" class="mt-2" />
                                             </div>
@@ -575,8 +594,7 @@ const sendEmail = () => {
                                                 <div class="flex gap-1">
                                                     <TextInput id="correo_electronico" type="email"
                                                         v-model="form.correo_electronico" class="block w-full mt-1"
-                                                        placeholder="correo@ejemplo.com"
-                                                        :disabled="editEmpleadoDisable" />
+                                                        placeholder="correo@ejemplo.com" :disabled="editEmpleadoDisable" />
                                                     <SecondaryButton v-if="form.rol_id" @click="sendEmail" class="py-0"
                                                         :disabled="userEmailForm.processing">
                                                         <SpinProgress :inprogress="userEmailForm.processing" />
@@ -626,20 +644,18 @@ const sendEmail = () => {
                                                 <InputLabel for="cat_estados_civile_id" value="Estado Civil:*" />
                                                 <Select v-model="form.cat_estados_civile_id" class="w-full"
                                                     :disabled="editEmpleadoDisable">
-                                                    <option v-for="estados_civil in estados_civiles"
-                                                        :key="estados_civil.id" :value="estados_civil.id">
+                                                    <option v-for="estados_civil in estados_civiles" :key="estados_civil.id"
+                                                        :value="estados_civil.id">
                                                         {{ estados_civil.nombre }}
                                                     </option>
                                                 </Select>
                                                 <InputError :message="form.errors.cat_estados_civile_id" class="mt-2" />
                                             </div>
                                             <div class="mt-4">
-                                                <InputLabel for="contacto_emergencia"
-                                                    value="Contacto de Emergencia:*" />
+                                                <InputLabel for="contacto_emergencia" value="Contacto de Emergencia:*" />
                                                 <TextInput id="contacto_emergencia" type="text"
                                                     v-model="form.contacto_emergencia" class="block w-full mt-1"
-                                                    placeholder="Contacto de emergencia"
-                                                    :disabled="editEmpleadoDisable" />
+                                                    placeholder="Contacto de emergencia" :disabled="editEmpleadoDisable" />
                                                 <InputError :message="form.errors.contacto_emergencia" class="mt-2" />
                                             </div>
                                             <div class="mt-4">
@@ -696,9 +712,8 @@ const sendEmail = () => {
                                     <div
                                         class="flex items-center justify-center border rounded-full border-grey w-7 h-7 test">
                                         <svg aria-hidden="true" class="" data-reactid="266" fill="none" height="24"
-                                            stroke="#606F7B" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" viewbox="0 0 24 24" width="24"
-                                            xmlns="http://www.w3.org/2000/svg">
+                                            stroke="#606F7B" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                                             <polyline points="6 9 12 15 18 9">
                                             </polyline>
                                         </svg>
@@ -754,22 +769,19 @@ const sendEmail = () => {
                                             <div class="mt-4">
                                                 <InputLabel for="direccion_estado_id" value="Estado:*" />
                                                 <ListInputVue list="listaEstados" :disabled="editEmpleadoDisable"
-                                                    v-model="form.direccion_estado_id"
-                                                    :options="catalogos.estadosDireccion" class="block w-full mt-1"
-                                                    @click="getEstados()" />
+                                                    v-model="form.direccion_estado_id" :options="catalogos.estadosDireccion"
+                                                    class="block w-full mt-1" @click="getEstados()" />
                                                 <InputError :message="form.errors.direccion_estado_id" class="mt-2" />
                                             </div>
                                             <div class="mt-4">
                                                 <InputLabel for="direccion_municipio_id" value="Municipio:*" />
-                                                <ListInputVue v-if="form.direccion_estado_id !== 0"
-                                                    list="listaMunicipios" :disabled="false"
-                                                    v-model="form.direccion_municipio_id"
+                                                <ListInputVue v-if="form.direccion_estado_id !== 0" list="listaMunicipios"
+                                                    :disabled="false" v-model="form.direccion_municipio_id"
                                                     :options="catalogos.municipiosDireccion" class="block w-full mt-1"
                                                     @click="getMunicipios()" />
-                                                <ListInputVue v-if="form.direccion_estado_id == 0"
-                                                    list="listaMunicipios" :disabled="true" />
-                                                <InputError :message="form.errors.direccion_municipio_id"
-                                                    class="mt-2" />
+                                                <ListInputVue v-if="form.direccion_estado_id == 0" list="listaMunicipios"
+                                                    :disabled="true" />
+                                                <InputError :message="form.errors.direccion_municipio_id" class="mt-2" />
                                             </div>
                                             <div class="mt-4">
                                                 <InputLabel for="direccion_localidade_id" value="Localidad:*" />
@@ -778,10 +790,8 @@ const sendEmail = () => {
                                                     v-model="form.direccion_localidade_id"
                                                     :options="catalogos.localidadesDireccion" class="block w-full mt-1"
                                                     @click="getLocalidades()" />
-                                                <ListInputVue v-if="form.direccion_municipio_id == 0"
-                                                    :disabled="true" />
-                                                <InputError :message="form.errors.direccion_localidade_id"
-                                                    class="mt-2" />
+                                                <ListInputVue v-if="form.direccion_municipio_id == 0" :disabled="true" />
+                                                <InputError :message="form.errors.direccion_localidade_id" class="mt-2" />
                                             </div>
                                             <!-- ----------------------------------------------------------------- -->
                                         </div>
@@ -806,9 +816,8 @@ const sendEmail = () => {
                                     <div
                                         class="flex items-center justify-center border rounded-full border-grey w-7 h-7 test">
                                         <svg aria-hidden="true" class="" data-reactid="266" fill="none" height="24"
-                                            stroke="#606F7B" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" viewbox="0 0 24 24" width="24"
-                                            xmlns="http://www.w3.org/2000/svg">
+                                            stroke="#606F7B" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                                             <polyline points="6 9 12 15 18 9">
                                             </polyline>
                                         </svg>
@@ -840,8 +849,7 @@ const sendEmail = () => {
                                                 <TextInput id="numero_cuenta_bancaria" type="text"
                                                     v-model="form.numero_cuenta_bancaria" class="block w-full mt-1"
                                                     placeholder="No. Cuenta" :disabled="editEmpleadoDisable" />
-                                                <InputError :message="form.errors.numero_cuenta_bancaria"
-                                                    class="mt-2" />
+                                                <InputError :message="form.errors.numero_cuenta_bancaria" class="mt-2" />
                                             </div>
                                         </div>
                                     </div>
@@ -865,9 +873,8 @@ const sendEmail = () => {
                                     <div
                                         class="flex items-center justify-center border rounded-full border-grey w-7 h-7 test">
                                         <svg aria-hidden="true" class="" data-reactid="266" fill="none" height="24"
-                                            stroke="#606F7B" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" viewbox="0 0 24 24" width="24"
-                                            xmlns="http://www.w3.org/2000/svg">
+                                            stroke="#606F7B" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                                             <polyline points="6 9 12 15 18 9">
                                             </polyline>
                                         </svg>
@@ -888,8 +895,7 @@ const sendEmail = () => {
                                                 <InputLabel for="puesto_id" value="Puesto:*" />
                                                 <Select v-model="form.puesto_id" class="w-full"
                                                     :disabled="editEmpleadoDisable">
-                                                    <option v-for="puesto in puestos" :key="puesto.id"
-                                                        :value="puesto.id">
+                                                    <option v-for="puesto in puestos" :key="puesto.id" :value="puesto.id">
                                                         {{ puesto.name }}
                                                     </option>
                                                 </Select>
@@ -909,8 +915,8 @@ const sendEmail = () => {
 
                                             <div class="mt-4">
                                                 <InputLabel for="nss" value="Número de Seguridad Social:*" />
-                                                <TextInput id="nss" type="text" v-model="form.nss"
-                                                    class="block w-full mt-1" placeholder="Número de Seguridad Social"
+                                                <TextInput id="nss" type="text" v-model="form.nss" class="block w-full mt-1"
+                                                    placeholder="Número de Seguridad Social"
                                                     :disabled="editEmpleadoDisable" />
                                                 <InputError :message="form.errors.nss" class="mt-2" />
                                             </div>
@@ -977,9 +983,8 @@ const sendEmail = () => {
                                     <div
                                         class="flex items-center justify-center border rounded-full border-grey w-7 h-7 test">
                                         <svg aria-hidden="true" class="" data-reactid="266" fill="none" height="24"
-                                            stroke="#606F7B" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" viewbox="0 0 24 24" width="24"
-                                            xmlns="http://www.w3.org/2000/svg">
+                                            stroke="#606F7B" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                                             <polyline points="6 9 12 15 18 9">
                                             </polyline>
                                         </svg>
@@ -1015,16 +1020,14 @@ const sendEmail = () => {
                                             </div>
                                             <div class="col-span-3">
                                                 <InputLabel for="bono_puntualidad" value="Bono de Puntualidad:*" />
-                                                <TextInput id="bono_puntualidad" type="text"
-                                                    v-model="form.bono_puntualidad" class="block w-full mt-1"
-                                                    placeholder="$ 00.0" disabled />
+                                                <TextInput id="bono_puntualidad" type="text" v-model="form.bono_puntualidad"
+                                                    class="block w-full mt-1" placeholder="$ 00.0" disabled />
                                                 <InputError :message="form.errors.bono_puntualidad" class="mt-2" />
                                             </div>
                                             <div class="col-span-3">
                                                 <InputLabel for="bono_asistencia" value="Bono de Asistencia:*" />
-                                                <TextInput id="bono_asistencia" type="text"
-                                                    v-model="form.bono_asistencia" class="block w-full mt-1"
-                                                    placeholder="$ 00.0" disabled />
+                                                <TextInput id="bono_asistencia" type="text" v-model="form.bono_asistencia"
+                                                    class="block w-full mt-1" placeholder="$ 00.0" disabled />
                                                 <InputError :message="form.errors.bono_asistencia" class="mt-2" />
                                             </div>
                                             <div class="col-span-3">
@@ -1056,9 +1059,8 @@ const sendEmail = () => {
                                     <div
                                         class="flex items-center justify-center border rounded-full border-grey w-7 h-7 test">
                                         <svg aria-hidden="true" class="" data-reactid="266" fill="none" height="24"
-                                            stroke="#606F7B" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" viewbox="0 0 24 24" width="24"
-                                            xmlns="http://www.w3.org/2000/svg">
+                                            stroke="#606F7B" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                                             <polyline points="6 9 12 15 18 9">
                                             </polyline>
                                         </svg>
@@ -1086,8 +1088,7 @@ const sendEmail = () => {
                                                 <InputError :message="form.errors.alergias" class="mt-2" />
                                             </div>
                                             <div class="mt-4">
-                                                <InputLabel for="enfermedades_cronicas"
-                                                    value="Enfermedades Crónicas:" />
+                                                <InputLabel for="enfermedades_cronicas" value="Enfermedades Crónicas:" />
                                                 <TextInput id="enfermedades_cronicas" type="text"
                                                     v-model="form.enfermedades_cronicas" class="block w-full mt-1"
                                                     placeholder="enfermedad 1, enfermedad 2"
@@ -1116,9 +1117,8 @@ const sendEmail = () => {
                                     <div
                                         class="flex items-center justify-center border rounded-full border-grey w-7 h-7 test">
                                         <svg aria-hidden="true" class="" data-reactid="266" fill="none" height="24"
-                                            stroke="#606F7B" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" viewbox="0 0 24 24" width="24"
-                                            xmlns="http://www.w3.org/2000/svg">
+                                            stroke="#606F7B" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                                             <polyline points="6 9 12 15 18 9">
                                             </polyline>
                                         </svg>
@@ -1136,8 +1136,8 @@ const sendEmail = () => {
                                                 </div>
                                                 <div class="mt-4">
                                                     <InputLabel for="foto_empresarial" value="Foto Empresarial:" />
-                                                    <DropZone id="foto_empresarial" v-model="form.foto_empresarial" ref="fotografia_empresarial"
-                                                        accept="image/x-png,image/jpeg" />
+                                                    <DropZone id="foto_empresarial" v-model="form.foto_empresarial"
+                                                        ref="fotografia_empresarial" accept="image/x-png,image/jpeg" />
                                                 </div>
                                                 <div class="mt-4">
                                                     <InputLabel for="expediente" value="Expediente:" />
@@ -1185,8 +1185,7 @@ const sendEmail = () => {
                                                         :data-src="empleado.contrato.ruta + timeImage"
                                                         class="inline-flex items-center w-6 h-6 p-1 m-1 text-xs font-semibold tracking-widest text-blue-400 uppercase transition bg-transparent border border-blue-400 rounded-full hover:border-blue-700 active:bg-gray-900 focus:ring-green-300 disabled:opacity-25">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                            fill="currentColor" class="bi bi-card-list"
-                                                            viewBox="0 0 16 16">
+                                                            fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
                                                             <path
                                                                 d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
                                                             <path
@@ -1217,9 +1216,8 @@ const sendEmail = () => {
                                     <div
                                         class="flex items-center justify-center border rounded-full border-grey w-7 h-7 test">
                                         <svg aria-hidden="true" class="" data-reactid="266" fill="none" height="24"
-                                            stroke="#606F7B" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" viewbox="0 0 24 24" width="24"
-                                            xmlns="http://www.w3.org/2000/svg">
+                                            stroke="#606F7B" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                                             <polyline points="6 9 12 15 18 9">
                                             </polyline>
                                         </svg>
@@ -1253,8 +1251,7 @@ const sendEmail = () => {
                                             <div class="mt-4">
                                                 <InputLabel for="monto_finiquito" value="Monto de Finiquito:*" />
                                                 <TextInput id="monto_finiquito" type="text" placeholder="$0.0"
-                                                    v-model="form.monto_finiquito" class="block w-full mt-1"
-                                                    max="99999" />
+                                                    v-model="form.monto_finiquito" class="block w-full mt-1" max="99999" />
                                                 <InputError :message="form.errors.monto_finiquito" class="mt-2" />
                                             </div>
                                             <div class="mt-4">
@@ -1267,33 +1264,33 @@ const sendEmail = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
-                                
+
                             </div>
-                    
+
                         </div>
-                        
-                        
+
+
                     </div>
                     <!-- Fin Finiquitos -->
-                   <div class="p-16 pt-0">
-                      <ButtonAdd @click="createOrUpdate" style="float:right; margin:2rem; justify-content: center;">
-                          Guardar
-                      </ButtonAdd>
-                      <a :href="route('empleado.indexmanual', { activo: 'activo' })">
-                          <ButtonInfo style="float:right; margin:2rem; justify-content: center;">
-                              Regresar
-                          </ButtonInfo>
-                      </a>
-                      <div class="px-6 py-4 ">
-                          <ul v-if="form.hasErrors" class="text-red-500">
-                              <li v-for="(error, index) in form.errors" :key="index">
-                                  *{{ error }}
-                              </li>
-                          </ul>
-                      </div>
-                   </div>
+                    <div class="p-16 pt-0">
+                        <ButtonAdd @click="createOrUpdate" style="float:right; margin:2rem; justify-content: center;">
+                            Guardar
+                        </ButtonAdd>
+                        <a :href="route('empleado.indexmanual', { activo: 'activo' })">
+                            <ButtonInfo style="float:right; margin:2rem; justify-content: center;">
+                                Regresar
+                            </ButtonInfo>
+                        </a>
+                        <div class="px-6 py-4 ">
+                            <ul v-if="form.hasErrors" class="text-red-500">
+                                <li v-for="(error, index) in form.errors" :key="index">
+                                    *{{ error }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

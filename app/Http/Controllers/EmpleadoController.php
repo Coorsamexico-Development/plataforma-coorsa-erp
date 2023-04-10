@@ -6,6 +6,8 @@ use App\Models\bajasEmpleado;
 use App\Models\Banco;
 use App\Models\CatBajasEmpleados;
 use App\Models\catEstadosCiviles;
+use App\Models\CatTipoDocumento;
+use App\Models\CatTipoDocumeto;
 use App\Models\catTipoSangre;
 use App\Models\Ceco;
 use App\Models\direccione;
@@ -25,7 +27,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Calculation\Logical\Boolean;
 
-class EmpleadoControlller extends Controller
+class EmpleadoController extends Controller
 {
     //
     public function index($activo)
@@ -45,7 +47,16 @@ class EmpleadoControlller extends Controller
             'cecos.nombre AS departamento',
             'puestos.name AS puesto'
         )
-            ->leftjoin('empleados_puestos', 'empleados_puestos.empleado_id', 'users.id')
+            ->with(['expedientes' => function ($query) {
+                $query->select(
+                    'expedientes.id',
+                    'expedientes.ruta',
+                    'expedientes.cat_tipos_documento_id',
+                    'cat_tipo_documentos.nombre as tipo_documento',
+                    'expedientes.empleado_id'
+                )
+                    ->join('cat_tipo_documentos', 'expedientes.cat_tipos_documento_id', '=', 'cat_tipo_documentos.id');
+            }])->leftjoin('empleados_puestos', 'empleados_puestos.empleado_id', 'users.id')
             ->leftjoin('cecos', 'empleados_puestos.departamento_id', 'cecos.id')
             ->leftjoin('puestos', 'empleados_puestos.puesto_id', 'puestos.id');
 
@@ -112,7 +123,13 @@ class EmpleadoControlller extends Controller
         $departamentos = Ceco::where('activo_erp', '=', 1)->get();
         $tipos_contrato = tipoContrato::select('id', 'nombre', 'activo')->where('activo', 1)->get();
         $roles = Role::all();
-
+        $tiposDocumentos = CatTipoDocumento::select(
+            'id',
+            'nombre as tipo_documento',
+            'id as cat_tipo_documento_id'
+        )
+            ->where('activo', '=', 1)->get();
+        // return  dd(request());
 
         return Inertia::render(
             'RH/Empleados/Create/CreateIndex',
@@ -123,7 +140,9 @@ class EmpleadoControlller extends Controller
                 'bancos' => $bancos,
                 'departamentos' => $departamentos,
                 'tipos_contrato' => $tipos_contrato,
-                'roles' => $roles
+                'roles' => $roles,
+                'expedientes' => $tiposDocumentos,
+                'empleado_id' => session()->get('empleado_id'),
             ]
         );
     }
@@ -131,6 +150,7 @@ class EmpleadoControlller extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([ //validaciones
             'correo_electronico' => 'required | unique:users,email',
             'numero_empleado' => 'required',
@@ -176,8 +196,8 @@ class EmpleadoControlller extends Controller
             'tipos_contrato_id' => 'required',
             'horario' => 'required',
             'cat_estados_civile_id' => 'required',
-            'expediente' => 'required',
-            'contrato' => 'required',
+            // 'expediente' => 'required',
+            // 'contrato' => 'required',
             'cat_tipos_sangre_id' => 'required',
             'alergias' => 'required',
             'enfermedades_cronicas' => 'required',
@@ -269,9 +289,9 @@ class EmpleadoControlller extends Controller
             'password' => Hash::make($newEmpleado['password']),
             'role_id' => $newEmpleado['rol_id'],
             /*Datos enmpresariales*/
-            'correo_empresarial' => $newEmpleado['correo_empresarial'],
-            'telefono_empresarial' => $newEmpleado['telefono_empresarial'],
-            'foto_empresarial' => $urlFotografia_Empresarial
+            // 'correo_empresarial' => $newEmpleado['correo_empresarial'],
+            // 'telefono_empresarial' => $newEmpleado['telefono_empresarial'],
+            // 'foto_empresarial' => $urlFotografia_Empresarial
         ]); //creamos el usuario
 
 
@@ -323,12 +343,39 @@ class EmpleadoControlller extends Controller
             ]);
         }
 
-
-        // Store docuemtos
-
-        return redirect()->back();
+        return back()->with(['empleado_id' => $empleado->id]);
     }
 
+
+
+    public function storeExpediente(Request $request, User $empleado)
+    {
+        $request->validate([
+            'file' => ['required', 'file'],
+            'cat_tipo_documento_id' => ['required', 'exists:cat_tipo_documentos,id']
+        ]);
+
+        if ($request->hasFile('file')) {
+            $curp = $empleado->curp;
+            $tipoDoc = CatTipoDocumento::select('cat_tipo_documentos.*')->firstWhere('id', $request['cat_tipo_documento_id']);
+            /*Guardamos*/
+            $file = $request->file('file');
+            $fileName =  "{$curp}_{$tipoDoc->nombre}.{$file->extension()}";
+            $rutaFile = $file->storeAs("expedientes/$curp/{$tipoDoc->nombre}", $fileName, 'public');
+            $urlExpediente = Storage::disk('public')->url($rutaFile);
+            expediente::updateOrCreate(
+                [
+                    'ruta' => $urlExpediente,
+                    'empleado_id' => $empleado->id,
+                    'cat_tipos_documento_id' => $tipoDoc->id,
+                ]
+            );
+        }
+
+        return response()->json([
+            'message' => 'ok'
+        ]);
+    }
 
     public function edit($id)
     {

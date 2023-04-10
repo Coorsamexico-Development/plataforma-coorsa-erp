@@ -6,7 +6,7 @@ use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\DepartamentosAuditoriaController;
 use App\Http\Controllers\DocsPoliticasController;
 use App\Http\Controllers\DocumentosCalificacionMesController;
-use App\Http\Controllers\EmpleadoControlller;
+use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\LocalidadesController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\MunicipioController;
@@ -145,13 +145,13 @@ Route::middleware([
         'names' => 'rh.plantillas-autorizadas'
     ])->except('destroy');
 
-    Route::controller(EmpleadoControlller::class)->group(function () {
+    Route::controller(EmpleadoController::class)->group(function () {
         Route::post('empleados/store', 'store')->name('empleado.store')->middleware('can:user-activos.create');
         Route::get('empleados/create', 'createNewEmpleado')->name('empleado.create')->middleware('can:user-activos.create');
         Route::get('/empleados/edit/{id}', 'edit')->name('empleado.edit');
         Route::post('empleados/update', 'update')->name('empleado.update');
         Route::get('empleados/{activo}', 'index')->name('empleado.indexmanual');
-        Route::get('empleadosData', 'empleadosData')->name('empleados.data');
+        Route::post('empleados/{empleado}/expediente', 'storeExpediente')->name('empleado.expediente')->middleware('can:user-activos.create');
     });
 });
 
