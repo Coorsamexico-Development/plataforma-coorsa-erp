@@ -152,6 +152,7 @@ Route::middleware([
         Route::post('empleados/{empleado}/update', 'update')->name('empleados.update');
         Route::get('empleados/{activo}', 'index')->name('empleado.indexmanual');
         Route::post('empleados/{empleado}/expediente', 'storeExpediente')->name('empleado.expediente')->middleware('can:user-activos.create');
+        Route::get('/empleadosData','empleadosData')->name('empleadosData');
     });
 });
 
