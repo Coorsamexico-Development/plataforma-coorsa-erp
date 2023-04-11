@@ -127,8 +127,7 @@ class EmpleadoController extends Controller
             'id',
             'nombre as tipo_documento',
             'id as cat_tipo_documento_id'
-        )
-            ->where('activo', '=', 1)->get();
+        )->where('activo', '=', 1)->get();
         // return  dd(request());
 
         return Inertia::render(
@@ -214,8 +213,8 @@ class EmpleadoController extends Controller
             $foto =  $request['fotografia'];
             $nombre_original = $foto->getClientOriginalName();
             /*Guardamos*/
-            $rutaFoto = $foto->storeAs('fotos', $nombre_original, 'public');
-            $urlFotografia = Storage::disk('public')->url($rutaFoto);
+            $rutaFoto = $foto->storeAs('fotos', $nombre_original, 'gcs');
+            $urlFotografia = Storage::disk('gcs')->url($rutaFoto);
         } else {
             $urlFotografia = null;
         }
@@ -225,8 +224,8 @@ class EmpleadoController extends Controller
             $foto_empresarial =  $request['foto_empresarial'];
             $nombre_original_empresarial = $foto_empresarial->getClientOriginalName();
             /*Guardamos*/
-            $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial, 'public');
-            $urlFotografiaEmpresarial = Storage::disk('public')->url($rutaFotoEmpresarial);
+            $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial, 'gcs');
+            $urlFotografiaEmpresarial = Storage::disk('gcs')->url($rutaFotoEmpresarial);
         } else {
             $urlFotografiaEmpresarial = null;
         }
@@ -318,8 +317,8 @@ class EmpleadoController extends Controller
             /*Guardamos*/
             $file = $request->file('file');
             $fileName =  "{$curp}_{$tipoDoc->nombre}.{$file->extension()}";
-            $rutaFile = $file->storeAs("expedientes/$curp/{$tipoDoc->nombre}", $fileName, 'public');
-            $urlExpediente = Storage::disk('public')->url($rutaFile);
+            $rutaFile = $file->storeAs("expedientes/$curp/{$tipoDoc->nombre}", $fileName, 'gcs');
+            $urlExpediente = Storage::disk('gcs')->url($rutaFile);
             expediente::updateOrCreate(
                 [
                     'empleado_id' => $empleado->id,
@@ -409,6 +408,10 @@ class EmpleadoController extends Controller
             ->leftJoin('expedientes', function ($join) use ($id) {
                 $join->on('expedientes.cat_tipos_documento_id', '=', 'cat_tipo_documentos.id')
                     ->on('expedientes.empleado_id', '=', DB::raw($id));
+            })
+            ->where(function ($query) {
+                $query->where('cat_tipo_documentos.activo', '=', 1)
+                    ->orWhereNotNull('expedientes.empleado_id');
             })->get();
 
 
@@ -505,8 +508,8 @@ class EmpleadoController extends Controller
             $foto =  $request->file('fotografia');
             $nombre_original = $foto->getClientOriginalName();
             /*Guardamos*/
-            $rutaFoto = $foto->storeAs('fotos', $nombre_original, 'public');
-            $urlFoto = Storage::disk('public')->url($rutaFoto);
+            $rutaFoto = $foto->storeAs('fotos', $nombre_original, 'gcs');
+            $urlFoto = Storage::disk('gcs')->url($rutaFoto);
         } else {
             $urlFoto  = $empleado->fotografia;
         }
@@ -516,8 +519,8 @@ class EmpleadoController extends Controller
             $foto_empresarial =  $request->file('foto_empresarial');
             $nombre_original_empresarial = $foto_empresarial->getClientOriginalName();
             /*Guardamos*/
-            $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial, 'public');
-            $urlFotografiaEmpresarial = Storage::disk('public')->url($rutaFotoEmpresarial);
+            $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial, 'gcs');
+            $urlFotografiaEmpresarial = Storage::disk('gcs')->url($rutaFotoEmpresarial);
         } else { //para que no exista un cambio
             $urlFotografiaEmpresarial = $empleado->foto_empresarial;
         }
