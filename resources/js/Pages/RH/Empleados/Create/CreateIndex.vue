@@ -262,7 +262,7 @@ const generateCurp = computed(() => {
 
 const messageCurp = computed(() => {
     if (form.curp != '') {
-        if (form.curp.length === 18 && form.curp.startsWith(generateCurp)) {
+        if (form.curp.length === 18 && form.curp.startsWith(generateCurp.value)) {
             form.errors.curp = '';
             return 'CURP VALIDA';
         } else {
@@ -274,7 +274,7 @@ const messageCurp = computed(() => {
 });
 const messageRFC = computed(() => {
     if (form.rfc != '') {
-        if (form.rfc.length >= 12 && form.rfc.startsWith(generateCurp)) {
+        if (form.rfc.length >= 12 && form.rfc.startsWith(generateCurp.value)) {
             form.errors.rfc = '';
             return 'RCF VALIDO';
         } else {

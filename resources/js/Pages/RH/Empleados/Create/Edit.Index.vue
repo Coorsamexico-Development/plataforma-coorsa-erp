@@ -9,8 +9,6 @@ import InputError from '@/Components/InputError.vue';
 import InputSuccess from '@/Components/InputSuccess.vue';
 import Select from '@/Components/Select.vue';
 import TextInput from '@/Components/TextInput.vue';
-import ListInput from '@/Components/ListInput.vue';
-import DropZone from '@/Components/DropZone.vue';
 import ButtonSeccion from '@/Components/ButtonSeccion.vue';
 import ButtonInfo from '@/Components/Buttoninfo.vue';
 import ButtonAdd from '@/Components/ButtonAdd.vue';
@@ -196,6 +194,7 @@ const form = useForm
         /*Datos coorporativos*/
         'correo_empresarial': empleado.value.correo_empresarial,
         'foto_empresarial': empleado.value.foto_empresarial,
+        'foto_empresarial_url': empleado.value.foto_empresarial,
         'telefono_empresarial': empleado.value.telefono_empresarial,
         'fotografia_url': empleado.value.fotografia,
     });
@@ -222,14 +221,14 @@ const updateEmpelado = () => {
         form.foto_empresarial = null;
     }
 
-    form.post(route('empleado.update'),
+    form.post(route('empleados.update', props.empleado.id),
         {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                form.reset();
-                form.fotografia_url = props.empleado.fotografia_url;
-                swal("Create", "Exitosamente", "success");
+                form.fotografia_url = props.empleado.fotografia;
+                form.foto_empresarial_url = props.empleado.foto_empresarial;
+                swal("Actualizado", "Exitosamente", "success");
             },
             onError: (error) => {
                 console.log(error.response);
@@ -377,11 +376,12 @@ const generateCurp = computed(() => {
 
 const messageCurp = computed(() => {
     if (form.curp != '') {
-        if (form.curp.length === 18 && form.curp.startsWith(generateCurp)) {
+        console.log(generateCurp, form.curp)
+        if (form.curp.length === 18 && form.curp.startsWith(generateCurp.value)) {
             form.errors.curp = '';
             return 'CURP VALIDA';
         } else {
-            form.errors.curp = 'CURP INVALIDA.';
+            form.errors.curp = 'CURP INVALIDA. 1';
             return '';
         }
     }
@@ -389,7 +389,7 @@ const messageCurp = computed(() => {
 });
 const messageRFC = computed(() => {
     if (form.rfc != '') {
-        if (form.rfc.length >= 12 && form.rfc.startsWith(generateCurp)) {
+        if (form.rfc.length >= 12 && form.rfc.startsWith(generateCurp.value)) {
             form.errors.rfc = '';
             return 'RCF VALIDO';
         } else {
@@ -684,11 +684,13 @@ const sendEmail = () => {
                                             </div>
                                             <div class="mt-4">
                                                 <InputLabel value="Correo Empresarial:*" />
-                                                <TextInput class="block w-full mt-1" v-model="form.correo_empresarial" />
+                                                <TextInput type="email" class="block w-full mt-1"
+                                                    v-model="form.correo_empresarial" />
                                             </div>
                                             <div class="mt-4">
                                                 <InputLabel value="Telefono Empresarial:*" />
-                                                <TextInput class="block w-full mt-1" v-model="form.telefono_empresarial" />
+                                                <TextInput type="tel" class="block w-full mt-1"
+                                                    v-model="form.telefono_empresarial" />
                                             </div>
                                         </div>
                                     </div>

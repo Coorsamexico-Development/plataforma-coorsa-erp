@@ -149,7 +149,7 @@ Route::middleware([
         Route::post('empleados/store', 'store')->name('empleado.store')->middleware('can:user-activos.create');
         Route::get('empleados/create', 'createNewEmpleado')->name('empleado.create')->middleware('can:user-activos.create');
         Route::get('/empleados/edit/{id}', 'edit')->name('empleado.edit');
-        Route::post('empleados/update', 'update')->name('empleado.update');
+        Route::post('empleados/{empleado}/update', 'update')->name('empleados.update');
         Route::get('empleados/{activo}', 'index')->name('empleado.indexmanual');
         Route::post('empleados/{empleado}/expediente', 'storeExpediente')->name('empleado.expediente')->middleware('can:user-activos.create');
     });

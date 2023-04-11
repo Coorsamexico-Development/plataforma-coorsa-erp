@@ -151,7 +151,7 @@ class EmpleadoController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate([ //validaciones
+        $newEmpleado =  $request->validate([ //validaciones
             'correo_electronico' => 'required | unique:users,email',
             'numero_empleado' => 'required',
             'nombre' => 'required',
@@ -163,10 +163,16 @@ class EmpleadoController extends Controller
             'nss' => 'required',
             'curp' => 'required',
             'rfc' => 'required',
+            'password' => 'required',
             'contacto_emergencia' => 'required',
             'telefono' => 'required',
             'hijos' => 'required',
+
+            'correo_empresarial' => ['nullable', 'email'],
+            'telefono_empresarial' => ['nullable', 'numeric'],
             'clave_bancaria' => 'required',
+            'banco_id' => ['nullable', 'exists:bancos,id'],
+            'escolaridade_id' => ['nullable', 'exists:escolaridads,id'],
             'numero_cuenta_bancaria' => 'required',
             'salario_diario' => 'required',
             'salario_bruto' => 'required',
@@ -180,8 +186,6 @@ class EmpleadoController extends Controller
             'despensa' => 'required',
             'fondo_ahorro' => 'required',
             'horario' => 'required',
-            'alergias' => 'required',
-            'enfermedades_cronicas' => 'required',
             'direccion_estado_id' => 'required',
             'direccion_municipio_id' => 'required',
             'direccion_localidade_id' => 'required',
@@ -194,49 +198,37 @@ class EmpleadoController extends Controller
             'manzana' => 'required',
             'cat_tipos_nomina_id' => 'required',
             'tipos_contrato_id' => 'required',
-            'horario' => 'required',
             'cat_estados_civile_id' => 'required',
             // 'expediente' => 'required',
             // 'contrato' => 'required',
             'cat_tipos_sangre_id' => 'required',
-            'alergias' => 'required',
-            'enfermedades_cronicas' => 'required',
+            'alergias' => ['nullable', 'string'],
+            'enfermedades_cronicas' => ['nullable', 'string'],
             'cat_genero_id' => 'required',
             'rol_id' => 'required',
         ]);
 
-        $newEmpleado =  $request;
-        $ruta_fotografia = "";
 
-        if (empty($request['fotografia'])) {
-            if ($request->has('fotografia')) {
-                if ($request['fotografia'] != null) {
-                    $fotografia = request('fotografia');
-                    $nombre_fotografia =  $fotografia->getClientOriginalName(); //rescatamos el nombre original
-                    $ruta_fotografia = $fotografia->storeAs('expedientes/fotografia/', $nombre_fotografia,); //guardamos el archivo en el storage
-                    $urlFotografia = Storage::disk()->url($ruta_fotografia);
-                } else {
-                    $urlFotografia = "";
-                }
-            }
+        /*Guardado de imagnes, expedientes, contrato*/
+        if ($request->hasFile('fotografia')) {
+            $foto =  $request['fotografia'];
+            $nombre_original = $foto->getClientOriginalName();
+            /*Guardamos*/
+            $rutaFoto = $foto->storeAs('fotos', $nombre_original, 'public');
+            $urlFotografia = Storage::disk('public')->url($rutaFoto);
         } else {
-            $urlFotografia = "";
+            $urlFotografia = null;
         }
 
-        $ruta_fotografia_empresarial = "";
-        if (empty($request['foto_empresarial'])) {
-            if ($request->has('foto_empresarial')) {
-                if ($request['foto_empresarial'] != null) {
-                    $fotografia_Empresarial = request('foto_empresarial');
-                    $nombre_fotografia_empresarial =  $fotografia_Empresarial->getClientOriginalName(); //rescatamos el nombre original
-                    $ruta_fotografia_empresarial = $fotografia_Empresarial->storeAs('expedientes/fotografia/', $nombre_fotografia_empresarial,); //guardamos el archivo en el storage
-                    $urlFotografia_Empresarial = Storage::disk()->url($ruta_fotografia_empresarial);
-                } else {
-                    $urlFotografia_Empresarial = "";
-                }
-            }
+        /*Guardado de foto empresarial*/
+        if ($request->hasFile('foto_empresarial')) {
+            $foto_empresarial =  $request['foto_empresarial'];
+            $nombre_original_empresarial = $foto_empresarial->getClientOriginalName();
+            /*Guardamos*/
+            $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial, 'public');
+            $urlFotografiaEmpresarial = Storage::disk('public')->url($rutaFotoEmpresarial);
         } else {
-            $urlFotografia_Empresarial = "";
+            $urlFotografiaEmpresarial = null;
         }
 
         //creamos la direccion
@@ -289,47 +281,10 @@ class EmpleadoController extends Controller
             'password' => Hash::make($newEmpleado['password']),
             'role_id' => $newEmpleado['rol_id'],
             /*Datos enmpresariales*/
-            // 'correo_empresarial' => $newEmpleado['correo_empresarial'],
-            // 'telefono_empresarial' => $newEmpleado['telefono_empresarial'],
-            // 'foto_empresarial' => $urlFotografia_Empresarial
+            'correo_empresarial' => $newEmpleado['correo_empresarial'],
+            'telefono_empresarial' => $newEmpleado['telefono_empresarial'],
+            'foto_empresarial' => $urlFotografiaEmpresarial
         ]); //creamos el usuario
-
-
-        if ($request->has('expediente')) {
-            if ($request['expediente'] != null) {
-                $curp = $request['curp'];
-                $expediente  = $request['expediente'];
-                /*Guardamos*/
-                $rutaExpediente = $expediente->storeAs('expedientes', $curp . '_expediente.' . $expediente->extension(),);
-                $urlExpediente = Storage::disk()->url($rutaExpediente);
-
-                expediente::updateOrCreate(
-                    [
-                        'ruta' => $urlExpediente,
-                        'cat_tipos_documento_id' => 25,
-                        'empleado_id' => $empleado->id
-                    ]
-                );
-            } else {
-            }
-        }
-        if ($request->has('contrato')) {
-            if ($request['contrato'] != null) {
-                $curp = $request['curp'];
-                $contrato = $request['contrato'];
-                /*Guardamos*/
-                $rutaContrato = $contrato->storeAs('expedientes/contratos', $curp . '_contrato.' . $contrato->extension(),);
-                $urlContrato = Storage::disk()->url($rutaContrato);
-
-                expediente::updateOrCreate(
-                    [
-                        'ruta' => $urlContrato,
-                        'cat_tipos_documento_id' => 26,
-                        'empleado_id' => $empleado->id
-                    ]
-                );
-            }
-        }
 
         //creamos el empleado_puesto
 
@@ -347,7 +302,9 @@ class EmpleadoController extends Controller
     }
 
 
-
+    /**
+     * Almacena los expedientes de un empleado
+     */
     public function storeExpediente(Request $request, User $empleado)
     {
         $request->validate([
@@ -480,7 +437,7 @@ class EmpleadoController extends Controller
 
     public function update(Request $request, User $empleado)
     {
-        $request->validate([ //validaciones
+        $newEmpleado = $request->validate([ //validaciones
             'correo_electronico' => 'required',
             'numero_empleado' => 'required',
             'nombre' => 'required',
@@ -495,7 +452,11 @@ class EmpleadoController extends Controller
             'contacto_emergencia' => 'required',
             'telefono' => 'required',
             'hijos' => 'required',
+            'correo_empresarial' => ['nullable', 'email'],
+            'telefono_empresarial' => ['nullable', 'numeric'],
             'clave_bancaria' => 'required',
+            'banco_id' => ['nullable', 'exists:bancos,id'],
+            'escolaridade_id' => ['nullable', 'exists:escolaridads,id'],
             'numero_cuenta_bancaria' => 'required',
             'salario_diario' => 'required',
             'salario_bruto' => 'required',
@@ -526,8 +487,8 @@ class EmpleadoController extends Controller
             'horario' => 'required',
             'cat_estados_civile_id' => 'required',
             'cat_tipos_sangre_id' => 'required',
-            'alergias' => 'required',
-            'enfermedades_cronicas' => 'required',
+            'alergias' => ['nullable', 'string'],
+            'enfermedades_cronicas' => ['nullable', 'string'],
             'cat_genero_id' => 'required',
             'rol_id' => 'required',
         ]);
@@ -539,68 +500,27 @@ class EmpleadoController extends Controller
 
 
         /*Guardado de imagnes, expedientes, contrato*/
-        if ($request->has('fotografia') && $request['fotografia'] !== null) {
-            if (is_file($request['fotografia'])) {
-                $foto =  $request['fotografia'];
-                $nombre_original = $foto->getClientOriginalName();
-                /*Guardamos*/
-                $rutaFoto = $foto->storeAs('fotos', $nombre_original,);
-                $urlFoto = Storage::disk()->url($rutaFoto);
-            } else {
-                $urlFoto = $request['fotografia'];
-            }
+        if ($request->hasFile('fotografia')) {
+
+            $foto =  $request->file('fotografia');
+            $nombre_original = $foto->getClientOriginalName();
+            /*Guardamos*/
+            $rutaFoto = $foto->storeAs('fotos', $nombre_original, 'public');
+            $urlFoto = Storage::disk('public')->url($rutaFoto);
         } else {
-            if ($request['fotografia'] == null) {
-                $urlFoto = null;
-            } else {
-                $foto =  $request['fotografia'];
-                $nombre_original = $foto->getClientOriginalName();
-                /*Guardamos*/
-                $rutaFoto = $foto->storeAs('fotos', $nombre_original,);
-                $urlFoto = Storage::disk()->url($rutaFoto);
-            }
+            $urlFoto  = $empleado->fotografia;
         }
 
         /*Guardado de foto empresarial*/
-        if ($request->has('foto_empresarial') && $request['foto_empresarial'] !== null) {
-            if (is_file($request['foto_empresarial'])) {
-                $foto_empresarial =  $request['foto_empresarial'];
-                $nombre_original_empresarial = $foto_empresarial->getClientOriginalName();
-                /*Guardamos*/
-                $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial,);
-                $urlFotografiaEmpresarial = Storage::disk()->url($rutaFotoEmpresarial);
-            } else {
-                $urlFotografiaEmpresarial = $request['foto_empresarial'];
-            }
-        } else {
-            if ($request['foto_empresarial'] == null) {
-                $urlFotografiaEmpresarial = null;
-            } else {
-                $foto_empresarial =  $request['foto_empresarial'];
-                $nombre_original_empresarial = $foto_empresarial->getClientOriginalName();
-                /*Guardamos*/
-                $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial,);
-                $urlFotografiaEmpresarial = Storage::disk()->url($rutaFotoEmpresarial);
-            }
+        if ($request->hasFile('foto_empresarial')) {
+            $foto_empresarial =  $request->file('foto_empresarial');
+            $nombre_original_empresarial = $foto_empresarial->getClientOriginalName();
+            /*Guardamos*/
+            $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial, 'public');
+            $urlFotografiaEmpresarial = Storage::disk('public')->url($rutaFotoEmpresarial);
+        } else { //para que no exista un cambio
+            $urlFotografiaEmpresarial = $empleado->foto_empresarial;
         }
-
-        $newEmpleado =  $request;
-
-        $password = '';
-
-        if (empty($request->password)) {
-            $user = DB::table(DB::raw('users'))
-                ->selectRaw('*')
-                ->where('id', '=', $request['id'])
-                ->get();
-
-            $password_user = $user[0]->password;
-            $password = $password_user;
-        } else {
-            $password = Hash::make($request['password']);
-        }
-
-
         // Guarda nueva direccion si el campo no existe
         if (empty($request->direccion_id)) {
             //creamos la direccion
@@ -615,7 +535,7 @@ class EmpleadoController extends Controller
             ]);
         } else //sino actualizamos el existente
         {
-            direccione::where('id', $newEmpleado->direccion_id)->update([
+            direccione::where('id', $newEmpleado['direccion_id'])->update([
                 "direccion_localidade_id" => $newEmpleado['direccion_localidade_id'],
                 "calle" => $newEmpleado['calle'],
                 "numero" => $newEmpleado['numero'],
@@ -626,95 +546,53 @@ class EmpleadoController extends Controller
             ]);
         }
         //Actualizamos el usuario
-        $newUser = User::where('id', '=', $newEmpleado['id'])
-            ->update([
-                'numero_empleado' => $newEmpleado['numero_empleado'],
-                'name' => $newEmpleado['nombre'],
-                'apellido_paterno' => $newEmpleado['apellido_paterno'],
-                'apellido_materno' => $newEmpleado['apellido_materno'],
-                'email' => $newEmpleado['correo_electronico'],
-                'fecha_nacimiento' => $newEmpleado['fecha_nacimiento'],
-                'fecha_ingreso' => $newEmpleado['fecha_ingreso'],
-                'fecha_ingreso_real' => $newEmpleado['fecha_ingreso_real'],
-                'nss' => $newEmpleado['nss'],
-                'curp' => $newEmpleado['curp'],
-                'rfc' => $newEmpleado['rfc'],
-                'contacto_emergencia' => $newEmpleado['contacto_emergencia'],
-                'telefono' => $newEmpleado['telefono'],
-                'hijos' => $newEmpleado['hijos'],
-                'clave_bancaria' => $newEmpleado['clave_bancaria'],
-                'numero_cuenta_bancaria' => $newEmpleado['numero_cuenta_bancaria'],
-                'salario_diario' => $newEmpleado['salario_diario'],
-                'salario_bruto' => $newEmpleado['salario_bruto'],
-                'salario_imss' => $newEmpleado['salario_imss'],
-                'bono_puntualidad' => $newEmpleado['bono_puntualidad'],
-                'bono_asistencia' => $newEmpleado['bono_asistencia'],
-                'despensa' => $newEmpleado['despensa'],
-                'fondo_ahorro' => $newEmpleado['fondo_ahorro'],
-                'horario' => $newEmpleado['horario'],
-                'alergias' => $newEmpleado['alergias'],
-                'enfermedades_cronicas' => $newEmpleado['enfermedades_cronicas'],
-                'direccion_id' => $direccion->id,
-                'estado_civil_id' => $newEmpleado['cat_estados_civile_id'],
-                'banco_id' => $newEmpleado['banco_id'],
-                'escolaridad_id' => $newEmpleado['escolaridade_id'],
-                'cat_tipos_nomina_id' => $newEmpleado['cat_tipos_nomina_id'],
-                'tipos_contrato_id' => $newEmpleado['tipos_contrato_id'],
-                'cat_genero_id' => $newEmpleado['cat_genero_id'],
-                'cat_tipo_sangre_id' => $newEmpleado['cat_tipos_sangre_id'],
-                'fotografia' => $urlFoto,
-                'password' =>  $password,
-                'role_id' => $newEmpleado['rol_id'],
-                /*Datos empresariales */
-                'foto_empresarial' => $urlFotografiaEmpresarial,
-                'correo_empresarial' => $newEmpleado['correo_empresarial'],
-                'telefono_empresarial' => $newEmpleado['telefono_empresarial']
-            ]);
-
-        // Store expediente
-        if ($request->has('expediente') && $request['expediente'] !== null) {
-            if (is_file($request['expediente'])) {
-                if ($request['curp'] !== null) {
-                    $curp = $request['curp'];
-                    $expediente  = $request['expediente'];
-                    /*Guardamos*/
-                    $rutaExpediente = $expediente->storeAs('expedientes', $curp . '_expediente.' . $expediente->extension(),);
-                    $urlExpediente = Storage::disk()->url($rutaExpediente);
-
-                    expediente::updateOrCreate(
-                        [
-                            'ruta' => $urlExpediente,
-                            'cat_tipos_documento_id' => 25,
-                            'empleado_id' => $newEmpleado['id']
-                        ]
-                    );
-                }
-            }
+        $empleado->update([
+            'numero_empleado' => $newEmpleado['numero_empleado'],
+            'name' => $newEmpleado['nombre'],
+            'apellido_paterno' => $newEmpleado['apellido_paterno'],
+            'apellido_materno' => $newEmpleado['apellido_materno'],
+            'email' => $newEmpleado['correo_electronico'],
+            'fecha_nacimiento' => $newEmpleado['fecha_nacimiento'],
+            'fecha_ingreso' => $newEmpleado['fecha_ingreso'],
+            'fecha_ingreso_real' => $newEmpleado['fecha_ingreso_real'],
+            'nss' => $newEmpleado['nss'],
+            'curp' => $newEmpleado['curp'],
+            'rfc' => $newEmpleado['rfc'],
+            'contacto_emergencia' => $newEmpleado['contacto_emergencia'],
+            'telefono' => $newEmpleado['telefono'],
+            'hijos' => $newEmpleado['hijos'],
+            'clave_bancaria' => $newEmpleado['clave_bancaria'],
+            'numero_cuenta_bancaria' => $newEmpleado['numero_cuenta_bancaria'],
+            'salario_diario' => $newEmpleado['salario_diario'],
+            'salario_bruto' => $newEmpleado['salario_bruto'],
+            'salario_imss' => $newEmpleado['salario_imss'],
+            'bono_puntualidad' => $newEmpleado['bono_puntualidad'],
+            'bono_asistencia' => $newEmpleado['bono_asistencia'],
+            'despensa' => $newEmpleado['despensa'],
+            'fondo_ahorro' => $newEmpleado['fondo_ahorro'],
+            'horario' => $newEmpleado['horario'],
+            'alergias' => $newEmpleado['alergias'],
+            'enfermedades_cronicas' => $newEmpleado['enfermedades_cronicas'],
+            'direccion_id' => $direccion->id,
+            'estado_civil_id' => $newEmpleado['cat_estados_civile_id'],
+            'banco_id' => $newEmpleado['banco_id'],
+            'escolaridad_id' => $newEmpleado['escolaridade_id'],
+            'cat_tipos_nomina_id' => $newEmpleado['cat_tipos_nomina_id'],
+            'tipos_contrato_id' => $newEmpleado['tipos_contrato_id'],
+            'cat_genero_id' => $newEmpleado['cat_genero_id'],
+            'cat_tipo_sangre_id' => $newEmpleado['cat_tipos_sangre_id'],
+            'fotografia' => $urlFoto,
+            'role_id' => $newEmpleado['rol_id'],
+            /*Datos empresariales */
+            'foto_empresarial' => $urlFotografiaEmpresarial,
+            'correo_empresarial' => $newEmpleado['correo_empresarial'],
+            'telefono_empresarial' => $newEmpleado['telefono_empresarial']
+        ]);
+        //Cambio de contraseña
+        if (!empty($request->password)) {
+            $password = Hash::make($request['password']);
+            $empleado->password = $password;
         }
-
-        // Store contrato
-
-        if ($request->has('contrato') && $request['contrato'] !== null) {
-            if (is_file($request['contrato'])) {
-                if ($request['curp'] !== null) {
-                    $curp = $request['curp'];
-                    $contrato  = $request['contrato'];
-                    /*Guardamos*/
-                    $rutaContrato = $contrato->storeAs('contrato', $curp . '_contrato.' . $contrato->extension(),);
-                    $urlContrato = Storage::disk()->url($rutaContrato);
-
-                    expediente::updateOrCreate(
-                        [
-                            'ruta' => $urlContrato,
-                            'cat_tipos_documento_id' => 26,
-                            'empleado_id' => $newEmpleado['id']
-                        ]
-                    );
-                }
-            }
-        }
-
-
 
         if (!empty($request->puesto_id) && !empty($request->departamento_id)) {
             $exist_empleados_puesto = empleados_puesto::select('*')

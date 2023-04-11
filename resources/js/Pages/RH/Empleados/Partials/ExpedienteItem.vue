@@ -98,7 +98,7 @@ defineExpose({
                 </span>
             </div>
         </div>
-        <div v-if="expediente.ruta !== null" class="text-green-500 cursor-pointer hover:opacity-80">
+        <div v-if="expediente.ruta && expediente.ruta !== null" class="text-green-500 cursor-pointer hover:opacity-80">
             <a data-fancybox="expedientes" :data-src="expediente.ruta">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="inline w-5 h-5" viewBox="0 0 16 16">
                     <path
