@@ -32,7 +32,8 @@ export default {
   data() {
     return { 
         modalEmpleadoActivo: false,
-        modalMoreInfo:false
+        modalMoreInfo:false,
+        usuario_reactivo:null
     }
   },
 
@@ -68,8 +69,9 @@ export default {
         this.modalEmpleadoActivo = false;
     },
 
-    openInfoUser()
+    openInfoUser(usuario)
     {
+      this.usuario_reactivo = usuario;
       this.modalMoreInfo = true;
     },
 
@@ -136,10 +138,10 @@ export default {
      >
       <swiper-slide v-for="usuario in usuarios" :key="usuario.id">  
         <div class="">
-            <button @click="openInfoUser()" class="bg-[#1D2B4E] text-white pl-2 pr-2 rounded-full uppercase">
+            <button @click="openInfoUser(usuario)" class="bg-[#1D2B4E] text-white pl-2 pr-2 rounded-full uppercase">
                 {{ usuario.name.charAt(0) }}
             </button>
-            <ModalInfoUser :show="modalMoreInfo" :activo_id="activo_id" :usuario="usuario" @close="closeInforUser" @axios="emitAxios"></ModalInfoUser>
+
         </div>
       </swiper-slide>
    </swiper>
@@ -148,6 +150,6 @@ export default {
    </button>
  </div>
 </div>
-
+<ModalInfoUser v-if="usuario_reactivo !== null" :show="modalMoreInfo" :activo_id="activo_id" :usuario="usuario_reactivo" @close="closeInforUser" @axios="emitAxios"></ModalInfoUser>
 <ModalAddEmpleadoActivo :show="modalEmpleadoActivo" :activo_id="$props.activo_id" @close="closeModalEmpleadoActivo" @axios="emitAxios"> </ModalAddEmpleadoActivo>
 </template>
