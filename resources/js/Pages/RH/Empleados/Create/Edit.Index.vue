@@ -20,6 +20,9 @@ import { ObtenerCurp } from '../../../../utils/index.js';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import ActionMessage from '@/Components/ActionMessage.vue';
 import SpinProgress from '@/Components/SpinProgress.vue';
+import SectionExpendiente from '../Partials/SectionExpendiente.vue';
+import { Fancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox.css";
 
 var props = defineProps(
     {
@@ -36,12 +39,15 @@ var props = defineProps(
         cat_bajas: Object,
         empleado_baja: Object,
         finiquito: Object,
-        departamento_puesto: Object
+        departamento_puesto: Object,
+        expedientes: Object,
     }
 );
 
 
 let typeForm = ref('update');
+let editEmpleadoDisable = ref(false);
+
 
 let catalogos = ref({
     departamentos: props.departamentos,
@@ -68,7 +74,7 @@ else {
 
 
 let empleado = ref({});
-empleado.value = props.empleado[0];
+empleado.value = props.empleado;
 
 let direccion = ref({});
 
@@ -190,7 +196,8 @@ const form = useForm
         /*Datos coorporativos*/
         'correo_empresarial': empleado.value.correo_empresarial,
         'foto_empresarial': empleado.value.foto_empresarial,
-        'telefono_empresarial': empleado.value.telefono_empresarial
+        'telefono_empresarial': empleado.value.telefono_empresarial,
+        'fotografia_url': empleado.value.fotografia,
     });
 
 
@@ -207,19 +214,10 @@ if (props.finiquito.length > 0) {
 }
 
 
-const createOrUpdate = () => {
+const updateEmpelado = () => {
     if (form.fotografia == "") {
         form.fotografia = null;
     }
-
-    if (form.expediente == "") {
-        form.expediente = null;
-    }
-
-    if (form.contrato == undefined) {
-        form.contrato = null;
-    }
-
     if (form.foto_empresarial == undefined) {
         form.foto_empresarial = null;
     }
@@ -230,6 +228,7 @@ const createOrUpdate = () => {
             preserveState: true,
             onSuccess: () => {
                 form.reset();
+                form.fotografia_url = props.empleado.fotografia_url;
                 swal("Create", "Exitosamente", "success");
             },
             onError: (error) => {
@@ -429,6 +428,7 @@ const sendEmail = () => {
         preserveState: true,
     });
 }
+
 
 </script>
 
@@ -904,8 +904,7 @@ const sendEmail = () => {
 
                                             <div class="mt-4">
                                                 <InputLabel for="horario" value="Horario Laboral:*" />
-                                                <Select v-model="form.horario" class="w-full"
-                                                    :disabled="editEmpleadoDisable">
+                                                <Select v-model="form.horario" class="w-full">
                                                     <option disabled selected>Elige un Horario</option>
                                                     <option value="oficina">Oficina</option>
                                                     <option value="turnos">Rolar Turnos</option>
@@ -1103,102 +1102,9 @@ const sendEmail = () => {
                     </div>
                     <!--Fin Aspectos Generales de Salud -->
                     <!-- Expediente -->
-                    <div v-if="buttonSelected == 7">
-                        <div class="border-b tab">
-                            <div class="relative border-l-2 border-transparent">
-                                <input checked class="absolute z-10 w-full h-10 opacity-0 cursor-pointer top-6"
-                                    type="checkbox" id="datosPersonales">
-                                <header
-                                    class="flex items-center justify-between p-5 pl-8 pr-8 cursor-pointer select-none tab-label"
-                                    for="datosPersonales">
-                                    <span class="text-xl font-thin text-grey-darkest">
-                                        Archivos Expedientes
-                                    </span>
-                                    <div
-                                        class="flex items-center justify-center border rounded-full border-grey w-7 h-7 test">
-                                        <svg aria-hidden="true" class="" data-reactid="266" fill="none" height="24"
-                                            stroke="#606F7B" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                                            <polyline points="6 9 12 15 18 9">
-                                            </polyline>
-                                        </svg>
-                                    </div>
-                                </header>
-                                <div class="tab-content">
-                                    <div class="pb-5 pl-8 pr-8">
-                                        <div class="grid grid-cols-3 gap-4">
-                                            <template v-if="!editEmpleadoDisable">
-                                                <div class="mt-4">
-                                                    <InputLabel for="fotografia" value="Foto:" />
-                                                    <DropZone id="fotografia" v-model="form.fotografia" ref="fotografia"
-                                                        accept="image/x-png,image/jpeg" />
-                                                    <InputError :message="form.errors.fotografia" class="mt-2" />
-                                                </div>
-                                                <div class="mt-4">
-                                                    <InputLabel for="foto_empresarial" value="Foto Empresarial:" />
-                                                    <DropZone id="foto_empresarial" v-model="form.foto_empresarial"
-                                                        ref="fotografia_empresarial" accept="image/x-png,image/jpeg" />
-                                                </div>
-                                                <div class="mt-4">
-                                                    <InputLabel for="expediente" value="Expediente:" />
-                                                    <DropZone id="expediente" v-model="form.expediente"
-                                                        accept="application/pdf" />
-                                                    <InputError :message="form.errors.expediente" class="mt-2" />
-                                                </div>
-                                                <div class="mt-4">
-                                                    <InputLabel for="contrato" value="Contrato:" />
-                                                    <DropZone id="contrato" v-model="form.contrato"
-                                                        accept="application/pdf" />
-                                                    <InputError :message="form.errors.contrato" class="mt-2" />
-                                                </div>
-                                            </template>
-                                            <div class="mt-4">
-                                                <span v-if="empleado.fotografia">
-                                                    <a :data-fancybox="'fotografia' + empleado.id"
-                                                        :data-src="empleado.fotografia"
-                                                        class="inline-flex items-center w-10 h-10 p-1 m-1 text-xs font-semibold tracking-widest text-white uppercase transition bg-green-800 border border-transparent rounded-full hover:bg-green-700 active:bg-gray-900 focus:ring-green-300 disabled:opacity-25">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                            class="w-10 h-10" viewBox="0 0 16 16">
-                                                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                                                            <path fill-rule="evenodd"
-                                                                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-                                                        </svg>
-                                                    </a>
-                                                </span>
-                                                <span v-if="empleado.expedienteGeneral">
-                                                    <a :data-fancybox="'expedientes' + empleado.id" data-type="pdf"
-                                                        data-caption="Expediente General"
-                                                        :data-src="empleado.expedienteGeneral.ruta + timeImage"
-                                                        class="inline-flex items-center w-10 h-10 p-1 m-1 text-xs font-semibold tracking-widest text-red-500 uppercase transition bg-transparent border border-red-800 rounded-full hover:border-red-700 active:bg-gray-900 focus:ring-green-300 disabled:opacity-25">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                            class="w-10 h-10" viewBox="0 0 16 16">
-                                                            <path
-                                                                d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
-                                                            <path
-                                                                d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029zm1.379-1.901c-.166.076-.32.156-.459.238-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361.01.022.02.036.026.044a.266.266 0 0 0 .035-.012c.137-.056.355-.235.635-.572a8.18 8.18 0 0 0 .45-.606zm1.64-1.33a12.71 12.71 0 0 1 1.01-.193 11.744 11.744 0 0 1-.51-.858 20.801 20.801 0 0 1-.5 1.05zm2.446.45c.15.163.296.3.435.41.24.19.407.253.498.256a.107.107 0 0 0 .07-.015.307.307 0 0 0 .094-.125.436.436 0 0 0 .059-.2.095.095 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a3.876 3.876 0 0 0-.612-.053zM8.078 7.8a6.7 6.7 0 0 0 .2-.828c.031-.188.043-.343.038-.465a.613.613 0 0 0-.032-.198.517.517 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822.024.111.054.227.09.346z" />
-                                                        </svg>
-                                                    </a>
-                                                </span>
-                                                <span v-if="empleado.contrato">
-                                                    <a :data-fancybox="'contrato' + empleado.id" data-type="pdf"
-                                                        data-caption="Contrato"
-                                                        :data-src="empleado.contrato.ruta + timeImage"
-                                                        class="inline-flex items-center w-6 h-6 p-1 m-1 text-xs font-semibold tracking-widest text-blue-400 uppercase transition bg-transparent border border-blue-400 rounded-full hover:border-blue-700 active:bg-gray-900 focus:ring-green-300 disabled:opacity-25">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                            fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
-                                                            <path
-                                                                d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
-                                                            <path
-                                                                d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
-                                                        </svg>
-                                                    </a>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div v-show="buttonSelected == 7">
+                        <SectionExpendiente ref="sectionExpediente" :empleado-id="empleado.id"
+                            :expedientes="props.expedientes" :form="form" />
                     </div>
                     <!--Fin Expediente -->
                     <!-- Finiquitos -->
@@ -1275,7 +1181,7 @@ const sendEmail = () => {
                     </div>
                     <!-- Fin Finiquitos -->
                     <div class="p-16 pt-0">
-                        <ButtonAdd @click="createOrUpdate" style="float:right; margin:2rem; justify-content: center;">
+                        <ButtonAdd @click="updateEmpelado()" style="float:right; margin:2rem; justify-content: center;">
                             Guardar
                         </ButtonAdd>
                         <a :href="route('empleado.indexmanual', { activo: 'activo' })">

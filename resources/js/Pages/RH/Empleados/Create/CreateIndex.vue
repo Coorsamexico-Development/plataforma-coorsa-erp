@@ -926,7 +926,7 @@ const fecha_termino = computed(() => {
                         <!--Fin Aspectos Generales de Salud -->
                         <!-- Expediente -->
                         <div v-show="buttonSelected == 7">
-                            <SectionExpendiente ref="sectionExpediente" :expedientes="props.expedientes" />
+                            <SectionExpendiente ref="sectionExpediente" :expedientes="props.expedientes" :form="form" />
                         </div>
                         <!--Fin Expediente -->
                         <!-- Finiquitos -->

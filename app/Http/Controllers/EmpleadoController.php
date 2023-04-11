@@ -213,8 +213,8 @@ class EmpleadoController extends Controller
                 if ($request['fotografia'] != null) {
                     $fotografia = request('fotografia');
                     $nombre_fotografia =  $fotografia->getClientOriginalName(); //rescatamos el nombre original
-                    $ruta_fotografia = $fotografia->storeAs('expedientes/fotografia/', $nombre_fotografia, 'gcs'); //guardamos el archivo en el storage
-                    $urlFotografia = Storage::disk('gcs')->url($ruta_fotografia);
+                    $ruta_fotografia = $fotografia->storeAs('expedientes/fotografia/', $nombre_fotografia,); //guardamos el archivo en el storage
+                    $urlFotografia = Storage::disk()->url($ruta_fotografia);
                 } else {
                     $urlFotografia = "";
                 }
@@ -229,8 +229,8 @@ class EmpleadoController extends Controller
                 if ($request['foto_empresarial'] != null) {
                     $fotografia_Empresarial = request('foto_empresarial');
                     $nombre_fotografia_empresarial =  $fotografia_Empresarial->getClientOriginalName(); //rescatamos el nombre original
-                    $ruta_fotografia_empresarial = $fotografia_Empresarial->storeAs('expedientes/fotografia/', $nombre_fotografia_empresarial, 'gcs'); //guardamos el archivo en el storage
-                    $urlFotografia_Empresarial = Storage::disk('gcs')->url($ruta_fotografia_empresarial);
+                    $ruta_fotografia_empresarial = $fotografia_Empresarial->storeAs('expedientes/fotografia/', $nombre_fotografia_empresarial,); //guardamos el archivo en el storage
+                    $urlFotografia_Empresarial = Storage::disk()->url($ruta_fotografia_empresarial);
                 } else {
                     $urlFotografia_Empresarial = "";
                 }
@@ -300,8 +300,8 @@ class EmpleadoController extends Controller
                 $curp = $request['curp'];
                 $expediente  = $request['expediente'];
                 /*Guardamos*/
-                $rutaExpediente = $expediente->storeAs('expedientes', $curp . '_expediente.' . $expediente->extension(), 'gcs');
-                $urlExpediente = Storage::disk('gcs')->url($rutaExpediente);
+                $rutaExpediente = $expediente->storeAs('expedientes', $curp . '_expediente.' . $expediente->extension(),);
+                $urlExpediente = Storage::disk()->url($rutaExpediente);
 
                 expediente::updateOrCreate(
                     [
@@ -318,8 +318,8 @@ class EmpleadoController extends Controller
                 $curp = $request['curp'];
                 $contrato = $request['contrato'];
                 /*Guardamos*/
-                $rutaContrato = $contrato->storeAs('expedientes/contratos', $curp . '_contrato.' . $contrato->extension(), 'gcs');
-                $urlContrato = Storage::disk('gcs')->url($rutaContrato);
+                $rutaContrato = $contrato->storeAs('expedientes/contratos', $curp . '_contrato.' . $contrato->extension(),);
+                $urlContrato = Storage::disk()->url($rutaContrato);
 
                 expediente::updateOrCreate(
                     [
@@ -365,26 +365,28 @@ class EmpleadoController extends Controller
             $urlExpediente = Storage::disk('public')->url($rutaFile);
             expediente::updateOrCreate(
                 [
-                    'ruta' => $urlExpediente,
                     'empleado_id' => $empleado->id,
                     'cat_tipos_documento_id' => $tipoDoc->id,
+                ],
+                [
+                    'ruta' => $urlExpediente,
                 ]
             );
         }
 
         return response()->json([
+            'ruta' => $urlExpediente,
             'message' => 'ok'
         ]);
     }
 
     public function edit($id)
     {
-        $empleado = DB::table(DB::raw('users'))
-            ->selectRaw('*')
-            ->where('id', '=', $id)
-            ->get();
 
-        $empleado_direccion_id = $empleado[0]->direccion_id;
+        $empleado = User::selectRaw('*')
+            ->findOrFail($id);
+
+        $empleado_direccion_id = $empleado->direccion_id;
 
         $direccion = DB::table(DB::raw('direcciones'))
             ->selectRaw(
@@ -441,6 +443,17 @@ class EmpleadoController extends Controller
             ->where('empleado_id', '=', $id)
             ->get();
 
+        $expedientes = CatTipoDocumento::select(
+            'expedientes.*',
+            'cat_tipo_documentos.nombre as tipo_documento',
+            'cat_tipo_documentos.activo as active',
+            'cat_tipo_documentos.id as cat_tipo_documento_id'
+        )
+            ->leftJoin('expedientes', function ($join) use ($id) {
+                $join->on('expedientes.cat_tipos_documento_id', '=', 'cat_tipo_documentos.id')
+                    ->on('expedientes.empleado_id', '=', DB::raw($id));
+            })->get();
+
 
 
         return Inertia::render(
@@ -459,7 +472,8 @@ class EmpleadoController extends Controller
                 'cat_bajas' => $cat_bajas,
                 'empleado_baja' => $empleado_baja,
                 'finiquito' => $finiquito,
-                'departamento_puesto' => $dept_puesto
+                'departamento_puesto' => $dept_puesto,
+                'expedientes'  => $expedientes
             ]
         );
     }
@@ -530,8 +544,8 @@ class EmpleadoController extends Controller
                 $foto =  $request['fotografia'];
                 $nombre_original = $foto->getClientOriginalName();
                 /*Guardamos*/
-                $rutaFoto = $foto->storeAs('fotos', $nombre_original, 'gcs');
-                $urlFoto = Storage::disk('gcs')->url($rutaFoto);
+                $rutaFoto = $foto->storeAs('fotos', $nombre_original,);
+                $urlFoto = Storage::disk()->url($rutaFoto);
             } else {
                 $urlFoto = $request['fotografia'];
             }
@@ -542,8 +556,8 @@ class EmpleadoController extends Controller
                 $foto =  $request['fotografia'];
                 $nombre_original = $foto->getClientOriginalName();
                 /*Guardamos*/
-                $rutaFoto = $foto->storeAs('fotos', $nombre_original, 'gcs');
-                $urlFoto = Storage::disk('gcs')->url($rutaFoto);
+                $rutaFoto = $foto->storeAs('fotos', $nombre_original,);
+                $urlFoto = Storage::disk()->url($rutaFoto);
             }
         }
 
@@ -553,8 +567,8 @@ class EmpleadoController extends Controller
                 $foto_empresarial =  $request['foto_empresarial'];
                 $nombre_original_empresarial = $foto_empresarial->getClientOriginalName();
                 /*Guardamos*/
-                $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial, 'gcs');
-                $urlFotografiaEmpresarial = Storage::disk('gcs')->url($rutaFotoEmpresarial);
+                $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial,);
+                $urlFotografiaEmpresarial = Storage::disk()->url($rutaFotoEmpresarial);
             } else {
                 $urlFotografiaEmpresarial = $request['foto_empresarial'];
             }
@@ -565,8 +579,8 @@ class EmpleadoController extends Controller
                 $foto_empresarial =  $request['foto_empresarial'];
                 $nombre_original_empresarial = $foto_empresarial->getClientOriginalName();
                 /*Guardamos*/
-                $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial, 'gcs');
-                $urlFotografiaEmpresarial = Storage::disk('gcs')->url($rutaFotoEmpresarial);
+                $rutaFotoEmpresarial = $foto_empresarial->storeAs('fotos', $nombre_original_empresarial,);
+                $urlFotografiaEmpresarial = Storage::disk()->url($rutaFotoEmpresarial);
             }
         }
 
@@ -664,8 +678,8 @@ class EmpleadoController extends Controller
                     $curp = $request['curp'];
                     $expediente  = $request['expediente'];
                     /*Guardamos*/
-                    $rutaExpediente = $expediente->storeAs('expedientes', $curp . '_expediente.' . $expediente->extension(), 'gcs');
-                    $urlExpediente = Storage::disk('gcs')->url($rutaExpediente);
+                    $rutaExpediente = $expediente->storeAs('expedientes', $curp . '_expediente.' . $expediente->extension(),);
+                    $urlExpediente = Storage::disk()->url($rutaExpediente);
 
                     expediente::updateOrCreate(
                         [
@@ -686,8 +700,8 @@ class EmpleadoController extends Controller
                     $curp = $request['curp'];
                     $contrato  = $request['contrato'];
                     /*Guardamos*/
-                    $rutaContrato = $contrato->storeAs('contrato', $curp . '_contrato.' . $contrato->extension(), 'gcs');
-                    $urlContrato = Storage::disk('gcs')->url($rutaContrato);
+                    $rutaContrato = $contrato->storeAs('contrato', $curp . '_contrato.' . $contrato->extension(),);
+                    $urlContrato = Storage::disk()->url($rutaContrato);
 
                     expediente::updateOrCreate(
                         [

@@ -1,7 +1,7 @@
 <template>
-    <div class="flex items-center justify-center w-64 h-32 border-2 border-dashed rounded cursor-pointer hover:border-gray-700"
+    <div class="flex items-center justify-center w-64 h-32 border-2 border-dashed rounded cursor-pointer "
+        :class="{ 'text-gray-400': disabled, 'hover:border-blue-400 hover:text-blue-400 border-gray-700': !disabled }"
         @click="selectFile()" @drop="drop" @dragover.prevent="checkDrop">
-
         <input :ref="'filedropzone'" type="file" @input="$emit('update:modelValue', $event.target.files[0])" class="hidden"
             :accept="accept" @change="setFile" />
         <svg xmlns="http://www.w3.org/2000/svg" :class="{ 'hidden': withFile }" width="16" height="16" fill="currentColor"
@@ -12,7 +12,7 @@
                 d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3z" />
         </svg>
 
-        <span class="block text-grey" :class="{ 'hidden': withFile }">Suelta aquí.</span>
+        <span class="block " :class="{ 'hidden': withFile, 'text-grey-700': disabled }">Suelta aquí.</span>
         <div class="flex flex-col" v-if="withFile">
             <img class="w-10 h-10 m-auto rounded" :src="urlImage" alt="File Drop" />
             <span class="text-gray-400 text-xm">{{ fileName }}</span>
@@ -32,6 +32,10 @@ export default defineComponent({
         accept: {
             default: 'images/*',
             require: false
+        },
+        disabled: {
+            require: false,
+            default: false
         }
     },
 
@@ -48,9 +52,15 @@ export default defineComponent({
             this.$refs.filedropzone.focus()
         },
         selectFile() {
+            if (this.$props.disabled) {
+                return;
+            }
             this.$refs.filedropzone.click();
         },
         drop(event) {
+            if (this.$props.disabled) {
+                return;
+            }
             this.error = false
             event.preventDefault();
             const file = event.dataTransfer.files[0];
