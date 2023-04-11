@@ -1244,7 +1244,7 @@ input:checked~.tab-content {
 
 .modal__body {
     display: flex;
-    flex-direction: column;
+    flex-direction:row-reverse;
     padding: 0 2em 1.875em 1.875em;
 }
 
@@ -1332,6 +1332,7 @@ input:checked~.tab-content {
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
     opacity: 0;
+    width: 8rem;
 }
 
 .modal__file {
@@ -1575,7 +1576,7 @@ input:checked~.tab-content {
     }
 
     .modal__body {
-        flex-direction: row;
+        flex-direction: row-reverse;
         align-items: center;
     }
 

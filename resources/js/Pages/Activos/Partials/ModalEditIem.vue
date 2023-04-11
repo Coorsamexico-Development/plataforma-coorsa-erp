@@ -214,7 +214,7 @@ const arregloCampos = computed(() => {
                      <div v-for="campo in arregloCampos" :key="campo.id">
                        <InputLabel class="text-center">{{ campo.campo }}</InputLabel>
                        <div class="flex items-center justify-center">
-                        <component 
+                        <component  
                           :valore="campo.valor"
                           :is="setComponent(campo.input)" 
                           @input="putId(campo.id)" 
