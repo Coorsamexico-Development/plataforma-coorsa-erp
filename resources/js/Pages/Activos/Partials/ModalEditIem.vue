@@ -205,21 +205,25 @@ const arregloCampos = computed(() => {
 <template>
          <DialogModal  @close="close()">
            <template #title>
-               <h2 style="font-weight:bolder">Opciones de activo</h2>
+               <h2 style="font-weight:bolder" class="text-2xl">Opciones de activo</h2>
             </template>
             <template #content>
                <div class="mt-4 border-b-2">
-                <h2 class="mr-4">Campos</h2>
-                <div v-for="campo in arregloCampos" :key="campo.id">
-                  <InputLabel>{{ campo.campo }}</InputLabel>
-                  <component 
-                        :valore="campo.valor"
-                       :is="setComponent(campo.input)" 
-                       @input="putId(campo.id)" 
-                       @updateCampo="updateCampo"
-                       @retornar="setFile"
-                       @openModalTableCampos="openTableModal(campo.campo, campo.id)" />  
-                </div>
+                  <h2 class="mb-4 text-xl text-center">Campos</h2>
+                  <div class="grid grid-cols-3">
+                     <div v-for="campo in arregloCampos" :key="campo.id">
+                       <InputLabel class="text-center">{{ campo.campo }}</InputLabel>
+                       <div class="flex items-center justify-center">
+                        <component 
+                          :valore="campo.valor"
+                          :is="setComponent(campo.input)" 
+                          @input="putId(campo.id)" 
+                          @updateCampo="updateCampo"
+                          @retornar="setFile"
+                          @openModalTableCampos="openTableModal(campo.campo, campo.id)" /> 
+                       </div> 
+                     </div>
+                  </div>
                </div>
                <ModalTableItems v-if="campoName !== null" 
                :activo_id="activo.id" 
