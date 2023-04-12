@@ -116,7 +116,7 @@ const cambio2 = () => {
                                                 Documentos Socios
                                             </span>
                                         </DropdownLink>
-                                        <DropdownLink v-if="$page.props.can['documentos-internos.show']"
+                                        <DropdownLink v-if="$page.props.can['documentos-nominas.show']"
                                             :href="route('documentos-internos.socios.index', 4)">
                                             <span class="text-xs">
                                                 Documentos Nominas
