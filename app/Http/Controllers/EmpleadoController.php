@@ -131,7 +131,7 @@ class EmpleadoController extends Controller
         // return  dd(request());
 
         return Inertia::render(
-            'RH/Empleados/Create/CreateIndex',
+            'RH/Empleados/Create/CreateEmpleado',
             [
                 'escolaridades' => $escolaridades,
                 'estados_civiles' => $estado_civiles,
@@ -176,10 +176,6 @@ class EmpleadoController extends Controller
             'salario_diario' => 'required',
             'salario_bruto' => 'required',
             'salario_imss' => 'required',
-            'bono_puntualidad' => 'required',
-            'bono_asistencia' => 'required',
-            'despensa' => 'required',
-            'fondo_ahorro' => 'required',
             'bono_puntualidad' => 'required',
             'bono_asistencia' => 'required',
             'despensa' => 'required',
@@ -345,9 +341,8 @@ class EmpleadoController extends Controller
 
         $empleado_direccion_id = $empleado->direccion_id;
 
-        $direccion = DB::table(DB::raw('direcciones'))
-            ->selectRaw(
-                'direccion_localidades.id AS localidad_id,
+        $direccion = direccione::selectRaw(
+            'direccion_localidades.id AS localidad_id,
             direccion_municipios.nombre,
             direccion_municipios.id AS municipio_id,
             direccion_estados.nombre,
@@ -358,23 +353,17 @@ class EmpleadoController extends Controller
             direcciones.codigo_postal AS codigo_postal,
             direcciones.manzana AS manzana,
             direcciones.lote AS lote'
-            )
+        )
             ->join('users', 'direcciones.id', 'users.direccion_id')
             ->join('direccion_localidades', 'direcciones.direccion_localidade_id', 'direccion_localidades.id')
             ->join('direccion_municipios', 'direccion_localidades.direccion_municipio_id', 'direccion_municipios.id')
             ->join('direccion_estados', 'direccion_municipios.direccion_estado_id', 'direccion_estados.id')
-            ->where('users.direccion_id', '=', $empleado_direccion_id)
-            ->get();
+            ->firstWhere('users.direccion_id', '=', $empleado_direccion_id);
 
 
         $dept_puesto = empleados_puesto::select('puesto_id', 'departamento_id')
             ->where('empleado_id', '=', $id)
-            ->get();
-
-
-        $documentos = expediente::select('*')
-            ->where('empleado_id', '=', $id)
-            ->get();
+            ->firstWhere('empleados_puestos.activo', '=', 1);
 
         $escolaridades = Escolaridad::all();
         $estado_civiles = catEstadosCiviles::all();
@@ -388,17 +377,15 @@ class EmpleadoController extends Controller
         $empleado_baja = bajasEmpleado::select(
             'cat_bajas_empleado_id',
             'fecha_baja'
-        )
-            ->where('empleado_id', '=', $id)
-            ->get();
+        )->where('activo', '=', 1)
+            ->firstwhere('empleado_id', '=', $id);
 
         $finiquito = finiquito::select(
             'monto',
             'fecha_finiquito',
             'pagado',
-        )
-            ->where('empleado_id', '=', $id)
-            ->get();
+        )->where('activo', '=', 1)
+            ->firstwhere('empleado_id', '=', $id);
 
         $expedientes = CatTipoDocumento::select(
             'expedientes.*',
@@ -418,7 +405,7 @@ class EmpleadoController extends Controller
 
 
         return Inertia::render(
-            'RH/Empleados/Create/Edit.Index',
+            'RH/Empleados/Create/EditEmpleado',
             [
                 'direccion' => $direccion,
                 'empleado' => $empleado,
@@ -429,7 +416,6 @@ class EmpleadoController extends Controller
                 'departamentos' => $departamentos,
                 'tipos_contrato' => $tipos_contrato,
                 'roles' => $roles,
-                'documentos' => $documentos,
                 'cat_bajas' => $cat_bajas,
                 'empleado_baja' => $empleado_baja,
                 'finiquito' => $finiquito,
@@ -469,10 +455,6 @@ class EmpleadoController extends Controller
             'bono_asistencia' => 'required',
             'despensa' => 'required',
             'fondo_ahorro' => 'required',
-            'bono_puntualidad' => 'required',
-            'bono_asistencia' => 'required',
-            'despensa' => 'required',
-            'fondo_ahorro' => 'required',
             'horario' => 'required',
             'alergias' => 'required',
             'enfermedades_cronicas' => 'required',
@@ -498,8 +480,6 @@ class EmpleadoController extends Controller
         ]);
 
         $urlFoto = '';
-        $urlExpediente = '';
-        $urlContrato = '';
         $urlFotografiaEmpresarial = '';
 
 
@@ -590,7 +570,9 @@ class EmpleadoController extends Controller
             /*Datos empresariales */
             'foto_empresarial' => $urlFotografiaEmpresarial,
             'correo_empresarial' => $newEmpleado['correo_empresarial'],
-            'telefono_empresarial' => $newEmpleado['telefono_empresarial']
+            'telefono_empresarial' => $newEmpleado['telefono_empresarial'],
+            'cat_bajas_empleado_id' => 'nullable|exits:cat_bajas_empleados,id',
+            'fecha_baja' => 'required_with:cat_bajas_empleado_id|after:1900-01-01'
         ]);
         //Cambio de contraseña
         if (!empty($request->password)) {
@@ -627,9 +609,8 @@ class EmpleadoController extends Controller
         }
 
 
-        //Preguntamos si el la categoria de baja viene vacia
+        //En caso de que contenga la baja
         if (!empty($request->cat_bajas_empleado_id)) {
-            $request->validate(['fecha_baja' => 'required|after:1900-01-01']);
             bajasEmpleado::updateOrCreate(
                 [
                     'cat_bajas_empleado_id' => $request['cat_bajas_empleado_id'],
@@ -638,14 +619,14 @@ class EmpleadoController extends Controller
                 ]
             );
 
-            User::where('id', '=', $newEmpleado['id'])  //desactivamos el usuario
+            User::where('id', '=', $empleado->id)  //desactivamos el usuario
                 ->update(['activo' => 0]);
         }
         //finiquito_pagado
         if (!empty($request->fecha_finiquito)) {
             finiquito::updateOrCreate(
                 [
-                    'empleado_id' => $newEmpleado['id'],
+                    'empleado_id' => $empleado->id,
                     'monto' => $request['monto_finiquito'],
                     'fecha_finiquito' => $request['fecha_finiquito'],
                     'pagado' => $request['finiquito_pagado']

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onBeforeMount } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm, Link } from '@inertiajs/inertia-vue3';
 import ButtonInfo from '@/Components/Buttoninfo.vue';
 import ButtonAdd from '@/Components/ButtonAdd.vue';
 import swal from 'sweetalert';
@@ -190,11 +190,11 @@ const cambiar = (id) => {
                         <!--Fin Expediente -->
                         <!-- Error forms -->
                         <div class="flex justify-end gap-2">
-                            <a :href="route('empleado.indexmanual', { activo: 'activo' })">
-                                <ButtonInfo>
-                                    Regresar
-                                </ButtonInfo>
-                            </a>
+                            <Link :href="route('empleado.indexmanual', { activo: 'activo' })" replace>
+                            <ButtonInfo>
+                                Regresar
+                            </ButtonInfo>
+                            </Link>
                             <ButtonAdd @click="createEmpleado">
                                 Guardar
                             </ButtonAdd>
