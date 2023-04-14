@@ -43,22 +43,15 @@ const color = computed(() => {
 </script>
 <template>
     <td class="relative px-2 whitespace-nowrap">
-        <span
-            v-if="plantillaAutorizada.id === -1"
-            class="absolute text-xs text-white bg-yellow-500 rounded top-[28%]"
-            >S/D</span
-        >
+
         <div :class="color" class="mx-4 my-1 rounded">
-            {{ plantillaAutorizada.cantidad_activa }}
-            /
-            <input
-                type="number"
-                class="w-2/4 p-0 bg-transparent border-transparent focus:ring-0 focus:border-transparent focus:border-b-gray-600"
-                @blur="$emit('save', plantillaAutorizada)"
-                min="0"
-                max="10000"
-                v-model="plantillaAutorizada.cantidad"
-            />
+            <div v-if="plantillaAutorizada.id !== -1">
+                {{ plantillaAutorizada.cantidad_activa }}
+                /
+                <input type="number"
+                    class="w-2/4 p-0 bg-transparent border-transparent focus:ring-0 focus:border-transparent focus:border-b-gray-600"
+                    @blur="$emit('save', plantillaAutorizada)" min="0" max="10000" v-model="plantillaAutorizada.cantidad" />
+            </div>
         </div>
     </td>
 </template>

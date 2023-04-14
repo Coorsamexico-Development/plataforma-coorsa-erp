@@ -42,10 +42,11 @@ const color = computed(() => {
 </script>
 <template>
     <td class="relative px-2 whitespace-nowrap">
-        <span v-if="plantillaAutorizada.id === -1"
-            class="absolute text-xs text-white bg-yellow-500 rounded -top-1">S/D</span>
+
         <div :class="color" class="mx-4 my-1 rounded">
-            {{ plantillaAutorizada.cantidad_activa }}/{{ plantillaAutorizada.cantidad }}
+            <div v-if="plantillaAutorizada.id !== -1">
+                {{ plantillaAutorizada.cantidad_activa }}/{{ plantillaAutorizada.cantidad }}
+            </div>
         </div>
     </td>
 </template>
