@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CecoRequest;
 use App\Models\Ceco;
 use App\Models\Cliente;
-use App\Models\departamentoPuesto;
 use App\Models\empleados_puesto;
 use App\Models\Ubicacion;
 use Illuminate\Http\Request;
@@ -18,12 +17,7 @@ class DepartamentoController extends Controller
     //
     public function listPuestoDep(Ceco $departamento)
     {
-        $puestos = DB::table(DB::raw('departamento_puestos'))
-            ->select(DB::raw(
-                'puestos.id,puestos.name'
-            ))
-            ->join('puestos', 'departamento_puestos.puesto_id', 'puestos.id')
-            ->where('departamento_id', '=', $departamento['id'])
+        $puestos = $departamento->puestos()
             ->get();
 
         return $puestos;

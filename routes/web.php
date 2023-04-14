@@ -152,7 +152,7 @@ Route::middleware([
         Route::post('empleados/{empleado}/update', 'update')->name('empleados.update');
         Route::get('empleados/{activo}', 'index')->name('empleado.indexmanual');
         Route::post('empleados/{empleado}/expediente', 'storeExpediente')->name('empleado.expediente')->middleware('can:user-activos.create');
-        Route::get('/empleadosData','empleadosData')->name('empleadosData');
+        Route::get('/empleadosData', 'empleadosData')->name('empleadosData');
     });
 });
 
@@ -191,9 +191,9 @@ Route::controller(ActivoController::class)->group(function () {
 
 Route::apiResource('/DocsPoliticas', DocsPoliticasController::class);
 
-Route::get('/catalogos/formulario/empelado', [CatalogoController::class, 'formularioEmpleado'])->name('catalogos.formularioEmpleado'); //ruta para los diferentes catalogos
-Route::get('/municipio/{estado}', [MunicipioController::class, 'getMunicipiosEstado'])->name('municipos.estado');
-Route::get('/localidades/{municipio}', [LocalidadesController::class, 'getLocalidades'])->name('localidades.municipio');
+Route::get('/catalogos/formulario/empelado', [CatalogoController::class, 'getEstados'])->name('catalogos.estados'); //ruta para los diferentes catalogos
+Route::get('/estados/{estado}/municipios', [MunicipioController::class, 'getMunicipiosEstado'])->name('municipos.estado');
+Route::get('/municipios/{municipio}/localidades', [LocalidadesController::class, 'getLocalidades'])->name('localidades.municipio');
 
 
 

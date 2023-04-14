@@ -239,7 +239,7 @@ const updateEmpelado = () => {
 
 /*Obtener datos direcciones*/
 const getEstados = () => {
-    axios.get(route('catalogos.formularioEmpleado')).then((response) => {
+    axios.get(route('catalogos.estados')).then((response) => {
         catalogos.value.estadosDireccion = response.data.estadosDireccion;
         //console.log(response.data);
     }).catch(error => {

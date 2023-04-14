@@ -358,13 +358,9 @@ input:checked~.tab-content {
 
 /*Empleados create*/
 .buttonseccion {
-    border: 0.2rem solid gray;
     border-radius: 20% 0% 0% 2%;
 }
 
-.buttonseccion:hover {
-    border: 0.2rem solid red;
-}
 
 .divseccion {
     margin: 1rem;
@@ -1244,7 +1240,7 @@ input:checked~.tab-content {
 
 .modal__body {
     display: flex;
-    flex-direction:row-reverse;
+    flex-direction: row-reverse;
     padding: 0 2em 1.875em 1.875em;
 }
 

@@ -54,9 +54,9 @@ defineExpose({
     <div class="border-b tab">
         <div class="relative border-l-2 border-transparent">
             <input checked class="absolute z-10 w-full h-10 opacity-0 cursor-pointer top-6" type="checkbox"
-                id="datosPersonales">
+                id="expedientes">
             <header class="flex items-center justify-between p-5 pl-8 pr-8 cursor-pointer select-none tab-label"
-                for="datosPersonales">
+                for="expedientes">
                 <span class="text-xl font-thin text-grey-darkest">
                     Archivos Expedientes
                 </span>

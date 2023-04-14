@@ -86,10 +86,9 @@ defineExpose({ focus: () => inputlist.value.focus() });
 <template>
     <div class="text-black">
         <input type="text" :list="list"
-            class="w-full py-1 text-sm text-black bg-white border-gray-300 rounded-md shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50 disabled:bg-gray-300"
-            :class="{ 'border-red-400': error, 'text-red-400': error }" :value="valueText"
-            @keyup="emit('value', valueText)" @input="changeText($event.target.value)" ref="inputlist"
-            :disabled="disabled">
+            class="w-full border-indigo-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 read-only:bg-gray-300"
+            :class="{ 'border-red-400': error, 'text-red-400': error }" :value="valueText" @keyup="emit('value', valueText)"
+            @input="changeText($event.target.value)" ref="inputlist" :disabled="disabled">
         <datalist :id="list">
             <option v-for="opcion in props.options" :key="opcion[props.keyOption]">
                 {{ opcion[props.nameOption] }}

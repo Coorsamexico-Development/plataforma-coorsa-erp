@@ -152,7 +152,7 @@ class EmpleadoController extends Controller
 
         $newEmpleado =  $request->validate([ //validaciones
             'correo_electronico' => 'required | unique:users,email',
-            'numero_empleado' => 'required',
+            'numero_empleado' => 'required|unique:users,numero_empleado',
             'nombre' => 'required',
             'apellido_paterno' => 'required',
             'apellido_materno' => 'required',
@@ -202,6 +202,7 @@ class EmpleadoController extends Controller
             // 'contrato' => 'required',
             'cat_tipos_sangre_id' => 'required',
             'alergias' => ['nullable', 'string'],
+            'departamento_id' => ['nullable', 'exists:cecos,id'],
             'enfermedades_cronicas' => ['nullable', 'string'],
             'cat_genero_id' => 'required',
             'rol_id' => 'required',
@@ -442,7 +443,7 @@ class EmpleadoController extends Controller
     {
         $newEmpleado = $request->validate([ //validaciones
             'correo_electronico' => 'required',
-            'numero_empleado' => 'required',
+            'numero_empleado' => 'required|unique:users,numero_empleado,' . $empleado->id . ',id',
             'nombre' => 'required',
             'apellido_paterno' => 'required',
             'apellido_materno' => 'required',
