@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RoleRequest;
+use App\Models\Role;
+use Inertia\Inertia;
 use App\Models\Permission;
 use App\Models\Plataforma;
-use App\Models\Role;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+use App\Http\Requests\RoleRequest;
+use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
 {
@@ -38,12 +39,14 @@ class RoleController extends Controller
         } else {
             $roles->orderBy('roles.created_at', 'desc');
         }
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
 
         return Inertia::render('Roles/RolesIndex', [
             'laravelRoles' => fn () =>  $roles->paginate(20),
             'laravelPermissions' => fn () => $permissons->get(),
             'laravelPlataformas' => fn () => $plataformas->get(),
-            'filters' => request(['search', 'field', 'direction', 'plataforma_id'])
+            'filters' => request(['search', 'field', 'direction', 'plataforma_id']),
+            'nominas' => $nominas
         ]);
     }
 

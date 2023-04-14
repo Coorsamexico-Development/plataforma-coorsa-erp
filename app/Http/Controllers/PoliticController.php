@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Politic;
 use App\Models\Tipopolitica;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Inertia\Inertia;
 
 class PoliticController extends Controller
 {
@@ -35,10 +36,13 @@ class PoliticController extends Controller
             $politicas->where('politics.type_politic', '=', request('type_politic'));
         }
 
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
+
         return Inertia::render('ControlInterno/PoliticsIndex', [
             'tipoPoliticas' => fn () => $tipoPoliticas->get(),
             'politicas' =>  fn () => $politicas->get(),
             'filters' => fn () => request()->all(['search', 'type_politic']),
+            'nominas' => $nominas
         ]);
     }
 
@@ -65,11 +69,13 @@ class PoliticController extends Controller
         if (request()->has('type_politic')) {
             $politicas->where('politics.type_politic', '=', request('type_politic'));
         }
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
 
-        return Inertia::render('ControlInterno/DocumentosInternos', [
+        return Inertia::render('ControlInterno/PoliticsIndex', [
             'tipoPoliticas' => fn () => $tipoPoliticas->get(),
             'politicas' =>  fn () => $politicas->get(),
             'filters' => fn () => request()->all(['search', 'type_politic']),
+            'nominas' => $nominas
         ]);
     }
 

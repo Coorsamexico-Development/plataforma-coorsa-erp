@@ -84,12 +84,15 @@ Route::middleware([
             )
             ->where('menus.created_at', 'LIKE', '%' . $fechaActual . '%')
             ->get();
+
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
         return Inertia::render(
             'Dashboard',
             [
                 'menus' => $menus,
                 'noticias' => $noticias,
-                'videos' => $videos
+                'videos' => $videos,
+                'nominas' => $nominas
             ]
         );
     })->name('dashboard');

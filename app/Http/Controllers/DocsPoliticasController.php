@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 class DocsPoliticasController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -14,7 +16,7 @@ class DocsPoliticasController extends Controller
     public function index()
     {
         //
-        return Inertia::render('ControlInterno/Index.vue');
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
+        return Inertia::render('ControlInterno/Index.vue', ['nominas' => $nominas]);
     }
-
 }

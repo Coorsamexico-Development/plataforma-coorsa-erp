@@ -57,11 +57,14 @@ class DepartamentoController extends Controller
         if (request()->has(['field', 'direction'])) {
             $departamentos->orderBy(request('field'), request('direction'));
         }
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
+
         return Inertia::render('RH/Departamentos/Departamento.Index', [
             'departamentos' => fn ()  => $departamentos->paginate(50),
             'filters' => fn ()  => request()->all(['search', 'field', 'direction']),
             'ubicaciones' => fn () => $ubicaciones->get(),
             'clientes' => fn () => $clientes->get(),
+            'nominas' => $nominas,
         ]);
     }
 

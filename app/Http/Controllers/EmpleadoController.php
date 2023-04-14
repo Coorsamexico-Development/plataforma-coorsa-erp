@@ -104,12 +104,14 @@ class EmpleadoController extends Controller
 
 
 
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
         return Inertia::render(
             'RH/Empleados/EmpleadosIndex',
             [
                 'empleados' => fn () => $empleados->paginate(10),
                 'activo' => $activo,
-                'filters' => request()->all(['search', 'fields', 'searchs'])
+                'filters' => request()->all(['search', 'fields', 'searchs']),
+                'nominas' => $nominas
             ]
         );
     }
@@ -130,6 +132,8 @@ class EmpleadoController extends Controller
         )->where('activo', '=', 1)->get();
         // return  dd(request());
 
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
+
         return Inertia::render(
             'RH/Empleados/Create/CreateEmpleado',
             [
@@ -142,6 +146,7 @@ class EmpleadoController extends Controller
                 'roles' => $roles,
                 'expedientes' => $tiposDocumentos,
                 'empleado_id' => session()->get('empleado_id'),
+                'nominas' => $nominas
             ]
         );
     }
@@ -404,6 +409,7 @@ class EmpleadoController extends Controller
 
 
 
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
         return Inertia::render(
             'RH/Empleados/Create/EditEmpleado',
             [
@@ -420,7 +426,8 @@ class EmpleadoController extends Controller
                 'empleado_baja' => $empleado_baja,
                 'finiquito' => $finiquito,
                 'departamento_puesto' => $dept_puesto,
-                'expedientes'  => $expedientes
+                'expedientes'  => $expedientes,
+                'nominas' => $nominas
             ]
         );
     }

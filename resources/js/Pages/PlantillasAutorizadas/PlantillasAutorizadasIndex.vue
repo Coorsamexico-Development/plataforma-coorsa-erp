@@ -29,6 +29,7 @@ var props = defineProps({
         type: Object,
         required: true,
     },
+    nominas: Object,
 });
 
 const params = reactive({
@@ -126,7 +127,7 @@ const totalGlobal = computed(() => {
 });
 </script>
 <template>
-    <AppLayout title="Plantillas">
+    <AppLayout title="Plantillas" :nominas="nominas">
         <template #header>
             <Title> Plantillas Autorizadas</Title>
         </template>

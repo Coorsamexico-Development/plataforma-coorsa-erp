@@ -1,18 +1,17 @@
 <script setup>
-import { reactive, ref, watch, computed } from 'vue';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import ButtonSeccion from '../../Components/ButtonSeccion.vue';
-import Title from '../../Components/Title.vue';
-import CardImage from '@/Components/CardImage.vue';
-import InputSearch from '@/Components/InputSearch.vue';
-import FormPoliticsModal from './Modals/FormPoliticsModal.vue';
-import { Inertia } from '@inertiajs/inertia';
-import { pickBy } from 'lodash';
-import AnimationCard from '../../Components/AnimationCard.vue';
-import { Fancybox } from '@fancyapps/ui/src/Fancybox/Fancybox.js';
-import ButtonAdd from '@/Components/ButtonAdd.vue';
-import FormDocsInternosModal from './Modals/FormDocsInternosModal.vue';
-
+import { reactive, ref, watch, computed } from "vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import ButtonSeccion from "../../Components/ButtonSeccion.vue";
+import Title from "../../Components/Title.vue";
+import CardImage from "@/Components/CardImage.vue";
+import InputSearch from "@/Components/InputSearch.vue";
+import FormPoliticsModal from "./Modals/FormPoliticsModal.vue";
+import { Inertia } from "@inertiajs/inertia";
+import { pickBy } from "lodash";
+import AnimationCard from "../../Components/AnimationCard.vue";
+import { Fancybox } from "@fancyapps/ui/src/Fancybox/Fancybox.js";
+import ButtonAdd from "@/Components/ButtonAdd.vue";
+import FormDocsInternosModal from "./Modals/FormDocsInternosModal.vue";
 
 let props = defineProps({
     tipoPoliticas: {
@@ -27,24 +26,24 @@ let props = defineProps({
         type: Object,
         required: true,
     },
+    nominas: Object,
 });
 
 const params = reactive({
     search: props.filters.search,
     type_politic: props.filters.type_politic,
-})
-
+});
 
 const showingFormPolitics = ref(false);
-const typeFormPolitic = ref('create');
+const typeFormPolitic = ref("create");
 const politic = ref({
-    id: -1
+    id: -1,
 });
 
 const closeFormPolitics = () => {
     showingFormPolitics.value = false;
     politic.value = { id: -1 };
-}
+};
 
 const showFormPolitic = (typeForm, politicSelect = null) => {
     typeFormPolitic.value = typeForm;
@@ -52,61 +51,91 @@ const showFormPolitic = (typeForm, politicSelect = null) => {
         politic.value = politicSelect;
     }
     showingFormPolitics.value = true;
-}
+};
 
 watch(params, (newParams) => {
-    Inertia.reload(
-        {
-            data: pickBy(newParams),
-            replace: true,
-            only: ['politicas'],
-            preserveScroll: true,
-            preserveState: true,
-        });
+    Inertia.reload({
+        data: pickBy(newParams),
+        replace: true,
+        only: ["politicas"],
+        preserveScroll: true,
+        preserveState: true,
+    });
 });
-
-
 
 /*Funcion Hover*/
 
 let hoverState = ref(false);
 
 const hover = computed(() => {
-    let modifier = '';
+    let modifier = "";
     if (hoverState.value) {
         return {
-            color: 'red',
-        }
+            color: "red",
+        };
     }
-
 });
-
 
 const updateHoverState = (isHover) => {
     hoverState.value = isHover;
     console.log(hoverState.value);
-} 
+};
 </script>
 
 <template>
-    <AppLayout title="Dashboard">
-        <section class="objetivo ">
-            <div class="text-center pt-14 objetivos" style="font-family: 'Montserrat';">
-                <h1 v-if="route().current('control-interno.documentos-internos.index')"
-                    class="ml-4 text-4xl font-semibold text-white">Objetivo de documentos internos</h1>
-                <h1 v-else class="ml-32 text-4xl font-semibold text-white">DOCUMENTOS PARA SOCIOS</h1>
-                <span class="w-16 h-1 bg-[#EC2944] mt-4" style="display:block; margin-left: 8.5rem;"></span>
+    <AppLayout title="Dashboard" :nominas="nominas">
+        <section class="objetivo">
+            <div
+                class="text-center pt-14 objetivos"
+                style="font-family: 'Montserrat'"
+            >
+                <h1
+                    v-if="
+                        route().current(
+                            'control-interno.documentos-internos.index'
+                        )
+                    "
+                    class="ml-4 text-4xl font-semibold text-white"
+                >
+                    Objetivo de documentos internos
+                </h1>
+                <h1 v-else class="ml-32 text-4xl font-semibold text-white">
+                    DOCUMENTOS PARA SOCIOS
+                </h1>
+                <span
+                    class="w-16 h-1 bg-[#EC2944] mt-4"
+                    style="display: block; margin-left: 8.5rem"
+                ></span>
             </div>
-            <p v-if="route().current('control-interno.documentos-internos.index')" class="mt-6 mb-16 text-xl text-white"
-                style="margin-left: 0rem; font-family: 'Montserrat'; line-height: 1.8;">
-                En esta sección tendrás acceso a toda la documentación normativa de la empresa de<br>
-                manera organizada para su revisión, lo cual te permitirá cumplir con los procesos y<br>
+            <p
+                v-if="
+                    route().current('control-interno.documentos-internos.index')
+                "
+                class="mt-6 mb-16 text-xl text-white"
+                style="
+                    margin-left: 0rem;
+                    font-family: 'Montserrat';
+                    line-height: 1.8;
+                "
+            >
+                En esta sección tendrás acceso a toda la documentación normativa
+                de la empresa de<br />
+                manera organizada para su revisión, lo cual te permitirá cumplir
+                con los procesos y<br />
                 optimizar tus tiempos.
             </p>
-            <p v-else class="mt-6 mb-16 text-xl text-white"
-                style="margin-left: 0rem; font-family: 'Montserrat'; line-height: 1.8;">
-                En esta sección encontraremos los estados de resultados con la<br>
-                información relevante de la empresa, para la correcta toma de<br>
+            <p
+                v-else
+                class="mt-6 mb-16 text-xl text-white"
+                style="
+                    margin-left: 0rem;
+                    font-family: 'Montserrat';
+                    line-height: 1.8;
+                "
+            >
+                En esta sección encontraremos los estados de resultados con
+                la<br />
+                información relevante de la empresa, para la correcta toma de<br />
                 decisiones y planeación estratégica.
             </p>
         </section>
@@ -114,106 +143,253 @@ const updateHoverState = (isHover) => {
 
         <section class="documentos">
             <div class="lateral">
-                <header class="text-[#1A1A22]" style="font-family: 'Montserrat';">Documentos</header>
-                <ul class="menuVert" v-for="tipoPoliticas in tipoPoliticas" :key="'poli' + tipoPoliticas.id">
+                <header
+                    class="text-[#1A1A22]"
+                    style="font-family: 'Montserrat'"
+                >
+                    Documentos
+                </header>
+                <ul
+                    class="menuVert"
+                    v-for="tipoPoliticas in tipoPoliticas"
+                    :key="'poli' + tipoPoliticas.id"
+                >
                     <div v-if="tipoPoliticas.id == 14">
                         <div v-if="$page.props.can['minutas.watch']">
-                            <span v-if="hoverState" class="absolute w-2 h-8 mt-2" style="float: left; margin-left: -1rem;"
-                                :style="{ backgroundColor: '#' + tipoPoliticas.color }"></span>
-                            <span v-if="!hoverState" class="absolute w-2 h-8 mt-2" style="float: left;"></span>
+                            <span
+                                v-if="hoverState"
+                                class="absolute w-2 h-8 mt-2"
+                                style="float: left; margin-left: -1rem"
+                                :style="{
+                                    backgroundColor: '#' + tipoPoliticas.color,
+                                }"
+                            ></span>
+                            <span
+                                v-if="!hoverState"
+                                class="absolute w-2 h-8 mt-2"
+                                style="float: left"
+                            ></span>
                             <li @click="params.type_politic = tipoPoliticas.id">
-                                <a class="font-semibold" @mouseenter="updateHoverState(true)"
-                                    @mouseleave="updateHoverState(false)">
-                                    <p v-if="params.type_politic == tipoPoliticas.id"
-                                        :style="{ color: '#' + tipoPoliticas.color }">
-                                        <span class="absolute w-2 h-8 mt-0" style="float: left; margin-left: -1rem;"
-                                            :style="{ backgroundColor: '#' + tipoPoliticas.color }"></span>
-                                        <span v-if="hoverState" :style="{ color: '#' + tipoPoliticas.color }">{{
-                                            tipoPoliticas.name }}</span>
-                                        <span v-if="!hoverState">{{ tipoPoliticas.name }}</span>
+                                <a
+                                    class="font-semibold"
+                                    @mouseenter="updateHoverState(true)"
+                                    @mouseleave="updateHoverState(false)"
+                                >
+                                    <p
+                                        v-if="
+                                            params.type_politic ==
+                                            tipoPoliticas.id
+                                        "
+                                        :style="{
+                                            color: '#' + tipoPoliticas.color,
+                                        }"
+                                    >
+                                        <span
+                                            class="absolute w-2 h-8 mt-0"
+                                            style="
+                                                float: left;
+                                                margin-left: -1rem;
+                                            "
+                                            :style="{
+                                                backgroundColor:
+                                                    '#' + tipoPoliticas.color,
+                                            }"
+                                        ></span>
+                                        <span
+                                            v-if="hoverState"
+                                            :style="{
+                                                color:
+                                                    '#' + tipoPoliticas.color,
+                                            }"
+                                            >{{ tipoPoliticas.name }}</span
+                                        >
+                                        <span v-if="!hoverState">{{
+                                            tipoPoliticas.name
+                                        }}</span>
                                     </p>
                                     <p v-else>
-                                        <span v-if="hoverState" :style="{ color: '#' + tipoPoliticas.color }">{{
-                                            tipoPoliticas.name }}</span>
-                                        <span v-if="!hoverState">{{ tipoPoliticas.name }}</span>
+                                        <span
+                                            v-if="hoverState"
+                                            :style="{
+                                                color:
+                                                    '#' + tipoPoliticas.color,
+                                            }"
+                                            >{{ tipoPoliticas.name }}</span
+                                        >
+                                        <span v-if="!hoverState">{{
+                                            tipoPoliticas.name
+                                        }}</span>
                                     </p>
                                 </a>
                             </li>
                         </div>
                     </div>
                     <div v-else>
-                        <span v-if="hoverState" class="absolute w-2 h-8 mt-2" style="float: left; margin-left: -1rem;"
-                            :style="{ backgroundColor: '#' + tipoPoliticas.color }"></span>
-                        <span v-if="!hoverState" class="absolute w-2 h-8 mt-2" style="float: left;"></span>
+                        <span
+                            v-if="hoverState"
+                            class="absolute w-2 h-8 mt-2"
+                            style="float: left; margin-left: -1rem"
+                            :style="{
+                                backgroundColor: '#' + tipoPoliticas.color,
+                            }"
+                        ></span>
+                        <span
+                            v-if="!hoverState"
+                            class="absolute w-2 h-8 mt-2"
+                            style="float: left"
+                        ></span>
                         <li @click="params.type_politic = tipoPoliticas.id">
-                            <a class="font-semibold" @mouseenter="updateHoverState(true)"
-                                @mouseleave="updateHoverState(false)">
-                                <p v-if="params.type_politic == tipoPoliticas.id"
-                                    :style="{ color: '#' + tipoPoliticas.color }">
-                                    <span class="absolute w-2 h-8 mt-0" style="float: left; margin-left: -1rem;"
-                                        :style="{ backgroundColor: '#' + tipoPoliticas.color }"></span>
-                                    <span v-if="hoverState" :style="{ color: '#' + tipoPoliticas.color }">{{
+                            <a
+                                class="font-semibold"
+                                @mouseenter="updateHoverState(true)"
+                                @mouseleave="updateHoverState(false)"
+                            >
+                                <p
+                                    v-if="
+                                        params.type_politic == tipoPoliticas.id
+                                    "
+                                    :style="{
+                                        color: '#' + tipoPoliticas.color,
+                                    }"
+                                >
+                                    <span
+                                        class="absolute w-2 h-8 mt-0"
+                                        style="float: left; margin-left: -1rem"
+                                        :style="{
+                                            backgroundColor:
+                                                '#' + tipoPoliticas.color,
+                                        }"
+                                    ></span>
+                                    <span
+                                        v-if="hoverState"
+                                        :style="{
+                                            color: '#' + tipoPoliticas.color,
+                                        }"
+                                        >{{ tipoPoliticas.name }}</span
+                                    >
+                                    <span v-if="!hoverState">{{
                                         tipoPoliticas.name
                                     }}</span>
-                                    <span v-if="!hoverState">{{ tipoPoliticas.name }}</span>
                                 </p>
                                 <p v-else>
-                                    <span v-if="hoverState" :style="{ color: '#' + tipoPoliticas.color }">{{
+                                    <span
+                                        v-if="hoverState"
+                                        :style="{
+                                            color: '#' + tipoPoliticas.color,
+                                        }"
+                                        >{{ tipoPoliticas.name }}</span
+                                    >
+                                    <span v-if="!hoverState">{{
                                         tipoPoliticas.name
                                     }}</span>
-                                    <span v-if="!hoverState">{{ tipoPoliticas.name }}</span>
                                 </p>
                             </a>
                         </li>
                     </div>
                 </ul>
-                <ButtonAdd v-if="$page.props.can['documentos-internos.create']" @click="showFormPolitic('create')"
-                    style="margin-top:2rem;font-family: 'Montserrat'; margin-left: 2.2rem;">AGREGAR DOCUMENTO</ButtonAdd>
+                <ButtonAdd
+                    v-if="$page.props.can['documentos-internos.create']"
+                    @click="showFormPolitic('create')"
+                    style="
+                        margin-top: 2rem;
+                        font-family: 'Montserrat';
+                        margin-left: 2.2rem;
+                    "
+                    >AGREGAR DOCUMENTO</ButtonAdd
+                >
             </div>
             <div class="documentos_view">
                 <!-- Files Section -->
                 <AnimationCard>
-                    <CardImage style="margin:1.8rem; height: 20rem; width:16rem; margin-top: 4rem;"
-                        v-for="politica in politicas" :key="politica.id" :file="politica.pdf">
+                    <CardImage
+                        style="
+                            margin: 1.8rem;
+                            height: 20rem;
+                            width: 16rem;
+                            margin-top: 4rem;
+                        "
+                        v-for="politica in politicas"
+                        :key="politica.id"
+                        :file="politica.pdf"
+                    >
                         <div class="row">
                             <div class="col-lg-3 col-md-4">
-                                <img class="h-48" style="width:50rem;" :src="politica.imagePolitic" />
+                                <img
+                                    class="h-48"
+                                    style="width: 50rem"
+                                    :src="politica.imagePolitic"
+                                />
                             </div>
                         </div>
 
                         <div class="pt-6 row">
-                            <span class="absolute w-2 h-12" style="float: left;"
-                                :style="{ backgroundColor: '#' + politica.color }"></span>
-                            <span class="text-[#1D2B4E] ;"
-                                style="font-size:0.9rem; font-weight: 600; margin-left: 2rem; font-family: 'Montserrat';display: block;">{{
-                                    politica.namepolitica }}</span>
-
+                            <span
+                                class="absolute w-2 h-12"
+                                style="float: left"
+                                :style="{
+                                    backgroundColor: '#' + politica.color,
+                                }"
+                            ></span>
+                            <span
+                                class="text-[#1D2B4E] ;"
+                                style="
+                                    font-size: 0.9rem;
+                                    font-weight: 600;
+                                    margin-left: 2rem;
+                                    font-family: 'Montserrat';
+                                    display: block;
+                                "
+                                >{{ politica.namepolitica }}</span
+                            >
                         </div>
 
                         <div class="pb-12 row">
-                            <span class="font-light text-[#1D2B4E]"
-                                style="font-size:0.8rem;  margin-left: 2rem;  font-family: 'Montserrat';">{{ politica.nombre
-                                    + ' ' + politica.apellido_paterno + ' ' + politica.apellido_materno }}</span>
+                            <span
+                                class="font-light text-[#1D2B4E]"
+                                style="
+                                    font-size: 0.8rem;
+                                    margin-left: 2rem;
+                                    font-family: 'Montserrat';
+                                "
+                                >{{
+                                    politica.nombre +
+                                    " " +
+                                    politica.apellido_paterno +
+                                    " " +
+                                    politica.apellido_materno
+                                }}</span
+                            >
                         </div>
 
-                        <div v-if="$page.props.can['documentos-internos.update']" style="white-space: normal; "
+                        <div
+                            v-if="$page.props.can['documentos-internos.update']"
+                            style="white-space: normal"
                             class="absolute z-10 w-6 h-6 py-1 bg-white rounded-full shadow -bottom-2 -right-1 hover:bg-gray-500 hover:text-white"
-                            @click="showFormPolitic('update', politica)">
-
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 m-auto" fill="currentColor"
-                                viewBox="0 0 16 16">
+                            @click="showFormPolitic('update', politica)"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="w-4 h-4 m-auto"
+                                fill="currentColor"
+                                viewBox="0 0 16 16"
+                            >
                                 <path
-                                    d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+                                    d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"
+                                />
                             </svg>
-
                         </div>
                     </CardImage>
                 </AnimationCard>
                 <!-- End Files Section -->
             </div>
         </section>
-        <FormDocsInternosModal :show="showingFormPolitics" :tipoPoliticas="tipoPoliticas" :politic="politic"
-            :typeForm="typeFormPolitic" @close="closeFormPolitics()" />
+        <FormDocsInternosModal
+            :show="showingFormPolitics"
+            :tipoPoliticas="tipoPoliticas"
+            :politic="politic"
+            :typeForm="typeFormPolitic"
+            @close="closeFormPolitics()"
+        />
     </AppLayout>
 </template>
 <style scoped></style>

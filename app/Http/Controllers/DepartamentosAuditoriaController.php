@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CalfRubroMe;
-use App\Models\DepartamentosAuditoria;
-use App\Models\DocumentosMe;
-use App\Models\Proceso;
-use App\Models\Rubro;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use App\Models\Rubro;
+use App\Models\Proceso;
+use App\Models\CalfRubroMe;
+use App\Models\DocumentosMe;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Models\DepartamentosAuditoria;
+use Illuminate\Support\Facades\Storage;
 
 class DepartamentosAuditoriaController extends Controller
 {
@@ -22,49 +23,57 @@ class DepartamentosAuditoriaController extends Controller
 
         $procesos = Proceso::select('procesos.*');
 
-        $calificaciones_mes = CalfRubroMe::select('calf_rubro_mes.*',
-        'procesos.id AS proceso_id',
-        'procesos.nombre as proceso_name',
-        'rubros.nombre as rubro_name'
+        $calificaciones_mes = CalfRubroMe::select(
+            'calf_rubro_mes.*',
+            'procesos.id AS proceso_id',
+            'procesos.nombre as proceso_name',
+            'rubros.nombre as rubro_name'
         )
-        ->join('rubros', 'calf_rubro_mes.rubro_id' , 'rubros.id')
-        ->join('procesos', 'rubros.proceso_id', 'procesos.id')
-        ->orderBy('año', 'ASC')
-        ->orderBy('mes', 'ASC');
+            ->join('rubros', 'calf_rubro_mes.rubro_id', 'rubros.id')
+            ->join('procesos', 'rubros.proceso_id', 'procesos.id')
+            ->orderBy('año', 'ASC')
+            ->orderBy('mes', 'ASC');
 
         $rubros = Rubro::select(
             'rubros.id AS rubro_id',
-            'rubros.nombre AS rubro_name')
-        ->join('procesos', 'rubros.proceso_id', 'procesos.id');
+            'rubros.nombre AS rubro_name'
+        )
+            ->join('procesos', 'rubros.proceso_id', 'procesos.id');
 
-        $documentos_mes = DocumentosMe::select('documentos_mes.documento',
-        'documentos_mes.mes',
-        'documentos_mes.portada AS portada',
-        'procesos.nombre AS proceso_name',
-        'users.name', 'users.apellido_paterno', 'users.apellido_materno')
-        ->join('procesos','documentos_mes.proceso_id','procesos.id')
-        ->join('users', 'documentos_mes.user_id', 'users.id');
+        $documentos_mes = DocumentosMe::select(
+            'documentos_mes.documento',
+            'documentos_mes.mes',
+            'documentos_mes.portada AS portada',
+            'procesos.nombre AS proceso_name',
+            'users.name',
+            'users.apellido_paterno',
+            'users.apellido_materno'
+        )
+            ->join('procesos', 'documentos_mes.proceso_id', 'procesos.id')
+            ->join('users', 'documentos_mes.user_id', 'users.id');
 
 
-        if (request()->has('departamento_auditoria_id'))
-         {
+        if (request()->has('departamento_auditoria_id')) {
             $departamento =  DepartamentosAuditoria::find(request('departamento_auditoria_id'));
-            $procesos->where('procesos.departamento_auditoria_id','=',request('departamento_auditoria_id'));
-            $calificaciones_mes->where('procesos.departamento_auditoria_id','=',request('departamento_auditoria_id'));
-            $documentos_mes ->where('procesos.departamento_auditoria_id','=',request('departamento_auditoria_id'));
-            $rubros ->where('procesos.departamento_auditoria_id','=',request('departamento_auditoria_id'));
-            
+            $procesos->where('procesos.departamento_auditoria_id', '=', request('departamento_auditoria_id'));
+            $calificaciones_mes->where('procesos.departamento_auditoria_id', '=', request('departamento_auditoria_id'));
+            $documentos_mes->where('procesos.departamento_auditoria_id', '=', request('departamento_auditoria_id'));
+            $rubros->where('procesos.departamento_auditoria_id', '=', request('departamento_auditoria_id'));
+
             //$calificaciones = $departamento->documentosCalificacionesMes()->orderBy('mes', 'asc');
         }
 
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
+
         return Inertia::render('ControlInterno/DashboardAuditoria', [
             'departamentosAuditoria' => fn () => $departamentosAuditoria->get(),
-            'procesos' => fn() =>$procesos->get(),
+            'procesos' => fn () => $procesos->get(),
             'filters' => request()->all(['departamento_auditoria_id']),
             'usuarios' => $usuarios,
-            'calificaciones_mes' => fn () => $calificaciones_mes ->get(),
-            'documentos_mes' => fn() => $documentos_mes -> get(),
-            'rubros_mes' => fn() => $rubros -> get()
+            'calificaciones_mes' => fn () => $calificaciones_mes->get(),
+            'documentos_mes' => fn () => $documentos_mes->get(),
+            'rubros_mes' => fn () => $rubros->get(),
+            'nominas' => $nominas
         ]);
     }
 
@@ -76,43 +85,40 @@ class DepartamentosAuditoriaController extends Controller
             "departamento_auditoria_id" => ['required']
         ]);
 
-        if($request['logo']  !== null)
-        {
+        if ($request['logo']  !== null) {
             $logo = request('logo');
             $nombre_logo =  $logo->getClientOriginalName(); //rescatamos el nombre original
-            $ruta_logo= $logo->storeAs('procesos/logos', $nombre_logo, 'gcs'); //guardamos el archivo en el storage
+            $ruta_logo = $logo->storeAs('procesos/logos', $nombre_logo, 'gcs'); //guardamos el archivo en el storage
             $urlFotografia = Storage::disk('gcs')->url($ruta_logo);
 
             Proceso::create([
                 'nombre' => $request['nombre'],
                 'descripcion' => $request['descripcion'],
-                'departamento_auditoria_id'=> $request['departamento_auditoria_id'], 
+                'departamento_auditoria_id' => $request['departamento_auditoria_id'],
                 'logo' => $urlFotografia
             ]);
-        }
-        else
-        {
-           Proceso::create([
+        } else {
+            Proceso::create([
                 'nombre' => $request['nombre'],
                 'descripcion' => $request['descripcion'],
-                'departamento_auditoria_id'=> $request['departamento_auditoria_id'], 
+                'departamento_auditoria_id' => $request['departamento_auditoria_id'],
             ]);
         }
 
         return redirect()->back();
     }
 
-    public function storeDocumento (Request $request)
+    public function storeDocumento(Request $request)
     {
-          $documento = request('documento');
-          $nombre_documento =  $documento->getClientOriginalName(); //rescatamos el nombre original
-          $ruta_documento= $documento->storeAs('procesos/documentos', $nombre_documento, 'gcs'); //guardamos el archivo en el storage
-          $urlDocumento = Storage::disk('gcs')->url($ruta_documento);
+        $documento = request('documento');
+        $nombre_documento =  $documento->getClientOriginalName(); //rescatamos el nombre original
+        $ruta_documento = $documento->storeAs('procesos/documentos', $nombre_documento, 'gcs'); //guardamos el archivo en el storage
+        $urlDocumento = Storage::disk('gcs')->url($ruta_documento);
 
-          $portada = request('portada');
-          $nombre_portada = $portada->getClientOriginalName();
-          $ruta_portada = $portada->storeAs('procesos/documentos/portadas', $nombre_portada, 'gcs');
-          $urlPortada = Storage::disk('gcs')->url($ruta_portada);
+        $portada = request('portada');
+        $nombre_portada = $portada->getClientOriginalName();
+        $ruta_portada = $portada->storeAs('procesos/documentos/portadas', $nombre_portada, 'gcs');
+        $urlPortada = Storage::disk('gcs')->url($ruta_portada);
 
         DocumentosMe::create([
             'user_id' => $request['user_id'],
@@ -126,11 +132,11 @@ class DepartamentosAuditoriaController extends Controller
     }
 
     public function updateDocumento(Request $request, $idDocumento)
-    { 
+    {
 
         $documento = request('documento');
         $nombre_documento =  $documento->getClientOriginalName(); //rescatamos el nombre original
-        $ruta_documento= $documento->storeAs('procesos/documentos', $nombre_documento, 'gcs'); //guardamos el archivo en el storage
+        $ruta_documento = $documento->storeAs('procesos/documentos', $nombre_documento, 'gcs'); //guardamos el archivo en el storage
         $urlDocumento = Storage::disk('gcs')->url($ruta_documento);
 
         $portada = request('portada');
@@ -138,29 +144,31 @@ class DepartamentosAuditoriaController extends Controller
         $ruta_portada = $portada->storeAs('procesos/documentos/portadas', $nombre_portada, 'gcs');
         $urlPortada = Storage::disk('gcs')->url($ruta_portada);
 
-        DocumentosMe::where('documentos_mes.id','=', $idDocumento)
-        ->update([
-            'user_id' => $request['user_id'],
-            'proceso_id' => $request['proceso_id'],
-            'mes' => $request['mes'],
-            'documento' => $urlDocumento,
-            'portada' => $urlPortada
-        ]);
+        DocumentosMe::where('documentos_mes.id', '=', $idDocumento)
+            ->update([
+                'user_id' => $request['user_id'],
+                'proceso_id' => $request['proceso_id'],
+                'mes' => $request['mes'],
+                'documento' => $urlDocumento,
+                'portada' => $urlPortada
+            ]);
 
         return redirect()->back();
-    }  
+    }
 
 
-    public function getDocumentos ($proceso_id) 
+    public function getDocumentos($proceso_id)
     {
-        return DocumentosMe::select('documentos_mes.*', 
-        'users.id AS user_id',
-        'users.name AS user_name',
-        'users.apellido_paterno AS user_apellido_paterno',
-        'users.apellido_materno AS user_apellido_materno')
-        ->join('users','documentos_mes.user_id','users.id')
-        ->where('documentos_mes.proceso_id','=',$proceso_id)
-        ->get();
+        return DocumentosMe::select(
+            'documentos_mes.*',
+            'users.id AS user_id',
+            'users.name AS user_name',
+            'users.apellido_paterno AS user_apellido_paterno',
+            'users.apellido_materno AS user_apellido_materno'
+        )
+            ->join('users', 'documentos_mes.user_id', 'users.id')
+            ->where('documentos_mes.proceso_id', '=', $proceso_id)
+            ->get();
     }
 
     public function destroyDocumento(DocumentosMe $documento)
@@ -171,59 +179,58 @@ class DepartamentosAuditoriaController extends Controller
         return redirect()->back();
     }
 
-    public function storeRubro (Request $request)
+    public function storeRubro(Request $request)
     {
-       Rubro::create([
-         'proceso_id' => $request['proceso_id'],
-       ]);
-       return redirect()->back();
+        Rubro::create([
+            'proceso_id' => $request['proceso_id'],
+        ]);
+        return redirect()->back();
     }
 
     public function getRubros($proceso_id, $año)
     {
         return  Rubro::select('rubros.*')
-        ->with([
-            'calificaciones' => function ($query1) use ($año)
-            {
-                $query1->select(
-                    'calf_rubro_mes.*'
-                )
-                ->where('calf_rubro_mes.año','=', $año);
-            }
-        ])
-        ->where('rubros.proceso_id','=',$proceso_id)
-        ->get();
+            ->with([
+                'calificaciones' => function ($query1) use ($año) {
+                    $query1->select(
+                        'calf_rubro_mes.*'
+                    )
+                        ->where('calf_rubro_mes.año', '=', $año);
+                }
+            ])
+            ->where('rubros.proceso_id', '=', $proceso_id)
+            ->get();
     }
 
     public function updateRubro(Request $request, $rubro_id)
     {
-       //return $rubro_id;
-       $request->validate([
-        'nombre' =>  ['required']
-       ]);
-       Rubro::where('id','=',$rubro_id)
-       ->update([
-          'nombre'=> $request['nombre'],
-       ]);
+        //return $rubro_id;
+        $request->validate([
+            'nombre' =>  ['required']
+        ]);
+        Rubro::where('id', '=', $rubro_id)
+            ->update([
+                'nombre' => $request['nombre'],
+            ]);
 
-       return redirect()->back();
+        return redirect()->back();
     }
 
-    public function storeCalf (Request $request)
+    public function storeCalf(Request $request)
     {
         $request->validate([
             'rubro_id' =>  ['required'],
             'valor' =>  ['required'],
-           ]);
-           
-       CalfRubroMe::updateOrCreate(
-         ['rubro_id' => $request['rubro_id'], 'mes' => $request['mes'], 'año' => $request['año']],
-         ['valor' => $request['valor']]
-       );
-       return redirect()->back();
+        ]);
+
+        CalfRubroMe::updateOrCreate(
+            ['rubro_id' => $request['rubro_id'], 'mes' => $request['mes'], 'año' => $request['año']],
+            ['valor' => $request['valor']]
+        );
+        return redirect()->back();
     }
- 
-/*
+
+    /*
     public function storeCalificacion(DepartamentosAuditoria $departamentosAuditoria, Request $request)
     {
         $documentoUrl = "";
@@ -247,9 +254,9 @@ class DepartamentosAuditoriaController extends Controller
     }
  */
 
- public function recuperarRubros ($categoria, $mes , $año) 
- {
-    /*
+    public function recuperarRubros($categoria, $mes, $año)
+    {
+        /*
      $mesBuscado = 0;
      switch ($mes) 
      {
@@ -293,24 +300,24 @@ class DepartamentosAuditoriaController extends Controller
      }
      */
 
-     $rubros = Rubro::select(
-        'rubros.nombre AS rubro_name'
-     )
-     ->join('procesos','rubros.proceso_id', 'procesos.id')
-     ->where('procesos.nombre','LIKE','%'.$categoria.'%')
-     ->get();
+        $rubros = Rubro::select(
+            'rubros.nombre AS rubro_name'
+        )
+            ->join('procesos', 'rubros.proceso_id', 'procesos.id')
+            ->where('procesos.nombre', 'LIKE', '%' . $categoria . '%')
+            ->get();
 
-     $valores =  CalfRubroMe::select(
-        'rubros.nombre AS rubro_nombre',
-        'calf_rubro_mes.valor AS valor',
-      )
-      ->join('rubros', 'calf_rubro_mes.rubro_id', 'rubros.id')
-      ->join('procesos', 'rubros.proceso_id', 'procesos.id')
-      ->where('procesos.nombre','LIKE','%'.$categoria.'%')
-      ->where('calf_rubro_mes.mes','=', $mes)
-      ->where('calf_rubro_mes.año','=', $año)
-      ->get();
+        $valores =  CalfRubroMe::select(
+            'rubros.nombre AS rubro_nombre',
+            'calf_rubro_mes.valor AS valor',
+        )
+            ->join('rubros', 'calf_rubro_mes.rubro_id', 'rubros.id')
+            ->join('procesos', 'rubros.proceso_id', 'procesos.id')
+            ->where('procesos.nombre', 'LIKE', '%' . $categoria . '%')
+            ->where('calf_rubro_mes.mes', '=', $mes)
+            ->where('calf_rubro_mes.año', '=', $año)
+            ->get();
 
-      return [$rubros, $valores];
- }
+        return [$rubros, $valores];
+    }
 }
