@@ -44,7 +44,6 @@ class RecibosNominaController extends Controller
             $noEmpleado = explode('.', explode('_', explode('/', $file)[1])[3])[0];
             $pathfile = Storage::disk('gcs')->put('/nominas', new File(Storage::disk('docs')->path($file)));
             $pathGCS = Storage::disk('gcs')->url($pathfile);
-            dd($file);
             DB::table('nominas_empleados')->create([
                 'empleado_id' => 809,
                 'nomina_doc' => $pathGCS,
