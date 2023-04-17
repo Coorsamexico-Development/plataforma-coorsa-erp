@@ -23,7 +23,7 @@ class PuestoController extends Controller
         if (request()->has(['field', 'direction'])) {
             $puestos->orderBy(request('field'), request('direction'));
         }
-        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
         return response()->json([
             'puestos' => $puestos->paginate(10),
             'filters' => request()->all(['search', 'field', 'direction']),

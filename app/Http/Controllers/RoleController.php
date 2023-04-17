@@ -39,7 +39,7 @@ class RoleController extends Controller
         } else {
             $roles->orderBy('roles.created_at', 'desc');
         }
-        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
 
         return Inertia::render('Roles/RolesIndex', [
             'laravelRoles' => fn () =>  $roles->paginate(20),
