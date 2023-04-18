@@ -318,7 +318,7 @@ class EmpleadoController extends Controller
             $tipoDoc = CatTipoDocumento::select('cat_tipo_documentos.*')->firstWhere('id', $request['cat_tipo_documento_id']);
             /*Guardamos*/
             $file = $request->file('file');
-            $fileName =  "{$curp}_{$tipoDoc->nombre}.{$file->extension()}";
+            $fileName =  $curp . "_" . $tipoDoc->nombre . "." . $file->extension();
             $rutaFile = $file->storeAs("expedientes/$curp/{$tipoDoc->nombre}", $fileName, 'gcs');
             $urlExpediente = Storage::disk('gcs')->url($rutaFile);
             expediente::updateOrCreate(
