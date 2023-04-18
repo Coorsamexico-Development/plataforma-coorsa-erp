@@ -78,7 +78,7 @@ class ActivoController extends Controller
 
     $tipo_evidencias = tipoEvidencia::all();
 
-    $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
+    $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
 
     return Inertia::render(
       'Activos/ActivosIndex',

@@ -14,6 +14,7 @@ use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\PlantillasAutorizadaController;
 use App\Http\Controllers\PoliticController;
 use App\Http\Controllers\PuestoController;
+use App\Http\Controllers\RecibosNominaController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UbicacionController;
@@ -85,7 +86,7 @@ Route::middleware([
             ->where('menus.created_at', 'LIKE', '%' . $fechaActual . '%')
             ->get();
 
-        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
         return Inertia::render(
             'Dashboard',
             [
@@ -206,3 +207,7 @@ Route::get('users/export/{activo}', [UserController::class, 'export'])->name('ex
 Route::get('card/user/{numero_empleado}', [UserController::class, 'viewCard'])->name('view.card');
 
 Route::get('user/puesto/{id}', [UserController::class, 'getPuesto'])->name('getPuesto');
+
+Route::controller(RecibosNominaController::class)->group(function () {
+    Route::post('nominas/post', 'store')->name('nomina.upload');
+});

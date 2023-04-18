@@ -39,7 +39,15 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        'docs' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/docs'),
+            'url' => env('APP_URL') . '/docs',
             'visibility' => 'public',
             'throw' => false,
         ],
@@ -64,7 +72,7 @@ return [
             'path_prefix' => env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', ''), // optional: /default/path/to/apply/in/bucket
             'apiEndpoint' => env('GOOGLE_CLOUD_STORAGE_API_URI', null), // see: Public URLs below
             'visibility' => 'public', // optional: public|private
-            'metadata' => ['cacheControl'=> 'public,max-age=86400'], // optional: default metadata
+            'metadata' => ['cacheControl' => 'public,max-age=86400'], // optional: default metadata
 
         ],
     ],
@@ -82,6 +90,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('docs') => storage_path('app/public/docs'),
     ],
 
 ];

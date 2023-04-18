@@ -63,7 +63,7 @@ class DepartamentosAuditoriaController extends Controller
             //$calificaciones = $departamento->documentosCalificacionesMes()->orderBy('mes', 'asc');
         }
 
-        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
 
         return Inertia::render('ControlInterno/DashboardAuditoria', [
             'departamentosAuditoria' => fn () => $departamentosAuditoria->get(),

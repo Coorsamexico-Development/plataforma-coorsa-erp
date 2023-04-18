@@ -17,7 +17,20 @@ defineProps({
 });
 
 const showingNavigationDropdown = ref(false);
-
+const months = [
+    "Ene",
+    "Feb",
+    "Mar",
+    "Abr",
+    "May",
+    "Jun",
+    "Jul",
+    "Ago",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+];
 const switchToTeam = (team) => {
     Inertia.put(
         route("current-team.update"),
@@ -641,14 +654,16 @@ const cambio2 = () => {
                                                         {{
                                                             new Date(
                                                                 nomina.fecha_doc
-                                                            ).getMonth() + 1
+                                                            ).getFullYear()
                                                         }}
                                                     </td>
                                                     <td>
                                                         {{
-                                                            new Date(
-                                                                nomina.fecha_doc
-                                                            ).getFullYear()
+                                                            months[
+                                                                new Date(
+                                                                    nomina.fecha_doc
+                                                                ).getUTCMonth()
+                                                            ]
                                                         }}
                                                     </td>
                                                     <td>

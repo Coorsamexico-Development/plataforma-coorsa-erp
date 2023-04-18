@@ -104,7 +104,7 @@ class EmpleadoController extends Controller
 
 
 
-        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
         return Inertia::render(
             'RH/Empleados/EmpleadosIndex',
             [
@@ -132,7 +132,7 @@ class EmpleadoController extends Controller
         )->where('activo', '=', 1)->get();
         // return  dd(request());
 
-        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
 
         return Inertia::render(
             'RH/Empleados/Create/CreateEmpleado',
@@ -409,7 +409,7 @@ class EmpleadoController extends Controller
 
 
 
-        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->paginate(5);
+        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
         return Inertia::render(
             'RH/Empleados/Create/EditEmpleado',
             [
