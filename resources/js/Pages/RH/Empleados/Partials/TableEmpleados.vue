@@ -250,7 +250,7 @@ watch(params, throttle((newParams) => {
                             <template #content>
                                 <ul>
                                     <li v-for="expendiente in empleado.expedientes" class=" hover:bg-gray-600">
-                                        <div :data-fancybox="expendiente" :data-src="expendiente.ruta"
+                                        <div :data-fancybox="empleado.id + '-expediente'" :data-src="expendiente.ruta"
                                             :data-caption="expendiente.tipo_documento">
                                             {{ expendiente.tipo_documento }}
                                         </div>
