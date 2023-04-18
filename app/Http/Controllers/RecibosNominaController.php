@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\NominasEmpleado;
 use ZipArchive;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -27,32 +28,31 @@ class RecibosNominaController extends Controller
         $file = $request->file('doc');
         $fecha = explode('-', $file->getClientOriginalName())[0] . '-' . explode('-', $file->getClientOriginalName())[1] . '-01';
         $semana = explode('.', explode('-', $file->getClientOriginalName())[2])[0];
-        $temp = Storage::disk('gcs')->put('/nominas', $request->file('doc'));
+        $temp = Storage::disk('docs')->put('/', $request->file('doc'));
 
         $zip = new ZipArchive;
-        if ($zip->open(Storage::disk('gcs')->path($temp)) === TRUE) {
+        if ($zip->open(Storage::disk('docs')->path($temp)) === TRUE) {
             $folder = explode('.', $request->file('doc')->getClientOriginalName())[0];
-            $path = Storage::disk('gcs')->path('nominas') . $folder;
+            $path = Storage::disk('docs')->path('/') . $folder;
             $zip->extractTo($path);
             $zip->close();
         }
-        Storage::disk('gcs')->delete($temp);
+        Storage::disk('docs')->delete($temp);
 
-        $files = Storage::disk('gcs')->files('/nominas/' . $folder);
+        $files = Storage::disk('docs')->files($folder);
 
         foreach ($files as $file) {
             $noEmpleado = explode('.', explode('_', explode('/', $file)[1])[3])[0];
-            $pathfile = Storage::disk('gcs')->put('/nominas', new File(Storage::disk('gcs')->path($file)));
+            $pathfile = Storage::disk('gcs')->put('/nominas', new File(Storage::disk('docs')->path($file)));
             $pathGCS = Storage::disk('gcs')->url($pathfile);
 
-            DB::table('nominas_empleados')->create([
+            NominasEmpleado::create([
                 'empleado_id' => 809,
                 'nomina_doc' => $pathGCS,
                 'fecha_doc' => $fecha,
                 'periodo' => $semana,
             ]);
         }
-        Storage::disk('gcs')->deleteDirectory('/nominas/' . $folder);
-        return redirect()->back();
+        Storage::disk('docs')->deleteDirectory($folder);
     }
 }
