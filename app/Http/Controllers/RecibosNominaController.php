@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\NominasEmpleado;
+use App\Models\User;
 use ZipArchive;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -43,16 +44,18 @@ class RecibosNominaController extends Controller
 
         foreach ($files as $file) {
             $noEmpleado = explode('.', explode('_', explode('/', $file)[1])[3])[0];
+            $user = User::where('numero_empleado', $noEmpleado)->first();
             $pathfile = Storage::disk('gcs')->put('/nominas', new File(Storage::disk('docs')->path($file)));
             $pathGCS = Storage::disk('gcs')->url($pathfile);
 
             NominasEmpleado::create([
-                'empleado_id' => 809,
+                'empleado_id' => $user->id,
                 'nomina_doc' => $pathGCS,
                 'fecha_doc' => $fecha,
                 'periodo' => $semana,
             ]);
         }
         Storage::disk('docs')->deleteDirectory($folder);
+        return redirect()->back();
     }
 }

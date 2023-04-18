@@ -641,14 +641,14 @@ const cambio2 = () => {
                                                         {{
                                                             new Date(
                                                                 nomina.fecha_doc
-                                                            ).getMonth() + 1
+                                                            ).getFullYear()
                                                         }}
                                                     </td>
                                                     <td>
                                                         {{
                                                             new Date(
                                                                 nomina.fecha_doc
-                                                            ).getFullYear()
+                                                            ).getMonth() + 1
                                                         }}
                                                     </td>
                                                     <td>

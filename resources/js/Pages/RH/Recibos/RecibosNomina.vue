@@ -23,7 +23,7 @@ const subir = () => {
         <Card>
             <div class="grid place-content-center p-4">
                 <form class="flex gap-2 flex-col" @submit.prevent="subir">
-                    <div class="flex gap-2 items-center">
+                    <div class="flex flex-col gap-2 justify-center">
                         <label for="documento">Subir documento</label>
                         <input
                             type="file"
@@ -32,7 +32,10 @@ const subir = () => {
                             id="documento"
                             class="border-2 rounded-xl px-2 py-1 border-gray-400"
                         />
-                        <InputError :message="form.errors.doc" class="mt-2" />
+                        <InputError
+                            :message="form.errors.doc"
+                            class="mt-2 capitalize"
+                        />
                     </div>
                     <div>
                         <input
