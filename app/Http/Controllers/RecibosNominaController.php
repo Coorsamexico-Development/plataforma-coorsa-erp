@@ -27,24 +27,24 @@ class RecibosNominaController extends Controller
         $file = $request->file('doc');
         $fecha = explode('-', $file->getClientOriginalName())[0] . '-' . explode('-', $file->getClientOriginalName())[1] . '-01';
         $semana = explode('.', explode('-', $file->getClientOriginalName())[2])[0];
-        $temp = Storage::disk('docs')->put('/', $request->file('doc'));
+        $temp = Storage::disk('gcs')->put('/nominas', $request->file('doc'));
 
         $zip = new ZipArchive;
-        if ($zip->open(Storage::disk('docs')->path($temp)) === TRUE) {
+        if ($zip->open(Storage::disk('gcs')->path($temp)) === TRUE) {
             $folder = explode('.', $request->file('doc')->getClientOriginalName())[0];
-            $path = getcwd() . '\storage\docs\\' . $folder;
+            $path = Storage::disk('gcs')->path('nominas') . $folder;
             $zip->extractTo($path);
             $zip->close();
         }
-        Storage::disk('docs')->delete($temp);
+        Storage::disk('gcs')->delete($temp);
 
-        $files = Storage::disk('docs')->files($folder);
-        dd($files);
+        $files = Storage::disk('gcs')->files('/nominas/' . $folder);
 
         foreach ($files as $file) {
             $noEmpleado = explode('.', explode('_', explode('/', $file)[1])[3])[0];
-            $pathfile = Storage::disk('gcs')->put('/nominas', new File(Storage::disk('docs')->path($file)));
+            $pathfile = Storage::disk('gcs')->put('/nominas', new File(Storage::disk('gcs')->path($file)));
             $pathGCS = Storage::disk('gcs')->url($pathfile);
+
             DB::table('nominas_empleados')->create([
                 'empleado_id' => 809,
                 'nomina_doc' => $pathGCS,
@@ -52,7 +52,7 @@ class RecibosNominaController extends Controller
                 'periodo' => $semana,
             ]);
         }
-        Storage::disk('docs')->deleteDirectory($folder);
+        Storage::disk('gcs')->deleteDirectory('/nominas/' . $folder);
         return redirect()->back();
     }
 }
