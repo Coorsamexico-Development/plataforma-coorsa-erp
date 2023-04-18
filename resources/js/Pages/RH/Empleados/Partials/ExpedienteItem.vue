@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, watch } from 'vue';
+import { reactive, watchEffect } from 'vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import DropZone from '@/Components/DropZone.vue';
 import InputError from '@/Components/InputError.vue';
@@ -30,6 +30,9 @@ const form = reactive({
 
 
 const loadFile = async (empId = 0) => {
+    if (props.empleadoId === null) {
+        return;
+    };
     if (form.file.length === 0) {
         return true;
     }
@@ -42,9 +45,6 @@ const loadFile = async (empId = 0) => {
 
             const { loaded, total } = progressEvent;
             let percent = Math.floor((loaded * 100) / total);
-            if (percent < 100) {
-                console.log(`${loaded} bytes of ${total} bytes. ${percent}%`);
-            }
             form.progress = { percent, loaded, total };
         },
         headers: {
@@ -72,12 +72,10 @@ const loadFile = async (empId = 0) => {
     return true;
 }
 
-watch(form, () => {
-    if (props.empleadoId !== null) {
+watchEffect(() => {
+    if (form.file.length !== 0 && props.empleadoId !== null) {
         loadFile(props.empleadoId);
     };
-}, {
-    deep: true
 });
 
 defineExpose({
