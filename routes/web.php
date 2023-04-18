@@ -209,6 +209,5 @@ Route::get('card/user/{numero_empleado}', [UserController::class, 'viewCard'])->
 Route::get('user/puesto/{id}', [UserController::class, 'getPuesto'])->name('getPuesto');
 
 Route::controller(RecibosNominaController::class)->group(function () {
-    Route::get('nominas/recibos', 'index')->name('recibos.nomina');
     Route::post('nominas/post', 'store')->name('nomina.upload');
 });

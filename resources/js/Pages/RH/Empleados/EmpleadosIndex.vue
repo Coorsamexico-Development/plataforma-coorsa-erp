@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive, watch } from "vue";
+import { computed, reactive, watch, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Inertia } from "@inertiajs/inertia";
 import { pickBy } from "lodash";
@@ -9,6 +9,7 @@ import Pagination from "@/Components/Pagination.vue";
 import ButtonAdd from "../../../Components/ButtonAdd.vue";
 import ButtonInfo from "@/Components/Buttoninfo.vue";
 import { Link } from "@inertiajs/inertia-vue3";
+import NominaModal from "./Partials/NominaModal.vue";
 
 var props = defineProps({
     empleados: Object,
@@ -20,6 +21,7 @@ var props = defineProps({
 const params = reactive({
     search: props.filters.search,
 });
+const nominaModal = ref(false);
 
 watch(params, () => {
     const clearParams = pickBy({ ...params });
@@ -62,6 +64,7 @@ const permission = computed(() => {
             >
                 Empleados inactivos
             </h2>
+
             <a :href="route('export.empleados', activo)">
                 <ButtonInfo style="float: right; margin-top: -1.5rem">
                     <svg
@@ -107,6 +110,12 @@ const permission = computed(() => {
                 style="float: right; margin-top: -2rem; margin-right: 12rem"
             >
             </InputSearch>
+            <ButtonInfo
+                class="float-right -mt-[1.5rem] mr-[8rem]"
+                @click="nominaModal = true"
+            >
+                Nominas
+            </ButtonInfo>
         </template>
 
         <div class="py-12">
@@ -122,5 +131,6 @@ const permission = computed(() => {
                 </div>
             </div>
         </div>
+        <NominaModal :show="nominaModal" @close="nominaModal = false" />
     </app-layout>
 </template>

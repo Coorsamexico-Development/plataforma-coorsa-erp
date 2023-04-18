@@ -2,25 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\NominasEmpleado;
-use App\Models\User;
 use ZipArchive;
+use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\NominasEmpleado;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\File;
 
 class RecibosNominaController extends Controller
 {
-    public function index()
-    {
-        $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
-        return Inertia::render(
-            'RH/Recibos/RecibosNomina',
-            ['nominas' => $nominas]
-        );
-    }
     public function store(Request $request)
     {
         $request->validate([
@@ -45,7 +36,8 @@ class RecibosNominaController extends Controller
         foreach ($files as $file) {
             $noEmpleado = explode('.', explode('_', explode('/', $file)[1])[3])[0];
             $user = User::where('numero_empleado', $noEmpleado)->first();
-            $pathfile = Storage::disk('gcs')->put('/nominas', new File(Storage::disk('docs')->path($file)));
+            $docs = new UploadedFile(Storage::disk('docs')->path($file), explode('/', $file)[1], 'application/pdf');
+            $pathfile = $docs->storeAs("nominas/{$user->id}", $docs->getClientOriginalName(), 'gcs');
             $pathGCS = Storage::disk('gcs')->url($pathfile);
 
             NominasEmpleado::create([
