@@ -4,6 +4,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import DropZone from '@/Components/DropZone.vue';
 import InputError from '@/Components/InputError.vue';
 import axios from 'axios';
+import { throttle } from 'lodash'
 
 
 const props = defineProps({
@@ -72,11 +73,11 @@ const loadFile = async (empId = 0) => {
     return true;
 }
 
-watchEffect(() => {
+watchEffect(throttle(() => {
     if (form.file.length !== 0 && props.empleadoId !== null) {
         loadFile(props.empleadoId);
     };
-});
+}, 200));
 
 defineExpose({
     loadFile
