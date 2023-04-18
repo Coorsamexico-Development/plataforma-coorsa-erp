@@ -39,6 +39,7 @@ class RecibosNominaController extends Controller
         Storage::disk('docs')->delete($temp);
 
         $files = Storage::disk('docs')->files($folder);
+        dd($files);
 
         foreach ($files as $file) {
             $noEmpleado = explode('.', explode('_', explode('/', $file)[1])[3])[0];
