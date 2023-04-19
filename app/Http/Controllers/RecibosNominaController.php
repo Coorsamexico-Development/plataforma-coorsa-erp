@@ -36,7 +36,6 @@ class RecibosNominaController extends Controller
         foreach ($files as $file) {
             $noEmpleado = explode('.', explode('_', explode('/', $file)[1])[3])[0];
             $user = User::where('numero_empleado', $noEmpleado)->first();
-            dd($user);
             if ($user->id) {
                 $docs = new UploadedFile(Storage::disk('docs')->path($file), explode('/', $file)[1], 'application/pdf');
                 $pathfile = $docs->storeAs("nominas/{$user->id}", $docs->getClientOriginalName(), 'gcs');
