@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, watchEffect } from 'vue';
+import { reactive, watchEffect, computed } from 'vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import DropZone from '@/Components/DropZone.vue';
 import InputError from '@/Components/InputError.vue';
@@ -73,6 +73,11 @@ const loadFile = async (empId = 0) => {
     return true;
 }
 
+const rutaNochache = computed(() => {
+    const dateTime = new Date().getTime();
+    return props.expediente.ruta + '?nocache=' + dateTime;
+});
+
 watchEffect(throttle(() => {
     if (form.file.length !== 0 && props.empleadoId !== null) {
         loadFile(props.empleadoId);
@@ -98,7 +103,7 @@ defineExpose({
             </div>
         </div>
         <div v-if="expediente.ruta && expediente.ruta !== null" class="text-green-500 cursor-pointer hover:opacity-80">
-            <a data-fancybox="expedientes" :data-src="expediente.ruta">
+            <a data-fancybox="expedientes" :data-src="rutaNochache">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="inline w-5 h-5" viewBox="0 0 16 16">
                     <path
                         d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
