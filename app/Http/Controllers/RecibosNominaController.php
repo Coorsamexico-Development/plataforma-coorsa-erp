@@ -36,17 +36,20 @@ class RecibosNominaController extends Controller
         foreach ($files as $file) {
             $noEmpleado = explode('.', explode('_', explode('/', $file)[1])[3])[0];
             $user = User::where('numero_empleado', $noEmpleado)->first();
-            if ($user) {
-                $docs = new UploadedFile(Storage::disk('docs')->path($file), explode('/', $file)[1], 'application/pdf');
-                $pathfile = $docs->storeAs("nominas/{$user->id}", $docs->getClientOriginalName(), 'gcs');
-                $pathGCS = Storage::disk('gcs')->url($pathfile);
+            $extension = explode('.', explode('_', explode('/', $file)[1])[3])[1];
+            if ($extension === 'pdf') {
+                if ($user) {
+                    $docs = new UploadedFile(Storage::disk('docs')->path($file), explode('/', $file)[1], 'application/pdf');
+                    $pathfile = $docs->storeAs("nominas/{$user->id}", $docs->getClientOriginalName(), 'gcs');
+                    $pathGCS = Storage::disk('gcs')->url($pathfile);
 
-                NominasEmpleado::create([
-                    'empleado_id' => $user->id,
-                    'nomina_doc' => $pathGCS,
-                    'fecha_doc' => $fecha,
-                    'periodo' => $semana,
-                ]);
+                    NominasEmpleado::create([
+                        'empleado_id' => $user->id,
+                        'nomina_doc' => $pathGCS,
+                        'fecha_doc' => $fecha,
+                        'periodo' => $semana,
+                    ]);
+                }
             }
         }
         Storage::disk('docs')->deleteDirectory($folder);
