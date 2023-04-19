@@ -31,11 +31,7 @@ class DepartamentoController extends Controller
         ]);
 
         $departamentos = Ceco::select(
-            'cecos.id AS id',
-            'cecos.nombre AS nombre',
-            'cecos.ubicacione_id',
-            'cecos.cliente_id',
-            'cecos.activo_erp',
+            'cecos.*',
             DB::raw('COUNT(users.id) AS personal')
         )
             ->leftjoin('empleados_puestos', function ($join) {

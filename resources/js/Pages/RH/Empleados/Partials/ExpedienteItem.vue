@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, watchEffect, computed } from 'vue';
+import { reactive, watchEffect, computed, nextTick } from 'vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import DropZone from '@/Components/DropZone.vue';
 import InputError from '@/Components/InputError.vue';
@@ -56,7 +56,11 @@ const loadFile = async (empId = 0) => {
         form.error = ''
         form.hasErrors = false;
         if (props.empleadoId !== null) {
-            props.expediente.ruta = resp.data.ruta
+            props.expediente.ruta = ''
+            nextTick(() => {
+                props.expediente.ruta = resp.data.ruta
+            });
+
         }
     }).catch((error) => {
         console.log(error);

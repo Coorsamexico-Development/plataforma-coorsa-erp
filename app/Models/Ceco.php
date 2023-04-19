@@ -15,6 +15,7 @@ class Ceco extends Model
         'cliente_id',
         'ubicacione_id',
         'activo_erp',
+        'descripcion',
     ];
 
     protected $casts = [
