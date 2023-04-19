@@ -111,6 +111,7 @@ const permission = computed(() => {
             >
             </InputSearch>
             <ButtonInfo
+                v-if="$page.props.can['recibos-nominas']"
                 class="float-right -mt-[1.5rem] mr-[8rem]"
                 @click="nominaModal = true"
             >
