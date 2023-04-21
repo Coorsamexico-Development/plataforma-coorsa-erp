@@ -174,7 +174,7 @@ const cambio2 = () => {
                                             "
                                             :href="
                                                 route(
-                                                    'control-interno.documentos-internos.index'
+                                                    'control-interno.documentos-internos.index', 2
                                                 )
                                             "
                                         >
