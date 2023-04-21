@@ -216,6 +216,23 @@ const cambio2 = () => {
                                                 Documentos Nominas
                                             </span>
                                         </DropdownLink>
+                                        <DropdownLink
+                                            v-if="
+                                                $page.props.can[
+                                                    'documentos-diseño.show'
+                                                ]
+                                            "
+                                            :href="
+                                                route(
+                                                    'documentos-internos.socios.index',
+                                                    5
+                                                )
+                                            "
+                                        >
+                                            <span class="text-xs">
+                                                Imagen Corporativa
+                                            </span>
+                                        </DropdownLink>
                                         <div class="border-t border-gray-100" />
                                     </template>
                                 </Dropdown>
