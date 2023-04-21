@@ -91,17 +91,9 @@ const updateHoverState = (isHover) => {
                 style="font-family: 'Montserrat'"
             >
                 <h1
-                    v-if="
-                        route().current(
-                            'control-interno.documentos-internos.index'
-                        )
-                    "
                     class="ml-4 text-4xl font-semibold text-white"
                 >
-                    Objetivo de documentos internos
-                </h1>
-                <h1 v-else class="ml-32 text-4xl font-semibold text-white">
-                    DOCUMENTOS PARA SOCIOS
+                    Objetivo de documentos
                 </h1>
                 <span
                     class="w-16 h-1 bg-[#EC2944] mt-4"
@@ -109,9 +101,6 @@ const updateHoverState = (isHover) => {
                 ></span>
             </div>
             <p
-                v-if="
-                    route().current('control-interno.documentos-internos.index')
-                "
                 class="mt-6 mb-16 text-xl text-white"
                 style="
                     margin-left: 0rem;
@@ -124,20 +113,6 @@ const updateHoverState = (isHover) => {
                 manera organizada para su revisión, lo cual te permitirá cumplir
                 con los procesos y<br />
                 optimizar tus tiempos.
-            </p>
-            <p
-                v-else
-                class="mt-6 mb-16 text-xl text-white"
-                style="
-                    margin-left: 0rem;
-                    font-family: 'Montserrat';
-                    line-height: 1.8;
-                "
-            >
-                En esta sección encontraremos los estados de resultados con
-                la<br />
-                información relevante de la empresa, para la correcta toma de<br />
-                decisiones y planeación estratégica.
             </p>
         </section>
         <!-- Politics Section -->
