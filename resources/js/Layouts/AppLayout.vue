@@ -179,7 +179,7 @@ const cambio2 = () => {
                                             "
                                         >
                                             <span class="text-xs">
-                                                Documentos Internos
+                                                Direccion General
                                             </span>
                                         </DropdownLink>
                                         <DropdownLink
@@ -196,7 +196,7 @@ const cambio2 = () => {
                                             "
                                         >
                                             <span class="text-xs">
-                                                Documentos Socios
+                                                Información Financiera
                                             </span>
                                         </DropdownLink>
                                         <DropdownLink
@@ -613,7 +613,7 @@ const cambio2 = () => {
                                             </DropdownLink>
                                         </form>
                                         <div
-                                            class="grid text-xs text-center border-t border-gray-100 px-2"
+                                            class="grid px-2 text-xs text-center border-t border-gray-100"
                                             v-if="nominas.data != ''"
                                         >
                                             <span
@@ -637,7 +637,7 @@ const cambio2 = () => {
                                                             "
                                                             data-fancybox
                                                             data-type="pdf"
-                                                            class="bg-indigo-400 rounded-2xl px-1 grid place-content-center"
+                                                            class="grid px-1 bg-indigo-400 rounded-2xl place-content-center"
                                                         >
                                                             <svg
                                                                 xmlns="http://www.w3.org/2000/svg"
