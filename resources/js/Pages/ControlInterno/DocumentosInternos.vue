@@ -27,6 +27,7 @@ let props = defineProps({
         required: true,
     },
     nominas: Object,
+    seccion_id:Number
 });
 
 const params = reactive({

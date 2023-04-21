@@ -120,7 +120,7 @@ Route::middleware([
     Route::get('/recuperarRubro/{categoria}/{mes}/{año}', [DepartamentosAuditoriaController::class, 'recuperarRubros'])->name('recuperarRubros');
 
     Route::apiResource('politics', PoliticController::class)->name('index', 'control-interno.politics.index');
-    Route::get('/docinternos', [PoliticController::class, 'docsinternos'])->name('control-interno.documentos-internos.index');
+    //Route::get('/docinternos', [PoliticController::class, 'docsinternos'])->name('control-interno.documentos-internos.index');
     Route::get('/docinternos/seccion/{seccion}', [PoliticController::class, 'docsinternos'])->name('documentos-internos.socios.index');
 
     Route::get('users/list', [UserController::class, 'list'])->name('users.list');

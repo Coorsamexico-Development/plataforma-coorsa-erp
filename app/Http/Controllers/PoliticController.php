@@ -47,7 +47,7 @@ class PoliticController extends Controller
     }
 
 
-    public function docsinternos(int $seccion = 2)
+    public function docsinternos($seccion) // es solo docs internos
     {
         $tipoPoliticas = Tipopolitica::orderBy('id', 'asc')->where('seccion_id', '=', $seccion);
         $politicas = Politic::select(
@@ -71,11 +71,12 @@ class PoliticController extends Controller
         }
         $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
 
-        return Inertia::render('ControlInterno/PoliticsIndex', [
+        return Inertia::render('ControlInterno/DocumentosInternos', [
             'tipoPoliticas' => fn () => $tipoPoliticas->get(),
             'politicas' =>  fn () => $politicas->get(),
             'filters' => fn () => request()->all(['search', 'type_politic']),
-            'nominas' => $nominas
+            'nominas' => $nominas,
+            'seccion_id' => $seccion
         ]);
     }
 
