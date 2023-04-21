@@ -169,7 +169,7 @@ const cambio2 = () => {
                                         <DropdownLink
                                             v-if="
                                                 $page.props.can[
-                                                    'documentos-internos.show'
+                                                    'direccion-general.show'
                                                 ]
                                             "
                                             :href="
@@ -185,7 +185,7 @@ const cambio2 = () => {
                                         <DropdownLink
                                             v-if="
                                                 $page.props.can[
-                                                    'documentos-internos.show'
+                                                    'informacion-financiera.show'
                                                 ]
                                             "
                                             :href="

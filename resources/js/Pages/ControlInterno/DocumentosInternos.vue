@@ -264,7 +264,9 @@ const updateHoverState = (isHover) => {
                     </div>
                 </ul>
                 <ButtonAdd
-                    v-if="$page.props.can['documentos-internos.create']"
+                    v-if="$page.props.can['direccion-general.create'] || $page.props.can['informacion-financiera.create'] 
+                    || $page.props.can['documentos-nominas.create'] || $page.props.can['documentos-diseño.create'] 
+                    "
                     @click="showFormPolitic('create')"
                     style="
                         margin-top: 2rem;
@@ -338,7 +340,8 @@ const updateHoverState = (isHover) => {
                         </div>
 
                         <div
-                            v-if="$page.props.can['documentos-internos.update']"
+                            v-if="$page.props.can['direccion-general.update'] || $page.props.can['informacion-financiera.update']
+                            || $page.props.can['documentos-nominas.update'] || $page.props.can['documentos-diseño.update'] "
                             style="white-space: normal"
                             class="absolute z-10 w-6 h-6 py-1 bg-white rounded-full shadow -bottom-2 -right-1 hover:bg-gray-500 hover:text-white"
                             @click="showFormPolitic('update', politica)"
