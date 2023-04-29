@@ -1057,7 +1057,7 @@ const rubrosCalculados = computed(() => {
         </section>
         <!-- Modal Procesos -->
         <AddProcesoModal
-            :departamento="params.departamento_auditoria_id"
+            :departamento="parseInt(params.departamento_auditoria_id)"
             :show="modalAddProceso"
             @close="closeModalAddProceso"
         />

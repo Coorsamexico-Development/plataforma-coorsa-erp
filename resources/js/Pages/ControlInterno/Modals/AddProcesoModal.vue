@@ -16,7 +16,7 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    departamento:String
+    departamento:Number
 });
 
 const fileImage = ref(null)
@@ -28,7 +28,7 @@ const formProceso = useForm({
     'nombre': null,
     'descripción': null,
     "logo": null,
-    "departamento_auditoria_id": props.departamento
+    "departamento_auditoria_id": -1
 });
 
 const selectFileImage = () => {
@@ -42,13 +42,17 @@ const setFileNameImg = () => {
 
 const create = () => 
 {
-   formProceso.post(route('storeProceso'),
-   {
-    preserveScroll:true,
-    preserveState:true,
-    onSuccess:() => formProceso.reset(),
-    onFinish:() => close()
-   })
+    if(props.departamento !== 0)
+    {
+       formProceso.departamento_auditoria_id = props.departamento
+       formProceso.post(route('storeProceso'),
+        {
+         preserveScroll:true,
+         preserveState:true,
+         onSuccess:() => formProceso.reset(),
+         onFinish:() => close()
+        })
+    }
 }
 
 const close = () => {
@@ -62,7 +66,7 @@ const close = () => {
         <template #title>
             <div class="grid grid-cols-2">
              <div class="flex justify-start">
-                <h2 class="font-bold tracking-widest text-md uppercase">
+                <h2 class="font-bold tracking-widest uppercase text-md">
                    Nuevo proceso
                 </h2>
             </div>
@@ -80,7 +84,7 @@ const close = () => {
         </template>
         <template #content>
             <form  @submit.prevent="create()">
-                <div class=" grid grid-cols-3">
+                <div class="grid grid-cols-3 ">
                   <div>
                     <InputLabel>Nombre del proceso</InputLabel>
                     <TextInput v-model="formProceso.nombre"></TextInput>
@@ -108,7 +112,7 @@ const close = () => {
                 </div>
             </form>
             <div class="grid grid-cols-4 mt-4">
-                <ButtonAdd class="ml-4 col-start-4 flex justify-center" @click="create()" :disabled="formProceso.processing">
+                <ButtonAdd class="flex justify-center col-start-4 ml-4" @click="create()" :disabled="formProceso.processing">
                   <SpinProgress v-if="formProceso.processing" :inprogress="formProceso.processing" /> Guardar
                </ButtonAdd>
             </div>
