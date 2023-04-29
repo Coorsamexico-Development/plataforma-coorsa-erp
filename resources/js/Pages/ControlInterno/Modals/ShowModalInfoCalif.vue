@@ -11,7 +11,8 @@ const props = defineProps({
     rubros:Object,
     valores:Object,
     mes:String,
-    proceso:String
+    proceso:String,
+    show:Boolean
 });
 
 const close = () => {
