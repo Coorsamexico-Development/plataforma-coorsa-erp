@@ -289,6 +289,7 @@ class DepartamentosAuditoriaController extends Controller
             ->where('calf_rubro_mes.mes', '=', $mes)
             ->where('calf_rubro_mes.año', '=', $año)
             ->orderBy('calf_rubro_mes.valor')
+            ->limit(10)
             ->get();
     }
 
