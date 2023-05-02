@@ -593,6 +593,7 @@ const rubrosCalculados = computed(() => {
         }
         arregloMesesAux.push(newObj);
     }
+    console.log(arregloMesesAux)
     return arregloMesesAux;
 });
 </script>
