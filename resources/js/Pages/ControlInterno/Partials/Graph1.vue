@@ -53,6 +53,7 @@ series.dataFields.valueY = "promedio";
 series.tooltip.pointerOrientation = "vertical";
 series.tooltip.background.fillOpacity = 0.5;
 series.strokeWidth = 3;
+series.tensionX = 0.8;
 
 chart.cursor = new am4charts.XYCursor();
 chart.cursor.xAxis = dateAxis;
