@@ -343,6 +343,75 @@ const arregloCalificaciones = computed(() => {
     return arregloFiltrado.slice(0,3)
 });
 
+const arregloCalificacionesGrafica = computed(() => {
+    /***/
+    let arregloAñoMes = [];
+    let fechaTemp = "";
+
+    // console.log(props.calificaciones_mes)
+    for (let index = 0; index < props.calificaciones_mes.length; index++) {
+        const element = props.calificaciones_mes[index];
+        let fechaActual = element.año + "-" + element.mes;
+        //console.log(element.año+'-'+element.mes);
+        if (element == props.calificaciones_mes[0]) {
+            arregloAñoMes.push(fechaActual);
+            fechaTemp = fechaActual;
+        } else {
+            if (fechaTemp !== fechaActual) {
+                arregloAñoMes.push(fechaActual);
+                fechaTemp = fechaActual;
+            }
+        }
+    }
+
+    let arregloFechasTotales = [];
+    const first = arregloAñoMes[0];
+    const fechaInicio = moment(first);
+    const last = _.last(arregloAñoMes);
+    const fechaFinal = moment(last);
+
+    while (fechaInicio.isSameOrBefore(fechaFinal)) {
+        let Obj = {
+            date: fechaInicio.format("YYYY-MM"),
+            promedio: 0,
+        };
+        arregloFechasTotales.push(Obj);
+        fechaInicio.add(1, "months");
+    }
+
+    for (let index2 = 0; index2 < arregloFechasTotales.length; index2++) {
+        let conteo = [];
+        let suma = 0;
+        let promedio = 0;
+        const fecha = arregloFechasTotales[index2];
+        for (
+            let index3 = 0;
+            index3 < props.calificaciones_mes.length;
+            index3++
+        ) {
+            const calificacion = props.calificaciones_mes[index3];
+            //console.log(calificacion);
+            let fechaActual = calificacion.año + "-" + calificacion.mes;
+            let fechaActual2 = moment(fechaActual);
+            let fechaActual3 = fechaActual2.format("YYYY-MM");
+
+            if (fechaActual3 === fecha.date) {
+                suma += calificacion.valor;
+                conteo.push(calificacion);
+            } else {
+                fecha.promedio = 0;
+            }
+        }
+        promedio = suma / conteo.length;
+        fecha.promedio = promedio.toFixed(2);
+        //console.log(promedio)
+    }
+
+
+    return arregloFechasTotales
+});
+
+
 const arregloParametros = computed(() => {
     /***/
     let arregloAñoMes = [];
@@ -619,7 +688,7 @@ const rubrosCalculados = computed(() => {
                             <h2 class="text-lg font-bold">Graficas</h2>
                             <div>
                                 <Graph1
-                                    :calificaciones="arregloCalificaciones"
+                                    :calificaciones="arregloCalificacionesGrafica"
                                 />
                             </div>
                             <div>
