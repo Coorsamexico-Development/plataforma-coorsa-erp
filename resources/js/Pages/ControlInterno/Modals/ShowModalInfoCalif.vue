@@ -26,6 +26,7 @@ const close = () => {
    // Create chart instance
    var chart = am4core.create("chartdiv3", am4charts.XYChart);
    chart.scrollbarX = new am4core.Scrollbar();
+   chart.scrollbarY = new am4core.Scrollbar();
    // Add data
 
 
@@ -78,6 +79,7 @@ const close = () => {
    categoryAxis.renderer.labels.template.horizontalCenter = "right";
    categoryAxis.renderer.labels.template.verticalCenter = "middle";
    categoryAxis.renderer.labels.template.rotation = 270;
+   //categoryAxis.renderer.labels.template.fontSize = 5;
    categoryAxis.tooltip.disabled = true;
    categoryAxis.renderer.minHeight = 110;
    
@@ -116,7 +118,7 @@ const close = () => {
 <style>
 #chartdiv3 {
   width: 100%;
-  height: 500px;
+  height: 1500px;
 }
 </style>
 <template>
@@ -141,8 +143,12 @@ const close = () => {
           </div>
         </template>
         <template #content> 
+          <div 
+           style=" overflow-y: scroll;"
+          >
             <div class="hello" id="chartdiv3" ref="chartdiv3">
             </div>
+          </div>
         </template>
     </DialogModal>
 </template>
