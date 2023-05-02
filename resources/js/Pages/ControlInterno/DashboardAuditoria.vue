@@ -656,13 +656,24 @@ const rubrosCalculados = computed(() => {
     }
      hoy = hoy +mes   
 
-    let arregloFiltrado = arregloMesesAñoAux.filter(promedio => promedio.fecha < hoy );
+     let anotherArray = []
+    for (let index = 0; index < arregloMesesAñoAux.length; index++) 
+    {
+        const añoMes = arregloMesesAñoAux[index];
+        if(añoMes.promedio > 0) //solo los que tengan promedio mayo a 0
+        {
+          anotherArray.push(añoMes)
+        }
+        
+    }
+
+    let arregloFiltrado = anotherArray.filter(promedio => promedio.fecha < hoy);
     let añoConsulta = arregloFiltrado[0].año
     let mesConsulta = arregloFiltrado[0].numero
-    //tenemos el ultimo evaludado
-    //console.log(params.departamento_auditoria_id)
-
+            //tenemos el ultimo evaludado
+            //console.log(params.departamento_auditoria_id)
     consultar(mesConsulta, añoConsulta)
+    //console.log(anotherArray)
 
 });
 
