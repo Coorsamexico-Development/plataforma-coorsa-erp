@@ -256,50 +256,6 @@ class DepartamentosAuditoriaController extends Controller
 
     public function recuperarRubros($categoria, $mes, $año)
     {
-        /*
-     $mesBuscado = 0;
-     switch ($mes) 
-     {
-        case 'Ene':
-              $mesBuscado = 1;
-            break;
-        case 'Feb':
-              $mesBuscado = 2;
-            break;
-        case 'Mar':
-              $mesBuscado = 3;
-            break;
-        case 'Abr':
-              $mesBuscado = 4;
-            break;
-        case 'May':
-              $mesBuscado = 5;
-            break;
-        case 'Jun':
-             $mesBuscado = 6;
-          break;
-        case 'Jul':
-            $mesBuscado = 7;
-          break;
-        case 'Ago':
-            $mesBuscado = 8;
-          break;
-        case 'Sep':
-            $mesBuscado = 9;
-          break;
-        case 'Oct':
-            $mesBuscado = 10;
-          break;
-        case 'Nov':
-            $mesBuscado = 11;
-          break;
-        case 'Dic':
-            $mesBuscado = 12;
-          break;
-        
-     }
-     */
-
         $rubros = Rubro::select(
             'rubros.nombre AS rubro_name'
         )
@@ -321,19 +277,19 @@ class DepartamentosAuditoriaController extends Controller
         return [$rubros, $valores];
     }
 
-
-    public function rubros ($mes, $año)
+    public function getRubrosAnterior ($departamento,  $mes, $año)
     {
-      return  CalfRubroMe::select(
+       return CalfRubroMe::select(
             'rubros.nombre AS rubro_nombre',
             'calf_rubro_mes.valor AS valor',
-            )
+        )
             ->join('rubros', 'calf_rubro_mes.rubro_id', 'rubros.id')
             ->join('procesos', 'rubros.proceso_id', 'procesos.id')
+            ->where('procesos.departamento_auditoria_id','=',$departamento)
             ->where('calf_rubro_mes.mes', '=', $mes)
             ->where('calf_rubro_mes.año', '=', $año)
             ->orderBy('calf_rubro_mes.valor')
-            ->limit(10)
             ->get();
     }
+
 }

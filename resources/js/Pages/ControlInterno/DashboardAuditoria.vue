@@ -579,9 +579,10 @@ const promedios = computed(() => {
 
 
 //Rubros
-let rubrosCal = ref([])
-let arregloMesesAñoAux = [];
-  //console.log(props.calificaciones_mes)
+const rubrosAct = ref([]);
+const rubrosCalculados = computed(() => {
+    let arregloMesesAñoAux = [];
+    //console.log(props.calificaciones_mes)
     for (let index = 0; index < promedios.value.length; index++) 
     {
         const element = promedios.value[index];
@@ -590,32 +591,38 @@ let arregloMesesAñoAux = [];
         arregloMesesAñoAux.push(element)
     }
     let hoy = new Date().getFullYear() + '-' ;
-    let mesact = new Date().getMonth() +1
-    if(mesact < 10)
+    let mes = new Date().getMonth() +1
+    if(mes < 10)
     {
-        mesact = '0'+mesact
+        mes = '0'+mes
     }
-     hoy = hoy +mesact   
+     hoy = hoy +mes   
 
     let arregloFiltrado = arregloMesesAñoAux.filter(promedio => promedio.fecha < hoy );
     let añoConsulta = arregloFiltrado[0].año
     let mesConsulta = arregloFiltrado[0].numero
-    
+    //tenemos el ultimo evaludado
+    //console.log(params.departamento_auditoria_id)
 
-    if(rubrosCal.value.length <= 0)
-    {
-        axios.get('/rubros/'+mesConsulta+ '/'+ añoConsulta)
-       .then(response => {
-           // Handle response
-           console.log(response.data);
-           rubrosCal.value = response.data
-       })
-       .catch(err => {
-           // Handle errors
-           console.error(err);
-       });
-   
-    }
+    consultar(mesConsulta, añoConsulta)
+
+});
+
+
+const consultar = async (mes, año) => 
+{
+   await axios.get('/getAnterioresRubros/'+params.departamento_auditoria_id+'/'+mes+'/'+año)
+    .then(response => {
+        // Obtenemos los datos  
+        rubrosAct.value =  response.data
+    })
+    .catch(e => {
+        // Capturamos los errores
+    })
+}
+
+
+
 </script>
 
 <template>
@@ -925,16 +932,16 @@ let arregloMesesAñoAux = [];
                                             Calif.
                                         </h1>
                                     </div>
-                                    <div v-for="rubro in rubrosCal" :key="rubro.id" class="grid grid-cols-2 m-2 text-center">
+                                    <div class="grid grid-cols-2 m-2 text-center"
+                                       v-for="rubro in  rubrosAct" :key="rubro.id"
+                                    >
                                      <!--RUBROS PEOR CALIFICADOS DEL ULTIMO MES CALF--> 
-                                      <div>
-                                        {{ rubro.rubro_nombre }}
-                                      </div>
-                                      <div>
-                                         <span>
-                                            {{rubro.valor}}
-                                         </span>
-                                      </div>
+                                       <div>
+                                          {{ rubro.rubro_nombre }}
+                                       </div>
+                                       <div>
+                                        {{ rubro.valor }}
+                                       </div>
                                     </div>
                                 </div>
                             </div>

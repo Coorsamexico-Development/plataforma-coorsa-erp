@@ -73,6 +73,7 @@ function addSeries() {
   newSeries.dataFields.dateX = "date";
   newSeries.dataFields.valueY = "newValue";
   newSeries.interpolationDuration = 0;
+  series.tooltipText = "{dateX}:\{valueY}";
 
 
   var bullet = newSeries.bullets.push(new am4charts.CircleBullet());

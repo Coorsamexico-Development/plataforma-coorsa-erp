@@ -118,6 +118,7 @@ Route::middleware([
     Route::post('/updateRubro/{rubro_id}', [DepartamentosAuditoriaController::class, 'updateRubro'])->name('updateRubro');
     Route::post('/storeCalf', [DepartamentosAuditoriaController::class, 'storeCalf'])->name('storeCalf');
     Route::get('/recuperarRubro/{categoria}/{mes}/{año}', [DepartamentosAuditoriaController::class, 'recuperarRubros'])->name('recuperarRubros');
+    Route::get('/getAnterioresRubros/{departamento}/{mes}/{año}', [DepartamentosAuditoriaController::class, 'getRubrosAnterior'])->name('getRubrosAnterior');
 
     Route::apiResource('politics', PoliticController::class)->name('index', 'control-interno.politics.index');
     //Route::get('/docinternos', [PoliticController::class, 'docsinternos'])->name('control-interno.documentos-internos.index');
@@ -212,4 +213,3 @@ Route::controller(RecibosNominaController::class)->group(function () {
     Route::post('nominas/post', 'store')->name('nomina.upload');
 });
 
-Route::get('rubros/{mes}/{año}', [DepartamentosAuditoriaController::class, 'rubros'])->name('getRubros');
