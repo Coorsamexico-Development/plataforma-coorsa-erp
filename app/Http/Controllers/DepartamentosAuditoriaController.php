@@ -320,4 +320,20 @@ class DepartamentosAuditoriaController extends Controller
 
         return [$rubros, $valores];
     }
+
+
+    public function rubros ($mes, $año)
+    {
+      return  CalfRubroMe::select(
+            'rubros.nombre AS rubro_nombre',
+            'calf_rubro_mes.valor AS valor',
+            )
+            ->join('rubros', 'calf_rubro_mes.rubro_id', 'rubros.id')
+            ->join('procesos', 'rubros.proceso_id', 'procesos.id')
+            ->where('calf_rubro_mes.mes', '=', $mes)
+            ->where('calf_rubro_mes.año', '=', $año)
+            ->orderBy('calf_rubro_mes.valor')
+            ->limit(10)
+            ->get();
+    }
 }

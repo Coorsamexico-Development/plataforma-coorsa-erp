@@ -211,3 +211,5 @@ Route::get('user/puesto/{id}', [UserController::class, 'getPuesto'])->name('getP
 Route::controller(RecibosNominaController::class)->group(function () {
     Route::post('nominas/post', 'store')->name('nomina.upload');
 });
+
+Route::get('rubros/{mes}/{año}', [DepartamentosAuditoriaController::class, 'rubros'])->name('getRubros');

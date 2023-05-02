@@ -510,26 +510,41 @@ let fecha = new Date();
 let year = ref(null);
 year.value = fecha.getFullYear();
 
-let mes = ref(null);
+let mes = ref(fecha.getMonth()+1);
 
+/*
 if (fecha.getMonth.length < 1) {
     mes.value = "0" + fecha.getMonth();
 } else {
     mes.value = fecha.getMonth();
 }
+*/
 
 const promedios = computed(() => {
     let arregloAux = [];
     for (let index = 0; index < meses.length; index++) {
         const fecha = new Date();
         const año = fecha.getFullYear();
-
+        let fullFecha = '';
         const mes = meses[index];
+
+
+        if(mes.numero < 10)
+        {
+            fullFecha = año + '-0' + mes.numero
+            //console.log(fullFecha)
+        }
+        else
+        {
+            fullFecha = año + '-' + mes.numero
+        }
+
         let newObjCalf = {
             numero: mes.numero,
             mes: mes.mes,
             año: año,
             promedio: 0,
+            fecha:fullFecha
         };
         arregloAux.push(newObjCalf);
     }
@@ -562,40 +577,45 @@ const promedios = computed(() => {
     return arregloAux;
 });
 
-const rubrosCalculados = computed(() => {
-    let arregloMesesAux = [];
-    const año = fecha.getFullYear();
-    for (let index = 0; index < meses2.length; index++) {
-        let mes = meses2[index];
-        let newObj = {
-            numero_mes: mes.numero,
-            mes: mes.mes,
-        };
 
-        for (let index2 = 0; index2 < props.rubros_mes.length; index2++) {
-            const rubro = props.rubros_mes[index2];
-            for (
-                let index3 = 0;
-                index3 < props.calificaciones_mes.length;
-                index3++
-            ) {
-                const calificacion = props.calificaciones_mes[index3];
-                //console.log(calificacion);
-                if (
-                    calificacion.rubro_id == rubro.rubro_id &&
-                    mes.numero == calificacion.mes
-                ) {
-                    if (calificacion.año == año) {
-                        newObj[`${rubro.rubro_name}`] = calificacion.valor;
-                    }
-                }
-            }
-        }
-        arregloMesesAux.push(newObj);
+//Rubros
+let rubrosCal = ref([])
+let arregloMesesAñoAux = [];
+  //console.log(props.calificaciones_mes)
+    for (let index = 0; index < promedios.value.length; index++) 
+    {
+        const element = promedios.value[index];
+        //console.log(element)
+
+        arregloMesesAñoAux.push(element)
     }
-    console.log(arregloMesesAux)
-    return arregloMesesAux;
-});
+    let hoy = new Date().getFullYear() + '-' ;
+    let mesact = new Date().getMonth() +1
+    if(mesact < 10)
+    {
+        mesact = '0'+mesact
+    }
+     hoy = hoy +mesact   
+
+    let arregloFiltrado = arregloMesesAñoAux.filter(promedio => promedio.fecha < hoy );
+    let añoConsulta = arregloFiltrado[0].año
+    let mesConsulta = arregloFiltrado[0].numero
+    
+
+    if(rubrosCal.value.length <= 0)
+    {
+        axios.get('/rubros/'+mesConsulta+ '/'+ añoConsulta)
+       .then(response => {
+           // Handle response
+           console.log(response.data);
+           rubrosCal.value = response.data
+       })
+       .catch(err => {
+           // Handle errors
+           console.error(err);
+       });
+   
+    }
 </script>
 
 <template>
@@ -905,74 +925,16 @@ const rubrosCalculados = computed(() => {
                                             Calif.
                                         </h1>
                                     </div>
-                                    <div>
-                                        <div
-                                            v-for="parametro in rubrosCalculados"
-                                            :key="parametro.id"
-                                        >
-                                            <div
-                                                v-if="
-                                                    parametro.numero_mes ==
-                                                    mes - 1
-                                                "
-                                            >
-                                                <div
-                                                    v-for="(
-                                                        dato, name, index
-                                                    ) in parametro"
-                                                    :key="index"
-                                                >
-                                                    <div v-if="index <= 6">
-                                                        <div
-                                                            v-if="
-                                                                name !==
-                                                                    'numero_mes' &&
-                                                                name !== 'mes'
-                                                            "
-                                                            class="grid grid-cols-2 m-2 text-center"
-                                                        >
-                                                            <h1 v-if="dato">
-                                                                {{ name }}
-                                                            </h1>
-                                                            <h1 v-if="dato">
-                                                                <span
-                                                                    class="text-[#EC2944]"
-                                                                    v-if="
-                                                                        dato <=
-                                                                        25
-                                                                    "
-                                                                    >{{
-                                                                        dato
-                                                                    }}</span
-                                                                >
-                                                                <span
-                                                                    class="text-[#F7B815]"
-                                                                    v-if="
-                                                                        dato >=
-                                                                            26 &&
-                                                                        dato <=
-                                                                            70
-                                                                    "
-                                                                    >{{
-                                                                        dato
-                                                                    }}</span
-                                                                >
-                                                                <span
-                                                                    class="text-[#00CB83]"
-                                                                    v-if="
-                                                                        dato >
-                                                                        70
-                                                                    "
-                                                                    >{{
-                                                                        dato
-                                                                    }}</span
-                                                                >
-                                                            </h1>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div v-for="rubro in rubrosCal" :key="rubro.id" class="grid grid-cols-2 m-2 text-center">
+                                     <!--RUBROS PEOR CALIFICADOS DEL ULTIMO MES CALF--> 
+                                      <div>
+                                        {{ rubro.rubro_nombre }}
+                                      </div>
+                                      <div>
+                                         <span>
+                                            {{rubro.valor}}
+                                         </span>
+                                      </div>
                                     </div>
                                 </div>
                             </div>
