@@ -142,7 +142,7 @@ export default {
          series.tooltipText = "{value}"
          series.strokeWidth = 2;
          series.minBulletDistance = 15;
-         
+         series.tensionX = 0.8;
          // Drop-shaped tooltips
          series.tooltip.background.cornerRadius = 20;
          series.tooltip.background.strokeOpacity = 0;
