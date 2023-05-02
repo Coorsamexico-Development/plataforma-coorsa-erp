@@ -326,7 +326,21 @@ const arregloCalificaciones = computed(() => {
         //console.log(promedio)
     }
 
-    return arregloFechasTotales;
+    let hoy = new Date().getFullYear() + '-' ;
+    let mes = new Date().getMonth() +1
+    if(mes < 10)
+    {
+        mes = '0'+mes
+    }
+
+    hoy = hoy +mes
+    //console.log(hoy)
+
+    let arregloFiltrado = arregloFechasTotales.filter(promedio => promedio.date < hoy );
+    //console.log(arregloFiltrado)
+
+    arregloFiltrado.reverse()
+    return arregloFiltrado.slice(0,3)
 });
 
 const arregloParametros = computed(() => {
@@ -622,7 +636,7 @@ const rubrosCalculados = computed(() => {
                                 <div
                                     class="w-full h-full border shadow-lg b-white rounded-2xl"
                                 >
-                                    <div
+                                <div
                                         v-for="(
                                             calificacion, index
                                         ) in arregloCalificaciones"
