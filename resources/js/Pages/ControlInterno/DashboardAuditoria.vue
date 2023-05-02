@@ -582,14 +582,72 @@ const promedios = computed(() => {
 const rubrosAct = ref([]);
 const rubrosCalculados = computed(() => {
     let arregloMesesAñoAux = [];
-    //console.log(props.calificaciones_mes)
-    for (let index = 0; index < promedios.value.length; index++) 
+    let arregloAux = [];
+    for (let index = 0; index < meses.length; index++) {
+        const fecha = new Date();
+        const año = fecha.getFullYear();
+        let fullFecha = '';
+        const mes = meses[index];
+
+
+        if(mes.numero < 10)
+        {
+            fullFecha = año + '-0' + mes.numero
+            //console.log(fullFecha)
+        }
+        else
+        {
+            fullFecha = año + '-' + mes.numero
+        }
+
+        let newObjCalf = {
+            numero: mes.numero,
+            mes: mes.mes,
+            año: año,
+            promedio: 0,
+            fecha:fullFecha
+        };
+        arregloAux.push(newObjCalf);
+    }
+
+    for (let index2 = 0; index2 < arregloAux.length; index2++) {
+        const objeto = arregloAux[index2];
+        //console.log(objeto);
+        let conteo = [];
+        let suma = 0;
+        let promedio = 0;
+        for (
+            let index3 = 0;
+            index3 < props.calificaciones_mes.length;
+            index3++
+        ) {
+            const calificacion = props.calificaciones_mes[index3];
+            if (calificacion.mes == objeto.numero) {
+                objeto.promedio += calificacion.valor;
+                suma += calificacion.valor;
+                conteo.push(calificacion);
+            } else {
+            }
+        }
+        //console.log(suma/conteo.length)
+        promedio = suma / conteo.length;
+        //console.log(promedio)
+        objeto.promedio = promedio;
+    }
+
+    //console.log(arregloAux)
+
+
+    for (let index = 0; index < arregloAux.length; index++) 
     {
-        const element = promedios.value[index];
+        const element = arregloAux[index];
         //console.log(element)
 
         arregloMesesAñoAux.push(element)
     }
+
+
+
     let hoy = new Date().getFullYear() + '-' ;
     let mes = new Date().getMonth() +1
     if(mes < 10)
@@ -627,6 +685,7 @@ const consultar = async (mes, año) =>
 
 <template>
     <AppLayout title="Dashboard" :nominas="nominas">
+        {{ rubrosCalculados }}
         <section class="p-2 pt-8 objetivo_auditoria sm:p-8">
             <div
                 class="mr-0 sm:text-center sm:mr-96 sm:pt-8"
