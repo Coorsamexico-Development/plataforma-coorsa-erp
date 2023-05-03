@@ -176,7 +176,7 @@ class EmpleadoController extends Controller
             'telefono_empresarial' => ['nullable', 'numeric'],
             'clave_bancaria' => 'required',
             'banco_id' => ['nullable', 'exists:bancos,id'],
-            'escolaridade_id' => ['nullable', 'exists:escolaridads,id'],
+            //'escolaridade_id' => ['nullable', 'exists:escolaridads,id'],
             'numero_cuenta_bancaria' => 'required',
             'salario_diario' => 'required',
             'salario_bruto' => 'required',
@@ -186,14 +186,14 @@ class EmpleadoController extends Controller
             'despensa' => 'required',
             'fondo_ahorro' => 'required',
             'horario' => 'required',
-            'direccion_estado_id' => 'required',
-            'direccion_municipio_id' => 'required',
-            'direccion_localidade_id' => 'required',
-            'calle' => 'required',
-            'numero' => 'required',
-            'colonia' => 'required',
-            'codigo_postal' => 'required',
-            'lote' => 'required',
+            //'direccion_estado_id' => 'required',
+            //'direccion_municipio_id' => 'required',
+            //'direccion_localidade_id' => 'required',
+            //'calle' => 'required',
+            //'numero' => 'required',
+            //'colonia' => 'required',
+            //'codigo_postal' => 'required',
+            //'lote' => 'required',
             'cat_estados_civile_id' => 'required',
             'manzana' => 'required',
             'cat_tipos_nomina_id' => 'required',
@@ -232,7 +232,9 @@ class EmpleadoController extends Controller
             $urlFotografiaEmpresarial = null;
         }
 
-        //creamos la direccion
+        if($newEmpleado['direccion_localidade_id'])
+        {
+                    //creamos la direccion
         $direccion = direccione::create([
             'direccion_localidade_id' => $newEmpleado['direccion_localidade_id'],
             'calle' => $newEmpleado['calle'],
@@ -286,6 +288,52 @@ class EmpleadoController extends Controller
             'telefono_empresarial' => $newEmpleado['telefono_empresarial'],
             'foto_empresarial' => $urlFotografiaEmpresarial
         ]); //creamos el usuario
+        }
+        else
+        {
+            $empleado = User::create([
+                'numero_empleado' => $newEmpleado['numero_empleado'],
+                'name' => $newEmpleado['nombre'],
+                'apellido_paterno' => $newEmpleado['apellido_paterno'],
+                'apellido_materno' => $newEmpleado['apellido_materno'],
+                'email' => $newEmpleado['correo_electronico'],
+                'fecha_nacimiento' => $newEmpleado['fecha_nacimiento'],
+                'fecha_ingreso' => $newEmpleado['fecha_ingreso'],
+                'fecha_ingreso_real' => $newEmpleado['fecha_ingreso_real'],
+                'nss' => $newEmpleado['nss'],
+                'curp' => $newEmpleado['curp'],
+                'rfc' => $newEmpleado['rfc'],
+                'contacto_emergencia' => $newEmpleado['contacto_emergencia'],
+                'telefono' => $newEmpleado['telefono'],
+                'hijos' => $newEmpleado['hijos'],
+                'clave_bancaria' => $newEmpleado['clave_bancaria'],
+                'numero_cuenta_bancaria' => $newEmpleado['numero_cuenta_bancaria'],
+                'salario_diario' => $newEmpleado['salario_diario'],
+                'salario_bruto' => $newEmpleado['salario_bruto'],
+                'salario_imss' => $newEmpleado['salario_imss'],
+                'bono_puntualidad' => $newEmpleado['bono_puntualidad'],
+                'bono_asistencia' => $newEmpleado['bono_asistencia'],
+                'despensa' => $newEmpleado['despensa'],
+                'fondo_ahorro' => $newEmpleado['fondo_ahorro'],
+                'horario' => $newEmpleado['horario'],
+                'alergias' => $newEmpleado['alergias'],
+                'enfermedades_cronicas' => $newEmpleado['enfermedades_cronicas'],
+                'estado_civil_id' => $newEmpleado['cat_estados_civile_id'],
+                'banco_id' => $newEmpleado['banco_id'],
+                'escolaridad_id' => $newEmpleado['escolaridade_id'],
+                'cat_tipos_nomina_id' => $newEmpleado['cat_tipos_nomina_id'],
+                'tipos_contrato_id' => $newEmpleado['tipos_contrato_id'],
+                'cat_genero_id' => $newEmpleado['cat_genero_id'],
+                'cat_tipo_sangre_id' => $newEmpleado['cat_tipos_sangre_id'],
+                'fotografia' => $urlFotografia,
+                'password' => Hash::make($newEmpleado['password']),
+                'role_id' => $newEmpleado['rol_id'],
+                /*Datos enmpresariales*/
+                'correo_empresarial' => $newEmpleado['correo_empresarial'],
+                'telefono_empresarial' => $newEmpleado['telefono_empresarial'],
+                'foto_empresarial' => $urlFotografiaEmpresarial
+            ]); 
+        }
 
         //creamos el empleado_puesto
 
