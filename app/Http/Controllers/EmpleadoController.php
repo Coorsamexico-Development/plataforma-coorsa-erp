@@ -195,7 +195,7 @@ class EmpleadoController extends Controller
             //'codigo_postal' => 'required',
             //'lote' => 'required',
             'cat_estados_civile_id' => 'required',
-            'manzana' => 'required',
+            //'manzana' => 'required',
             'cat_tipos_nomina_id' => 'required',
             'tipos_contrato_id' => 'required',
             'cat_estados_civile_id' => 'required',

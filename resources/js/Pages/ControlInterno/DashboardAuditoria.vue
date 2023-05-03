@@ -668,12 +668,20 @@ const rubrosCalculados = computed(() => {
     }
 
     let arregloFiltrado = anotherArray.filter(promedio => promedio.fecha < hoy);
-    let añoConsulta = arregloFiltrado[0].año
-    let mesConsulta = arregloFiltrado[0].numero
-            //tenemos el ultimo evaludado
-            //console.log(params.departamento_auditoria_id)
-    consultar(mesConsulta, añoConsulta)
-    //console.log(anotherArray)
+    if(arregloFiltrado.length > 0)
+    {
+        let añoConsulta = arregloFiltrado[0].año
+        let mesConsulta = arregloFiltrado[0].numero
+        //tenemos el ultimo evaludado
+        //console.log(params.departamento_auditoria_id)
+        consultar(mesConsulta, añoConsulta)
+        //console.log(anotherArray)
+    }
+    else
+    {
+        rubrosAct.value = [];
+    }
+
 
 });
 
