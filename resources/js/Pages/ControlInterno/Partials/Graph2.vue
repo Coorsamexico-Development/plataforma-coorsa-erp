@@ -139,7 +139,7 @@ export default {
          series.dataFields.valueY = field;
          series.dataFields.dateX = "date";
          series.name = name;
-         series.tooltipText = "{value}"
+         
          series.strokeWidth = 2;
          series.minBulletDistance = 15;
          series.tensionX = 0.8;
@@ -151,6 +151,7 @@ export default {
          series.tooltip.label.minHeight = 40;
          series.tooltip.label.textAlign = "middle";
          series.tooltip.label.textValign = "middle" 
+         series.tooltipText  = '{dateX} : {valueY}'
 
          // Make bullets grow on hover
          var bullet = series.bullets.push(new am4charts.CircleBullet());
@@ -161,7 +162,7 @@ export default {
          {
             //console.log(ev.target.dataItem.component.dataFields.valueY);
             //console.log(ev.target.dataItem.categoryX)
-            console.log("hola")
+            //console.log("hola")
             funcion(ev.target.dataItem.component.dataFields.valueY, ev.target.dataItem.dateX );
          });
 

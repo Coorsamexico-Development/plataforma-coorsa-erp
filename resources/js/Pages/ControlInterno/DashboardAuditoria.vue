@@ -1006,11 +1006,24 @@ const consultar = async (mes, año) =>
                                        v-for="rubro in  rubrosAct" :key="rubro.id"
                                     >
                                      <!--RUBROS PEOR CALIFICADOS DEL ULTIMO MES CALF--> 
-                                       <div>
-                                          {{ rubro.rubro_nombre }}
+                                       <div class="text-xl">
+                                          <span class="font-bold">
+                                            {{ rubro.rubro_nombre }}
+                                          </span>
                                        </div>
                                        <div>
-                                        {{ rubro.valor }}
+                                         <span class="font-bold">
+                                            <span v-if="rubro.valor < 40" class="text-[#D9435E]" >
+                                                {{ rubro.valor }}
+                                            </span>
+                                            <span v-if="rubro.valor >= 40 && rubro.valor < 60"  class="text-[#F28C20]" >
+                                                {{ rubro.valor }}
+                                            </span>
+                                            <span v-if="rubro.valor >=60 &&  rubro.valor < 100" class="text-[#00CB83]" >
+                                                {{ rubro.valor }}
+                                            </span>
+
+                                         </span>
                                        </div>
                                     </div>
                                 </div>

@@ -99,6 +99,7 @@ const close = () => {
    series.columns.template.column.cornerRadiusTopLeft = 10;
    series.columns.template.column.cornerRadiusTopRight = 10;
    series.columns.template.column.fillOpacity = 0.8;
+   series.columns.template.column.maxHeight = 500
    
    // on hover, make corner radiuses bigger
    var hoverState = series.columns.template.column.states.create("hover");
@@ -118,7 +119,7 @@ const close = () => {
 <style>
 #chartdiv3 {
   width: 100%;
-  height: 1500px;
+  height: 1000px;
 }
 </style>
 <template>
