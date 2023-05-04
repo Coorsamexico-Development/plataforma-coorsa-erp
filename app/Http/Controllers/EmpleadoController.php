@@ -176,7 +176,7 @@ class EmpleadoController extends Controller
             'telefono_empresarial' => ['nullable', 'numeric'],
             'clave_bancaria' => 'required',
             'banco_id' => ['nullable', 'exists:bancos,id'],
-            //'escolaridade_id' => ['nullable', 'exists:escolaridads,id'],
+            'escolaridade_id' => ['nullable', 'exists:escolaridads,id'],
             'numero_cuenta_bancaria' => 'required',
             'salario_diario' => 'required',
             'salario_bruto' => 'required',
@@ -231,7 +231,7 @@ class EmpleadoController extends Controller
         } else {
             $urlFotografiaEmpresarial = null;
         }
-        
+
         //creamos la direccion
         $direccion = direccione::create([
             'direccion_localidade_id' => $newEmpleado['direccion_localidade_id'],
