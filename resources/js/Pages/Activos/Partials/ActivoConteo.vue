@@ -5,6 +5,9 @@ import { computed, reactive, watch, ref } from 'vue';
 import axios from 'axios';
 import TableActivos from '../Partials/TableActivos.vue';
 import { value } from 'dom7';
+import PaginationAxios from '@/Components/PaginationAxios.vue';
+import { pickBy } from 'lodash';
+
 
 var props = defineProps(
     {
@@ -19,16 +22,14 @@ const activos = ref([]);
 
 
 const emit = defineEmits(["axios" ])
-const open = (id) => 
+const open = async (id) => 
 {
-    visible.value = !visible.value ;
     //emit('axios',id);
-/*
-
-    axios.get('/activosxtipo/'+id).then((response)=> 
+   await axios.get('/activosxtipo/'+id).then((response)=> 
     {
       //console.log(response);
       activos.value = response.data;
+      visible.value = !visible.value ;
     });
     //console.log(visible.value);
     //console.log(props.tipoActivo.id);
@@ -119,6 +120,19 @@ const changeStatus = (id)  =>
     });
     */
 }
+
+const actualizarPaginado = async (page='') =>
+{
+   //console.log(event)
+   const  params = pickBy({page});
+   await axios.get('/activosxtipo/'+props.tipoActivo.id, {params}).then((response)=> 
+    {
+      console.log(response);
+      activos.value = response.data;
+
+    });
+
+}
 </script>
 <template>
     <div class="col-start-2 col-end-7 mt-2">
@@ -158,9 +172,11 @@ const changeStatus = (id)  =>
             <div v-if="visible" class="w-full mt-2 mb-8">
               <TableActivos :tipo_inputs="tipo_inputs" :tipoActivo="tipoActivo"
                :tipo_evidencias="tipo_evidencias"
-               :activos="tipoActivo.activos_items"
+               :activos="activos.data"
+               :activosConfig = "activos"
                :allcampos="tipoActivo.camposAllInput" 
                :campos="tipoActivo.camposInput" @axios="axiosOpen"></TableActivos>
+               <PaginationAxios :pagination="activos" @loadPage="actualizarPaginado($event)" />
            </div>
         </Transition>
     </div>

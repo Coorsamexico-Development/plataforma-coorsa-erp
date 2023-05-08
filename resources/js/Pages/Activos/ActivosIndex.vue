@@ -21,6 +21,7 @@ var props = defineProps({
         required: true,
     },
     nominas: Object,
+    activos:Object
 });
 
 /*Comentario*/
@@ -47,6 +48,8 @@ const openModalNewCategory = () => {
 const closeModalNewCategory = () => {
     modalNewCategory.value = false;
 };
+
+//console.log(props.tipo_activos)
 </script>
 
 <template>
@@ -71,15 +74,16 @@ const closeModalNewCategory = () => {
             </div>
         </div>
         <div class="grid grid-cols-5 mt-8">
-            <!--Seccion buscador-->
+            <!--Seccion buscador
             <div class="flex justify-center col-start-5">
                 <InputSearch class="" v-model="params.search"></InputSearch>
             </div>
+            -->
         </div>
 
         <div class="grid grid-cols-5 mt-8 mb-8">
             <h1
-                class="col-start-2 text-2xl font-semibold uppercase tracking-wide"
+                class="col-start-2 text-2xl font-semibold tracking-wide uppercase"
                 style="font-family: 'Montserrat'"
             >
                 Activos

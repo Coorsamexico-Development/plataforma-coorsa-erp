@@ -26,7 +26,7 @@ class ActivoController extends Controller
   {
     //traemos todos los tipos de activos
     $tipo_activos = tipos_activo::select('tipos_activos.*')
-      ->with([
+     /* ->with([
         'activos_items' => function ($query) use ($request) {
           $query->select(
             'activos_items.*',
@@ -61,7 +61,6 @@ class ActivoController extends Controller
               },
               'evidencias_activo'
             ])
-            ->limit(20)
             ->leftjoin('valor_campo_activos', 'valor_campo_activos.activo_id', 'activos_items.id')
             //->where('valor_campo_activos.valor','LIKE','%Q3%')
             ->groupBy('activos_items.id');
@@ -73,7 +72,8 @@ class ActivoController extends Controller
             $query->where("valor_campo_activos.valor", "LIKE", "%" . $search . "%");
           }
         }
-      ]);
+      ])*/
+      ;
 
     $tipo_inputs = TipoInput::all();
 
@@ -127,7 +127,7 @@ class ActivoController extends Controller
         'evidencias_activo'
       ])
       ->where('tipo_activo', '=', $idTipo)
-      ->get();
+      ->paginate(10);
 
     return $activos_item;
   }

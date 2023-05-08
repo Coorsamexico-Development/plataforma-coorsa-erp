@@ -1,6 +1,7 @@
 <script setup>
 import { Inertia } from '@inertiajs/inertia';
 import { usePage } from '@inertiajs/inertia-vue3';
+import axios from 'axios';
 import { computed, ref, watchEffect } from 'vue';
 const props = defineProps({
     pagination: Object,
@@ -28,8 +29,6 @@ const page = computed(() => {
 })
 
 </script>
-
-
 
 <template>
     <div class="inline-flex items-center justify-center px-10">

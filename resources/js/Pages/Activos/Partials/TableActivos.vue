@@ -14,6 +14,7 @@ import "@fancyapps/ui/dist/fancybox.css";
 import { index } from "d3-array";
 import axios from "axios";
 import ModalTableShowItems from "./ModalTableShowItems.vue";
+import PaginationAxios from "@/Components/PaginationAxios.vue";
 
 const emit = defineEmits(["axios" ])
 
@@ -24,7 +25,8 @@ var props = defineProps(
         tipo_evidencias:Object,
         allcampos:Object,
         tipo_inputs:Object,
-        tipoActivo:Object
+        tipoActivo:Object,
+        activosConfig:Object
     }
 );
 
@@ -54,7 +56,7 @@ const desactivarItem = (activos_empleados,id) =>
 
 
 const modalEditItem = ref(false);
-let activoModal = ref(null);
+let activoModal = ref({});
 let valores_activos = ref([]);
 const openModalEditItem = async (activo) =>
 {
@@ -115,7 +117,7 @@ const camposReactive = ref([]);
 const activo_id = ref(null);
 const openModalTable = (campo, idActivo) => 
 {
-  console.log('emision')
+  //console.log('emision')
   /*
   console.log(campo);
   console.log(idActivo);
@@ -170,6 +172,8 @@ const closeModalTable = () =>
 {
   modalTable.value = false;
 }
+
+
 </script>
 <template>        
      <table class="w-full table-auto md:table-fixed">
@@ -326,9 +330,8 @@ const closeModalTable = () =>
                <td>
                   <CarruselUsers :activo_id="activo.id" :usuarios="activo.activos_empleados" :status="activo.status" @emit-axios="emitAxios(activo.tipo_activo)"></CarruselUsers>
                </td>
-               <ModalEditItem :tipoActivo="tipoActivo" :tipo_evidencias="tipo_evidencias"  :tipo_inputs="tipo_inputs" :activo="activoModal" :campos="allcampos" :show="modalEditItem"  @close="closeModalEditItem"></ModalEditItem>
             </tr>
         </tbody>
     </table>
-
+    <ModalEditItem :tipoActivo="tipoActivo" :tipo_evidencias="tipo_evidencias"  :tipo_inputs="tipo_inputs" :activo="activoModal" :campos="allcampos" :show="modalEditItem"  @close="closeModalEditItem"></ModalEditItem>
 </template>
