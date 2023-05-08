@@ -108,7 +108,7 @@ class EmpleadoController extends Controller
         return Inertia::render(
             'RH/Empleados/EmpleadosIndex',
             [
-                'empleados' => fn () => $empleados->get(),
+                'empleados' => fn () => $empleados->paginate(10),
                 'activo' => $activo,
                 'filters' => request()->all(['search', 'fields', 'searchs']),
                 'nominas' => fn () => $nominas->paginate(5)
