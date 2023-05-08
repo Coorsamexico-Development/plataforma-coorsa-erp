@@ -128,7 +128,7 @@ const permission = computed(() => {
                         :filters="props.filters"
                         :permission="permission"
                     />
-                    <Pagination :pagination="props.empleados.data" />
+                    <Pagination :pagination="props.empleados" />
                 </div>
             </div>
         </div>
