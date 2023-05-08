@@ -115,7 +115,7 @@ const modalTable = ref(false);
 const campoReactive = ref(null);
 const camposReactive = ref([]);
 const activo_id = ref(null);
-const openModalTable = (campo, idActivo) => 
+const openModalTable = async (campo, idActivo) => 
 {
   //console.log('emision')
   /*
@@ -124,7 +124,7 @@ const openModalTable = (campo, idActivo) =>
  */
    activo_id.value = idActivo;
    campoReactive.value = campo;
-   axios.get('/columnasxCampo/'+campoReactive.value.idCampo+'/'+idActivo).then((response)=> 
+ await  axios.get('/columnasxCampo/'+campoReactive.value.idCampo+'/'+idActivo).then((response)=> 
     {
        //console.log(response.data);
        let camposAxios = response.data;     
