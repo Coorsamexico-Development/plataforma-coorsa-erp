@@ -56,16 +56,15 @@ const desactivarItem = (activos_empleados,id) =>
 const modalEditItem = ref(false);
 let activoModal = ref(null);
 let valores_activos = ref([]);
-const openModalEditItem = (activo) =>
+const openModalEditItem = async (activo) =>
 {
    activoModal.value = activo;
    
-   axios.get('/valorCampo/'+activo.id).then((response)=> 
+ await  axios.get('/valorCampo/'+activo.id).then((response)=> 
     {
         valores_activos.value = response.data
+        modalEditItem.value = true;
     });
-  
-   modalEditItem.value = true;
 }
 
 const closeModalEditItem = () =>
