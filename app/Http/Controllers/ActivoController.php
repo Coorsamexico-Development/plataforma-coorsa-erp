@@ -61,6 +61,7 @@ class ActivoController extends Controller
               },
               'evidencias_activo'
             ])
+            ->limit(20)
             ->leftjoin('valor_campo_activos', 'valor_campo_activos.activo_id', 'activos_items.id')
             //->where('valor_campo_activos.valor','LIKE','%Q3%')
             ->groupBy('activos_items.id');
