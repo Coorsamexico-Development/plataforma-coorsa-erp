@@ -99,15 +99,42 @@ const form = useForm({
     hijos: props.empleado.hijos,
     clave_bancaria: props.empleado.clave_bancaria,
     numero_cuenta_bancaria: props.empleado.numero_cuenta_bancaria,
-    direccion_estado_id: props.direccion.estado_id,
-    direccion_municipio_id: props.direccion.municipio_id,
-    direccion_localidade_id: props.direccion.localidad_id,
-    calle: props.direccion.calle,
-    numero: props.direccion.numero,
-    colonia: props.direccion.colonia,
-    codigo_postal: props.direccion.codigo_postal,
-    lote: props.direccion.lote,
-    manzana: props.direccion.manzana,
+    direccion_estado_id: 
+    props.direccion !== null
+            ? props.direccion.estado_id
+            : "",
+    direccion_municipio_id: 
+    props.direccion !== null
+            ? props.direccion.municipio_id
+            : "",
+    direccion_localidade_id:
+    props.direccion !== null
+            ? props.direccion.localidad_id
+            : "",
+    calle: 
+    props.direccion !== null
+            ? props.direccion.calle
+            : "",
+    numero: 
+    props.direccion !== null
+            ? props.direccion.numero
+            : "",
+    colonia: 
+    props.direccion !== null
+            ? props.direccion.colonia
+            : "",
+    codigo_postal: 
+    props.direccion !== null
+            ? props.direccion.codigo_postal
+            : "",
+    lote: 
+    props.direccion !== null
+            ? props.direccion.lote
+            : "",
+    manzana: 
+        props.direccion !== null
+            ? props.direccion.manzana
+            : "",
     cat_tipos_nomina_id: props.empleado.cat_tipos_nomina_id,
     tipos_contrato_id: props.empleado.tipos_contrato_id,
     salario_bruto: props.empleado.salario_bruto,
