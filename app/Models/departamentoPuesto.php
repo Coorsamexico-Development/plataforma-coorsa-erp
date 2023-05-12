@@ -8,9 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class departamentoPuesto extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'departamento_id',
-        'puesto_id'
+        'puesto_id',
+        'areas_id'
     ];
+    public function relaciones()
+    {
+        return $this->hasMany(Padres_hijos::class, 'departamento_puestos_id_padre');
+    }
 }

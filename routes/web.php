@@ -11,6 +11,7 @@ use App\Http\Controllers\LocalidadesController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\MunicipioController;
 use App\Http\Controllers\NoticiaController;
+use App\Http\Controllers\OrganigramaController;
 use App\Http\Controllers\PlantillasAutorizadaController;
 use App\Http\Controllers\PoliticController;
 use App\Http\Controllers\PuestoController;
@@ -213,3 +214,9 @@ Route::controller(RecibosNominaController::class)->group(function () {
     Route::post('nominas/post', 'store')->name('nomina.upload');
 });
 
+Route::controller(OrganigramaController::class)->group(function () {
+    Route::get('/organigrama', 'index')->name('organigrama.index');
+    Route::post('/organigrama/relacion', 'relacion')->name('organigrama.relacion');
+    Route::post('/organigrama/destroy', 'destroy')->name('organigrama.destroy');
+    Route::post('/organigrama/area', 'area')->name('organigrama.area');
+});

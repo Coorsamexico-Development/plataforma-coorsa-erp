@@ -1,0 +1,53 @@
+<script setup>
+import DialogModal from "@/Components/DialogModal.vue";
+import Diagrama from "../Partials/Diagrama.vue";
+
+const emit = defineEmits(["close"]);
+
+defineProps({
+    show: {
+        type: Boolean,
+        default: false,
+    },
+    maxWidth: {
+        type: String,
+        default: "2xl",
+    },
+    closeable: {
+        type: Boolean,
+        default: true,
+    },
+    title: {
+        type: String,
+        default: "Gerencia",
+    },
+    nodos: {
+        default: null,
+    },
+    relaciones: {
+        default: null,
+    },
+});
+
+const close = () => {
+    emit("close");
+};
+</script>
+
+<template>
+    <DialogModal
+        :show="show"
+        :max-width="maxWidth"
+        :closeable="closeable"
+        @close="close"
+    >
+        <template #title>
+            <h1>{{ title }}</h1>
+        </template>
+        <template #content>
+            <div class="h-[84vh]">
+                <Diagrama :nodos="nodos" :rels="relaciones" />
+            </div>
+        </template>
+    </DialogModal>
+</template>
