@@ -83,6 +83,8 @@ class OrganigramaController extends Controller
             ->where('DP.areas_id', 1)
             ->get();
 
+        $areas = Area::where('id', '<>', 1)->get();
+
         /* Recuperamos los recibos de nomina del empleado */
         $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
 
@@ -92,6 +94,7 @@ class OrganigramaController extends Controller
             'SinArea' => $nodes,
             'rels' => $rels,
             'gerencia' => $gerencia,
+            'areas' => $areas,
         ]);
     }
 
@@ -244,7 +247,6 @@ class OrganigramaController extends Controller
             }
         }
 
-
         $nodos = DB::table('departamento_puestos as DP')
             ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
             ->join('puestos as P', 'P.id', 'DP.puesto_id')
@@ -290,7 +292,8 @@ class OrganigramaController extends Controller
                 ];
             }
         }
+        $areas = Area::where('id', '<>', 1)->get();
 
-        return redirect()->back()->with(['nodes' => $nodos]);
+        return redirect()->back();
     }
 }

@@ -33,7 +33,7 @@
                                     :edgesTo="getInputEdges(node, input)"
                                 >
                                     <div
-                                        class="port-inner text-center px-[5px]"
+                                        class="port-inner text-center px-[5px] capitalize"
                                         @mousedown.prevent.stop="
                                             (evt) =>
                                                 startConnect(
@@ -51,14 +51,12 @@
                                             getInputEdges(node, input).length &&
                                             'connected'
                                         "
-                                    >
-                                        {{ node.Ceco }}
-                                    </div>
+                                    ></div>
                                 </port>
                                 {{ input.slice(1) }}
                             </div>
                         </div>
-                        <div style="border-bottom: none">
+                        <div style="border-bottom: none" class="-mt-[15px]">
                             <div
                                 v-for="output in node.outputs"
                                 :key="node.id + ':' + output"
@@ -90,9 +88,8 @@
                                                 .length && 'connected'
                                         "
                                     >
-                                        {{ node.Puesto }}
                                         <dragable
-                                            :list="gerencia"
+                                            :list="gerencias"
                                             item-key="id"
                                             group="elementos"
                                             animation="300"
@@ -100,7 +97,16 @@
                                             class="p-[1vw] justify-center overflow-auto"
                                             drag-class="drag"
                                             ghost-class="ghost"
+                                            @drop="elemento(node.nid)"
                                         >
+                                            <template #header>
+                                                <h1
+                                                    class="capitalize text-[20px]"
+                                                    @click="modal(node.nid)"
+                                                >
+                                                    {{ node.id }}
+                                                </h1>
+                                            </template>
                                             <template
                                                 #item="{ element }"
                                             ></template
@@ -121,6 +127,7 @@
 import { Screen, Node, Edge, graph, Port } from "vnodes";
 import { useForm } from "@inertiajs/inertia-vue3";
 import Dragable from "vuedraggable";
+import DiagramaModal from "../Modals/DiagramaModal.vue";
 
 export default {
     components: {
@@ -129,18 +136,22 @@ export default {
         Edge,
         Port,
         Dragable,
+        DiagramaModal,
     },
     setup() {
-        const form = useForm({
-            nodoA: "",
-            nodoB: "",
-            nodoC: "",
-            nodoD: "",
-        });
         const gerencia = "";
+        const modal = false;
+        let nodos = null;
+        const form = useForm({
+            elemento: "",
+            area: "",
+        });
+
         return {
             form,
             gerencia,
+            modal,
+            nodos,
         };
     },
     data() {
@@ -151,7 +162,8 @@ export default {
             zoom: 1,
         };
     },
-    props: ["rels", "nodos"],
+    emits: ["elemento", "modal"],
+    props: ["rels", "nodos", "areas", "gerencia"],
     methods: {
         startConnect(node, { input, output }, evt) {
             if (this.connecting) return;
@@ -210,30 +222,14 @@ export default {
                     this.form.nodoA = node;
                 }
                 this.stopConnect();
-                this.submit();
             } else {
                 this.cancelConnect();
             }
-        },
-        submit() {
-            this.form
-                .transform((data) => ({
-                    ...data,
-                }))
-                .post(route("organigrama.relacion"), {});
-        },
-        delete() {
-            this.form
-                .transform((data) => ({
-                    ...data,
-                }))
-                .post(route("organigrama.destroy"), {});
         },
         cancelConnect() {
             if (!this.connecting) return;
             this.graph.removeEdge(this.activeEdge);
             this.stopConnect();
-            this.delete();
         },
         stopConnect() {
             if (this.activeEdge) {
@@ -249,7 +245,7 @@ export default {
                     type: "tree",
                     dir: "down",
                 });
-                this.$refs.screen.zoomNodes(this.graph.nodes);
+                this.$refs.screen.zoomNodes(this.graph.nodes, { scale: 1 });
             });
         },
         isValidConnection(conA, conB) {
@@ -288,38 +284,54 @@ export default {
                 this.mousePrev = { x: e.clientX, y: e.clientY };
             }
         },
+        area() {
+            this.form
+                .transform((data) => ({
+                    ...data,
+                }))
+                .post(route("organigrama.area"), {});
+        },
+        elemento(element) {
+            this.$emit("elemento", { element });
+        },
+        modal(nodos) {
+            let n = null;
+            switch (nodos) {
+                case 2:
+                    n = this.$props.gerencia;
+                    break;
+                default:
+                    n = null;
+                    break;
+            }
+            this.$emit("modal", { n });
+        },
     },
     computed: {
         activeEdge: (vm) => vm.graph.edges.find((e) => e.active),
     },
     mounted() {
         window.ports = this; // DELETEME
-        const node = this.nodos;
+        const node = this.areas;
         node.forEach((nodo) => {
             this.graph.createNode({
-                id: nodo.Puesto + "/" + nodo.Ceco,
-                Nodeid: nodo.id,
-                Ceco: nodo.Ceco,
-                Puesto: nodo.Puesto,
+                id: nodo.nombre,
+                nid: nodo.id,
                 inputs: ["i"],
                 outputs: ["o"],
             });
         });
-        if (this.rels) {
-            this.rels.forEach((rel) => {
-                this.graph.createEdge({
-                    from: rel.nodoA,
-                    to: rel.nodoB,
-                    fromPort: "o",
-                    toPort: "i",
-                    active: false,
-                    type: "hsmooth",
-                });
-            });
-        }
+        this.graph.createEdge({
+            from: "directivo",
+            to: "gerencia",
+            fromPort: "o",
+            toPort: "i",
+            active: false,
+            type: "hsmooth",
+        });
         this.$nextTick(() => {
             this.graph.graphNodes({ spacing: 25, type: "tree", dir: "down" });
-            this.$refs.screen.zoomNodes(this.graph.nodes);
+            this.$refs.screen.zoomNodes(this.graph.nodes, { scale: 1 });
         });
         document.addEventListener("mouseup", this.cancelConnect);
         document.addEventListener("mousemove", this.onmousemove);

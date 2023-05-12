@@ -3,11 +3,18 @@ import { useForm, usePage } from "@inertiajs/inertia-vue3";
 import { ref, computed } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import DiagramaModal from "./Modals/DiagramaModal.vue";
+import DiagramaAreas from "./Partials/DiagramaAreas.vue";
 import Dragable from "vuedraggable";
 import Elemento from "./Partials/Elemento.vue";
 
-const props = defineProps(["nominas", "SinArea", "rels", "gerencia", "nodes"]);
-const page = usePage();
+const props = defineProps([
+    "nominas",
+    "SinArea",
+    "rels",
+    "gerencia",
+    "nodes",
+    "areas",
+]);
 const modal = ref(false);
 let nodos = ref();
 const form = useForm({
@@ -19,11 +26,6 @@ const area = () => {
     form.transform((data) => ({
         ...data,
     })).post(route("organigrama.area"), {
-        onFinish: () => {
-            nodos.value = page.props.value.flash.nodes;
-            console.log(nodos.value);
-            /* modal.value = true; */
-        },
         onCancel: () => form.reset(),
     });
 };
@@ -31,8 +33,13 @@ const area = () => {
 const close = () => {
     modal.value = false;
 };
-const open = () => {
+const open = (e) => {
+    nodos.value = e.n;
     modal.value = true;
+};
+const elemento = (elm) => {
+    form.area = elm.element;
+    area();
 };
 </script>
 <template>
@@ -55,7 +62,6 @@ const open = () => {
                 <template #header>
                     <h1
                         class="text-[20px] h-fit font-bold text-center py-[10px] uppercase hover:cursor-pointer"
-                        @click="open"
                     >
                         Lista Empleados
                     </h1>
@@ -83,7 +89,7 @@ const open = () => {
                 "
             >
                 <template #header>
-                    <button
+                    <h1
                         class="text-[20px] h-fit font-bold text-center py-[10px] uppercase hover:cursor-pointer"
                         @click="
                             nodos = gerencia;
@@ -92,7 +98,7 @@ const open = () => {
                         :disabled="form.progress"
                     >
                         Gerencia
-                    </button>
+                    </h1>
                 </template>
                 <template #item="{ element }">
                     <Elemento
@@ -102,6 +108,16 @@ const open = () => {
                     />
                 </template>
             </Dragable>
+            <div class="h-[80vh] w-full">
+                <DiagramaAreas
+                    :nodos="gerencia"
+                    :rels="rels"
+                    :areas="areas"
+                    :gerencia="gerencia"
+                    @elemento="elemento"
+                    @modal="open"
+                />
+            </div>
         </div>
         <DiagramaModal
             title="Gerencia"
