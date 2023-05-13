@@ -91,20 +91,6 @@
                                         "
                                     >
                                         {{ node.Puesto }}
-                                        <dragable
-                                            :list="gerencia"
-                                            item-key="id"
-                                            group="elementos"
-                                            animation="300"
-                                            tag="div"
-                                            class="p-[1vw] justify-center overflow-auto"
-                                            drag-class="drag"
-                                            ghost-class="ghost"
-                                        >
-                                            <template
-                                                #item="{ element }"
-                                            ></template
-                                        ></dragable>
                                     </div>
                                 </port>
                             </div>

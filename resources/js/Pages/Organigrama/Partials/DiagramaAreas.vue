@@ -163,7 +163,7 @@ export default {
         };
     },
     emits: ["elemento", "modal"],
-    props: ["rels", "nodos", "areas", "gerencia"],
+    props: ["rels", "nodos", "areas"],
     methods: {
         startConnect(node, { input, output }, evt) {
             if (this.connecting) return;
@@ -294,17 +294,28 @@ export default {
         elemento(element) {
             this.$emit("elemento", { element });
         },
-        modal(nodos) {
+        modal(nds) {
             let n = null;
-            switch (nodos) {
+            let r = null;
+            let a = null;
+            switch (nds) {
                 case 2:
-                    n = this.$props.gerencia;
+                    n = this.$props.nodos[2];
+                    r = this.$props.rels[2];
+                    a = 0;
+                    break;
+                case 3:
+                    n = this.$props.nodos[3];
+                    r = this.$props.rels[3];
+                    a = 1;
                     break;
                 default:
                     n = null;
+                    r = null;
+                    a = null;
                     break;
             }
-            this.$emit("modal", { n });
+            this.$emit("modal", { n, r, a });
         },
     },
     computed: {
@@ -322,8 +333,8 @@ export default {
             });
         });
         this.graph.createEdge({
-            from: "directivo",
-            to: "gerencia",
+            from: node[1].nombre,
+            to: node[0].nombre,
             fromPort: "o",
             toPort: "i",
             active: false,

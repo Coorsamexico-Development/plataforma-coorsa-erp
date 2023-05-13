@@ -15,7 +15,7 @@ class OrganigramaController extends Controller
     {
 
         $rels = false;
-        $nodes = DB::table('departamento_puestos as DP')
+        $nodes[] = DB::table('departamento_puestos as DP')
             ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
             ->join('puestos as P', 'P.id', 'DP.puesto_id')
             ->select(
@@ -25,63 +25,59 @@ class OrganigramaController extends Controller
             )
             ->get();
 
-        $gerencia = DB::table('departamento_puestos as DP')
-            ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
-            ->join('puestos as P', 'P.id', 'DP.puesto_id')
-            ->select(
-                'DP.id as id',
-                'P.name as Puesto',
-                'Ce.Nombre as Ceco',
-            )
-            ->where('DP.areas_id', 2)
-            ->get();
+        $areas = Area::all();
+        foreach ($areas as $area) {
+            $nodes[] = DB::table('departamento_puestos as DP')
+                ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
+                ->join('puestos as P', 'P.id', 'DP.puesto_id')
+                ->select(
+                    'DP.id as id',
+                    'P.name as Puesto',
+                    'Ce.Nombre as Ceco',
+                )
+                ->where('DP.areas_id', $area->id)
+                ->get();
+        }
 
         foreach ($nodes as $nodo) {
             /* Obtenemos las relaciones Padres->Hijos */
-            $rel = Padres_hijos::where([['departamento_puestos_id_padre', $nodo->id], ['activo', 1]])->get();
-            foreach ($rel as $r) {
-                /* Informacion del Padre */
-                $a = DB::table('departamento_puestos as DP')
-                    ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
-                    ->join('puestos as P', 'P.id', 'DP.puesto_id')
-                    ->select(
-                        'DP.id as id',
-                        'P.name as Puesto',
-                        'Ce.Nombre as Ceco',
-                    )
-                    ->where('DP.id', $r->departamento_puestos_id_padre)
-                    ->first();
+            $rela = null;
+            foreach ($nodo as $n) {
+                $rel = Padres_hijos::where([['departamento_puestos_id_padre', $n->id], ['activo', 1]])->get();
+                foreach ($rel as $r) {
+                    /* Informacion del Padre */
+                    $a = DB::table('departamento_puestos as DP')
+                        ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
+                        ->join('puestos as P', 'P.id', 'DP.puesto_id')
+                        ->select(
+                            'DP.id as id',
+                            'P.name as Puesto',
+                            'Ce.Nombre as Ceco',
+                        )
+                        ->where('DP.id', $r->departamento_puestos_id_padre)
+                        ->first();
 
-                /* Informacion del Hijo */
-                $b = DB::table('departamento_puestos as DP')
-                    ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
-                    ->join('puestos as P', 'P.id', 'DP.puesto_id')
-                    ->select(
-                        'DP.id as id',
-                        'P.name as Puesto',
-                        'Ce.Nombre as Ceco',
-                    )
-                    ->where('DP.id', $r->departamento_puestos_id_hijo)
-                    ->first();
+                    /* Informacion del Hijo */
+                    $b = DB::table('departamento_puestos as DP')
+                        ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
+                        ->join('puestos as P', 'P.id', 'DP.puesto_id')
+                        ->select(
+                            'DP.id as id',
+                            'P.name as Puesto',
+                            'Ce.Nombre as Ceco',
+                        )
+                        ->where('DP.id', $r->departamento_puestos_id_hijo)
+                        ->first();
 
-                /* Establecemos las relaciones con el nombre de los nodos */
-                $rels[] = [
-                    'nodoA' => $a->Puesto . '/' . $a->Ceco,
-                    'nodoB' => $b->Puesto . '/' . $b->Ceco,
-                ];
+                    /* Establecemos las relaciones con el nombre de los nodos */
+                    $rela[] = [
+                        'nodoA' => $a->Puesto . '/' . $a->Ceco,
+                        'nodoB' => $b->Puesto . '/' . $b->Ceco,
+                    ];
+                }
             }
+            $rels[] = $rela;
         }
-
-        $nodes = DB::table('departamento_puestos as DP')
-            ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
-            ->join('puestos as P', 'P.id', 'DP.puesto_id')
-            ->select(
-                'DP.id as id',
-                'P.name as Puesto',
-                'Ce.Nombre as Ceco',
-            )
-            ->where('DP.areas_id', 1)
-            ->get();
 
         $areas = Area::where('id', '<>', 1)->get();
 
@@ -91,9 +87,8 @@ class OrganigramaController extends Controller
         /* Pasamos la vista junto con los parametros requeridos para el funcionamiento */
         return Inertia::render('Organigrama/Organigrama', [
             'nominas' => $nominas,
-            'SinArea' => $nodes,
+            'nodes' => $nodes,
             'rels' => $rels,
-            'gerencia' => $gerencia,
             'areas' => $areas,
         ]);
     }
@@ -246,53 +241,6 @@ class OrganigramaController extends Controller
                 ]);
             }
         }
-
-        $nodos = DB::table('departamento_puestos as DP')
-            ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
-            ->join('puestos as P', 'P.id', 'DP.puesto_id')
-            ->select(
-                'DP.id as id',
-                'P.name as Puesto',
-                'Ce.Nombre as Ceco',
-            )
-            ->where('DP.areas_id', $request->area)
-            ->get();
-
-        foreach ($nodos as $nodo) {
-            $rel = Padres_hijos::where([['departamento_puestos_id_padre', $nodo->id], ['activo', 1]])->get();
-            foreach ($rel as $r) {
-                /* Informacion del Padre */
-                $a = DB::table('departamento_puestos as DP')
-                    ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
-                    ->join('puestos as P', 'P.id', 'DP.puesto_id')
-                    ->select(
-                        'DP.id as id',
-                        'P.name as Puesto',
-                        'Ce.Nombre as Ceco',
-                    )
-                    ->where('DP.id', $r->departamento_puestos_id_padre)
-                    ->first();
-
-                /* Informacion del Hijo */
-                $b = DB::table('departamento_puestos as DP')
-                    ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
-                    ->join('puestos as P', 'P.id', 'DP.puesto_id')
-                    ->select(
-                        'DP.id as id',
-                        'P.name as Puesto',
-                        'Ce.Nombre as Ceco',
-                    )
-                    ->where('DP.id', $r->departamento_puestos_id_hijo)
-                    ->first();
-
-                /* Establecemos las relaciones con el nombre de los nodos */
-                $rels[] = [
-                    'nodoA' => $a->Puesto . '/' . $a->Ceco,
-                    'nodoB' => $b->Puesto . '/' . $b->Ceco,
-                ];
-            }
-        }
-        $areas = Area::where('id', '<>', 1)->get();
 
         return redirect()->back();
     }
