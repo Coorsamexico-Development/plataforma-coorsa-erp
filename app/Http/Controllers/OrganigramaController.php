@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Area;
+use App\Models\Areas_padres_hijos;
 use App\Models\departamentoPuesto;
 use App\Models\Padres_hijos;
 use Inertia\Inertia;
@@ -81,6 +82,25 @@ class OrganigramaController extends Controller
 
         $areas = Area::where('id', '<>', 1)->get();
 
+        foreach ($areas as $n) {
+            $rel = Areas_padres_hijos::where([['areas_id_padre', $n->id], ['activo', 1]])->get();
+            foreach ($rel as $r) {
+                /* Informacion del Padre */
+                $a = Area::where('id', $r->areas_id_padre)
+                    ->first();
+
+                /* Informacion del Hijo */
+                $b = Area::where('id', $r->areas_id_hijo)
+                    ->first();
+
+                /* Establecemos las relaciones con el nombre de los nodos */
+                $areaRel[] = [
+                    'nodoA' => $a->nombre,
+                    'nodoB' => $b->nombre,
+                ];
+            }
+        }
+
         /* Recuperamos los recibos de nomina del empleado */
         $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
 
@@ -90,6 +110,7 @@ class OrganigramaController extends Controller
             'nodes' => $nodes,
             'rels' => $rels,
             'areas' => $areas,
+            'areaRel' => $areaRel,
         ]);
     }
 
@@ -223,7 +244,6 @@ class OrganigramaController extends Controller
     /* Pasar a las diferentes areas */
     public function area(Request $request)
     {
-        $rels = false;
         $DP = departamentoPuesto::where('id', $request->elemento['id'])->first();
         $area = Area::where('id', $request->area)->first();
 

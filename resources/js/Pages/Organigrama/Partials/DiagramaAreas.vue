@@ -16,9 +16,27 @@
                     :key="node.id"
                 >
                     <div
-                        class="node-header px-[6px] text-center text-white rounded-[5px_5px_0_0] bg-[#28965f]"
+                        class="node-header px-[6px] cursor-pointer text-center text-white rounded-[5px_5px_0_0] bg-[#28965f]"
+                        @click="modal(node.nid)"
                     >
-                        <strong class="hidden">{{ node.id }}</strong>
+                        <dragable
+                            :list="gerencias"
+                            item-key="id"
+                            group="elementos"
+                            animation="300"
+                            tag="div"
+                            class="px-[15px] justify-center overflow-auto relative z-[10]"
+                            drag-class="drag"
+                            ghost-class="ghost"
+                            @drop="elemento(node.nid)"
+                        >
+                            <template #header>
+                                <h1 class="capitalize text-[20px]">
+                                    {{ node.id }}
+                                </h1>
+                            </template>
+                            <template #item="{ element }"></template
+                        ></dragable>
                     </div>
                     <div class="grid">
                         <div style="border-bottom: none" class="">
@@ -51,12 +69,14 @@
                                             getInputEdges(node, input).length &&
                                             'connected'
                                         "
-                                    ></div>
+                                    >
+                                        <h1 class="opacity-0">Area</h1>
+                                    </div>
                                 </port>
                                 {{ input.slice(1) }}
                             </div>
                         </div>
-                        <div style="border-bottom: none" class="-mt-[15px]">
+                        <div style="border-bottom: none">
                             <div
                                 v-for="output in node.outputs"
                                 :key="node.id + ':' + output"
@@ -88,29 +108,7 @@
                                                 .length && 'connected'
                                         "
                                     >
-                                        <dragable
-                                            :list="gerencias"
-                                            item-key="id"
-                                            group="elementos"
-                                            animation="300"
-                                            tag="div"
-                                            class="p-[1vw] justify-center overflow-auto"
-                                            drag-class="drag"
-                                            ghost-class="ghost"
-                                            @drop="elemento(node.nid)"
-                                        >
-                                            <template #header>
-                                                <h1
-                                                    class="capitalize text-[20px]"
-                                                    @click="modal(node.nid)"
-                                                >
-                                                    {{ node.id }}
-                                                </h1>
-                                            </template>
-                                            <template
-                                                #item="{ element }"
-                                            ></template
-                                        ></dragable>
+                                        <h1 class="opacity-0">Area</h1>
                                     </div>
                                 </port>
                             </div>
@@ -119,7 +117,6 @@
                 </node>
             </screen>
         </div>
-        <div class="sidebar"></div>
     </div>
 </template>
 
@@ -146,9 +143,16 @@ export default {
             elemento: "",
             area: "",
         });
+        const Nform = useForm({
+            nodoA: "",
+            nodoB: "",
+            nodoC: "",
+            nodoD: "",
+        });
 
         return {
             form,
+            Nform,
             gerencia,
             modal,
             nodos,
@@ -163,7 +167,7 @@ export default {
         };
     },
     emits: ["elemento", "modal"],
-    props: ["rels", "nodos", "areas"],
+    props: ["rels", "nodos", "areas", "areaRel"],
     methods: {
         startConnect(node, { input, output }, evt) {
             if (this.connecting) return;
@@ -181,8 +185,8 @@ export default {
                     input: output,
                     output: input,
                 };
-                this.form.nodoC = edge;
-                this.form.nodoD = node;
+                this.Nform.nodoC = edge;
+                this.Nform.nodoD = node;
             } else {
                 // new edge
                 this.graph.createEdge({
@@ -193,7 +197,7 @@ export default {
                     fromAnchor: { ...port.offset },
                     toAnchor: { ...port.offset },
                     active: true,
-                    type: "hsmooth",
+                    type: "smooth",
                 });
                 this.connecting = {
                     node,
@@ -201,7 +205,7 @@ export default {
                     output,
                 };
 
-                this.form.nodoA = node;
+                this.Nform.nodoA = node;
             }
             this.mousePrev = { x: evt.clientX, y: evt.clientY };
             this.zoom = this.$refs.screen.panzoom.getZoom();
@@ -214,22 +218,34 @@ export default {
                 if (input) {
                     this.activeEdge.to = node.id;
                     this.activeEdge.toPort = input;
-                    this.form.nodoB = node;
+                    this.Nform.nodoB = node;
                 } else if (output) {
                     this.activeEdge.from = node.id;
                     this.activeEdge.fromPort = output;
-                    this.form.nodoB = this.form.nodoA;
-                    this.form.nodoA = node;
+                    this.Nform.nodoB = this.Nform.nodoA;
+                    this.Nform.nodoA = node;
                 }
                 this.stopConnect();
+                this.submit();
             } else {
                 this.cancelConnect();
             }
+        },
+        submit() {
+            this.Nform.transform((data) => ({
+                ...data,
+            })).post(route("area.relacion"), {});
+        },
+        delete() {
+            this.Nform.transform((data) => ({
+                ...data,
+            })).post(route("area.destroy"), {});
         },
         cancelConnect() {
             if (!this.connecting) return;
             this.graph.removeEdge(this.activeEdge);
             this.stopConnect();
+            this.delete();
         },
         stopConnect() {
             if (this.activeEdge) {
@@ -238,10 +254,9 @@ export default {
             this.$nextTick(() => {
                 this.connecting = null;
             });
-
             this.$nextTick(() => {
                 this.graph.graphNodes({
-                    spacing: 25,
+                    spacing: 75,
                     type: "tree",
                     dir: "down",
                 });
@@ -295,26 +310,9 @@ export default {
             this.$emit("elemento", { element });
         },
         modal(nds) {
-            let n = null;
-            let r = null;
-            let a = null;
-            switch (nds) {
-                case 2:
-                    n = this.$props.nodos[2];
-                    r = this.$props.rels[2];
-                    a = 0;
-                    break;
-                case 3:
-                    n = this.$props.nodos[3];
-                    r = this.$props.rels[3];
-                    a = 1;
-                    break;
-                default:
-                    n = null;
-                    r = null;
-                    a = null;
-                    break;
-            }
+            let n = this.$props.nodos[nds];
+            let r = this.$props.rels[nds];
+            let a = nds - 2;
             this.$emit("modal", { n, r, a });
         },
     },
@@ -332,16 +330,18 @@ export default {
                 outputs: ["o"],
             });
         });
-        this.graph.createEdge({
-            from: node[1].nombre,
-            to: node[0].nombre,
-            fromPort: "o",
-            toPort: "i",
-            active: false,
-            type: "hsmooth",
+        this.$props.areaRel.forEach((element) => {
+            this.graph.createEdge({
+                from: element.nodoA,
+                to: element.nodoB,
+                fromPort: "o",
+                toPort: "i",
+                active: false,
+                type: "smooth",
+            });
         });
         this.$nextTick(() => {
-            this.graph.graphNodes({ spacing: 25, type: "tree", dir: "down" });
+            this.graph.graphNodes({ spacing: 75, type: "tree", dir: "down" });
             this.$refs.screen.zoomNodes(this.graph.nodes, { scale: 1 });
         });
         document.addEventListener("mouseup", this.cancelConnect);

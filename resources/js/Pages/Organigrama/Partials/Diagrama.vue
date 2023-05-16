@@ -167,7 +167,7 @@ export default {
                     fromAnchor: { ...port.offset },
                     toAnchor: { ...port.offset },
                     active: true,
-                    type: "hsmooth",
+                    type: "smooth",
                 });
                 this.connecting = {
                     node,

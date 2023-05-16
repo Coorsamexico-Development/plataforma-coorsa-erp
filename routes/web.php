@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivoController;
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\DepartamentosAuditoriaController;
@@ -219,4 +220,9 @@ Route::controller(OrganigramaController::class)->group(function () {
     Route::post('/organigrama/relacion', 'relacion')->name('organigrama.relacion');
     Route::post('/organigrama/destroy', 'destroy')->name('organigrama.destroy');
     Route::post('/organigrama/area', 'area')->name('organigrama.area');
+});
+Route::controller(AreaController::class)->group(function () {
+    Route::post('area/addArea', 'store')->name('area.addArea');
+    Route::post('area/relacion', 'relacion')->name('area.relacion');
+    Route::post('area/destroy', 'destroy')->name('area.destroy');
 });

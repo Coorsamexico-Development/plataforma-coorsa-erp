@@ -42,10 +42,10 @@ const close = () => {
         @close="close"
     >
         <template #title>
-            <h1>{{ title }}</h1>
+            <h1 class="text-[40px] pt-4">{{ title }}</h1>
         </template>
         <template #content>
-            <div class="h-[84vh]">
+            <div class="h-[83vh]">
                 <Diagrama :nodos="nodos" :rels="relaciones" />
             </div>
         </template>
