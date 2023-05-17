@@ -18,7 +18,7 @@ class AreaController extends Controller
         Area::create([
             'nombre' => $request->area,
         ]);
-        return redirect()->back();
+        return to_route('organigrama.index');
     }
 
     public function relacion(Request $request)
@@ -108,14 +108,11 @@ class AreaController extends Controller
         $nodoB = $request->nodoB;
         $nodoC = $request->nododC; /* Nodo de recuperacion */
         $nodoD = $request->nodoD; /* Nodo de relcion anterior */
-        dd($nodoA, $nodoB, $nodoC, $nodoD);
 
         if ($nodoA === null) {
-            $nodoF = explode('/', $request->nodoC['from']);
-            $nodoA = get_object_vars(Area::where([['nombre', $nodoF[0]]])
-                ->first());
+            $nodoA = Area::where('nombre', $request->nodoC['from'])->first();
 
-            $relBef = Areas_padres_hijos::where([['areas_id_padre', $nodoA['nid']], ['areas_id_hijo', $nodoD['nid']]])->first();
+            $relBef = Areas_padres_hijos::where([['areas_id_padre', $nodoA->id], ['areas_id_hijo', $nodoD['nid']]])->first();
 
             $relBef->update([
                 'activo' => 0

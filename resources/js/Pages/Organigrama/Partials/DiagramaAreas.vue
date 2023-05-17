@@ -15,29 +15,6 @@
                     v-for="node in graph.nodes"
                     :key="node.id"
                 >
-                    <div
-                        class="node-header px-[6px] cursor-pointer text-center text-white rounded-[5px_5px_0_0] bg-[#28965f]"
-                        @click="modal(node.nid)"
-                    >
-                        <dragable
-                            :list="gerencias"
-                            item-key="id"
-                            group="elementos"
-                            animation="300"
-                            tag="div"
-                            class="px-[15px] justify-center overflow-auto relative z-[10]"
-                            drag-class="drag"
-                            ghost-class="ghost"
-                            @drop="elemento(node.nid)"
-                        >
-                            <template #header>
-                                <h1 class="capitalize text-[20px]">
-                                    {{ node.id }}
-                                </h1>
-                            </template>
-                            <template #item="{ element }"></template
-                        ></dragable>
-                    </div>
                     <div class="grid">
                         <div style="border-bottom: none" class="">
                             <div
@@ -75,6 +52,29 @@
                                 </port>
                                 {{ input.slice(1) }}
                             </div>
+                        </div>
+                        <div
+                            class="node-header px-[6px] cursor-pointer text-center"
+                            @click="modal(node.nid)"
+                        >
+                            <dragable
+                                :list="gerencias"
+                                item-key="id"
+                                group="elementos"
+                                animation="300"
+                                tag="div"
+                                class="px-[15px] justify-center overflow-auto relative z-[10]"
+                                drag-class="drag"
+                                ghost-class="ghost"
+                                @drop="elemento(node.nid)"
+                            >
+                                <template #header>
+                                    <h1 class="capitalize text-[20px]">
+                                        {{ node.id }}
+                                    </h1>
+                                </template>
+                                <template #item="{ element }"></template
+                            ></dragable>
                         </div>
                         <div style="border-bottom: none">
                             <div
@@ -125,6 +125,7 @@ import { Screen, Node, Edge, graph, Port } from "vnodes";
 import { useForm } from "@inertiajs/inertia-vue3";
 import Dragable from "vuedraggable";
 import DiagramaModal from "../Modals/DiagramaModal.vue";
+import { createVNode } from "vue";
 
 export default {
     components: {
@@ -260,7 +261,7 @@ export default {
                     type: "tree",
                     dir: "down",
                 });
-                this.$refs.screen.zoomNodes(this.graph.nodes, { scale: 1 });
+                this.$refs.screen.zoomNodes(this.graph.nodes);
             });
         },
         isValidConnection(conA, conB) {
@@ -315,34 +316,42 @@ export default {
             let a = nds - 2;
             this.$emit("modal", { n, r, a });
         },
+        createNode() {
+            this.graph.reset();
+            const node = this.areas;
+            node.forEach((nodo) => {
+                this.graph.createNode({
+                    id: nodo.nombre,
+                    nid: nodo.id,
+                    inputs: ["i"],
+                    outputs: ["o"],
+                });
+            });
+            this.$props.areaRel.forEach((element) => {
+                this.graph.createEdge({
+                    from: element.nodoA,
+                    to: element.nodoB,
+                    fromPort: "o",
+                    toPort: "i",
+                    active: false,
+                    type: "smooth",
+                });
+            });
+        },
     },
     computed: {
         activeEdge: (vm) => vm.graph.edges.find((e) => e.active),
     },
     mounted() {
         window.ports = this; // DELETEME
-        const node = this.areas;
-        node.forEach((nodo) => {
-            this.graph.createNode({
-                id: nodo.nombre,
-                nid: nodo.id,
-                inputs: ["i"],
-                outputs: ["o"],
-            });
-        });
-        this.$props.areaRel.forEach((element) => {
-            this.graph.createEdge({
-                from: element.nodoA,
-                to: element.nodoB,
-                fromPort: "o",
-                toPort: "i",
-                active: false,
-                type: "smooth",
-            });
-        });
+        this.createNode();
         this.$nextTick(() => {
-            this.graph.graphNodes({ spacing: 75, type: "tree", dir: "down" });
-            this.$refs.screen.zoomNodes(this.graph.nodes, { scale: 1 });
+            this.graph.graphNodes({
+                spacing: 75,
+                type: "tree",
+                dir: "down",
+            });
+            this.$refs.screen.zoomNodes(this.graph.nodes);
         });
         document.addEventListener("mouseup", this.cancelConnect);
         document.addEventListener("mousemove", this.onmousemove);
@@ -350,6 +359,11 @@ export default {
     beforeDestroy() {
         document.removeEventListener("mouseup", this.cancelConnect);
         document.removeEventListener("mousemove", this.onmousemove);
+    },
+    watch: {
+        node() {
+            console.log(node);
+        },
     },
 };
 </script>

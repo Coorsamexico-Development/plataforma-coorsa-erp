@@ -28,7 +28,7 @@
 
 /*Nav*/
 
-@media only screen and (min-width: 1224px) {
+@media only screen and (min-width: 480px) {
     .navMenu {
         background-image: url("../img/HEADER_24.jpg");
         height: 5rem;

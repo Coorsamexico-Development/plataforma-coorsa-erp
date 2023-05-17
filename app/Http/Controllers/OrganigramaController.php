@@ -24,6 +24,8 @@ class OrganigramaController extends Controller
                 'P.name as Puesto',
                 'Ce.Nombre as Ceco',
             )
+            ->where('DP.areas_id', null)
+            ->orWhere('DP.areas_id', 1)
             ->get();
 
         $areas = Area::all();
@@ -219,8 +221,10 @@ class OrganigramaController extends Controller
         $nodoC = $request->nododC; /* Nodo de recuperacion */
         $nodoD = $request->nodoD; /* Nodo de relcion anterior */
 
+
         if ($nodoA === null) {
             $nodoF = explode('/', $request->nodoC['from']);
+            dd($nodoF);
             $nodoA = get_object_vars(DB::table('departamento_puestos as DP')
                 ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
                 ->join('puestos as P', 'P.id', 'DP.puesto_id')

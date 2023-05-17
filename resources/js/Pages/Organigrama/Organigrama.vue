@@ -35,7 +35,10 @@ const addArea = () => {
             ...data,
         }))
         .post(route("area.addArea"), {
-            onFinish: () => addAreaF.reset(),
+            onFinish: () => {
+                addAreaF.reset();
+                console.log(props.areas);
+            },
             onCancel: () => addAreaF.reset(),
         });
 };
@@ -58,7 +61,7 @@ const elemento = (elm) => {
     <AppLayout :nominas="nominas" title="Organigrama">
         <div class="flex overflow-hidden">
             <Dragable
-                :list="nodes[1]"
+                :list="nodes[0]"
                 item-key="id"
                 group="elementos"
                 animation="300"
@@ -93,6 +96,7 @@ const elemento = (elm) => {
                             required
                             v-model="addAreaF.area"
                             placeholder="Nombre del area"
+                            @keyup.enter="addArea"
                         />
                         <input
                             type="submit"
