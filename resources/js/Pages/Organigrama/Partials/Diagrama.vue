@@ -1,6 +1,6 @@
 <template>
-    <div class="h-full w-full relative" id="ports-demo">
-        <div class="h-full w-full viewport">
+    <div class="relative w-full h-full" id="ports-demo">
+        <div class="w-full h-full viewport">
             <screen ref="screen" style="border: none">
                 <edge
                     v-for="edge in graph.edges"
@@ -15,10 +15,25 @@
                     v-for="node in graph.nodes"
                     :key="node.id"
                 >
-                    <div
-                        class="node-header px-[6px] text-center text-white rounded-[5px_5px_0_0] bg-[#28965f]"
-                    >
-                        <strong class="hidden">{{ node.id }}</strong>
+                    <div class="node-header px-[6px]">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="absolute icon icon-tabler icon-tabler-x w-[10px] z-[2] cursor-pointer right-[3px] top-[3px]"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="#ec2944"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            @click="
+                                form.nodoA = node;
+                                remove();
+                            "
+                        >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M18 6l-12 12" />
+                            <path d="M6 6l12 12" />
+                        </svg>
                     </div>
                     <div class="grid">
                         <div style="border-bottom: none" class="">
@@ -137,7 +152,8 @@ export default {
             zoom: 1,
         };
     },
-    props: ["rels", "nodos"],
+    emits: ["area"],
+    props: ["rels", "nodos", "area"],
     methods: {
         startConnect(node, { input, output }, evt) {
             if (this.connecting) return;
@@ -215,6 +231,18 @@ export default {
                 }))
                 .post(route("organigrama.destroy"), {});
         },
+        remove() {
+            this.form
+                .transform((data) => ({
+                    ...data,
+                }))
+                .post(route("organigrama.remove"), {
+                    onFinish: () => {
+                        this.form.reset();
+                        this.modal();
+                    },
+                });
+        },
         cancelConnect() {
             if (!this.connecting) return;
             this.graph.removeEdge(this.activeEdge);
@@ -274,6 +302,10 @@ export default {
                 this.mousePrev = { x: e.clientX, y: e.clientY };
             }
         },
+        modal() {
+            let a = this.$props.area;
+            this.$emit("area", { a });
+        },
     },
     computed: {
         activeEdge: (vm) => vm.graph.edges.find((e) => e.active),
@@ -309,6 +341,45 @@ export default {
         });
         document.addEventListener("mouseup", this.cancelConnect);
         document.addEventListener("mousemove", this.onmousemove);
+    },
+    beforeUpdate() {
+        window.ports = this; // DELETEME
+        const node = this.nodos;
+        this.graph.reset();
+        this.$nextTick(() => {
+            node.forEach((nodo) => {
+                this.graph.createNode({
+                    id: nodo.Puesto + "/" + nodo.Ceco,
+                    Nodeid: nodo.id,
+                    Ceco: nodo.Ceco,
+                    Puesto: nodo.Puesto,
+                    inputs: ["i"],
+                    outputs: ["o"],
+                });
+            });
+            if (this.rels) {
+                this.rels.forEach((rel) => {
+                    this.graph.createEdge({
+                        from: rel.nodoA,
+                        to: rel.nodoB,
+                        fromPort: "o",
+                        toPort: "i",
+                        active: false,
+                        type: "hsmooth",
+                    });
+                });
+            }
+            this.$nextTick(() => {
+                this.graph.graphNodes({
+                    spacing: 25,
+                    type: "tree",
+                    dir: "down",
+                });
+                this.$refs.screen.zoomNodes(this.graph.nodes);
+            });
+            document.addEventListener("mouseup", this.cancelConnect);
+            document.addEventListener("mousemove", this.onmousemove);
+        });
     },
     beforeDestroy() {
         document.removeEventListener("mouseup", this.cancelConnect);

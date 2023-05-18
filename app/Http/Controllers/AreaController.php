@@ -18,7 +18,6 @@ class AreaController extends Controller
         Area::create([
             'nombre' => $request->area,
         ]);
-        return to_route('organigrama.index');
     }
 
     public function relacion(Request $request)
@@ -118,6 +117,7 @@ class AreaController extends Controller
                 'activo' => 0
             ]);
         }
+
         return redirect()->back();
     }
 }

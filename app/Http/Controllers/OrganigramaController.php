@@ -16,6 +16,7 @@ class OrganigramaController extends Controller
     {
 
         $rels = false;
+        $areaRel = false;
         $nodes[] = DB::table('departamento_puestos as DP')
             ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
             ->join('puestos as P', 'P.id', 'DP.puesto_id')
@@ -99,6 +100,8 @@ class OrganigramaController extends Controller
                 $areaRel[] = [
                     'nodoA' => $a->nombre,
                     'nodoB' => $b->nombre,
+                    'idA' => $a->id,
+                    'idB' => $b->id,
                 ];
             }
         }
@@ -224,7 +227,6 @@ class OrganigramaController extends Controller
 
         if ($nodoA === null) {
             $nodoF = explode('/', $request->nodoC['from']);
-            dd($nodoF);
             $nodoA = get_object_vars(DB::table('departamento_puestos as DP')
                 ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
                 ->join('puestos as P', 'P.id', 'DP.puesto_id')
@@ -265,6 +267,13 @@ class OrganigramaController extends Controller
                 ]);
             }
         }
+
+        return redirect()->back();
+    }
+    public function remove(Request $request)
+    {
+        $DP = departamentoPuesto::where('id', $request->nodoA['Nodeid'])->first();
+        $DP->update(['areas_id' => 1]);
 
         return redirect()->back();
     }

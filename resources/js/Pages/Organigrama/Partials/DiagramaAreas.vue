@@ -1,6 +1,6 @@
 <template>
-    <div class="h-full w-full relative" id="ports-demo">
-        <div class="h-full w-full viewport">
+    <div class="relative w-full h-full" id="ports-demo">
+        <div class="w-full h-full viewport">
             <screen ref="screen" style="border: none">
                 <edge
                     v-for="edge in graph.edges"
@@ -125,7 +125,7 @@ import { Screen, Node, Edge, graph, Port } from "vnodes";
 import { useForm } from "@inertiajs/inertia-vue3";
 import Dragable from "vuedraggable";
 import DiagramaModal from "../Modals/DiagramaModal.vue";
-import { createVNode } from "vue";
+import { h } from "vue";
 
 export default {
     components: {
@@ -311,22 +311,25 @@ export default {
             this.$emit("elemento", { element });
         },
         modal(nds) {
-            let n = this.$props.nodos[nds];
-            let r = this.$props.rels[nds];
-            let a = nds - 2;
-            this.$emit("modal", { n, r, a });
+            let a = nds;
+            this.$emit("modal", { a });
         },
-        createNode() {
-            this.graph.reset();
-            const node = this.areas;
-            node.forEach((nodo) => {
-                this.graph.createNode({
-                    id: nodo.nombre,
-                    nid: nodo.id,
-                    inputs: ["i"],
-                    outputs: ["o"],
-                });
+    },
+    computed: {
+        activeEdge: (vm) => vm.graph.edges.find((e) => e.active),
+    },
+    mounted() {
+        window.ports = this; // DELETEME
+        const node = this.areas;
+        node.forEach((nodo) => {
+            this.graph.createNode({
+                id: nodo.nombre,
+                nid: nodo.id,
+                inputs: ["i"],
+                outputs: ["o"],
             });
+        });
+        if (this.$props.areaRel) {
             this.$props.areaRel.forEach((element) => {
                 this.graph.createEdge({
                     from: element.nodoA,
@@ -337,14 +340,7 @@ export default {
                     type: "smooth",
                 });
             });
-        },
-    },
-    computed: {
-        activeEdge: (vm) => vm.graph.edges.find((e) => e.active),
-    },
-    mounted() {
-        window.ports = this; // DELETEME
-        this.createNode();
+        }
         this.$nextTick(() => {
             this.graph.graphNodes({
                 spacing: 75,
@@ -356,21 +352,52 @@ export default {
         document.addEventListener("mouseup", this.cancelConnect);
         document.addEventListener("mousemove", this.onmousemove);
     },
+    beforeUpdate() {
+        window.ports = this; // DELETEMEconst node = this.areas;
+        const node = this.$props.areas;
+        this.graph.reset();
+        this.$nextTick(() => {
+            node.forEach((nodo) => {
+                this.graph.createNode({
+                    id: nodo.nombre,
+                    nid: nodo.id,
+                    inputs: ["i"],
+                    outputs: ["o"],
+                });
+            });
+            if (this.$props.areaRel) {
+                this.$props.areaRel.forEach((element) => {
+                    this.graph.createEdge({
+                        from: element.nodoA,
+                        to: element.nodoB,
+                        fromPort: "o",
+                        toPort: "i",
+                        active: false,
+                        type: "smooth",
+                    });
+                });
+            }
+            this.$nextTick(() => {
+                this.graph.graphNodes({
+                    spacing: 75,
+                    type: "tree",
+                    dir: "down",
+                });
+                this.$refs.screen.zoomNodes(this.graph.nodes);
+            });
+            document.addEventListener("mouseup", this.cancelConnect);
+            document.addEventListener("mousemove", this.onmousemove);
+        });
+    },
     beforeDestroy() {
         document.removeEventListener("mouseup", this.cancelConnect);
         document.removeEventListener("mousemove", this.onmousemove);
-    },
-    watch: {
-        node() {
-            console.log(node);
-        },
     },
 };
 </script>
 
 <style scoped>
 .port-inner {
-    background-color: #abc00000;
     display: inline-block;
     cursor: pointer;
     width: 100%;

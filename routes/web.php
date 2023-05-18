@@ -220,6 +220,7 @@ Route::controller(OrganigramaController::class)->group(function () {
     Route::post('/organigrama/relacion', 'relacion')->name('organigrama.relacion');
     Route::post('/organigrama/destroy', 'destroy')->name('organigrama.destroy');
     Route::post('/organigrama/area', 'area')->name('organigrama.area');
+    Route::post('/organigrama/remove', 'remove')->name('organigrama.remove');
 });
 Route::controller(AreaController::class)->group(function () {
     Route::post('area/addArea', 'store')->name('area.addArea');

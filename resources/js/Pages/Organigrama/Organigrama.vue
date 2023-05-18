@@ -1,5 +1,5 @@
 <script setup>
-import { useForm, usePage } from "@inertiajs/inertia-vue3";
+import { useForm } from "@inertiajs/inertia-vue3";
 import { ref, onMounted } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import DiagramaModal from "./Modals/DiagramaModal.vue";
@@ -13,6 +13,7 @@ const modal = ref(false);
 let nodos = ref();
 let rela = ref();
 let arean = ref();
+let sons = ref();
 
 const form = useForm({
     elemento: "",
@@ -26,6 +27,7 @@ const area = () => {
     form.transform((data) => ({
         ...data,
     })).post(route("organigrama.area"), {
+        onSuccess: () => form.reset(),
         onCancel: () => form.reset(),
     });
 };
@@ -35,9 +37,9 @@ const addArea = () => {
             ...data,
         }))
         .post(route("area.addArea"), {
+            onSuccess: () => addAreaF.reset(),
             onFinish: () => {
                 addAreaF.reset();
-                console.log(props.areas);
             },
             onCancel: () => addAreaF.reset(),
         });
@@ -47,10 +49,20 @@ const close = () => {
     modal.value = false;
 };
 const open = (e) => {
-    nodos.value = e.n;
-    rela.value = e.r;
-    arean.value = props.areas[e.a].nombre;
+    nodos.value = props.nodes[e.a];
+    rela.value = props.rels[e.a];
+    arean.value = props.areas[e.a - 2];
     modal.value = true;
+
+    props.areaRel.forEach((element) => {
+        if (element.nodoA === props.areas[e.a - 2].nombre)
+            sons.value = {
+                nodoA: element.nodoA,
+                nodoB: element.nodoB,
+                idA: element.idA,
+                idB: element.idB,
+            };
+    });
 };
 const elemento = (elm) => {
     form.area = elm.element;
@@ -86,7 +98,7 @@ const elemento = (elm) => {
                 </template>
             </Dragable>
             <div class="h-[90vh] w-full">
-                <div class="flex py-3 px-10">
+                <div class="flex px-10 py-3">
                     <form class="flex gap-10" @submit.prevent="addArea">
                         <input
                             style="border: 1px black solid"
@@ -122,9 +134,11 @@ const elemento = (elm) => {
         <DiagramaModal
             :title="arean"
             @close="close"
+            @modal="open"
             :show="modal"
             :nodos="nodos"
             :relaciones="rela"
+            :sons="sons"
             :max-width="'full'"
         />
     </AppLayout>

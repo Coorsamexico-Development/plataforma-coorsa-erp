@@ -27,10 +27,18 @@ defineProps({
     relaciones: {
         default: null,
     },
+    sons: {
+        default: null,
+    },
 });
 
 const close = () => {
     emit("close");
+};
+
+const modal = (nds) => {
+    let a = nds.a;
+    emit("modal", { a });
 };
 </script>
 
@@ -42,11 +50,17 @@ const close = () => {
         @close="close"
     >
         <template #title>
-            <h1 class="text-[40px] pt-4">{{ title }}</h1>
+            <h1 class="text-[40px] pt-4">{{ title.nombre }}</h1>
         </template>
         <template #content>
+            {{ sons }}
             <div class="h-[83vh]">
-                <Diagrama :nodos="nodos" :rels="relaciones" />
+                <Diagrama
+                    :nodos="nodos"
+                    :rels="relaciones"
+                    :area="title.id"
+                    @area="modal"
+                />
             </div>
         </template>
     </DialogModal>
