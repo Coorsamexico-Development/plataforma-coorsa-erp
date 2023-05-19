@@ -84,9 +84,14 @@ class OrganigramaController extends Controller
         }
 
         $areas = Area::where('id', '<>', 1)->get();
+        $padre = null;
 
         foreach ($areas as $n) {
             $rel = Areas_padres_hijos::where([['areas_id_padre', $n->id], ['activo', 1]])->get();
+
+            $DP = DB::table('departamento_puestos as DP')
+                ->where([['DP.areas_id', $n->id]])
+                ->get();
             foreach ($rel as $r) {
                 /* Informacion del Padre */
                 $a = Area::where('id', $r->areas_id_padre)
@@ -95,6 +100,12 @@ class OrganigramaController extends Controller
                 /* Informacion del Hijo */
                 $b = Area::where('id', $r->areas_id_hijo)
                     ->first();
+                foreach ($DP as $p) {
+                    $rel = Padres_hijos::where([['departamento_puestos_id_hijo', $p->id], ['activo', 2]])
+                        ->get();
+                    if ($rel->count() != 0)
+                        $padre = $p;
+                }
 
                 /* Establecemos las relaciones con el nombre de los nodos */
                 $areaRel[] = [
@@ -223,26 +234,55 @@ class OrganigramaController extends Controller
         $nodoB = $request->nodoB;
         $nodoC = $request->nododC; /* Nodo de recuperacion */
         $nodoD = $request->nodoD; /* Nodo de relcion anterior */
+        $area = $request->area;
 
+        if ($area === null) {
+            if ($nodoA === null) {
+                $nodoF = explode('/', $request->nodoC['from']);
+                $nodoA = get_object_vars(DB::table('departamento_puestos as DP')
+                    ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
+                    ->join('puestos as P', 'P.id', 'DP.puesto_id')
+                    ->select(
+                        'DP.id as Nodeid',
+                        'P.name as Puesto',
+                        'Ce.Nombre as Ceco',
+                    )
+                    ->where([['P.name', $nodoF[0]], ['Ce.nombre', $nodoF[1]]])
+                    ->first());
 
-        if ($nodoA === null) {
-            $nodoF = explode('/', $request->nodoC['from']);
-            $nodoA = get_object_vars(DB::table('departamento_puestos as DP')
-                ->join('cecos as Ce', 'Ce.id', 'DP.departamento_id')
-                ->join('puestos as P', 'P.id', 'DP.puesto_id')
-                ->select(
-                    'DP.id as Nodeid',
-                    'P.name as Puesto',
-                    'Ce.Nombre as Ceco',
-                )
-                ->where([['P.name', $nodoF[0]], ['Ce.nombre', $nodoF[1]]])
-                ->first());
+                $relBef = Padres_hijos::where([['departamento_puestos_id_padre', $nodoA['Nodeid']], ['departamento_puestos_id_hijo', $nodoD['Nodeid']]])->first();
 
-            $relBef = Padres_hijos::where([['departamento_puestos_id_padre', $nodoA['Nodeid']], ['departamento_puestos_id_hijo', $nodoD['Nodeid']]])->first();
+                $relBef->update([
+                    'activo' => 0
+                ]);
+            }
+        } else {
+            $padre = null;
+            $DP = DB::table('departamento_puestos as DP')
+                ->where([['DP.areas_id', $area['idB']]])
+                ->get();
+            foreach ($DP as $p) {
+                $rel = Padres_hijos::where([['departamento_puestos_id_hijo', $p->id], ['activo', 1]])
+                    ->get();
+                if ($rel->count() === 0)
+                    $padre = $p;
+            }
+            if ($padre === null)
+                return redirect()->back();
 
-            $relBef->update([
-                'activo' => 0
-            ]);
+            $relBef = Padres_hijos::where([['departamento_puestos_id_padre', $nodoA['Nodeid']], ['departamento_puestos_id_hijo', $padre->id]])->first();
+
+            if ($relBef) {
+                $relBef->update([
+                    'activo' => 0
+                ]);
+            } else {
+                Padres_hijos::create([
+                    'departamento_puestos_id_padre' => $nodoA['Nodeid'],
+                    'departamento_puestos_id_hijo' => $padre->id,
+                    'activo' => 2,
+                ]);
+            }
         }
         return redirect()->back();
     }

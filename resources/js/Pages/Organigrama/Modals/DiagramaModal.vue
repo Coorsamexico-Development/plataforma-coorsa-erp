@@ -53,12 +53,12 @@ const modal = (nds) => {
             <h1 class="text-[40px] pt-4">{{ title.nombre }}</h1>
         </template>
         <template #content>
-            {{ sons }}
             <div class="h-[83vh]">
                 <Diagrama
                     :nodos="nodos"
                     :rels="relaciones"
                     :area="title.id"
+                    :sons="sons"
                     @area="modal"
                 />
             </div>

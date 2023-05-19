@@ -1,6 +1,6 @@
 <template>
     <div class="relative w-full h-full" id="ports-demo">
-        <div class="w-full h-full viewport">
+        <div class="w-full h-[80vh] viewport">
             <screen ref="screen" style="border: none">
                 <edge
                     v-for="edge in graph.edges"
@@ -36,7 +36,7 @@
                         </svg>
                     </div>
                     <div class="grid">
-                        <div style="border-bottom: none" class="">
+                        <div style="border-bottom: none">
                             <div
                                 v-for="input in node.inputs"
                                 :key="node.id + ':' + input"
@@ -48,7 +48,7 @@
                                     :edgesTo="getInputEdges(node, input)"
                                 >
                                     <div
-                                        class="port-inner text-center px-[5px]"
+                                        class="port-inner text-center px-[15px]"
                                         @mousedown.prevent.stop="
                                             (evt) =>
                                                 startConnect(
@@ -113,8 +113,18 @@
                     </div>
                 </node>
             </screen>
+            <div class="flex justify-evenly px-[2vw] gap-[10px]">
+                <template v-for="son in sons" :key="idB">
+                    <div
+                        class="text-[20px] w-fit text-center cursor-pointer select-none"
+                        @mouseover="form.area = son"
+                        @mouseout="form.area = null"
+                    >
+                        <h1>{{ son.nodoB }}</h1>
+                    </div>
+                </template>
+            </div>
         </div>
-        <div class="sidebar"></div>
     </div>
 </template>
 
@@ -137,6 +147,7 @@ export default {
             nodoB: "",
             nodoC: "",
             nodoD: "",
+            area: null,
         });
         const gerencia = "";
         return {
@@ -153,7 +164,7 @@ export default {
         };
     },
     emits: ["area"],
-    props: ["rels", "nodos", "area"],
+    props: ["rels", "nodos", "area", "sons"],
     methods: {
         startConnect(node, { input, output }, evt) {
             if (this.connecting) return;

@@ -53,16 +53,19 @@ const open = (e) => {
     rela.value = props.rels[e.a];
     arean.value = props.areas[e.a - 2];
     modal.value = true;
+    let son = [];
 
     props.areaRel.forEach((element) => {
-        if (element.nodoA === props.areas[e.a - 2].nombre)
-            sons.value = {
+        if (element.nodoA === props.areas[e.a - 2].nombre) {
+            son.push({
                 nodoA: element.nodoA,
                 nodoB: element.nodoB,
                 idA: element.idA,
                 idB: element.idB,
-            };
+            });
+        }
     });
+    sons.value = son;
 };
 const elemento = (elm) => {
     form.area = elm.element;
