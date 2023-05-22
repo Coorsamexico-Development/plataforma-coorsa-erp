@@ -39,7 +39,7 @@ const closeModalAgregarNoticia = () => {
                 <div class="sm:ml-16 sm:mt-0 inicio_info_text">
                     <div class="text1-inicio">
                         <h1
-                            class="sm:m-5 ml-6 sm:text-6xl text-2xl font-semibold sm:font-bold text-white"
+                            class="ml-6 text-2xl font-semibold text-white sm:m-5 sm:text-6xl sm:font-bold"
                             style="font-family: 'Montserrat'"
                         >
                             Somos más que <br />
@@ -52,7 +52,7 @@ const closeModalAgregarNoticia = () => {
                     </div>
                     <div class="text2-inicio">
                         <h3
-                            class="m-5 mt-10 text-xl sm:text-4xl text-white"
+                            class="m-5 mt-10 text-xl text-white sm:text-4xl"
                             style="font-family: 'Montserrat'"
                         >
                             <span>Conoce </span> más sobre COORSA
@@ -104,18 +104,18 @@ const closeModalAgregarNoticia = () => {
         <section class="inicio_mv">
             <div class="flex flex-col items-center align-middle inicio_m">
                 <img
-                    class="sm:mt-24 mt-8 icon_m"
+                    class="mt-8 sm:mt-24 icon_m"
                     src="../../img/Icono_Mision.png"
                 />
                 <div class="p-2 sm:p-8">
                     <h3
-                        class="mt-2 md:mt-10 text-3xl text-white"
+                        class="mt-2 text-3xl text-white md:mt-10"
                         style="font-family: 'Montserrat'"
                     >
                         Misión
                     </h3>
                     <p
-                        class="mt-5 text-sm sm:text-2xl text-white"
+                        class="mt-5 text-sm text-white sm:text-2xl"
                         style="font-family: 'Montserrat'; line-height: 1.8"
                     >
                         Eficientar los procesos de la cadena de suministros, a
@@ -127,31 +127,32 @@ const closeModalAgregarNoticia = () => {
             </div>
             <div class="flex flex-col items-center inicio_v">
                 <img
-                    class="sm:mt-24 mt-8 icon_v"
+                    class="mt-8 sm:mt-24 icon_v"
                     src="../../img/Icono_Vision.png"
                 />
                 <div class="p-2 sm:p-8">
                     <h3
-                        class="mt-2 md:mt-10 text-3xl text-white"
+                        class="mt-2 text-3xl text-white md:mt-10"
                         style="font-family: 'Montserrat'"
                     >
                         Visión
                     </h3>
                     <p
-                        class="mt-5 mb-8 sm:mb-16 text-sm sm:text-2xl text-white"
+                        class="mt-5 mb-8 text-sm text-white sm:mb-16 sm:text-2xl"
                         style="font-family: 'Montserrat'; line-height: 1.8"
                     >
-                        Ser la empresa lider en soluciones logísticas en México
-                        y en otros países, innovando y creando procesos en la
-                        cadena de suministros, convirtiéndonos en socios
-                        estrátegicos de nuestros clientes.
+                        Ser para 2026 la empresa líder en soluciones logísticas
+                        en zona centro y norte de México, innovando procesos y
+                        herramientas en la cadena de suministros,
+                        convirtiéndonos en socios estratégicos de nuestros
+                        clientes.
                     </p>
                 </div>
             </div>
         </section>
         <section class="section_video">
             <div class="video_section">
-                <div class="sm:pt-20 pt-40 sm:pb-48 ml-48">
+                <div class="pt-40 ml-48 sm:pt-20 sm:pb-48">
                     <img
                         class="float-right mt-16 mr-16"
                         src="../../img/VIDEO_APARTADO_icon.png"
@@ -189,7 +190,7 @@ const closeModalAgregarNoticia = () => {
         <section class="section_noti" v-if="noticias.length > 0">
             <div class="flex flex-col items-center mb-8">
                 <h1
-                    class="sm:text-4xl font-bold uppercase text-xl tracking-widest"
+                    class="text-xl font-bold tracking-widest uppercase sm:text-4xl"
                     style="font-family: 'Montserrat'"
                 >
                     <span class="text-[#1A1A22]">Sólo, </span>
