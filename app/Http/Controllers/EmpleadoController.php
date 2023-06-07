@@ -584,7 +584,7 @@ class EmpleadoController extends Controller
         //Cambio de contraseña
         if (!empty($request->password)) {
             $password = Hash::make($request['password']);
-            dd($empleado->update(['password' => $password]));
+            $empleado->update(['password' => $password]);
         }
 
         if (!empty($request->puesto_id) && !empty($request->departamento_id)) {
