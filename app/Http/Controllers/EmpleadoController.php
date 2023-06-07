@@ -242,7 +242,7 @@ class EmpleadoController extends Controller
             'lote' => $newEmpleado['lote'],
             'manzana' => $newEmpleado['manzana'],
         ]);
-        
+
         $empleado = User::create([
             'numero_empleado' => $newEmpleado['numero_empleado'],
             'name' => $newEmpleado['nombre'],
@@ -488,7 +488,7 @@ class EmpleadoController extends Controller
 
         $urlFoto = '';
         $urlFotografiaEmpresarial = '';
-
+        /* Haber si jala */
 
         /*Guardado de imagnes, expedientes, contrato*/
         if ($request->hasFile('fotografia')) {
