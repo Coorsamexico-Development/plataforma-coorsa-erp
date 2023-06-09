@@ -242,7 +242,7 @@ class EmpleadoController extends Controller
             'lote' => $newEmpleado['lote'],
             'manzana' => $newEmpleado['manzana'],
         ]);
-        
+
         $empleado = User::create([
             'numero_empleado' => $newEmpleado['numero_empleado'],
             'name' => $newEmpleado['nombre'],
@@ -488,7 +488,7 @@ class EmpleadoController extends Controller
 
         $urlFoto = '';
         $urlFotografiaEmpresarial = '';
-
+        /* Haber si jala */
 
         /*Guardado de imagnes, expedientes, contrato*/
         if ($request->hasFile('fotografia')) {
@@ -584,7 +584,7 @@ class EmpleadoController extends Controller
         //Cambio de contraseña
         if (!empty($request->password)) {
             $password = Hash::make($request['password']);
-            $empleado->password = $password;
+            $empleado->update(['password' => $password]);
         }
 
         if (!empty($request->puesto_id) && !empty($request->departamento_id)) {

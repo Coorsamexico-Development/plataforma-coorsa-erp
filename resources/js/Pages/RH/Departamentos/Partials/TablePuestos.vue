@@ -353,6 +353,7 @@ export default {
                     route("departamento.puestos.update", this.departamento.id),
                     {
                         puesto_id: puestoId,
+                        areas_id: 1,
                         checked,
                     }
                 )

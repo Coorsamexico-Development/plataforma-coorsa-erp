@@ -47,4 +47,13 @@ class HandleInertiaRequests extends Middleware
                 : null,
         ]);
     }
+
+    public function organigrama(Request $request)
+    {
+        return array_merge(parent::share($request), [
+            'flash' => [
+                'nodes' => fn () => $request->session()->get('nodes'),
+            ],
+        ]);
+    }
 }
