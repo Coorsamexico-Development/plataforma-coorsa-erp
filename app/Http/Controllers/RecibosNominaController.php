@@ -18,7 +18,7 @@ class RecibosNominaController extends Controller
             'doc' => 'required|mimes:zip'
         ]);
         $file = $request->file('doc');
-        $fecha = explode('-', $file->getClientOriginalName())[0] . '-' . explode('-', $file->getClientOriginalName())[1] . '-01';
+        $fecha = explode('-', $file->getClientOriginalName())[0] . '-' . explode('-', $file->getClientOriginalName())[1] . '-02';
         $semana = explode('.', explode('-', $file->getClientOriginalName())[2])[0];
         $temp = Storage::disk('docs')->put('/', $request->file('doc'));
 
