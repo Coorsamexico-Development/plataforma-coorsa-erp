@@ -93,7 +93,7 @@ const updateHoverState = (isHover) => {
                 <h1
                     class="ml-4 text-4xl font-semibold text-white"
                 >
-                    Objetivo de documentoss
+                    Objetivo de documentos
                 </h1>
                 <span
                     class="w-16 h-1 bg-[#EC2944] mt-4"

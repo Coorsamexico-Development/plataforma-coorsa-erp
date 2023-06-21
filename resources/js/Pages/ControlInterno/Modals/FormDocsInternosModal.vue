@@ -116,7 +116,6 @@ const createOrUpdate = async () => {
                 ...data,
                 _method: 'put',//debido que no soporta subir archivos el method put
             })).put(route('politics.update', props.politic.id), {
-                _method: 'put',
                 preserveScroll: true,
                 preserveState: true,
                 only: ['errors', 'politicas'],
