@@ -435,7 +435,7 @@ class EmpleadoController extends Controller
     public function update(Request $request, User $empleado)
     {
       
- return  $request;
+
         $urlFoto = '';
         $urlFotografiaEmpresarial = '';
         /* Haber si jala */
