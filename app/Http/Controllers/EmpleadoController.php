@@ -486,7 +486,8 @@ class EmpleadoController extends Controller
             'cat_genero_id' => 'required',
             'rol_id' => 'required',
         ]);
-        
+    
+    
 
         $urlFoto = '';
         $urlFotografiaEmpresarial = '';
@@ -527,10 +528,17 @@ class EmpleadoController extends Controller
                 'lote' => $request['lote'],
                 'manzana' => $request['manzana'],
             ]);
+
+
+
             $direccion = $newDireccion->id;
         } else //sino actualizamos el existente
         {
-           $direccion =  direccione::where('id', $request['direccion_id'])->update([
+            $updateDirection  = direccione::select('direcciones.*')
+            ->where('id', $request['direccion_id'])
+            ->first();
+            
+           $updateDirection->update([
                 "direccion_localidade_id" => $request['direccion_localidade_id'],
                 "calle" => $request['calle'],
                 "numero" => $request['numero'],
@@ -539,6 +547,9 @@ class EmpleadoController extends Controller
                 "lote" => $request['lote'],
                 "manzana" => $request['manzana']
             ]);
+
+
+             $direccion = $updateDirection->id;
         }
 
 
