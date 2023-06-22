@@ -486,7 +486,7 @@ class EmpleadoController extends Controller
             'cat_genero_id' => 'required',
             'rol_id' => 'required',
         ]);
-          
+        
 
         $urlFoto = '';
         $urlFotografiaEmpresarial = '';
@@ -516,7 +516,7 @@ class EmpleadoController extends Controller
         }
         // Guarda nueva direccion si el campo no existe
         $direccion='';
-        if (empty($request->direccion_id)) {
+        if ($request['direccion_id'] == null) {
             //creamos la direccion
             $newDireccion = direccione::create([
                 'direccion_localidade_id' => $request['direccion_localidade_id'],
@@ -541,7 +541,6 @@ class EmpleadoController extends Controller
             ]);
         }
 
-        return $direccion;
 
         //Actualizamos el usuario
         $empleado->update([
