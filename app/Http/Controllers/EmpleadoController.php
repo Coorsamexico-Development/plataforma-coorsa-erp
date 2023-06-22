@@ -434,7 +434,7 @@ class EmpleadoController extends Controller
 
     public function update(Request $request, User $empleado)
     {
-        /*
+
         $request->validate([ //validaciones
             'correo_electronico' => 'required',
             'numero_empleado' => 'required|unique:users,numero_empleado,' . $empleado->id . ',id',
@@ -487,7 +487,6 @@ class EmpleadoController extends Controller
             'rol_id' => 'required',
         ]);
           
-   */
 
         $urlFoto = '';
         $urlFotografiaEmpresarial = '';
@@ -516,10 +515,10 @@ class EmpleadoController extends Controller
             $urlFotografiaEmpresarial = $empleado->foto_empresarial;
         }
         // Guarda nueva direccion si el campo no existe
-        $direccion=null;
+        $direccion='';
         if (empty($request->direccion_id)) {
             //creamos la direccion
-            $direccion = direccione::create([
+            $newDireccion = direccione::create([
                 'direccion_localidade_id' => $request['direccion_localidade_id'],
                 'calle' => $request['calle'],
                 'numero' => $request['numero'],
@@ -528,6 +527,7 @@ class EmpleadoController extends Controller
                 'lote' => $request['lote'],
                 'manzana' => $request['manzana'],
             ]);
+            $direccion = $newDireccion->id;
         } else //sino actualizamos el existente
         {
            $direccion =  direccione::where('id', $request['direccion_id'])->update([
@@ -541,7 +541,6 @@ class EmpleadoController extends Controller
             ]);
         }
 
-        return $direccion;
         //Actualizamos el usuario
         $empleado->update([
             'numero_empleado' => $request['numero_empleado'],
@@ -570,7 +569,7 @@ class EmpleadoController extends Controller
             'horario' => $request['horario'],
             'alergias' => $request['alergias'],
             'enfermedades_cronicas' => $request['enfermedades_cronicas'],
-            'direccion_id' => $direccion->id,
+            'direccion_id' => $direccion,
             'estado_civil_id' => $request['cat_estados_civile_id'],
             'banco_id' => $request['banco_id'],
             'escolaridad_id' => $request['escolaridade_id'],
