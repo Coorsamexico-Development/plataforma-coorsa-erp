@@ -492,6 +492,8 @@ class EmpleadoController extends Controller
         $urlFotografiaEmpresarial = '';
         /* Haber si jala */
 
+        return $request;
+
         /*Guardado de imagnes, expedientes, contrato*/
         if ($request->hasFile('fotografia')) {
 
@@ -515,7 +517,8 @@ class EmpleadoController extends Controller
             $urlFotografiaEmpresarial = $empleado->foto_empresarial;
         }
         // Guarda nueva direccion si el campo no existe
-        if (empty($request->direccion_id)) {
+        if (empty($request->direccion_id)) 
+        {
             //creamos la direccion
             $direccion = direccione::create([
                 'direccion_localidade_id' => $newEmpleado['direccion_localidade_id'],
