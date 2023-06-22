@@ -434,8 +434,8 @@ class EmpleadoController extends Controller
 
     public function update(Request $request, User $empleado)
     {
+        /*
         $newEmpleado = $request->validate([ //validaciones
-            /*
             'correo_electronico' => 'required',
             'numero_empleado' => 'required|unique:users,numero_empleado,' . $empleado->id . ',id',
             'nombre' => 'required',
@@ -485,14 +485,13 @@ class EmpleadoController extends Controller
             'enfermedades_cronicas' => ['nullable', 'string'],
             'cat_genero_id' => 'required',
             'rol_id' => 'required',
-            */
         ]);
+        */
+        return $request;
 
         $urlFoto = '';
         $urlFotografiaEmpresarial = '';
         /* Haber si jala */
-
-        return $request;
 
         /*Guardado de imagnes, expedientes, contrato*/
         if ($request->hasFile('fotografia')) {
@@ -517,8 +516,7 @@ class EmpleadoController extends Controller
             $urlFotografiaEmpresarial = $empleado->foto_empresarial;
         }
         // Guarda nueva direccion si el campo no existe
-        if (empty($request->direccion_id)) 
-        {
+        if (empty($request->direccion_id)) {
             //creamos la direccion
             $direccion = direccione::create([
                 'direccion_localidade_id' => $newEmpleado['direccion_localidade_id'],

@@ -164,6 +164,7 @@ const form = useForm({
     foto_empresarial_url: props.empleado.foto_empresarial,
     telefono_empresarial: props.empleado.telefono_empresarial,
     fotografia_url: props.empleado.fotografia,
+    direccion_id: props.empleado.direccion_id
 });
 
 onMounted(() => {
