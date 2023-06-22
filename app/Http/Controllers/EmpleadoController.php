@@ -434,7 +434,6 @@ class EmpleadoController extends Controller
 
     public function update(Request $request, User $empleado)
     {
-        /*
         $newEmpleado = $request->validate([ //validaciones
             'correo_electronico' => 'required',
             'numero_empleado' => 'required|unique:users,numero_empleado,' . $empleado->id . ',id',
@@ -486,8 +485,7 @@ class EmpleadoController extends Controller
             'cat_genero_id' => 'required',
             'rol_id' => 'required',
         ]);
-        */
-        return $request;
+        
 
         $urlFoto = '';
         $urlFotografiaEmpresarial = '';
