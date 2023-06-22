@@ -434,7 +434,60 @@ class EmpleadoController extends Controller
 
     public function update(Request $request, User $empleado)
     {
-   
+        /*
+        $request->validate([ //validaciones
+            'correo_electronico' => 'required',
+            'numero_empleado' => 'required|unique:users,numero_empleado,' . $empleado->id . ',id',
+            'nombre' => 'required',
+            'apellido_paterno' => 'required',
+            'apellido_materno' => 'required',
+            'fecha_nacimiento' => 'required',
+            'fecha_ingreso' => 'required',
+            'fecha_ingreso_real' => 'required',
+            'nss' => 'required',
+            'curp' => 'required',
+            'rfc' => 'required',
+            'contacto_emergencia' => 'required',
+            'telefono' => 'required',
+            'hijos' => 'required',
+            'correo_empresarial' => ['nullable', 'email'],
+            'telefono_empresarial' => ['nullable', 'numeric'],
+            'clave_bancaria' => 'required',
+            'banco_id' => ['nullable', 'exists:bancos,id'],
+            'escolaridade_id' => ['nullable', 'exists:escolaridads,id'],
+            'numero_cuenta_bancaria' => 'required',
+            'salario_diario' => 'required',
+            'salario_bruto' => 'required',
+            'salario_imss' => 'required',
+            'bono_puntualidad' => 'required',
+            'bono_asistencia' => 'required',
+            'despensa' => 'required',
+            'fondo_ahorro' => 'required',
+            'horario' => 'required',
+            'alergias' => 'required',
+            'enfermedades_cronicas' => 'required',
+            'direccion_estado_id' => 'required',
+            'direccion_municipio_id' => 'required',
+            'direccion_localidade_id' => 'required',
+            'calle' => 'required',
+            'numero' => 'required',
+            'colonia' => 'required',
+            'codigo_postal' => 'required',
+            'lote' => 'required',
+            'cat_estados_civile_id' => 'required',
+            'manzana' => 'required',
+            'cat_tipos_nomina_id' => 'required',
+            'tipos_contrato_id' => 'required',
+            'horario' => 'required',
+            'cat_estados_civile_id' => 'required',
+            'cat_tipos_sangre_id' => 'required',
+            'alergias' => ['nullable', 'string'],
+            'enfermedades_cronicas' => ['nullable', 'string'],
+            'cat_genero_id' => 'required',
+            'rol_id' => 'required',
+        ]);
+          
+   */
 
         $urlFoto = '';
         $urlFotografiaEmpresarial = '';
@@ -487,6 +540,8 @@ class EmpleadoController extends Controller
                 "manzana" => $request['manzana']
             ]);
         }
+
+        return $direccion;
         //Actualizamos el usuario
         $empleado->update([
             'numero_empleado' => $request['numero_empleado'],
