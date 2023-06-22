@@ -541,6 +541,8 @@ class EmpleadoController extends Controller
             ]);
         }
 
+        return $direccion;
+
         //Actualizamos el usuario
         $empleado->update([
             'numero_empleado' => $request['numero_empleado'],
