@@ -164,7 +164,6 @@ const form = useForm({
     foto_empresarial_url: props.empleado.foto_empresarial,
     telefono_empresarial: props.empleado.telefono_empresarial,
     fotografia_url: props.empleado.fotografia,
-    direccion_id: props.empleado.direccion_id
 });
 
 onMounted(() => {
@@ -220,6 +219,7 @@ const cambiar = (id) => {
             </h2>
         </template>
         <div class="space">
+            {{ empleado }}
             <MenuSection
                 @changeMenu="cambiar($event)"
                 :menu-seleted="menuSeleted"
