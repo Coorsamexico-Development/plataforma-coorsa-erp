@@ -463,6 +463,7 @@ class EmpleadoController extends Controller
             $urlFotografiaEmpresarial = $empleado->foto_empresarial;
         }
         // Guarda nueva direccion si el campo no existe
+        $direccion=null;
         if (empty($request->direccion_id)) {
             //creamos la direccion
             $direccion = direccione::create([
