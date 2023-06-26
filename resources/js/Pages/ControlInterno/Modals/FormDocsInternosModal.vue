@@ -38,6 +38,7 @@ const form = useForm({
     'autor': '',
     'imagePolitic': null,
     'pdf': null,
+    'politic':null
 });
 const fileImage = ref(null)
 const fileName = ref("");
@@ -98,8 +99,6 @@ const close = () => {
     emit('close');
 }
 
-
-
 const createOrUpdate = async () => {
     if (document.getElementById("formPolitic").reportValidity()) {
         if (props.typeForm === 'create') {
@@ -109,14 +108,20 @@ const createOrUpdate = async () => {
                 only: ['errors', 'politicas'],
                 onSuccess: () => {
                     close()
+                },
+                onError:() => 
+                {
+                    form.reset();
                 }
             });
-        } else {
+        } else 
+        {
+            form.politic = props.politic.id
+            console.log(file.value)
             form.transform((data) => ({
                 ...data,
-                _method: 'put',//debido que no soporta subir archivos el method put
-            })).put(route('politics.update', props.politic.id), {
-                _method: 'put',
+                //_method: 'put',//debido que no soporta subir archivos el method put
+            })).post(route('politics.update', props.politic.id), {
                 preserveScroll: true,
                 preserveState: true,
                 only: ['errors', 'politicas'],

@@ -434,7 +434,8 @@ class EmpleadoController extends Controller
 
     public function update(Request $request, User $empleado)
     {
-        $newEmpleado = $request->validate([ //validaciones
+/*
+        $request->validate([ //validaciones
             'correo_electronico' => 'required',
             'numero_empleado' => 'required|unique:users,numero_empleado,' . $empleado->id . ',id',
             'nombre' => 'required',
@@ -485,6 +486,8 @@ class EmpleadoController extends Controller
             'cat_genero_id' => 'required',
             'rol_id' => 'required',
         ]);
+    */
+    
 
         $urlFoto = '';
         $urlFotografiaEmpresarial = '';
@@ -513,71 +516,85 @@ class EmpleadoController extends Controller
             $urlFotografiaEmpresarial = $empleado->foto_empresarial;
         }
         // Guarda nueva direccion si el campo no existe
-        if (empty($request->direccion_id)) {
+        $direccion='';
+        if ($request['direccion_id'] == null) {
             //creamos la direccion
-            $direccion = direccione::create([
-                'direccion_localidade_id' => $newEmpleado['direccion_localidade_id'],
-                'calle' => $newEmpleado['calle'],
-                'numero' => $newEmpleado['numero'],
-                'colonia' => $newEmpleado['colonia'],
-                'codigo_postal' => $newEmpleado['codigo_postal'],
-                'lote' => $newEmpleado['lote'],
-                'manzana' => $newEmpleado['manzana'],
+            $newDireccion = direccione::create([
+                'direccion_localidade_id' => $request['direccion_localidade_id'],
+                'calle' => $request['calle'],
+                'numero' => $request['numero'],
+                'colonia' => $request['colonia'],
+                'codigo_postal' => $request['codigo_postal'],
+                'lote' => $request['lote'],
+                'manzana' => $request['manzana'],
             ]);
+
+
+
+            $direccion = $newDireccion->id;
         } else //sino actualizamos el existente
         {
-            direccione::where('id', $newEmpleado['direccion_id'])->update([
-                "direccion_localidade_id" => $newEmpleado['direccion_localidade_id'],
-                "calle" => $newEmpleado['calle'],
-                "numero" => $newEmpleado['numero'],
-                "colonia" => $newEmpleado['colonia'],
-                "codigo_postal" => $newEmpleado['codigo_postal'],
-                "lote" => $newEmpleado['lote'],
-                "manzana" => $newEmpleado['manzana']
+            $updateDirection  = direccione::select('direcciones.*')
+            ->where('id', $request['direccion_id'])
+            ->first();
+            
+           $updateDirection->update([
+                "direccion_localidade_id" => $request['direccion_localidade_id'],
+                "calle" => $request['calle'],
+                "numero" => $request['numero'],
+                "colonia" => $request['colonia'],
+                "codigo_postal" => $request['codigo_postal'],
+                "lote" => $request['lote'],
+                "manzana" => $request['manzana']
             ]);
+
+
+             $direccion = $updateDirection->id;
         }
+
+
         //Actualizamos el usuario
         $empleado->update([
-            'numero_empleado' => $newEmpleado['numero_empleado'],
-            'name' => $newEmpleado['nombre'],
-            'apellido_paterno' => $newEmpleado['apellido_paterno'],
-            'apellido_materno' => $newEmpleado['apellido_materno'],
-            'email' => $newEmpleado['correo_electronico'],
-            'fecha_nacimiento' => $newEmpleado['fecha_nacimiento'],
-            'fecha_ingreso' => $newEmpleado['fecha_ingreso'],
-            'fecha_ingreso_real' => $newEmpleado['fecha_ingreso_real'],
-            'nss' => $newEmpleado['nss'],
-            'curp' => $newEmpleado['curp'],
-            'rfc' => $newEmpleado['rfc'],
-            'contacto_emergencia' => $newEmpleado['contacto_emergencia'],
-            'telefono' => $newEmpleado['telefono'],
-            'hijos' => $newEmpleado['hijos'],
-            'clave_bancaria' => $newEmpleado['clave_bancaria'],
-            'numero_cuenta_bancaria' => $newEmpleado['numero_cuenta_bancaria'],
-            'salario_diario' => $newEmpleado['salario_diario'],
-            'salario_bruto' => $newEmpleado['salario_bruto'],
-            'salario_imss' => $newEmpleado['salario_imss'],
-            'bono_puntualidad' => $newEmpleado['bono_puntualidad'],
-            'bono_asistencia' => $newEmpleado['bono_asistencia'],
-            'despensa' => $newEmpleado['despensa'],
-            'fondo_ahorro' => $newEmpleado['fondo_ahorro'],
-            'horario' => $newEmpleado['horario'],
-            'alergias' => $newEmpleado['alergias'],
-            'enfermedades_cronicas' => $newEmpleado['enfermedades_cronicas'],
-            'direccion_id' => $direccion->id,
-            'estado_civil_id' => $newEmpleado['cat_estados_civile_id'],
-            'banco_id' => $newEmpleado['banco_id'],
-            'escolaridad_id' => $newEmpleado['escolaridade_id'],
-            'cat_tipos_nomina_id' => $newEmpleado['cat_tipos_nomina_id'],
-            'tipos_contrato_id' => $newEmpleado['tipos_contrato_id'],
-            'cat_genero_id' => $newEmpleado['cat_genero_id'],
-            'cat_tipo_sangre_id' => $newEmpleado['cat_tipos_sangre_id'],
+            'numero_empleado' => $request['numero_empleado'],
+            'name' => $request['nombre'],
+            'apellido_paterno' => $request['apellido_paterno'],
+            'apellido_materno' => $request['apellido_materno'],
+            'email' => $request['correo_electronico'],
+            'fecha_nacimiento' => $request['fecha_nacimiento'],
+            'fecha_ingreso' => $request['fecha_ingreso'],
+            'fecha_ingreso_real' => $request['fecha_ingreso_real'],
+            'nss' => $request['nss'],
+            'curp' => $request['curp'],
+            'rfc' => $request['rfc'],
+            'contacto_emergencia' => $request['contacto_emergencia'],
+            'telefono' => $request['telefono'],
+            'hijos' => $request['hijos'],
+            'clave_bancaria' => $request['clave_bancaria'],
+            'numero_cuenta_bancaria' => $request['numero_cuenta_bancaria'],
+            'salario_diario' => $request['salario_diario'],
+            'salario_bruto' => $request['salario_bruto'],
+            'salario_imss' => $request['salario_imss'],
+            'bono_puntualidad' => $request['bono_puntualidad'],
+            'bono_asistencia' => $request['bono_asistencia'],
+            'despensa' => $request['despensa'],
+            'fondo_ahorro' => $request['fondo_ahorro'],
+            'horario' => $request['horario'],
+            'alergias' => $request['alergias'],
+            'enfermedades_cronicas' => $request['enfermedades_cronicas'],
+            'direccion_id' => $direccion,
+            'estado_civil_id' => $request['cat_estados_civile_id'],
+            'banco_id' => $request['banco_id'],
+            'escolaridad_id' => $request['escolaridade_id'],
+            'cat_tipos_nomina_id' => $request['cat_tipos_nomina_id'],
+            'tipos_contrato_id' => $request['tipos_contrato_id'],
+            'cat_genero_id' => $request['cat_genero_id'],
+            'cat_tipo_sangre_id' => $request['cat_tipos_sangre_id'],
             'fotografia' => $urlFoto,
-            'role_id' => $newEmpleado['rol_id'],
+            'role_id' => $request['rol_id'],
             /*Datos empresariales */
             'foto_empresarial' => $urlFotografiaEmpresarial,
-            'correo_empresarial' => $newEmpleado['correo_empresarial'],
-            'telefono_empresarial' => $newEmpleado['telefono_empresarial'],
+            'correo_empresarial' => $request['correo_empresarial'],
+            'telefono_empresarial' => $request['telefono_empresarial'],
             'cat_bajas_empleado_id' => 'nullable|exits:cat_bajas_empleados,id',
             'fecha_baja' => 'required_with:cat_bajas_empleado_id|after:1900-01-01'
         ]);
