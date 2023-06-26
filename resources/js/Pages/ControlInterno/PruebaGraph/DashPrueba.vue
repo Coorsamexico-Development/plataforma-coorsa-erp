@@ -805,7 +805,7 @@ const consultar = async (mes, año) => {
                                     <h2 class="text-lg font-bold">Graficas</h2>
                                 </div>
                                 <div
-                                    class="flex justify-between select-none mt-[2rem]"
+                                    class="flex justify-between gap-[1rem] select-none mt-[2rem]"
                                     v-if="proc"
                                 >
                                     <BotonProc
