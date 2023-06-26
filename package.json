@@ -23,7 +23,7 @@
     },
     "dependencies": {
         "@amcharts/amcharts4": "^4.10.34",
-        "@amcharts/amcharts5": "^5.3.6",
+        "@amcharts/amcharts5": "^5.3.16",
         "@fancyapps/ui": "^4.0.31",
         "@vuepic/vue-datepicker": "^4.2.0",
         "bootstrap": "^5.2.2",

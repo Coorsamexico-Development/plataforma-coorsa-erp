@@ -11,9 +11,10 @@ use App\Models\DocumentosMe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\DepartamentosAuditoria;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Storage;
 
-class DepartamentosAuditoriaController extends Controller
+class PruebaGraphController extends Controller
 {
     public function index()
     {
@@ -60,6 +61,24 @@ class DepartamentosAuditoriaController extends Controller
             $rubros->where('procesos.departamento_auditoria_id', '=', request('departamento_auditoria_id'));
 
             //$calificaciones = $departamento->documentosCalificacionesMes()->orderBy('mes', 'asc');
+
+            $rubTot = Rubro::select(
+                'rubros.id as id',
+                'rubros.nombre as name',
+                'P.id as procesoid',
+                'P.nombre as proceso',
+                'CRM.valor as calificacion',
+                'CRM.mes as mes',
+                'CRM.año as año'
+            )
+                ->join('calf_rubro_mes as CRM', 'CRM.rubro_id', 'rubros.id')
+                ->join('procesos as P', 'P.id', 'rubros.proceso_id')
+                ->where([['P.departamento_auditoria_id', request('departamento_auditoria_id')], ['CRM.año', date('o')]])
+                ->orderBy('P.departamento_auditoria_id', 'asc')
+                ->orderBy('CRM.rubro_id', 'ASC')
+                ->orderBy('año', 'ASC')
+                ->orderBy('mes', 'ASC')
+                ->get();
         }
 
         $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
@@ -72,9 +91,11 @@ class DepartamentosAuditoriaController extends Controller
             'calificaciones_mes' => fn () => $calificaciones_mes->get(),
             'documentos_mes' => fn () => $documentos_mes->get(),
             'rubros_mes' => fn () => $rubros->get(),
-            'nominas' => $nominas
+            'nominas' => $nominas,
+            'rubTot' => $rubTot,
         ]);
     }
+
 
     public function storeProceso(Request $request)
     {
@@ -281,6 +302,7 @@ class DepartamentosAuditoriaController extends Controller
         return CalfRubroMe::select(
             'rubros.nombre AS rubro_nombre',
             'calf_rubro_mes.valor AS valor',
+            'procesos.id as proceso'
         )
             ->join('rubros', 'calf_rubro_mes.rubro_id', 'rubros.id')
             ->join('procesos', 'rubros.proceso_id', 'procesos.id')
