@@ -15,6 +15,7 @@ use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\OrganigramaController;
 use App\Http\Controllers\PlantillasAutorizadaController;
 use App\Http\Controllers\PoliticController;
+use App\Http\Controllers\PruebaGraphController;
 use App\Http\Controllers\PuestoController;
 use App\Http\Controllers\RecibosNominaController;
 use App\Http\Controllers\ResetPasswordController;
@@ -103,24 +104,24 @@ Route::middleware([
     //Reenvio de correo de bienvenida
     Route::post('/welcome-password/{user}', [ResetPasswordController::class, 'store'])->name('welcome.password.first');
 
-    Route::get('/control-interno/departamentos-aditorias', [DepartamentosAuditoriaController::class, 'index'])
+    Route::get('/control-interno/departamentos-aditorias', [PruebaGraphController::class, 'index'])
         ->name('control-interno.departamentos-aditorias.index');
 
-    Route::post('departamentos-aditorias/{departamentosAuditoria}/calificacion', [DepartamentosAuditoriaController::class, 'storeCalificacion'])
+    Route::post('departamentos-aditorias/{departamentosAuditoria}/calificacion', [PruebaGraphController::class, 'storeCalificacion'])
         ->name('departamentos-aditorias.calificacion.store')->middleware('can:calificacion.create');
     Route::delete('documentos-calificacion-mes/{documentosCalificacionMes}', [DocumentosCalificacionMesController::class, 'destroy'])
         ->name('documentos-calificacion-mes.destroy')->middleware('can:calificacion.delete');
-    Route::post('/storeProceso', [DepartamentosAuditoriaController::class, 'storeProceso'])->name('storeProceso');
-    Route::post('/storeDocumento', [DepartamentosAuditoriaController::class, 'storeDocumento'])->name('storeDocumento');
-    Route::post('/updateDocumento/{idDocumento}', [DepartamentosAuditoriaController::class, 'updateDocumento'])->name('updateDocumento');
-    Route::get('/getDocumentos/{proceco_id}', [DepartamentosAuditoriaController::class, 'getDocumentos'])->name('getDocumentos');
-    Route::delete('documentos-mes/{documento}', [DepartamentosAuditoriaController::class, 'destroyDocumento'])->name('documentos-mes.destroy');
-    Route::post('/storeRubro', [DepartamentosAuditoriaController::class, 'storeRubro'])->name('storeRubro');
-    Route::get('/getRubros/{proceso_id}/{año}', [DepartamentosAuditoriaController::class, 'getRubros'])->name('getRubros');
-    Route::post('/updateRubro/{rubro_id}', [DepartamentosAuditoriaController::class, 'updateRubro'])->name('updateRubro');
-    Route::post('/storeCalf', [DepartamentosAuditoriaController::class, 'storeCalf'])->name('storeCalf');
-    Route::get('/recuperarRubro/{categoria}/{mes}/{año}', [DepartamentosAuditoriaController::class, 'recuperarRubros'])->name('recuperarRubros');
-    Route::get('/getAnterioresRubros/{departamento}/{mes}/{año}', [DepartamentosAuditoriaController::class, 'getRubrosAnterior'])->name('getRubrosAnterior');
+    Route::post('/storeProceso', [PruebaGraphController::class, 'storeProceso'])->name('storeProceso');
+    Route::post('/storeDocumento', [PruebaGraphController::class, 'storeDocumento'])->name('storeDocumento');
+    Route::post('/updateDocumento/{idDocumento}', [PruebaGraphController::class, 'updateDocumento'])->name('updateDocumento');
+    Route::get('/getDocumentos/{proceco_id}', [PruebaGraphController::class, 'getDocumentos'])->name('getDocumentos');
+    Route::delete('documentos-mes/{documento}', [PruebaGraphController::class, 'destroyDocumento'])->name('documentos-mes.destroy');
+    Route::post('/storeRubro', [PruebaGraphController::class, 'storeRubro'])->name('storeRubro');
+    Route::get('/getRubros/{proceso_id}/{año}', [PruebaGraphController::class, 'getRubros'])->name('getRubros');
+    Route::post('/updateRubro/{rubro_id}', [PruebaGraphController::class, 'updateRubro'])->name('updateRubro');
+    Route::post('/storeCalf', [PruebaGraphController::class, 'storeCalf'])->name('storeCalf');
+    Route::get('/recuperarRubro/{categoria}/{mes}/{año}', [PruebaGraphController::class, 'recuperarRubros'])->name('recuperarRubros');
+    Route::get('/getAnterioresRubros/{departamento}/{mes}/{año}', [PruebaGraphController::class, 'getRubrosAnterior'])->name('getRubrosAnterior');
 
     Route::apiResource('politics', PoliticController::class)->name('index', 'control-interno.politics.index')->except('update');
     Route::post('/politics/{politic_id}',[PoliticController::class,'update'])->name('politics.update');
@@ -227,4 +228,8 @@ Route::controller(AreaController::class)->group(function () {
     Route::post('area/addArea', 'store')->name('area.addArea');
     Route::post('area/relacion', 'relacion')->name('area.relacion');
     Route::post('area/destroy', 'destroy')->name('area.destroy');
+});
+
+Route::controller(PruebaGraphController::class)->group(function () {
+    Route::get('/pruebaGrpah', 'index')->name('graph.prueba');
 });

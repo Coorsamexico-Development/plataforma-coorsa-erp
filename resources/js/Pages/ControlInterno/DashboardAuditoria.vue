@@ -326,21 +326,22 @@ const arregloCalificaciones = computed(() => {
         //console.log(promedio)
     }
 
-    let hoy = new Date().getFullYear() + '-' ;
-    let mes = new Date().getMonth() +1
-    if(mes < 10)
-    {
-        mes = '0'+mes
+    let hoy = new Date().getFullYear() + "-";
+    let mes = new Date().getMonth() + 1;
+    if (mes < 10) {
+        mes = "0" + mes;
     }
 
-    hoy = hoy +mes
+    hoy = hoy + mes;
     //console.log(hoy)
 
-    let arregloFiltrado = arregloFechasTotales.filter(promedio => promedio.date < hoy );
+    let arregloFiltrado = arregloFechasTotales.filter(
+        (promedio) => promedio.date < hoy
+    );
     //console.log(arregloFiltrado)
 
-    arregloFiltrado.reverse()
-    return arregloFiltrado.slice(0,3)
+    arregloFiltrado.reverse();
+    return arregloFiltrado.slice(0, 3);
 });
 
 const arregloCalificacionesGrafica = computed(() => {
@@ -407,10 +408,8 @@ const arregloCalificacionesGrafica = computed(() => {
         //console.log(promedio)
     }
 
-
-    return arregloFechasTotales
+    return arregloFechasTotales;
 });
-
 
 const arregloParametros = computed(() => {
     /***/
@@ -510,7 +509,7 @@ let fecha = new Date();
 let year = ref(null);
 year.value = fecha.getFullYear();
 
-let mes = ref(fecha.getMonth()+1);
+let mes = ref(fecha.getMonth() + 1);
 
 /*
 if (fecha.getMonth.length < 1) {
@@ -525,18 +524,14 @@ const promedios = computed(() => {
     for (let index = 0; index < meses.length; index++) {
         const fecha = new Date();
         const año = fecha.getFullYear();
-        let fullFecha = '';
+        let fullFecha = "";
         const mes = meses[index];
 
-
-        if(mes.numero < 10)
-        {
-            fullFecha = año + '-0' + mes.numero
+        if (mes.numero < 10) {
+            fullFecha = año + "-0" + mes.numero;
             //console.log(fullFecha)
-        }
-        else
-        {
-            fullFecha = año + '-' + mes.numero
+        } else {
+            fullFecha = año + "-" + mes.numero;
         }
 
         let newObjCalf = {
@@ -544,7 +539,7 @@ const promedios = computed(() => {
             mes: mes.mes,
             año: año,
             promedio: 0,
-            fecha:fullFecha
+            fecha: fullFecha,
         };
         arregloAux.push(newObjCalf);
     }
@@ -577,7 +572,6 @@ const promedios = computed(() => {
     return arregloAux;
 });
 
-
 //Rubros
 const rubrosAct = ref([]);
 const rubrosCalculados = computed(() => {
@@ -586,18 +580,14 @@ const rubrosCalculados = computed(() => {
     for (let index = 0; index < meses.length; index++) {
         const fecha = new Date();
         const año = fecha.getFullYear();
-        let fullFecha = '';
+        let fullFecha = "";
         const mes = meses[index];
 
-
-        if(mes.numero < 10)
-        {
-            fullFecha = año + '-0' + mes.numero
+        if (mes.numero < 10) {
+            fullFecha = año + "-0" + mes.numero;
             //console.log(fullFecha)
-        }
-        else
-        {
-            fullFecha = año + '-' + mes.numero
+        } else {
+            fullFecha = año + "-" + mes.numero;
         }
 
         let newObjCalf = {
@@ -605,7 +595,7 @@ const rubrosCalculados = computed(() => {
             mes: mes.mes,
             año: año,
             promedio: 0,
-            fecha:fullFecha
+            fecha: fullFecha,
         };
         arregloAux.push(newObjCalf);
     }
@@ -637,69 +627,62 @@ const rubrosCalculados = computed(() => {
 
     //console.log(arregloAux)
 
-
-    for (let index = 0; index < arregloAux.length; index++) 
-    {
+    for (let index = 0; index < arregloAux.length; index++) {
         const element = arregloAux[index];
         //console.log(element)
 
-        arregloMesesAñoAux.push(element)
+        arregloMesesAñoAux.push(element);
     }
 
-
-
-    let hoy = new Date().getFullYear() + '-' ;
-    let mes = new Date().getMonth() +1
-    if(mes < 10)
-    {
-        mes = '0'+mes
+    let hoy = new Date().getFullYear() + "-";
+    let mes = new Date().getMonth() + 1;
+    if (mes < 10) {
+        mes = "0" + mes;
     }
-     hoy = hoy +mes   
+    hoy = hoy + mes;
 
-     let anotherArray = []
-    for (let index = 0; index < arregloMesesAñoAux.length; index++) 
-    {
+    let anotherArray = [];
+    for (let index = 0; index < arregloMesesAñoAux.length; index++) {
         const añoMes = arregloMesesAñoAux[index];
-        if(añoMes.promedio > 0) //solo los que tengan promedio mayo a 0
-        {
-          anotherArray.push(añoMes)
+        if (añoMes.promedio > 0) {
+            //solo los que tengan promedio mayo a 0
+            anotherArray.push(añoMes);
         }
-        
     }
 
-    let arregloFiltrado = anotherArray.filter(promedio => promedio.fecha < hoy);
-    if(arregloFiltrado.length > 0)
-    {
-        let añoConsulta = arregloFiltrado[0].año
-        let mesConsulta = arregloFiltrado[0].numero
+    let arregloFiltrado = anotherArray.filter(
+        (promedio) => promedio.fecha < hoy
+    );
+    if (arregloFiltrado.length > 0) {
+        let añoConsulta = arregloFiltrado[0].año;
+        let mesConsulta = arregloFiltrado[0].numero;
         //tenemos el ultimo evaludado
         //console.log(params.departamento_auditoria_id)
-        consultar(mesConsulta, añoConsulta)
+        consultar(mesConsulta, añoConsulta);
         //console.log(anotherArray)
-    }
-    else
-    {
+    } else {
         rubrosAct.value = [];
     }
-
-
 });
 
-
-const consultar = async (mes, año) => 
-{
-   await axios.get('/getAnterioresRubros/'+params.departamento_auditoria_id+'/'+mes+'/'+año)
-    .then(response => {
-        // Obtenemos los datos  
-        rubrosAct.value =  response.data
-    })
-    .catch(e => {
-        // Capturamos los errores
-    })
-}
-
-
-
+const consultar = async (mes, año) => {
+    await axios
+        .get(
+            "/getAnterioresRubros/" +
+                params.departamento_auditoria_id +
+                "/" +
+                mes +
+                "/" +
+                año
+        )
+        .then((response) => {
+            // Obtenemos los datos
+            rubrosAct.value = response.data;
+        })
+        .catch((e) => {
+            // Capturamos los errores
+        });
+};
 </script>
 
 <template>
@@ -756,7 +739,10 @@ const consultar = async (mes, año) =>
                         style="float: left"
                     ></span>
                     <li @click="params.departamento_auditoria_id = dep.id">
-                        <a class="font-semibold">{{ dep.nombre }}</a>
+                        <a
+                            class="font-light text-[#c4c8d1] hover:text-[#000000] hover:cursor-pointer hover:font-bold"
+                            >{{ dep.nombre }}</a
+                        >
                     </li>
                 </ul>
             </div>
@@ -794,7 +780,9 @@ const consultar = async (mes, año) =>
                             <h2 class="text-lg font-bold">Graficas</h2>
                             <div>
                                 <Graph1
-                                    :calificaciones="arregloCalificacionesGrafica"
+                                    :calificaciones="
+                                        arregloCalificacionesGrafica
+                                    "
                                 />
                             </div>
                             <div>
@@ -811,7 +799,7 @@ const consultar = async (mes, año) =>
                                 <div
                                     class="w-full h-full border shadow-lg b-white rounded-2xl"
                                 >
-                                <div
+                                    <div
                                         v-for="(
                                             calificacion, index
                                         ) in arregloCalificaciones"
@@ -1010,29 +998,45 @@ const consultar = async (mes, año) =>
                                             Calif.
                                         </h1>
                                     </div>
-                                    <div class="grid grid-cols-2 m-2 text-center"
-                                       v-for="rubro in  rubrosAct" :key="rubro.id"
+                                    <div
+                                        class="grid grid-cols-2 m-2 text-center"
+                                        v-for="rubro in rubrosAct"
+                                        :key="rubro.id"
                                     >
-                                     <!--RUBROS PEOR CALIFICADOS DEL ULTIMO MES CALF--> 
-                                       <div class="text-md">
-                                          <span class="font-bold">
-                                            {{ rubro.rubro_nombre }}
-                                          </span>
-                                       </div>
-                                       <div>
-                                         <span class="font-bold">
-                                            <span v-if="rubro.valor < 40" class="text-[#D9435E]" >
-                                                {{ rubro.valor }}
+                                        <!--RUBROS PEOR CALIFICADOS DEL ULTIMO MES CALF-->
+                                        <div class="text-md">
+                                            <span class="font-bold">
+                                                {{ rubro.rubro_nombre }}
                                             </span>
-                                            <span v-if="rubro.valor >= 40 && rubro.valor < 60"  class="text-[#F28C20]" >
-                                                {{ rubro.valor }}
+                                        </div>
+                                        <div>
+                                            <span class="font-bold">
+                                                <span
+                                                    v-if="rubro.valor < 40"
+                                                    class="text-[#D9435E]"
+                                                >
+                                                    {{ rubro.valor }}
+                                                </span>
+                                                <span
+                                                    v-if="
+                                                        rubro.valor >= 40 &&
+                                                        rubro.valor < 60
+                                                    "
+                                                    class="text-[#F28C20]"
+                                                >
+                                                    {{ rubro.valor }}
+                                                </span>
+                                                <span
+                                                    v-if="
+                                                        rubro.valor >= 60 &&
+                                                        rubro.valor < 100
+                                                    "
+                                                    class="text-[#00CB83]"
+                                                >
+                                                    {{ rubro.valor }}
+                                                </span>
                                             </span>
-                                            <span v-if="rubro.valor >=60 &&  rubro.valor < 100" class="text-[#00CB83]" >
-                                                {{ rubro.valor }}
-                                            </span>
-
-                                         </span>
-                                       </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1166,7 +1170,7 @@ const consultar = async (mes, año) =>
                             </template>
                             <template #content>
                                 <button
-                                    class="ml-2 mr-12 sm:ml-0"
+                                    class="ml-2 mr-12 sm:ml-0 hover:cursor-pointer"
                                     v-for="dep in departamentosAuditoria"
                                     :key="'dep' + dep.id"
                                 >
