@@ -233,6 +233,23 @@ const cambio2 = () => {
                                                 Imagen Corporativa
                                             </span>
                                         </DropdownLink>
+                                        <DropdownLink
+                                            v-if="
+                                                $page.props.can[
+                                                    'documentos-gerencia.show'
+                                                ]
+                                            "
+                                            :href="
+                                                route(
+                                                    'documentos-internos.socios.index',
+                                                    6
+                                                )
+                                            "
+                                        >
+                                            <span class="text-xs">
+                                                Gerencia
+                                            </span>
+                                        </DropdownLink>
                                         <div class="border-t border-gray-100" />
                                     </template>
                                 </Dropdown>
