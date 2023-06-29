@@ -38,6 +38,7 @@ const form = useForm({
     'autor': '',
     'imagePolitic': null,
     'pdf': null,
+    'politic':props.politic.id
 });
 const fileImage = ref(null)
 const fileName = ref("");
@@ -112,7 +113,7 @@ const createOrUpdate = async () => {
                 }
             });
         } else {
-            form.post(route('politics.update', props.politic.id), {
+            form.post(route('politics.update'), {
                 preserveScroll: true,
                 preserveState: true,
                 only: ['errors', 'politicas'],
