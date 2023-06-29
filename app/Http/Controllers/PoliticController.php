@@ -130,6 +130,8 @@ class PoliticController extends Controller
             */
         ]);
 
+        return $request;
+
         $urlImage = null;
         if($request->has('imagePolitic'))
         {
