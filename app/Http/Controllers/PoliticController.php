@@ -118,13 +118,15 @@ class PoliticController extends Controller
 
     public function update(Request $request, Politic $politic)
     {
+        return $request;
+
         $request->validate([
             'namepolitica' => ['required', 'max:60'],
             'descripcion' => ['required', 'max:100'],
             'type_politic' => ['required', 'exists:tipopoliticas,id'],
             'autor' => ['required', 'exists:users,id'],
-            'imagePolitic' => ['nullable'],
-            'pdf' => ['nullable'],
+            //'imagePolitic' => ['nullable'],
+            //'pdf' => ['nullable'],
             'politic' => ['required'] //id a editar
         ]);
 
