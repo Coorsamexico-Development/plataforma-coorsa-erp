@@ -44,11 +44,9 @@ const closeFormPolitics = () => {
     politic.value = { id: -1 };
 };
 
-const showFormPolitic = (typeForm, politicSelect = null) => {
+const showFormPolitic = (typeForm, politicSelect) => {
     typeFormPolitic.value = typeForm;
-    if (politicSelect !== null) {
-        politic.value = politicSelect;
-    }
+    politic.value = politicSelect;
     showingFormPolitics.value = true;
 };
 
