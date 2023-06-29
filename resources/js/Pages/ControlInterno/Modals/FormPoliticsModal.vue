@@ -113,7 +113,7 @@ const createOrUpdate = async () => {
                 }
             });
         } else {
-            form.post(route('politics.update'), {
+            form.post(route('politics.update', props.politic.id), {
                 preserveScroll: true,
                 preserveState: true,
                 only: ['errors', 'politicas'],
