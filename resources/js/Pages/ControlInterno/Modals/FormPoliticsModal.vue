@@ -114,9 +114,9 @@ const createOrUpdate = async () => {
         } else {
             form.transform((data) => ({
                 ...data,
-                _method: 'post',//debido que no soporta subir archivos el method put
+                //_method: 'post',//debido que no soporta subir archivos el method put
             })).post(route('politics.update', props.politic.id), {
-                _method: 'put',
+               // _method: 'put',
                 preserveScroll: true,
                 preserveState: true,
                 only: ['errors', 'politicas'],
