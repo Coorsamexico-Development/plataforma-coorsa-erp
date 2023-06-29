@@ -116,7 +116,7 @@ class PoliticController extends Controller
     }
 
 
-    public function update(Request $request, Politic $politic)
+    public function update(Request $request)
     {
         $request->validate([
             /*
@@ -135,7 +135,7 @@ class PoliticController extends Controller
         {
           if($request['imagePolitic'] !== null)
           {
-            $fileUrl = str_replace("https://storage.googleapis.com/" . env('GOOGLE_CLOUD_STORAGE_BUCKET'), "/", $politic->imagePolitic);
+            $fileUrl = str_replace("https://storage.googleapis.com/" . env('GOOGLE_CLOUD_STORAGE_BUCKET'), "/", $request['imagePolitic']);
             Storage::disk('gcs')->delete($fileUrl);
             $fileImg = $request->file('imagePolitic');
             $rutaImage = $fileImg->store('politics/img', 'gcs');
@@ -148,7 +148,7 @@ class PoliticController extends Controller
         {
           if($request['pdf'] !== null)
           {
-            $fileUrl = str_replace("https://storage.googleapis.com/" . env('GOOGLE_CLOUD_STORAGE_BUCKET'), "/", $politic->pdf);
+            $fileUrl = str_replace("https://storage.googleapis.com/" . env('GOOGLE_CLOUD_STORAGE_BUCKET'), "/", $request['pdf']);
             Storage::disk('gcs')->delete($fileUrl);
 
             $file = $request->file('pdf');
