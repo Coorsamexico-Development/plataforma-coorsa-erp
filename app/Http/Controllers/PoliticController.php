@@ -119,6 +119,7 @@ class PoliticController extends Controller
     public function update(Request $request, Politic $politic)
     {
         $request->validate([
+            /*
             'namepolitica' => ['required', 'max:60'],
             'descripcion' => ['required', 'max:100'],
             'type_politic' => ['required', 'exists:tipopoliticas,id'],
@@ -126,6 +127,7 @@ class PoliticController extends Controller
             //'imagePolitic' => ['nullable'],
             //'pdf' => ['nullable'],
             'politic' => ['required'] //id a editar
+            */
         ]);
 
         $urlImage = null;
