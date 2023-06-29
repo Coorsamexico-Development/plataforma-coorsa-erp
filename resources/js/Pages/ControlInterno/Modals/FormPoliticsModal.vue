@@ -112,6 +112,15 @@ const createOrUpdate = async () => {
                 }
             });
         } else {
+            form.post(route('politics.update', props.politic.id), {
+                preserveScroll: true,
+                preserveState: true,
+                only: ['errors', 'politicas'],
+                onSuccess: () => {
+                    close()
+                }
+            });
+            /*
             form.transform((data) => ({
                 ...data,
                 //_method: 'post',//debido que no soporta subir archivos el method put
@@ -124,6 +133,7 @@ const createOrUpdate = async () => {
                     close()
                 }
             });
+            */
         }
     }
 }
