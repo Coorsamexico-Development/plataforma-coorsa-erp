@@ -159,7 +159,6 @@ class PoliticController extends Controller
 
         if($urlPdf !== null || $urlImage !== null)
         {
-            return $request;
             $politica=  Politic::where('politics.id','=',$request['politic'])
             ->update([
                 'namepolitica' => $request->namepolitica,
@@ -173,6 +172,7 @@ class PoliticController extends Controller
         }
         else
         {
+            return $request;
             $politica=  Politic::where('politics.id','=',$request['politic'])
             ->update([
                 'namepolitica' => $request->namepolitica,
