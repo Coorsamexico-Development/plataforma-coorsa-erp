@@ -1,9 +1,10 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import ExpedienteItem from './ExpedienteItem.vue'
 import InputLabel from '@/Components/InputLabel.vue'
 import DropZone from '@/Components/DropZone.vue'
 import InputError from '@/Components/InputError.vue'
+import { useForm, usePage } from '@inertiajs/inertia-vue3';
 
 const props = defineProps({
 
@@ -46,6 +47,10 @@ const uploadExpedientes = async (emId) => {
 }
 defineExpose({
     uploadExpedientes
+})
+
+const canEdit = computed(() => {
+    return usePage().props.value.can['edit-users'];
 })
 
 
@@ -92,7 +97,7 @@ defineExpose({
                         </div>
                         <div class="mt-4">
                             <InputLabel for="foto_empresarial" value="Foto Empresarial:" />
-                            <DropZone id="foto_empresarial" v-model="form.foto_empresarial" ref="fotografia_empresarial"
+                            <DropZone v-if="canEdit" id="foto_empresarial" v-model="form.foto_empresarial" ref="fotografia_empresarial"
                                 accept="image/x-png,image/jpeg" />
                             <div v-if="form.foto_empresarial_url" class="text-green-500 cursor-pointer hover:opacity-80">
                                 <a data-fancybox="fotografia" :data-src="form.foto_empresarial_url">
@@ -108,8 +113,10 @@ defineExpose({
                             </div>
                             <InputError :message="form.errors.foto_empresarial" class="mt-2" />
                         </div>
-                        <ExpedienteItem v-for="expediente in expedientes" :key="expediente.id" ref="itemRefs"
+                        <div v-if="canEdit">
+                            <ExpedienteItem v-for="expediente in expedientes" :key="expediente.id" ref="itemRefs"
                             :expediente="expediente" :empleado-id="props.empleadoId" />
+                        </div>
                     </div>
                 </div>
             </div>

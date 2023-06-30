@@ -180,17 +180,24 @@ const canEdit = computed(() => {
                         </div>
                         <div class="mt-4">
                             <InputLabel for="tipos_contrato_id" value="Tipo de Contrato:*" />
-                            <Select v-model="props.form.tipos_contrato_id" class="w-full">
+                            <Select v-if="canEdit" v-model="props.form.tipos_contrato_id" class="w-full">
                                 <option v-for="tipo_contrato in props.tiposContratos" :key="tipo_contrato.id"
                                     :value="tipo_contrato.id">
                                     {{ tipo_contrato.nombre }}
                                 </option>
                             </Select>
+                            <Select v-else :disable="true" v-model="props.form.tipos_contrato_id" class="w-full">
+                                <option v-for="tipo_contrato in props.tiposContratos" :key="tipo_contrato.id"
+                                    :value="tipo_contrato.id">
+                                    {{ tipo_contrato.nombre }}
+                                </option>
+                            </Select>
+                            
                             <InputError :message="props.form.errors.tipos_contrato_id" class="mt-2" />
                         </div>
-                        <div v-if="props.form.tipos_contrato_id == 1" class="mt-4">
+                        <div v-if="props.form.tipos_contrato_id == 1 && canEdit" class="mt-4">
                             <InputLabel for="fecha_termino" value="Fecha de Termino:" />
-                            <TextInput id="fecha_termino" type="date" v-model="fecha_termino" class="w-full " disabled />
+                            <TextInput v-if="canEdit" id="fecha_termino" type="date" v-model="fecha_termino" class="w-full " disabled />
                         </div>
                     </div>
                 </div>

@@ -3,6 +3,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import Select from '@/Components/Select.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
+import { computed } from 'vue';
+import { useForm, usePage } from '@inertiajs/inertia-vue3';
 
 const props = defineProps({
     form: {
@@ -14,6 +16,11 @@ const props = defineProps({
         required: true
     },
 });
+
+const canEdit = computed(() => {
+    return usePage().props.value.can['edit-users'];
+})
+
 
 </script>
 <template>
@@ -40,23 +47,35 @@ const props = defineProps({
                     <div class="grid grid-cols-3 gap-4">
                         <div class="mt-4">
                             <InputLabel for="cat_tipos_sangre_id" value="Tipo de Sangre:*" />
-                            <Select v-model="props.form.cat_tipos_sangre_id" class="w-full">
+                            <Select v-if="canEdit" v-model="props.form.cat_tipos_sangre_id" class="w-full">
                                 <option v-for="sangre in props.tiposSangres" :key="sangre.id" :value="sangre.id">
                                     {{ sangre.nombre }}
                                 </option>
                             </Select>
+                            <Select v-else :disabled="true" v-model="props.form.cat_tipos_sangre_id" class="w-full">
+                                <option v-for="sangre in props.tiposSangres" :key="sangre.id" :value="sangre.id">
+                                    {{ sangre.nombre }}
+                                </option>
+                            </Select>
+
                             <InputError :message="props.form.errors.cat_tipos_sangre_id" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="alergias" value="Alergias:" />
-                            <TextInput id="alergias" type="text" v-model="props.form.alergias" class="block w-full mt-1"
+                            <TextInput v-if="canEdit" id="alergias" type="text" v-model="props.form.alergias" class="block w-full mt-1"
                                 placeholder="alergia 1, alergia 2" />
+                            <p v-else class="block w-full mt-1">
+                                {{ props.form.alergias }}
+                            </p>
                             <InputError :message="props.form.errors.alergias" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="enfermedades_cronicas" value="Enfermedades Crónicas:" />
-                            <TextInput id="enfermedades_cronicas" type="text" v-model="props.form.enfermedades_cronicas"
+                            <TextInput v-if="canEdit" id="enfermedades_cronicas" type="text" v-model="props.form.enfermedades_cronicas"
                                 class="block w-full mt-1" placeholder="enfermedad 1, enfermedad 2" />
+                            <p v-else class="block w-full mt-1">
+                                {{ props.form.enfermedades_cronicas }}
+                            </p>
                             <InputError :message="props.form.errors.enfermedades_cronicas" class="mt-2" />
                         </div>
                     </div>

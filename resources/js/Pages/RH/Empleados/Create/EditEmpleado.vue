@@ -1,7 +1,7 @@
 <script setup>
-import { onMounted, onBeforeMount, ref } from "vue";
+import { onMounted, onBeforeMount, ref, computed } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { useForm, Link } from "@inertiajs/inertia-vue3";
+import { useForm, Link, usePage } from "@inertiajs/inertia-vue3";
 
 import ButtonSeccion from "@/Components/ButtonSeccion.vue";
 import ButtonInfo from "@/Components/Buttoninfo.vue";
@@ -210,6 +210,13 @@ const menuSeleted = ref(1);
 const cambiar = (id) => {
     menuSeleted.value = id;
 };
+
+
+const canEdit = computed(() => {
+    return usePage().props.value.can['edit-users'];
+})
+
+
 </script>
 
 <template>
@@ -303,7 +310,7 @@ const cambiar = (id) => {
                     <!--Fin Expediente -->
                     <!-- Finiquitos -->
                     <SectionFiniquitos
-                        v-if="menuSeleted == 8"
+                        v-if="menuSeleted == 8 && canEdit"
                         :form="form"
                         :motivos-bajas="props.cat_bajas"
                     />

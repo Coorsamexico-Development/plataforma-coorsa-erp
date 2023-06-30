@@ -3,6 +3,8 @@
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
+import { computed } from 'vue';
+import { useForm, usePage } from '@inertiajs/inertia-vue3';
 
 
 const props = defineProps({
@@ -29,6 +31,11 @@ const calculoSalario = () => {
     props.form.fondo_ahorro = (salarioImss * 0.02).toFixed(2);
     return true;
 }
+
+const canEdit = computed(() => {
+    return usePage().props.value.can['edit-users'];
+})
+
 
 </script>
 
@@ -61,8 +68,11 @@ const calculoSalario = () => {
                         </div>
                         <div class="col-span-2">
                             <InputLabel for="salario_bruto" value="Salario Bruto:*" />
-                            <TextInput id="salario_bruto" type="number" v-model="props.form.salario_bruto"
+                            <TextInput v-if="canEdit"  id="salario_bruto" type="number" v-model="props.form.salario_bruto"
                                 class="block w-full mt-1" placeholder="$ 00.0" @keyup="calculoSalario()" />
+                            <p v-else class="block w-full mt-1">
+                                {{ props.form.salario_bruto }}
+                            </p>
                             <InputError :message="props.form.errors.salario_bruto" class="mt-2" />
                         </div>
                         <div class="col-span-2">
@@ -91,8 +101,11 @@ const calculoSalario = () => {
                         </div>
                         <div class="col-span-3">
                             <InputLabel for="despensa" value="Despensa:*" />
-                            <TextInput id="despensa" type="number" v-model="props.form.despensa" class="block w-full mt-1"
+                            <TextInput id="despensa" v-if="canEdit" type="number" v-model="props.form.despensa" class="block w-full mt-1"
                                 placeholder="$ 00.0" @keyup="calculoSalario()" />
+                            <p v-else class="block w-full mt-1">
+                                {{ props.form.despensa }}
+                            </p>
                             <InputError :message="props.form.errors.despensa" class="mt-2" />
                         </div>
                     </div>
