@@ -198,9 +198,12 @@ const canEdit = computed(() => {
                         <div class="mt-4">
                             <InputLabel for="correo_electronico" value="Correo:*" />
                             <div class="flex gap-1">
-                                <TextInput id="correo_electronico" type="email" v-model="props.form.correo_electronico"
+                                <TextInput v-if="canEdit" id="correo_electronico" type="email" v-model="props.form.correo_electronico"
                                     class="block w-full mt-1" placeholder="correo@ejemplo.com"
                                     :disabled="props.editEmpleadoDisable" />
+                                <p v-else class="block w-full mt-1" >
+                                   {{ props.form.correo_electronico }}
+                               </p>
                                 <SecondaryButton v-if="showSendEmail" @click="sendEmail" class="py-0"
                                     :disabled="userEmailForm.processing">
                                     <SpinProgress :inprogress="userEmailForm.processing" />
@@ -217,19 +220,31 @@ const canEdit = computed(() => {
                         </div>
                         <div class="mt-4">
                             <InputLabel for="cat_genero_id" value="Genero:*" />
-                            <Select v-model="props.form.cat_genero_id" class="w-full" style="margin-top:0.2rem"
+                            <Select v-if="canEdit" v-model="props.form.cat_genero_id" class="w-full" style="margin-top:0.2rem"
                                 :disabled="props.editEmpleadoDisable">
                                 <option disabled selected>Elige un Genero</option>
                                 <option value="1">Masculino</option>
                                 <option value="2">Femenino</option>
                             </Select>
+                            <Select v-else v-model="props.form.cat_genero_id" class="w-full" style="margin-top:0.2rem"
+                                :disabled="true">
+                                <option disabled selected>Elige un Genero</option>
+                                <option value="1">Masculino</option>
+                                <option value="2">Femenino</option>
+                            </Select>
                             <InputError :message="props.form.errors.cat_genero_id" class="mt-2" />
-
                         </div>
                         <div class="mt-4">
                             <InputLabel for="escolaridade_id" value="Escolaridad:*" />
-                            <Select v-model="props.form.escolaridade_id" class="w-full"
+                            <Select v-if="canEdit" v-model="props.form.escolaridade_id" class="w-full"
                                 :disabled="props.editEmpleadoDisable">
+                                <option v-for="escolaridad in props.escolaridades" :key="escolaridad.id"
+                                    :value="escolaridad.id">
+                                    {{ escolaridad.nombre }}
+                                </option>
+                            </Select>
+                            <Select v-else v-model="props.form.escolaridade_id" class="w-full"
+                                :disabled="true">
                                 <option v-for="escolaridad in props.escolaridades" :key="escolaridad.id"
                                     :value="escolaridad.id">
                                     {{ escolaridad.nombre }}
@@ -239,8 +254,15 @@ const canEdit = computed(() => {
                         </div>
                         <div class="mt-4">
                             <InputLabel for="cat_estados_civile_id" value="Estado Civil:*" />
-                            <Select v-model="props.form.cat_estados_civile_id" class="w-full"
+                            <Select v-if="canEdit" v-model="props.form.cat_estados_civile_id" class="w-full"
                                 :disabled="props.editEmpleadoDisable">
+                                <option v-for="estados_civil in props.estadosCiviles" :key="estados_civil.id"
+                                    :value="estados_civil.id">
+                                    {{ estados_civil.nombre }}
+                                </option>
+                            </Select>
+                            <Select v-else v-model="props.form.cat_estados_civile_id" class="w-full"
+                                :disabled="true">
                                 <option v-for="estados_civil in props.estadosCiviles" :key="estados_civil.id"
                                     :value="estados_civil.id">
                                     {{ estados_civil.nombre }}
@@ -250,33 +272,46 @@ const canEdit = computed(() => {
                         </div>
                         <div class="mt-4">
                             <InputLabel for="contacto_emergencia" value="Contacto de Emergencia:*" />
-                            <TextInput id="contacto_emergencia" type="text" v-model="props.form.contacto_emergencia"
+                            <TextInput v-if="canEdit" id="contacto_emergencia" type="text" v-model="props.form.contacto_emergencia"
                                 class="block w-full mt-1" placeholder="Contacto de emergencia"
                                 :disabled="props.editEmpleadoDisable" />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.contacto_emergencia }}
+                           </p>
                             <InputError :message="props.form.errors.contacto_emergencia" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="hijos" value=" Hijos:*" />
-                            <TextInput id="hijos" type="number" v-model="props.form.hijos" class="block w-full mt-1"
+                            <TextInput v-if="canEdit" id="hijos" type="number" v-model="props.form.hijos" class="block w-full mt-1"
                                 placeholder="Hijos" :disabled="props.editEmpleadoDisable" />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.hijos }}
+                           </p>
                             <InputError :message="props.form.errors.hijos" class="mt-2" />
                         </div>
 
                         <div class="mt-4">
                             <InputLabel for="password" value="Password:*" />
-                            <TextInput id="password" type="password" v-model="props.form.password" class="block w-full mt-1"
+                            <TextInput v-if="canEdit" id="password" type="password" v-model="props.form.password" class="block w-full mt-1"
                                 placeholder="Contraseña" :disabled="props.editEmpleadoDisable" />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.password }}
+                            </p>
                             <InputError :message="props.form.errors.password" class="mt-2" />
                         </div>
 
                         <div class="mt-4 ">
                             <InputLabel for="cat_estados_civile_id" value="Rol:*" />
-                            <Select v-model="props.form.rol_id" class="w-full" :disabled="props.editEmpleadoDisable">
+                            <Select v-if="canEdit" v-model="props.form.rol_id" class="w-full" :disabled="props.editEmpleadoDisable">
                                 <option v-for="rol in props.roles" :key="rol.id" :value="rol.id">
                                     {{ rol.nombre }}
                                 </option>
                             </Select>
-
+                            <Select v-else v-model="props.form.rol_id" class="w-full" :disabled="true">
+                                <option v-for="rol in props.roles" :key="rol.id" :value="rol.id">
+                                    {{ rol.nombre }}
+                                </option>
+                            </Select>
                             <InputError :message="props.form.errors.rol_id" class="mt-0" />
                         </div>
                         <div class="mt-4">
