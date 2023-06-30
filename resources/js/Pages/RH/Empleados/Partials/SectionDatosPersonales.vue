@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm, usePage } from '@inertiajs/inertia-vue3';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
@@ -91,6 +91,9 @@ const sendEmail = () => {
     });
 }
 
+const canEdit = computed(() => {
+    return usePage().props.value.can['edit-users'];
+})
 
 </script>
 <template>
@@ -105,65 +108,90 @@ const sendEmail = () => {
                     Datos Personales
                 </span>
             </header>
+
             <div class="tab-content">
                 <div class="pb-8 pl-8 pr-8">
                     <div class="grid grid-cols-3 gap-4">
                         <div class="mt-4">
                             <InputLabel for="numero_empleado" value="ID de Empleado:*" />
-                            <TextInput id="numero_empleado" type="text" v-model="props.form.numero_empleado"
+                            <TextInput v-if="canEdit" id="numero_empleado" type="text" v-model="props.form.numero_empleado"
                                 class="block w-full mt-1" placeholder="No. Empleado"
                                 :disabled="props.editEmpleadoDisable" />
+                            <p v-else class="block w-full mt-1">
+                                {{ props.form.numero_empleado }}
+                            </p>
                             <InputError :message="props.form.errors.numero_empleado" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="nombre" value="Nombre:*" />
-                            <TextInput id="nombre" type="text" v-model="props.form.nombre" class="block w-full mt-1"
+                            <TextInput  v-if="canEdit" id="nombre" type="text" v-model="props.form.nombre" class="block w-full mt-1"
                                 placeholder="Nombre" :disabled="props.editEmpleadoDisable" />
+                            <p v-else class="block w-full mt-1">
+                                {{ props.form.nombre }}
+                            </p>
                             <InputError :message="props.form.errors.nombre" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="apellido_paterno" value="Apellido Paterno:*" />
-                            <TextInput id="apellido_paterno" type="text" v-model="props.form.apellido_paterno"
+                            <TextInput  v-if="canEdit"  id="apellido_paterno" type="text" v-model="props.form.apellido_paterno"
                                 class="block w-full mt-1" placeholder="Apellido Paterno"
                                 :disabled="props.editEmpleadoDisable" />
+                            <p v-else class="block w-full mt-1">
+                                {{ props.form.apellido_paterno }}
+                            </p>
                             <InputError :message="props.form.errors.apellido_paterno" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="apellido_materno" value="Apellido Materno:*" />
-                            <TextInput id="apellido_materno" type="text" v-model="props.form.apellido_materno"
+                            <TextInput v-if="canEdit"  id="apellido_materno" type="text" v-model="props.form.apellido_materno"
                                 class="block w-full mt-1" placeholder="Apellido Materno"
                                 :disabled="props.editEmpleadoDisable" />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.apellido_materno }}
+                            </p>
                             <InputError :message="props.form.errors.apellido_materno" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="fecha_nacimiento" value="Fecha de Nacimiento:*" />
-                            <TextInput id="fecha_nacimiento" type="date" v-model="props.form.fecha_nacimiento"
+                            <TextInput v-if="canEdit"  id="fecha_nacimiento" type="date" v-model="props.form.fecha_nacimiento"
                                 class="block w-full mt-1" placeholder="No. Empleado"
                                 :disabled="props.editEmpleadoDisable" />
+                             <p v-else class="block w-full mt-1" >
+                               {{ props.form.fecha_nacimiento }}
+                            </p>
                             <InputError :message="props.form.errors.fecha_nacimiento" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="edad" value="Edad:*" />
-                            <TextInput id="edad" v-model="edad" type="text" disabled class="block w-full mt-1"
-                                placeholder="Edad" :disabled="props.editEmpleadoDisable" />
+                            <TextInput  id="edad" v-model="edad" type="text" disabled class="block w-full mt-1"
+                                placeholder="Edad" :disabled="props.editEmpleadoDisable" />          
                         </div>
                         <div class="mt-4">
                             <InputLabel for="telefono" value="Telefono:*" />
-                            <TextInput id="telefono" type="text" v-model="props.form.telefono" class="block w-full mt-1"
+                            <TextInput v-if="canEdit" id="telefono" type="text" v-model="props.form.telefono" class="block w-full mt-1"
                                 placeholder="+52 722 000 0000" :disabled="props.editEmpleadoDisable" />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.telefono }}
+                            </p>
                             <InputError :message="props.form.errors.telefono" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="curp" value="CURP:*" />
-                            <TextInput id="curp" type="text" v-model="props.form.curp" class="block w-full mt-1"
+                            <TextInput v-if="canEdit" id="curp" type="text" v-model="props.form.curp" class="block w-full mt-1"
                                 :placeholder="generateCurp" maxlength="18" :disabled="props.editEmpleadoDisable" />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.curp }}
+                            </p>
                             <InputError :message="props.form.errors.curp" class="mt-2" />
                             <InputSuccess :message="messageCurp" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="rfc" value="RFC:*" />
-                            <TextInput id="rfc" type="text" v-model="props.form.rfc" class="block w-full mt-1"
+                            <TextInput v-if="canEdit" id="rfc" type="text" v-model="props.form.rfc" class="block w-full mt-1"
                                 placeholder="RFC" maxlength="13" :disabled="props.editEmpleadoDisable" />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.rfc }}
+                            </p>
                             <InputError :message="props.form.errors.rfc" class="mt-2" />
                             <InputSuccess :message="messageRFC" class="mt-2" />
                         </div>
