@@ -5,6 +5,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import ListInputVue from '../../../../Components/ListInput.vue';
 import swal from 'sweetalert';
+import { useForm, usePage } from '@inertiajs/inertia-vue3';
+import { computed } from 'vue';
 
 
 const props = defineProps({
@@ -74,6 +76,11 @@ watchEffect(() => {
 });
 
 
+const canEdit = computed(() => {
+    return usePage().props.value.can['edit-users'];
+})
+
+
 </script>
 <template>
     <div class="border-b tab">
@@ -99,51 +106,71 @@ watchEffect(() => {
                     <div class="grid grid-cols-3 gap-4">
                         <div class="mt-4">
                             <InputLabel for="calle" value="Calle:*" />
-                            <TextInput id="calle" type="text" v-model="props.form.calle" class="block w-full mt-1"
+                            <TextInput v-if="canEdit" id="calle" type="text" v-model="props.form.calle" class="block w-full mt-1"
                                 placeholder="Calle" required />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.calle }}
+                            </p>
                             <InputError :message="props.form.errors.calle" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="numero" value="Colonia:*" />
-                            <TextInput id="numero" type="text" v-model="props.form.numero" class="block w-full mt-1"
+                            <TextInput v-if="canEdit" id="numero" type="text" v-model="props.form.numero" class="block w-full mt-1"
                                 placeholder="Nombre" required />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.numero }}
+                            </p>
                             <InputError :message="props.form.errors.numero" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="colonia" value="Número:*" />
-                            <TextInput id="colonia" type="text" v-model="props.form.colonia" class="block w-full mt-1"
+                            <TextInput v-if="canEdit" id="colonia" type="text" v-model="props.form.colonia" class="block w-full mt-1"
                                 placeholder="Número" required />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.colonia }}
+                            </p>
                             <InputError :message="props.form.errors.colonia" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="codigo_postal" value="CP:*" />
-                            <TextInput id="codigo_postal" type="number" maxlength="5" v-model="props.form.codigo_postal"
+                            <TextInput v-if="canEdit" id="codigo_postal" type="number" maxlength="5" v-model="props.form.codigo_postal"
                                 class="block w-full mt-1" placeholder="Codigo Postal" required />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.codigo_postal }}
+                            </p>
                             <InputError :message="props.form.errors.codigo_postal" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="lote" value="Lote:*" />
-                            <TextInput id="lote" type="text" v-model="props.form.lote" class="block w-full mt-1"
+                            <TextInput v-if="canEdit" id="lote" type="text" v-model="props.form.lote" class="block w-full mt-1"
                                 placeholder="Lote" required />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.lote }}
+                            </p>
                             <InputError :message="props.form.errors.lote" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="manzana" value="Manzana:*" />
-                            <TextInput id="manzana" type="text" v-model="props.form.manzana" class="block w-full mt-1"
+                            <TextInput v-if="canEdit" id="manzana" type="text" v-model="props.form.manzana" class="block w-full mt-1"
                                 placeholder="Manzana" required />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.manzana }}
+                            </p>
                             <InputError :message="props.form.errors.manzana" class="mt-2" />
                         </div>
 
                         <!-- ----------------------------------------------------------------- -->
                         <div class="mt-4">
                             <InputLabel for="direccion_estado_id" value="Estado:*" />
-                            <ListInputVue list="listaEstados" v-model="props.form.direccion_estado_id"
+                            <ListInputVue  v-if="canEdit"  list="listaEstados" v-model="props.form.direccion_estado_id"
+                                :options="props.estados" class="block w-full mt-1" />
+                            <ListInputVue  v-else :disable="true"  list="listaEstados" v-model="props.form.direccion_estado_id"
                                 :options="props.estados" class="block w-full mt-1" />
                             <InputError :message="props.form.errors.direccion_estado_id" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="direccion_municipio_id" value="Municipio:*" />
-                            <ListInputVue v-if="props.form.direccion_estado_id != 0" list="listaMunicipios"
+                            <ListInputVue  v-if="props.form.direccion_estado_id != 0 && canEdit" list="listaMunicipios"
                                 :disabled="false" v-model="props.form.direccion_municipio_id" :options="municipiosDireccion"
                                 class="block w-full mt-1" />
                             <ListInputVue v-if="props.form.direccion_estado_id == 0" list="listaMunicipios"
@@ -152,7 +179,7 @@ watchEffect(() => {
                         </div>
                         <div class="mt-4">
                             <InputLabel for="direccion_localidade_id" value="Localidad:*" />
-                            <ListInputVue list="listaLocalidades" v-if="props.form.direccion_municipio_id != 0"
+                            <ListInputVue list="listaLocalidades" v-if="props.form.direccion_municipio_id != 0 && canEdit"
                                 :disabled="false" v-model="props.form.direccion_localidade_id"
                                 :options="localidadesDireccion" class="block w-full mt-1" />
                             <ListInputVue v-if="props.form.direccion_municipio_id == 0" :disabled="true" />

@@ -6,6 +6,7 @@ import Select from '@/Components/Select.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import ListInputVue from '@/Components/ListInput.vue';
+import { useForm, usePage } from '@inertiajs/inertia-vue3';
 
 const props = defineProps({
     form: {
@@ -70,6 +71,9 @@ watchEffect(() => {
     }
 });
 
+const canEdit = computed(() => {
+    return usePage().props.value.can['edit-users'];
+})
 
 </script>
 <template>
@@ -96,15 +100,21 @@ watchEffect(() => {
                     <div class="grid grid-cols-3 gap-4">
                         <div class="mt-4">
                             <InputLabel for="departamento_id" value="Departamento:*" />
-                            <ListInputVue v-model="props.form.departamento_id" list="departamentos" class="w-full"
+                            <ListInputVue  v-if="canEdit" v-model="props.form.departamento_id" list="departamentos" class="w-full"
                                 :options="props.departamentos" />
+                            <ListInputVue  v-else :disable="true" v-model="props.form.departamento_id" list="departamentos" class="w-full"
+                            :options="props.departamentos" />
 
                             <InputError :message="props.form.errors.departamento_id" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="puesto_id" value="Puesto:*" />
-                            <Select v-model="props.form.puesto_id" class="w-full">
-
+                            <Select v-if="canEdit" v-model="props.form.puesto_id" class="w-full">
+                                <option v-for="puesto in puestos" :key="puesto.id" :value="puesto.id">
+                                    {{ puesto.name }}
+                                </option>
+                            </Select>
+                            <Select v-else :disabled="true" v-model="props.form.puesto_id" class="w-full">
                                 <option v-for="puesto in puestos" :key="puesto.id" :value="puesto.id">
                                     {{ puesto.name }}
                                 </option>
@@ -114,34 +124,54 @@ watchEffect(() => {
 
                         <div class="mt-4">
                             <InputLabel for="horario" value="Horario Laboral:*" />
-                            <Select v-model="props.form.horario" class="w-full">
+                            <Select v-if="canEdit" v-model="props.form.horario" class="w-full">
                                 <option disabled selected>Elige un Horario</option>
                                 <option value="oficina">Oficina</option>
                                 <option value="turnos">Rolar Turnos</option>
                             </Select>
+                            <Select v-else :disabled="true" v-model="props.form.horario" class="w-full">
+                                <option disabled selected>Elige un Horario</option>
+                                <option value="oficina">Oficina</option>
+                                <option value="turnos">Rolar Turnos</option>
+                            </Select>
+                            
                             <InputError :message="props.form.errors.horario" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="nss" value="Número de Seguridad Social:*" />
-                            <TextInput id="nss" type="text" v-model="props.form.nss" class="block w-full mt-1"
+                            <TextInput v-if="canEdit" id="nss" type="text" v-model="props.form.nss" class="block w-full mt-1"
                                 placeholder="Número de Seguridad Social" />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.nss }}
+                            </p>
                             <InputError :message="props.form.errors.nss" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="fecha_ingreso" value="Fecha de Ingreso:*" />
-                            <TextInput id="fecha_ingreso" type="date" v-model="props.form.fecha_ingreso"
+                            <TextInput v-if="canEdit" id="fecha_ingreso" type="date" v-model="props.form.fecha_ingreso"
                                 class="block w-full mt-1" placeholder="Fecha de Ingreso" max="2030-12-12" />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.fecha_ingreso }}
+                            </p>
                             <InputError :message="props.form.errors.fecha_ingreso" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="fecha_ingreso_real" value="Fecha Real:*" />
-                            <TextInput id="fecha_ingreso_real" type="date" v-model="props.form.fecha_ingreso_real"
+                            <TextInput v-if="canEdit" id="fecha_ingreso_real" type="date" v-model="props.form.fecha_ingreso_real"
                                 class="block w-full mt-1" placeholder="Fecha Real" max="2030-12-12" />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.fecha_ingreso_real }}
+                            </p>
                             <InputError :message="props.form.errors.fecha_ingreso_real" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="cat_tipos_nomina_id" value="Tipo de Nomina:*" />
-                            <Select v-model="props.form.cat_tipos_nomina_id" class="w-full">
+                            <Select  v-if="canEdit"  v-model="props.form.cat_tipos_nomina_id" class="w-full">
+                                <option disabled selected>Elige un tipo de nomina</option>
+                                <option value="1">Semanal</option>
+                                <option value="2">Quincenal</option>
+                            </Select>
+                            <Select  v-else :disabled="true"  v-model="props.form.cat_tipos_nomina_id" class="w-full">
                                 <option disabled selected>Elige un tipo de nomina</option>
                                 <option value="1">Semanal</option>
                                 <option value="2">Quincenal</option>

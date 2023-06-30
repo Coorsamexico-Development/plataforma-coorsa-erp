@@ -3,7 +3,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import Select from '@/Components/Select.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
-
+import { useForm, usePage } from '@inertiajs/inertia-vue3';
+import { computed } from 'vue';
 
 const props = defineProps({
     form: {
@@ -15,6 +16,11 @@ const props = defineProps({
         required: true
     },
 });
+
+const canEdit = computed(() => {
+    return usePage().props.value.can['edit-users'];
+})
+
 </script>
 
 <template>
@@ -41,7 +47,12 @@ const props = defineProps({
                     <div class="grid grid-cols-3 gap-4">
                         <div class="col-span-3">
                             <InputLabel for="banco_id" value="Banco:*" />
-                            <Select v-model="props.form.banco_id" class="w-full">
+                            <Select v-if="canEdit"  v-model="props.form.banco_id" class="w-full">
+                                <option v-for="banco in props.bancos" :key="banco.id" :value="banco.id">
+                                    {{ banco.nombre }}
+                                </option>
+                            </Select>
+                            <Select v-else :disabled="true"  v-model="props.form.banco_id" class="w-full">
                                 <option v-for="banco in props.bancos" :key="banco.id" :value="banco.id">
                                     {{ banco.nombre }}
                                 </option>
@@ -50,14 +61,20 @@ const props = defineProps({
                         </div>
                         <div class="mt-4">
                             <InputLabel for="clave_bancaria" value="Clave Interbancaria:*" />
-                            <TextInput id="clave_bancaria" type="text" v-model="props.form.clave_bancaria"
+                            <TextInput  v-if="canEdit" id="clave_bancaria" type="text" v-model="props.form.clave_bancaria"
                                 class="block w-full mt-1" placeholder="Clave Interbancaria" />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.clave_bancaria }}
+                            </p>
                             <InputError :message="props.form.errors.clave_bancaria" class="mt-2" />
                         </div>
                         <div class="mt-4">
                             <InputLabel for="numero_cuenta_bancaria" value="No. Cuenta:*" />
-                            <TextInput id="numero_cuenta_bancaria" type="text" v-model="props.form.numero_cuenta_bancaria"
+                            <TextInput v-if="canEdit" id="numero_cuenta_bancaria" type="text" v-model="props.form.numero_cuenta_bancaria"
                                 class="block w-full mt-1" placeholder="No. Cuenta" />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.numero_cuenta_bancaria }}
+                            </p>
                             <InputError :message="props.form.errors.numero_cuenta_bancaria" class="mt-2" />
                         </div>
                     </div>
