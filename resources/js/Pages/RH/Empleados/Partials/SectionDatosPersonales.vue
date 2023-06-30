@@ -316,13 +316,19 @@ const canEdit = computed(() => {
                         </div>
                         <div class="mt-4">
                             <InputLabel value="Correo Empresarial:*" />
-                            <TextInput class="block w-full mt-1" type="email" v-model="props.form.correo_empresarial"
+                            <TextInput v-if="canEdit" class="block w-full mt-1" type="email" v-model="props.form.correo_empresarial"
                                 :disabled="props.editEmpleadoDisable" />
+                            <p v-else class="block w-full mt-1" >
+                               {{ props.form.correo_empresarial }}
+                            </p>
                         </div>
                         <div class="mt-4">
                             <InputLabel value="Telefono Empresarial:*" />
-                            <TextInput class="block w-full mt-1" type="tel" v-model="props.form.telefono_empresarial"
+                            <TextInput v-if="canEdit" class="block w-full mt-1" type="tel" v-model="props.form.telefono_empresarial"
                                 :disabled="props.editEmpleadoDisable" />
+                             <p v-else class="block w-full mt-1" >
+                               {{ props.form.telefono_empresarial }}
+                            </p>
                         </div>
 
                     </div>
