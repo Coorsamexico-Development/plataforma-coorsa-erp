@@ -329,7 +329,7 @@ const canEdit = computed(() => {
                         >
                             <ButtonInfo> Regresar </ButtonInfo>
                         </Link>
-                        <ButtonAdd @click="updateEmpelado()">
+                        <ButtonAdd @click="updateEmpelado()" v-if="canEdit">
                             Guardar
                         </ButtonAdd>
                     </div>
