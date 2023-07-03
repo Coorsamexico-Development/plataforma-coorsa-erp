@@ -250,7 +250,6 @@ class PruebaGraphController extends Controller
         return redirect()->back();
     }
 
-    /*
     public function storeCalificacion(DepartamentosAuditoria $departamentosAuditoria, Request $request)
     {
         $documentoUrl = "";
@@ -272,7 +271,6 @@ class PruebaGraphController extends Controller
         ]);
         return redirect()->back();
     }
- */
 
     public function recuperarRubros($categoria, $mes, $año)
     {

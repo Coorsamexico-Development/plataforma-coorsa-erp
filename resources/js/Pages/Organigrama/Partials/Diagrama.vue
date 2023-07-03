@@ -1,6 +1,6 @@
 <template>
     <div class="relative w-full h-full" id="ports-demo">
-        <div class="w-full h-[80vh] viewport">
+        <div class="w-full h-[77vh] viewport">
             <screen ref="screen" style="border: none">
                 <edge
                     v-for="edge in graph.edges"
@@ -113,14 +113,36 @@
                     </div>
                 </node>
             </screen>
-            <div class="flex justify-evenly px-[2vw] gap-[10px]">
+            <div class="flex items-center justify-evenly">
                 <template v-for="son in sons" :key="idB">
                     <div
-                        class="text-[20px] w-fit text-center cursor-pointer select-none"
+                        class="text-[20px] text-center cursor-pointer select-none relative px-[2rem] py-2"
                         @mouseover="form.area = son"
                         @mouseout="form.area = null"
                     >
+                        <svg
+                            v-if="son.ph != null"
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="absolute icon icon-tabler icon-tabler-x w-[14px] z-[2] cursor-pointer right-[3px] top-[3px] hover:scale-110 bg-[#ec2944] rounded-full"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="#FFFFFF"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            @click="
+                                form.area = null;
+                                form.jARid = son.ph;
+                                removeAreaJefe();
+                            "
+                        >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M18 6l-12 12" />
+                            <path d="M6 6l12 12" />
+                        </svg>
+                        <h2 class="text-[12px]">{{ son.padre }}</h2>
                         <h1>{{ son.nodoB }}</h1>
+                        <h2 class="text-[12px]">{{ son.hijo }}</h2>
                     </div>
                 </template>
             </div>
@@ -147,6 +169,7 @@ export default {
             nodoB: "",
             nodoC: "",
             nodoD: "",
+            jARid: null,
             area: null,
         });
         const gerencia = "";
@@ -235,6 +258,18 @@ export default {
                 }))
                 .post(route("organigrama.relacion"), {});
         },
+        areaJefe() {
+            this.form
+                .transform((data) => ({
+                    ...data,
+                }))
+                .post(route("organigrama.jefearea"), {
+                    onFinish: () => {
+                        this.form.reset();
+                        this.modal();
+                    },
+                });
+        },
         delete() {
             this.form
                 .transform((data) => ({
@@ -254,11 +289,24 @@ export default {
                     },
                 });
         },
+        removeAreaJefe() {
+            this.form
+                .transform((data) => ({
+                    ...data,
+                }))
+                .post(route("organigrama.jefeAreaR"), {
+                    onFinish: () => {
+                        this.form.reset();
+                        this.modal();
+                    },
+                });
+        },
         cancelConnect() {
             if (!this.connecting) return;
             this.graph.removeEdge(this.activeEdge);
             this.stopConnect();
             this.delete();
+            if (this.form.area != null) this.areaJefe();
         },
         stopConnect() {
             if (this.activeEdge) {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Area;
 use App\Models\Areas_padres_hijos;
+use App\Models\Ceco;
 use App\Models\departamentoPuesto;
 use App\Models\Padres_hijos;
 use Inertia\Inertia;
@@ -14,7 +15,6 @@ class OrganigramaController extends Controller
 {
     public function index()
     {
-
         $rels = false;
         $areaRel = false;
         $nodes[] = DB::table('departamento_puestos as DP')
@@ -84,14 +84,10 @@ class OrganigramaController extends Controller
         }
 
         $areas = Area::where('id', '<>', 1)->get();
-        $padre = null;
 
         foreach ($areas as $n) {
             $rel = Areas_padres_hijos::where([['areas_id_padre', $n->id], ['activo', 1]])->get();
 
-            $DP = DB::table('departamento_puestos as DP')
-                ->where([['DP.areas_id', $n->id]])
-                ->get();
             foreach ($rel as $r) {
                 /* Informacion del Padre */
                 $a = Area::where('id', $r->areas_id_padre)
@@ -100,11 +96,50 @@ class OrganigramaController extends Controller
                 /* Informacion del Hijo */
                 $b = Area::where('id', $r->areas_id_hijo)
                     ->first();
-                foreach ($DP as $p) {
-                    $rel = Padres_hijos::where([['departamento_puestos_id_hijo', $p->id], ['activo', 2]])
-                        ->get();
-                    if ($rel->count() != 0)
-                        $padre = $p;
+                $ph = Area::select(
+                    'DP.*',
+                )
+                    ->join('departamento_puestos as DP', 'DP.areas_id', 'areas.id')
+                    ->where([['areas.nombre', $b->nombre]])
+                    ->get();
+                if (sizeof($ph) != 0) {
+                    foreach ($ph as $p) {
+                        $h = Padres_hijos::select(
+                            'padres_hijos.id',
+                            'c.nombre as padre',
+                            'P.name as puestoP',
+                            'c2.nombre as hijo',
+                            'P2.name as puestoH'
+                        )
+                            ->join('departamento_puestos as DP', 'DP.id', 'padres_hijos.departamento_puestos_id_padre')
+                            ->join('cecos as c', 'c.id', 'DP.departamento_id')
+                            ->join('puestos as P', 'P.id', 'DP.puesto_id')
+                            ->join('departamento_puestos as DP2', 'DP2.id', 'padres_hijos.departamento_puestos_id_hijo')
+                            ->join('cecos as c2', 'c2.id', 'DP2.departamento_id')
+                            ->join('puestos as P2', 'P2.id', 'DP2.puesto_id')
+                            ->where([['departamento_puestos_id_hijo', $p['id']], ['padres_hijos.activo', 2]])
+                            ->first();
+                        if ($h != null) {
+                            $hijo = $h;
+                            break;
+                        } else {
+                            $hijo = (object) [
+                                'id' => null,
+                                'padre' => null,
+                                'puestoP' => null,
+                                'hijo' => null,
+                                'puestoH' => null
+                            ];
+                        }
+                    }
+                } else {
+                    $hijo = (object) [
+                        'id' => null,
+                        'padre' => null,
+                        'puestoP' => null,
+                        'hijo' => null,
+                        'puestoH' => null
+                    ];
                 }
 
                 /* Establecemos las relaciones con el nombre de los nodos */
@@ -113,10 +148,12 @@ class OrganigramaController extends Controller
                     'nodoB' => $b->nombre,
                     'idA' => $a->id,
                     'idB' => $b->id,
+                    'padre' => $hijo->padre . ' ' . $hijo->puestoP,
+                    'hijo' => $hijo->hijo . ' ' . $hijo->puestoH,
+                    'ph' => $hijo->id
                 ];
             }
         }
-
         /* Recuperamos los recibos de nomina del empleado */
         $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
 
@@ -137,7 +174,7 @@ class OrganigramaController extends Controller
         $nodoB = $request->nodoB;
         $nodoC = $request->nododC; /* Nodo de recuperacion */
         $nodoD = $request->nodoD; /* Nodo de relcion anterior */
-
+        $area = $request->area;
 
         /* Revisamos si alguno de nuestros nodos Padre->Hijo estan vacios de ser así el nodoC tendra la infomacion que requerimos para ubtener el nodo faltante */
         if ($nodoA === null) {
@@ -310,11 +347,63 @@ class OrganigramaController extends Controller
 
         return redirect()->back();
     }
+
     public function remove(Request $request)
     {
         $DP = departamentoPuesto::where('id', $request->nodoA['Nodeid'])->first();
         $DP->update(['areas_id' => 1]);
 
         return redirect()->back();
+    }
+
+    public function jefearea(Request $request)
+    {
+        $nodoA = (object)$request->nodoA;
+        $area = (object)$request->area;
+        $hijo = null;
+        $PH = null;
+
+        $ph = Area::select(
+            'DP.*',
+        )
+            ->join('departamento_puestos as DP', 'DP.areas_id', 'areas.id')
+            ->where([['areas.nombre', $area->nodoB]])
+            ->get();
+
+        foreach ($ph as $p) {
+            $h = Padres_hijos::select()->where([['departamento_puestos_id_hijo', $p['id']], ['activo', 1]])->get();
+            if (sizeof($h) === 0) $hijo = $p;
+        }
+
+        $padre = departamentoPuesto::select('departamento_puestos.*')
+            ->join('cecos as dep', 'dep.id', 'departamento_puestos.departamento_id')
+            ->join('puestos as pue', 'pue.id', 'departamento_puestos.puesto_id')
+            ->where([['dep.nombre', $nodoA->Ceco], ['pue.name', $nodoA->Puesto]])
+            ->first();
+
+        if ($hijo != null) {
+            $existe = Padres_hijos::where([['departamento_puestos_id_padre', $padre->id], ['departamento_puestos_id_hijo', $hijo->id]])->exists();
+            if ($existe) {
+                $PH = Padres_hijos::where([['departamento_puestos_id_padre', $padre->id], ['departamento_puestos_id_hijo', $hijo->id]])->first();
+                $PH->update(['activo' => 2]);
+            } else {
+                $PH = Padres_hijos::create([
+                    'departamento_puestos_id_padre' => $padre->id,
+                    'departamento_puestos_id_hijo' => $hijo->id,
+                    'activo' => 2
+                ]);
+            }
+        }
+
+        return back();
+    }
+
+    public function jefeareaR(Request $request)
+    {
+        $jefeArea = Padres_hijos::where('id', $request->jARid)->first();
+        $jefeArea->update([
+            'activo' => 0,
+        ]);
+        return back();
     }
 }

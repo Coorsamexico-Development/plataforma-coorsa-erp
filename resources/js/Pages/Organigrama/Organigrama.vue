@@ -62,6 +62,9 @@ const open = (e) => {
                 nodoB: element.nodoB,
                 idA: element.idA,
                 idB: element.idB,
+                padre: element.padre,
+                hijo: element.hijo,
+                ph: element.ph,
             });
         }
     });

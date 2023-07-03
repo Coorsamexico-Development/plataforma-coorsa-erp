@@ -124,7 +124,7 @@ Route::middleware([
     Route::get('/getAnterioresRubros/{departamento}/{mes}/{año}', [PruebaGraphController::class, 'getRubrosAnterior'])->name('getRubrosAnterior');
 
     Route::apiResource('politics', PoliticController::class)->name('index', 'control-interno.politics.index')->except('update');
-    Route::post('/politics/{politic_id}',[PoliticController::class,'update'])->name('politics.update');
+    Route::post('/politics/{politic_id}', [PoliticController::class, 'update'])->name('politics.update');
     //Route::get('/docinternos', [PoliticController::class, 'docsinternos'])->name('control-interno.documentos-internos.index');
     Route::get('/docinternos/seccion/{seccion}', [PoliticController::class, 'docsinternos'])->name('documentos-internos.socios.index');
 
@@ -220,6 +220,8 @@ Route::controller(RecibosNominaController::class)->group(function () {
 Route::controller(OrganigramaController::class)->group(function () {
     Route::get('/organigrama', 'index')->name('organigrama.index');
     Route::post('/organigrama/relacion', 'relacion')->name('organigrama.relacion');
+    Route::post('/organigrama/jefearea', 'jefearea')->name('organigrama.jefearea');
+    Route::post('/organigrama/jefeAreaR', 'jefeareaR')->name('organigrama.jefeAreaR');
     Route::post('/organigrama/destroy', 'destroy')->name('organigrama.destroy');
     Route::post('/organigrama/area', 'area')->name('organigrama.area');
     Route::post('/organigrama/remove', 'remove')->name('organigrama.remove');
