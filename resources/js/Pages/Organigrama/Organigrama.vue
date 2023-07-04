@@ -55,19 +55,21 @@ const open = (e) => {
     modal.value = true;
     let son = [];
 
-    props.areaRel.forEach((element) => {
-        if (element.nodoA === props.areas[e.a - 2].nombre) {
-            son.push({
-                nodoA: element.nodoA,
-                nodoB: element.nodoB,
-                idA: element.idA,
-                idB: element.idB,
-                padre: element.padre,
-                hijo: element.hijo,
-                ph: element.ph,
-            });
-        }
-    });
+    if (props.areaRel) {
+        props.areaRel.forEach((element) => {
+            if (element.nodoA === props.areas[e.a - 2].nombre) {
+                son.push({
+                    nodoA: element.nodoA,
+                    nodoB: element.nodoB,
+                    idA: element.idA,
+                    idB: element.idB,
+                    padre: element.padre,
+                    hijo: element.hijo,
+                    ph: element.ph,
+                });
+            }
+        });
+    }
     sons.value = son;
 };
 const elemento = (elm) => {

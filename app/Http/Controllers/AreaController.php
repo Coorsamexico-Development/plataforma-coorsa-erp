@@ -17,6 +17,7 @@ class AreaController extends Controller
 
         Area::create([
             'nombre' => $request->area,
+            'activo' => 1
         ]);
     }
 

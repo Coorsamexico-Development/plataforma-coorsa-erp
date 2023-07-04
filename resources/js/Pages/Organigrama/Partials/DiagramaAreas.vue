@@ -322,12 +322,14 @@ export default {
         window.ports = this; // DELETEME
         const node = this.areas;
         node.forEach((nodo) => {
-            this.graph.createNode({
-                id: nodo.nombre,
-                nid: nodo.id,
-                inputs: ["i"],
-                outputs: ["o"],
-            });
+            if (nodo.activo === 1) {
+                this.graph.createNode({
+                    id: nodo.nombre,
+                    nid: nodo.id,
+                    inputs: ["i"],
+                    outputs: ["o"],
+                });
+            }
         });
         if (this.$props.areaRel) {
             this.$props.areaRel.forEach((element) => {
@@ -358,12 +360,14 @@ export default {
         this.graph.reset();
         this.$nextTick(() => {
             node.forEach((nodo) => {
-                this.graph.createNode({
-                    id: nodo.nombre,
-                    nid: nodo.id,
-                    inputs: ["i"],
-                    outputs: ["o"],
-                });
+                if (nodo.activo === 1) {
+                    this.graph.createNode({
+                        id: nodo.nombre,
+                        nid: nodo.id,
+                        inputs: ["i"],
+                        outputs: ["o"],
+                    });
+                }
             });
             if (this.$props.areaRel) {
                 this.$props.areaRel.forEach((element) => {
