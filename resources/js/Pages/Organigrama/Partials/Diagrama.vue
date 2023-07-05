@@ -18,10 +18,9 @@
                     <div class="node-header px-[6px]">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            class="absolute icon icon-tabler icon-tabler-x w-[10px] z-[2] cursor-pointer right-[3px] top-[3px]"
+                            class="absolute icon icon-tabler icon-tabler-x w-[14px] z-[2] cursor-pointer right-[3px] top-[3px] hover:scale-110 transition-all duration-200 stroke-[#F3798A] hover:stroke-[#ec2944]"
                             viewBox="0 0 24 24"
                             stroke-width="1.5"
-                            stroke="#ec2944"
                             fill="none"
                             stroke-linecap="round"
                             stroke-linejoin="round"
@@ -123,7 +122,7 @@
                         <svg
                             v-if="son.ph != null"
                             xmlns="http://www.w3.org/2000/svg"
-                            class="absolute icon icon-tabler icon-tabler-x w-[14px] z-[2] cursor-pointer right-[3px] top-[3px] hover:scale-110 bg-[#ec2944] rounded-full"
+                            class="absolute icon icon-tabler icon-tabler-x w-[14px] z-[2] cursor-pointer right-[3px] top-[3px] hover:scale-110 transition-all duration-200 stroke-[#F3798A] hover:stroke-[#ec2944]"
                             viewBox="0 0 24 24"
                             stroke-width="1.5"
                             stroke="#FFFFFF"

@@ -228,7 +228,9 @@ Route::controller(OrganigramaController::class)->group(function () {
 });
 Route::controller(AreaController::class)->group(function () {
     Route::post('area/addArea', 'store')->name('area.addArea');
+    Route::post('area/edit', 'edit')->name('area.edit');
     Route::post('area/relacion', 'relacion')->name('area.relacion');
+    Route::post('area/remove', 'remove')->name('area.remove');
     Route::post('area/destroy', 'destroy')->name('area.destroy');
 });
 

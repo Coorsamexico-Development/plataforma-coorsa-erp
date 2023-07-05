@@ -15,7 +15,46 @@
                     v-for="node in graph.nodes"
                     :key="node.id"
                 >
-                    <div class="grid">
+                    <div class="relative grid">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="absolute icon icon-tabler icon-tabler-x w-[14px] z-[2] cursor-pointer right-[3px] top-[3px] hover:scale-110 transition-all duration-200 stroke-[#F3798A] hover:stroke-[#ec2944]"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            @click="
+                                form.area = node.nid;
+                                remove();
+                            "
+                        >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M18 6l-12 12" />
+                            <path d="M6 6l12 12" />
+                        </svg>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="absolute icon icon-tabler icon-tabler-x w-[14px] z-[2] cursor-pointer right-[20px] top-[3px] hover:scale-110 transition-all duration-200 stroke-[#65D660] hover:stroke-[#09BD00]"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            @click="
+                                arEdit = node;
+                                edit = true;
+                            "
+                        >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"
+                            />
+                            <path
+                                d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"
+                            />
+                            <path d="M16 5l3 3" />
+                        </svg>
                         <div style="border-bottom: none" class="">
                             <div
                                 v-for="input in node.inputs"
@@ -118,14 +157,15 @@
             </screen>
         </div>
     </div>
+    <EditArea :show="edit" @close="close" :area="arEdit" />
 </template>
 
 <script>
 import { Screen, Node, Edge, graph, Port } from "vnodes";
 import { useForm } from "@inertiajs/inertia-vue3";
+import { ref } from "vue";
 import Dragable from "vuedraggable";
-import DiagramaModal from "../Modals/DiagramaModal.vue";
-import { h } from "vue";
+import EditArea from "../Modals/EditArea.vue";
 
 export default {
     components: {
@@ -134,12 +174,14 @@ export default {
         Edge,
         Port,
         Dragable,
-        DiagramaModal,
+        EditArea,
     },
     setup() {
         const gerencia = "";
-        const modal = false;
+        let modal = false;
+        let edit = ref(false);
         let nodos = null;
+        let arEdit = ref();
         const form = useForm({
             elemento: "",
             area: "",
@@ -156,7 +198,9 @@ export default {
             Nform,
             gerencia,
             modal,
+            edit,
             nodos,
+            arEdit,
         };
     },
     data() {
@@ -170,6 +214,9 @@ export default {
     emits: ["elemento", "modal"],
     props: ["rels", "nodos", "areas", "areaRel"],
     methods: {
+        close() {
+            this.edit = false;
+        },
         startConnect(node, { input, output }, evt) {
             if (this.connecting) return;
             const port = this.$refs.port.find(
@@ -235,12 +282,40 @@ export default {
         submit() {
             this.Nform.transform((data) => ({
                 ...data,
-            })).post(route("area.relacion"), {});
+            })).post(route("area.relacion"), {
+                onFinish: () => {
+                    this.Nform.reset();
+                },
+                onStart: () => {
+                    this.Nform.reset();
+                },
+            });
+        },
+        remove() {
+            this.form
+                .transform((data) => ({
+                    ...data,
+                }))
+                .post(route("area.remove"), {
+                    onFinish: () => {
+                        this.form.reset();
+                    },
+                    onStart: () => {
+                        this.form.reset();
+                    },
+                });
         },
         delete() {
             this.Nform.transform((data) => ({
                 ...data,
-            })).post(route("area.destroy"), {});
+            })).post(route("area.destroy"), {
+                onFinish: () => {
+                    this.Nform.reset();
+                },
+                onStart: () => {
+                    this.Nform.reset();
+                },
+            });
         },
         cancelConnect() {
             if (!this.connecting) return;
@@ -319,7 +394,7 @@ export default {
         activeEdge: (vm) => vm.graph.edges.find((e) => e.active),
     },
     mounted() {
-        window.ports = this; // DELETEME
+        window.ports = this; // DELETeME
         const node = this.areas;
         node.forEach((nodo) => {
             if (nodo.activo === 1) {
@@ -355,7 +430,7 @@ export default {
         document.addEventListener("mousemove", this.onmousemove);
     },
     beforeUpdate() {
-        window.ports = this; // DELETEMEconst node = this.areas;
+        window.ports = this; // DELETeMEconst node = this.areas;
         const node = this.$props.areas;
         this.graph.reset();
         this.$nextTick(() => {

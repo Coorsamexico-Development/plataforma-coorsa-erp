@@ -24,9 +24,11 @@ class OrganigramaController extends Controller
                 'DP.id as id',
                 'P.name as Puesto',
                 'Ce.Nombre as Ceco',
+                'Ce.descripcion as CecoName',
             )
             ->where('DP.areas_id', null)
             ->orWhere('DP.areas_id', 1)
+            ->orderBy('Ceco')
             ->get();
 
         $areas = Area::all();
@@ -38,8 +40,10 @@ class OrganigramaController extends Controller
                     'DP.id as id',
                     'P.name as Puesto',
                     'Ce.Nombre as Ceco',
+                    'Ce.descripcion as CecoName',
                 )
                 ->where('DP.areas_id', $area->id)
+                ->orderBy('Ceco')
                 ->get();
         }
 
@@ -57,8 +61,10 @@ class OrganigramaController extends Controller
                             'DP.id as id',
                             'P.name as Puesto',
                             'Ce.Nombre as Ceco',
+                            'Ce.descripcion as CecoName',
                         )
                         ->where('DP.id', $r->departamento_puestos_id_padre)
+                        ->orderBy('Ceco')
                         ->first();
 
                     /* Informacion del Hijo */
@@ -69,8 +75,10 @@ class OrganigramaController extends Controller
                             'DP.id as id',
                             'P.name as Puesto',
                             'Ce.Nombre as Ceco',
+                            'Ce.descripcion as CecoName',
                         )
                         ->where('DP.id', $r->departamento_puestos_id_hijo)
+                        ->orderBy('Ceco')
                         ->first();
 
                     /* Establecemos las relaciones con el nombre de los nodos */

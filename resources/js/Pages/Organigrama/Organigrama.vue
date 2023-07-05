@@ -119,13 +119,10 @@ const elemento = (elm) => {
                             @keyup.enter="addArea"
                         />
                         <input
+                            :disabled="addAreaF.area === ''"
                             type="submit"
                             value="Agregar area"
-                            style="
-                                border: 0.2rem solid #ec2944;
-                                padding: 0.5em 1em 0.5em 1em;
-                            "
-                            class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-[#1A1A22] uppercase transition border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:text-gray-800 active:bg-gray-50 disabled:opacity-25 cursor-pointer"
+                            class="inline-flex bg-[#0097f2] hover:bg-[#308EC7] hover:scale-105 items-center px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase transition-all duration-200 rounded-md shadow-sm disabled:opacity-50 cursor-pointer disabled:hover:cursor-default disabled:bg-[#88CEF9] disabled:hover:scale-100"
                         />
                     </form>
                 </div>
