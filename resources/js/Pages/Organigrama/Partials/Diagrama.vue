@@ -17,6 +17,7 @@
                 >
                     <div class="node-header px-[6px]">
                         <svg
+                            v-if="$page.props.can['organigrama.edit']"
                             xmlns="http://www.w3.org/2000/svg"
                             class="absolute icon icon-tabler icon-tabler-x w-[14px] z-[2] cursor-pointer right-[3px] top-[3px] hover:scale-110 transition-all duration-200 stroke-[#F3798A] hover:stroke-[#ec2944]"
                             viewBox="0 0 24 24"
@@ -53,13 +54,20 @@
                                                 startConnect(
                                                     node,
                                                     { input },
-                                                    evt
+                                                    evt,
+                                                    $page.props.can[
+                                                        'organigrama.edit'
+                                                    ]
                                                 )
                                         "
                                         @mouseup.prevent.stop="
+                                            permisos =
+                                                $page.props.can[
+                                                    'organigrama.edit'
+                                                ];
                                             createConnect(node, {
                                                 input,
-                                            })
+                                            });
                                         "
                                         :class="
                                             getInputEdges(node, input).length &&
@@ -91,13 +99,20 @@
                                                 startConnect(
                                                     node,
                                                     { output },
-                                                    evt
+                                                    evt,
+                                                    $page.props.can[
+                                                        'organigrama.edit'
+                                                    ]
                                                 )
                                         "
                                         @mouseup.prevent.stop="
+                                            permisos =
+                                                $page.props.can[
+                                                    'organigrama.edit'
+                                                ];
                                             createConnect(node, {
                                                 output,
-                                            })
+                                            });
                                         "
                                         :class="
                                             getOutputEdges(node, output)
@@ -120,7 +135,10 @@
                         @mouseout="form.area = null"
                     >
                         <svg
-                            v-if="son.ph != null"
+                            v-if="
+                                son.ph != null &&
+                                $page.props.can['organigrama.edit']
+                            "
                             xmlns="http://www.w3.org/2000/svg"
                             class="absolute icon icon-tabler icon-tabler-x w-[14px] z-[2] cursor-pointer right-[3px] top-[3px] hover:scale-110 transition-all duration-200 stroke-[#F3798A] hover:stroke-[#ec2944]"
                             viewBox="0 0 24 24"
@@ -153,6 +171,7 @@
 import { Screen, Node, Edge, graph, Port } from "vnodes";
 import { useForm } from "@inertiajs/inertia-vue3";
 import Dragable from "vuedraggable";
+import { ref } from "vue";
 
 export default {
     components: {
@@ -188,46 +207,49 @@ export default {
     emits: ["area"],
     props: ["rels", "nodos", "area", "sons"],
     methods: {
-        startConnect(node, { input, output }, evt) {
-            if (this.connecting) return;
-            const port = this.$refs.port.find(
-                (p) => p.id === `${node.id}:${input || output}`
-            );
-            const edge = input && this.getInputEdges(node, input).reverse()[0];
-            if (edge) {
-                // edit exiting edge
-                edge.active = true;
-                this.connecting = {
-                    node: this.graph.nodes.find((n) =>
-                        input ? edge.from === n.id : edge.to === n.id
-                    ),
-                    input: output,
-                    output: input,
-                };
-                this.form.nodoC = edge;
-                this.form.nodoD = node;
-            } else {
-                // new edge
-                this.graph.createEdge({
-                    from: node.id,
-                    to: node.id,
-                    fromPort: input || output,
-                    toPort: input || output,
-                    fromAnchor: { ...port.offset },
-                    toAnchor: { ...port.offset },
-                    active: true,
-                    type: "smooth",
-                });
-                this.connecting = {
-                    node,
-                    input,
-                    output,
-                };
+        startConnect(node, { input, output }, evt, permisos) {
+            if (permisos) {
+                if (this.connecting) return;
+                const port = this.$refs.port.find(
+                    (p) => p.id === `${node.id}:${input || output}`
+                );
+                const edge =
+                    input && this.getInputEdges(node, input).reverse()[0];
+                if (edge) {
+                    // edit exiting edge
+                    edge.active = true;
+                    this.connecting = {
+                        node: this.graph.nodes.find((n) =>
+                            input ? edge.from === n.id : edge.to === n.id
+                        ),
+                        input: output,
+                        output: input,
+                    };
+                    this.form.nodoC = edge;
+                    this.form.nodoD = node;
+                } else {
+                    // new edge
+                    this.graph.createEdge({
+                        from: node.id,
+                        to: node.id,
+                        fromPort: input || output,
+                        toPort: input || output,
+                        fromAnchor: { ...port.offset },
+                        toAnchor: { ...port.offset },
+                        active: true,
+                        type: "smooth",
+                    });
+                    this.connecting = {
+                        node,
+                        input,
+                        output,
+                    };
 
-                this.form.nodoA = node;
+                    this.form.nodoA = node;
+                }
+                this.mousePrev = { x: evt.clientX, y: evt.clientY };
+                this.zoom = this.$refs.screen.panzoom.getZoom();
             }
-            this.mousePrev = { x: evt.clientX, y: evt.clientY };
-            this.zoom = this.$refs.screen.panzoom.getZoom();
         },
         createConnect(node, { input, output }) {
             if (!this.connecting) return;
@@ -258,7 +280,6 @@ export default {
                 .post(route("organigrama.relacion"), {});
         },
         areaJefe() {
-            console.log("entra");
             this.form
                 .transform((data) => ({
                     ...data,

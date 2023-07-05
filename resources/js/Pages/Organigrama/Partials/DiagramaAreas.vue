@@ -17,6 +17,7 @@
                 >
                     <div class="relative grid">
                         <svg
+                            v-if="$page.props.can['organigrama.edit']"
                             xmlns="http://www.w3.org/2000/svg"
                             class="absolute icon icon-tabler icon-tabler-x w-[14px] z-[2] cursor-pointer right-[3px] top-[3px] hover:scale-110 transition-all duration-200 stroke-[#F3798A] hover:stroke-[#ec2944]"
                             viewBox="0 0 24 24"
@@ -34,6 +35,7 @@
                             <path d="M6 6l12 12" />
                         </svg>
                         <svg
+                            v-if="$page.props.can['organigrama.edit']"
                             xmlns="http://www.w3.org/2000/svg"
                             class="absolute icon icon-tabler icon-tabler-x w-[14px] z-[2] cursor-pointer right-[20px] top-[3px] hover:scale-110 transition-all duration-200 stroke-[#65D660] hover:stroke-[#09BD00]"
                             viewBox="0 0 24 24"
@@ -73,7 +75,10 @@
                                                 startConnect(
                                                     node,
                                                     { input },
-                                                    evt
+                                                    evt,
+                                                    $page.props.can[
+                                                        'organigrama.edit'
+                                                    ]
                                                 )
                                         "
                                         @mouseup.prevent.stop="
@@ -134,7 +139,10 @@
                                                 startConnect(
                                                     node,
                                                     { output },
-                                                    evt
+                                                    evt,
+                                                    $page.props.can[
+                                                        'organigrama.edit'
+                                                    ]
                                                 )
                                         "
                                         @mouseup.prevent.stop="
@@ -182,6 +190,7 @@ export default {
         let edit = ref(false);
         let nodos = null;
         let arEdit = ref();
+        let per = ref(false);
         const form = useForm({
             elemento: "",
             area: "",
@@ -201,6 +210,7 @@ export default {
             edit,
             nodos,
             arEdit,
+            per,
         };
     },
     data() {
@@ -217,46 +227,49 @@ export default {
         close() {
             this.edit = false;
         },
-        startConnect(node, { input, output }, evt) {
-            if (this.connecting) return;
-            const port = this.$refs.port.find(
-                (p) => p.id === `${node.id}:${input || output}`
-            );
-            const edge = input && this.getInputEdges(node, input).reverse()[0];
-            if (edge) {
-                // edit exiting edge
-                edge.active = true;
-                this.connecting = {
-                    node: this.graph.nodes.find((n) =>
-                        input ? edge.from === n.id : edge.to === n.id
-                    ),
-                    input: output,
-                    output: input,
-                };
-                this.Nform.nodoC = edge;
-                this.Nform.nodoD = node;
-            } else {
-                // new edge
-                this.graph.createEdge({
-                    from: node.id,
-                    to: node.id,
-                    fromPort: input || output,
-                    toPort: input || output,
-                    fromAnchor: { ...port.offset },
-                    toAnchor: { ...port.offset },
-                    active: true,
-                    type: "smooth",
-                });
-                this.connecting = {
-                    node,
-                    input,
-                    output,
-                };
+        startConnect(node, { input, output }, evt, permisos) {
+            if (permisos) {
+                if (this.connecting) return;
+                const port = this.$refs.port.find(
+                    (p) => p.id === `${node.id}:${input || output}`
+                );
+                const edge =
+                    input && this.getInputEdges(node, input).reverse()[0];
+                if (edge) {
+                    // edit exiting edge
+                    edge.active = true;
+                    this.connecting = {
+                        node: this.graph.nodes.find((n) =>
+                            input ? edge.from === n.id : edge.to === n.id
+                        ),
+                        input: output,
+                        output: input,
+                    };
+                    this.Nform.nodoC = edge;
+                    this.Nform.nodoD = node;
+                } else {
+                    // new edge
+                    this.graph.createEdge({
+                        from: node.id,
+                        to: node.id,
+                        fromPort: input || output,
+                        toPort: input || output,
+                        fromAnchor: { ...port.offset },
+                        toAnchor: { ...port.offset },
+                        active: true,
+                        type: "smooth",
+                    });
+                    this.connecting = {
+                        node,
+                        input,
+                        output,
+                    };
 
-                this.Nform.nodoA = node;
+                    this.Nform.nodoA = node;
+                }
+                this.mousePrev = { x: evt.clientX, y: evt.clientY };
+                this.zoom = this.$refs.screen.panzoom.getZoom();
             }
-            this.mousePrev = { x: evt.clientX, y: evt.clientY };
-            this.zoom = this.$refs.screen.panzoom.getZoom();
         },
         createConnect(node, { input, output }) {
             if (!this.connecting) return;

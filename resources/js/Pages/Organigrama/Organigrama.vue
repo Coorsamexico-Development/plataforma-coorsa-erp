@@ -81,6 +81,7 @@ const elemento = (elm) => {
     <AppLayout :nominas="nominas" title="Organigrama">
         <div class="flex overflow-hidden">
             <Dragable
+                v-if="$page.props.can['organigrama.edit']"
                 :list="nodes[0]"
                 item-key="id"
                 group="elementos"
@@ -107,7 +108,11 @@ const elemento = (elm) => {
             </Dragable>
             <div class="h-[90vh] w-full">
                 <div class="flex px-10 py-3">
-                    <form class="flex gap-10" @submit.prevent="addArea">
+                    <form
+                        class="flex gap-10"
+                        @submit.prevent="addArea"
+                        v-if="$page.props.can['organigrama.edit']"
+                    >
                         <input
                             style="border: 1px black solid"
                             :disabled="disable"

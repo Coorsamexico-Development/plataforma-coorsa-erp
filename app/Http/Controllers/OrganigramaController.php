@@ -268,7 +268,7 @@ class OrganigramaController extends Controller
                 'activo' => 1,
             ]);
         }
-        return redirect()->back();
+        return back();
     }
 
     /* Daamos de baja las relaciones */
@@ -313,7 +313,7 @@ class OrganigramaController extends Controller
                     $padre = $p;
             }
             if ($padre === null)
-                return redirect()->back();
+                return back();
 
             $relBef = Padres_hijos::where([['departamento_puestos_id_padre', $nodoA['Nodeid']], ['departamento_puestos_id_hijo', $padre->id]])->first();
 
@@ -329,7 +329,7 @@ class OrganigramaController extends Controller
                 ]);
             }
         }
-        return redirect()->back();
+        return back();
     }
 
     /* Pasar a las diferentes areas */
@@ -338,7 +338,7 @@ class OrganigramaController extends Controller
         $DP = departamentoPuesto::where('id', $request->elemento['id'])->first();
         $area = Area::where('id', $request->area)->first();
 
-        if ($DP->areas_id === $area->id) return redirect()->back();
+        if ($DP->areas_id === $area->id) return back();
         $DP->update([
             'areas_id' => $request->area,
         ]);
@@ -353,17 +353,33 @@ class OrganigramaController extends Controller
             }
         }
 
-        return redirect()->back();
+        return back();
     }
 
+    //Quitamos un Departamento-puesto del area
     public function remove(Request $request)
     {
         $DP = departamentoPuesto::where('id', $request->nodoA['Nodeid'])->first();
+
+        $relaciones = Padres_hijos::where([['departamento_puestos_id_padre', $DP->id], ['activo', '<>', 0]])->get();
+        foreach ($relaciones as $rel) {
+            $rel->update([
+                'activo' => 0
+            ]);
+        }
+        $relaciones = Padres_hijos::where([['departamento_puestos_id_hijo', $DP->id], ['activo', '<>', 0]])->get();
+        foreach ($relaciones as $rel) {
+            $rel->update([
+                'activo' => 0
+            ]);
+        }
+
         $DP->update(['areas_id' => 1]);
 
-        return redirect()->back();
+        return back();
     }
 
+    //Asignamos una relacion entre jefes de areas
     public function jefearea(Request $request)
     {
         $nodoA = (object)$request->nodoA;
@@ -406,6 +422,7 @@ class OrganigramaController extends Controller
         return back();
     }
 
+    //Quitamos la relacion entre jefes de area
     public function jefeareaR(Request $request)
     {
         $jefeArea = Padres_hijos::where('id', $request->jARid)->first();
