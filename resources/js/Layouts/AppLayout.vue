@@ -174,7 +174,8 @@ const cambio2 = () => {
                                             "
                                             :href="
                                                 route(
-                                                    'documentos-internos.socios.index', 2
+                                                    'documentos-internos.socios.index',
+                                                    2
                                                 )
                                             "
                                         >
@@ -331,6 +332,16 @@ const cambio2 = () => {
                                             "
                                         >
                                             Plantillas Autorizadas
+                                        </DropdownLink>
+                                        <DropdownLink
+                                            v-if="
+                                                $page.props.can[
+                                                    'organigrama.show'
+                                                ]
+                                            "
+                                            :href="route('organigrama.index')"
+                                        >
+                                            Organigrama
                                         </DropdownLink>
                                         <div class="border-t border-gray-100" />
                                     </template>

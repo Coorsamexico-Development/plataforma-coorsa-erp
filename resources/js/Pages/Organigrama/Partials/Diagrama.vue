@@ -42,7 +42,7 @@
                             >
                                 <port
                                     ref="port"
-                                    class="w-full hover:bg-green-400"
+                                    class="w-full hover:bg-[#8EEAB0]"
                                     :id="node.id + ':' + input"
                                     :edgesTo="getInputEdges(node, input)"
                                 >
@@ -82,7 +82,7 @@
                                     ref="port"
                                     :id="node.id + ':' + output"
                                     :edgesFrom="getOutputEdges(node, output)"
-                                    class="hover:bg-green-400"
+                                    class="w-full hover:bg-[#8EEAB0]"
                                 >
                                     <div
                                         class="port-inner text-center px-[5px]"
@@ -258,6 +258,7 @@ export default {
                 .post(route("organigrama.relacion"), {});
         },
         areaJefe() {
+            console.log("entra");
             this.form
                 .transform((data) => ({
                     ...data,

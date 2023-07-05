@@ -154,6 +154,7 @@ class AreaController extends Controller
 
     public function remove(Request $request)
     {
+
         //Damos de baja la relacion que había entre el Departamento-Puesto y el area
         $area = Area::where('id', $request->area)->first();
         $PH = departamentoPuesto::where('areas_id', $area->id)->get();

@@ -83,7 +83,7 @@ onBeforeUpdate(() => {
             <form @submit.prevent="submit">
                 <input
                     type="submit"
-                    class="px-4 py-1 transition-all duration-200 bg-green-300 rounded-xl hover:cursor-pointer hover:scale-110 hover:bg-green-500 hover:text-white disabled:bg-gray-300 disabled:hover:cursor-default disabled:hover:scale-100 disabled:hover:text-black"
+                    class="px-4 py-1 transition-all duration-200 bg-[#86EFAC] rounded-xl hover:cursor-pointer hover:scale-110 hover:bg-[#85E1A6] hover:text-white disabled:bg-[#B3F5CB] disabled:hover:cursor-default disabled:hover:scale-100 disabled:hover:text-black disabled:opacity-50"
                     value="Actualizar"
                     :disabled="form.progress || form.nombre === area.id"
                 />
