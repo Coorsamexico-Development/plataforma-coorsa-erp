@@ -57,67 +57,69 @@ class AreaController extends Controller
 
             /* Una vez tenemos los nodos Padre->Hijo revisamos que no exista un registro previo */
             $relAft = Areas_padres_hijos::where([['areas_id_padre', $nodoA['nid']], ['areas_id_hijo', $nodoB['nid']]])->first();
+            $existe = Areas_padres_hijos::where([['areas_id_padre', $nodoB['nid']], ['areas_id_hijo', $nodoA['nid']], ['activo', '<>', '0']])->exists();
+            if (!$existe) {
+                if ($nodoD != null) {
+                    if ($nodoD['nid'] != $nodoB['nid']) {
+                        $relBef = Areas_padres_hijos::where([['areas_id_padre', $nodoA['nid']], ['areas_id_hijo', $nodoD['nid']]])->first();
 
-            if ($nodoD != null) {
-                if ($nodoD['nid'] != $nodoB['nid']) {
-                    $relBef = Areas_padres_hijos::where([['areas_id_padre', $nodoA['nid']], ['areas_id_hijo', $nodoD['nid']]])->first();
-
-                    if ($relAft === null) {
-                        /* Como no existe un registro previo entonces lo creamos y desactivamos la relacion actual*/
-                        $relBef->update([
-                            'activo' => 0
-                        ]);
-                        Areas_padres_hijos::create([
-                            'areas_id_padre' => $nodoA['nid'],
-                            'areas_id_hijo' => $nodoB['nid'],
-                            'activo' => 1,
-                        ]);
-                    } else {
-                        /* En caso de existir debemos saber si esta activo o no */
-                        if ($relAft->Activo === 0) {
-                            $relAft->update([
-                                'activo' => 1
-                            ]);
+                        if ($relAft === null) {
+                            /* Como no existe un registro previo entonces lo creamos y desactivamos la relacion actual*/
                             $relBef->update([
                                 'activo' => 0
+                            ]);
+                            Areas_padres_hijos::create([
+                                'areas_id_padre' => $nodoA['nid'],
+                                'areas_id_hijo' => $nodoB['nid'],
+                                'activo' => 1,
                             ]);
                         } else {
-                            /* Si esta activa estan tratando de tener la misma relaacion dos veces así que solo desactivamos la relacion aactual */
-                            $relBef->update([
-                                'activo' => 0
+                            /* En caso de existir debemos saber si esta activo o no */
+                            if ($relAft->Activo === 0) {
+                                $relAft->update([
+                                    'activo' => 1
+                                ]);
+                                $relBef->update([
+                                    'activo' => 0
+                                ]);
+                            } else {
+                                /* Si esta activa estan tratando de tener la misma relaacion dos veces así que solo desactivamos la relacion aactual */
+                                $relBef->update([
+                                    'activo' => 0
+                                ]);
+                            }
+                        }
+                    } else {
+                        if ($relAft === null) {
+                            /* Como no existe un registro previo entonces lo creamos y desactivamos la relacion actual*/
+                            Areas_padres_hijos::create([
+                                'areas_id_padre' => $nodoA['nid'],
+                                'areas_id_hijo' => $nodoB['nid'],
+                                'activo' => 1,
                             ]);
+                        } else {
+                            /* En caso de existir debemos saber si esta activo o no */
+                            if ($relAft->Activo === 0) {
+                                $relAft->update([
+                                    'activo' => 1
+                                ]);
+                            }
                         }
                     }
                 } else {
-                    if ($relAft === null) {
-                        /* Como no existe un registro previo entonces lo creamos y desactivamos la relacion actual*/
+                    if (Areas_padres_hijos::where([['areas_id_padre', $nodoA['nid']], ['areas_id_hijo', $nodoB['nid']]])->exists()) {
+                        $relAft->update(['activo' => 1]);
+                    } else {
                         Areas_padres_hijos::create([
                             'areas_id_padre' => $nodoA['nid'],
                             'areas_id_hijo' => $nodoB['nid'],
                             'activo' => 1,
                         ]);
-                    } else {
-                        /* En caso de existir debemos saber si esta activo o no */
-                        if ($relAft->Activo === 0) {
-                            $relAft->update([
-                                'activo' => 1
-                            ]);
-                        }
                     }
-                }
-            } else {
-                if (Areas_padres_hijos::where([['areas_id_padre', $nodoA['nid']], ['areas_id_hijo', $nodoB['nid']]])->exists()) {
-                    $relAft->update(['activo' => 1]);
-                } else {
-                    Areas_padres_hijos::create([
-                        'areas_id_padre' => $nodoA['nid'],
-                        'areas_id_hijo' => $nodoB['nid'],
-                        'activo' => 1,
-                    ]);
                 }
             }
         }
-        return redirect()->back();
+        return back();
     }
 
     /* Daamos de baja las relaciones */
@@ -149,7 +151,7 @@ class AreaController extends Controller
             }
         }
 
-        return redirect()->back();
+        return back();
     }
 
     public function remove(Request $request)
@@ -195,7 +197,7 @@ class AreaController extends Controller
             'activo' => 0
         ]);
 
-        return redirect()->back();
+        return back();
     }
 
     public function edit(Request $request)
