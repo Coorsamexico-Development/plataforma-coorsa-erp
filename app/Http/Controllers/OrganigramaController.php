@@ -214,8 +214,6 @@ class OrganigramaController extends Controller
         /* Una vez tenemos los nodos Padre->Hijo revisamos que no exista un registro previo */
         $relAft = Padres_hijos::where([['departamento_puestos_id_padre', $nodoA['Nodeid']], ['departamento_puestos_id_hijo', $nodoB['Nodeid']]])->first();
 
-        $existe = Padres_hijos::where([['departamento_puestos_id_padre', $nodoB['Nodeid']], ['departamento_puestos_id_hijo', $nodoA['Nodeid']], ['activo', '<>', 0]])->exists();
-
         if ($nodoD != null) {
             if ($nodoD['Nodeid'] != $nodoB['Nodeid']) {
                 $relBef = Padres_hijos::where([['departamento_puestos_id_padre', $nodoA['Nodeid']], ['departamento_puestos_id_hijo', $nodoD['Nodeid']]])->first();
@@ -264,13 +262,19 @@ class OrganigramaController extends Controller
                 }
             }
         } else {
-            Padres_hijos::create([
-                'departamento_puestos_id_padre' => $nodoA['Nodeid'],
-                'departamento_puestos_id_hijo' => $nodoB['Nodeid'],
-                'activo' => 1,
-            ]);
+            if (Padres_hijos::where([['departamento_puestos_id_padre', $nodoA['Nodeid']], ['departamento_puestos_id_hijo', $nodoB['Nodeid']]])->exists()) {
+                $relAft->update([
+                    'activo' => 1
+                ]);
+            } else {
+                Padres_hijos::create([
+                    'departamento_puestos_id_padre' => $nodoA['Nodeid'],
+                    'departamento_puestos_id_hijo' => $nodoB['Nodeid'],
+                    'activo' => 1,
+                ]);
+            }
         }
-        return back();
+        return redirect()->back();
     }
 
     /* Daamos de baja las relaciones */
