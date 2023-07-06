@@ -157,7 +157,7 @@ class PoliticController extends Controller
           }
         }
 
-        if($urlPdf !== null || $urlImage !== null)
+        if($urlPdf !== null && $urlImage !== null)
         {
             $politica=  Politic::where('politics.id','=',$request['politic'])
             ->update([
