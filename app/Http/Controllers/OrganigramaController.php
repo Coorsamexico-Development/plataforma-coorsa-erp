@@ -393,35 +393,37 @@ class OrganigramaController extends Controller
         $hijo = null;
         $PH = null;
 
-        $ph = Area::select(
-            'DP.*',
-        )
-            ->join('departamento_puestos as DP', 'DP.areas_id', 'areas.id')
-            ->where([['areas.nombre', $area->nodoB]])
-            ->get();
+        if ($area->padre === null) {
+            $ph = Area::select(
+                'DP.*',
+            )
+                ->join('departamento_puestos as DP', 'DP.areas_id', 'areas.id')
+                ->where([['areas.nombre', $area->nodoB]])
+                ->get();
 
-        foreach ($ph as $p) {
-            $h = Padres_hijos::select()->where([['departamento_puestos_id_hijo', $p['id']], ['activo', 1]])->get();
-            if (sizeof($h) === 0) $hijo = $p;
-        }
+            foreach ($ph as $p) {
+                $h = Padres_hijos::select()->where([['departamento_puestos_id_hijo', $p['id']], ['activo', 1]])->get();
+                if (sizeof($h) === 0) $hijo = $p;
+            }
 
-        $padre = departamentoPuesto::select('departamento_puestos.*')
-            ->join('cecos as dep', 'dep.id', 'departamento_puestos.departamento_id')
-            ->join('puestos as pue', 'pue.id', 'departamento_puestos.puesto_id')
-            ->where([['dep.nombre', $nodoA->Ceco], ['pue.name', $nodoA->Puesto]])
-            ->first();
+            $padre = departamentoPuesto::select('departamento_puestos.*')
+                ->join('cecos as dep', 'dep.id', 'departamento_puestos.departamento_id')
+                ->join('puestos as pue', 'pue.id', 'departamento_puestos.puesto_id')
+                ->where([['dep.nombre', $nodoA->Ceco], ['pue.name', $nodoA->Puesto]])
+                ->first();
 
-        if ($hijo != null) {
-            $existe = Padres_hijos::where([['departamento_puestos_id_padre', $padre->id], ['departamento_puestos_id_hijo', $hijo->id]])->exists();
-            if ($existe) {
-                $PH = Padres_hijos::where([['departamento_puestos_id_padre', $padre->id], ['departamento_puestos_id_hijo', $hijo->id]])->first();
-                $PH->update(['activo' => 2]);
-            } else {
-                $PH = Padres_hijos::create([
-                    'departamento_puestos_id_padre' => $padre->id,
-                    'departamento_puestos_id_hijo' => $hijo->id,
-                    'activo' => 2
-                ]);
+            if ($hijo != null) {
+                $existe = Padres_hijos::where([['departamento_puestos_id_padre', $padre->id], ['departamento_puestos_id_hijo', $hijo->id]])->exists();
+                if ($existe) {
+                    $PH = Padres_hijos::where([['departamento_puestos_id_padre', $padre->id], ['departamento_puestos_id_hijo', $hijo->id]])->first();
+                    $PH->update(['activo' => 2]);
+                } else {
+                    $PH = Padres_hijos::create([
+                        'departamento_puestos_id_padre' => $padre->id,
+                        'departamento_puestos_id_hijo' => $hijo->id,
+                        'activo' => 2
+                    ]);
+                }
             }
         }
         return back();

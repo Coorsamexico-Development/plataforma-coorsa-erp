@@ -1,6 +1,6 @@
 <script setup>
 import { useForm } from "@inertiajs/inertia-vue3";
-import { ref, onMounted } from "vue";
+import { ref, onBeforeUpdate } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import DiagramaModal from "./Modals/DiagramaModal.vue";
 import DiagramaAreas from "./Partials/DiagramaAreas.vue";
@@ -14,6 +14,7 @@ let nodos = ref();
 let rela = ref();
 let arean = ref();
 let sons = ref();
+let ar = ref();
 
 const form = useForm({
     elemento: "",
@@ -49,6 +50,7 @@ const close = () => {
     modal.value = false;
 };
 const open = (e) => {
+    ar.value = e;
     nodos.value = props.nodes[e.a];
     rela.value = props.rels[e.a];
     arean.value = props.areas[e.a - 2];
@@ -76,6 +78,9 @@ const elemento = (elm) => {
     form.area = elm.element;
     area();
 };
+onBeforeUpdate(() => {
+    rela.value = props.rels[ar.value.a];
+});
 </script>
 <template>
     <AppLayout :nominas="nominas" title="Organigrama">
