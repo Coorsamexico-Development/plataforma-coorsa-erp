@@ -80,9 +80,10 @@ const elemento = (elm) => {
     form.area = elm.element;
     area();
 };
-/* onBeforeUpdate(() => {
+
+onBeforeUpdate(() => {
     rela.value = props.rels[ar.value.a];
-}); */
+});
 
 let nodes0 = computed(() => {
     if (search.value === "") return (nodes0.value = props.nodes[0]);
