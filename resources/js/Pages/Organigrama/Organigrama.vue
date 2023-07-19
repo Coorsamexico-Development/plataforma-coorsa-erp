@@ -56,6 +56,8 @@ const open = (e) => {
     arean.value = props.areas[e.a - 2];
     modal.value = true;
     let son = [];
+    console.log(e.a - 2);
+    console.log(props.areas);
 
     if (props.areaRel) {
         props.areaRel.forEach((element) => {

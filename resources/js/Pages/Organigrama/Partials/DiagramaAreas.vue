@@ -114,7 +114,7 @@
                             >
                                 <template #header>
                                     <h1 class="capitalize text-[20px]">
-                                        {{ node.id }}
+                                        {{ node.nid }}, {{ node.id }}
                                     </h1>
                                 </template>
                                 <template #item="{ element }"></template

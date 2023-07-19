@@ -42,7 +42,8 @@ class DepartamentoController extends Controller
                 $join->on('empleados_puestos.empleado_id', '=', 'users.id')
                     ->on('users.activo', '=', DB::raw(1));
             })
-            ->groupby('cecos.id');
+            ->groupby('cecos.id')
+            ->where('cecos.activo_erp', 1);
 
         $ubicaciones = Ubicacion::select('ubicaciones.id', 'ubicaciones.name');
         $clientes = Cliente::select('clientes.id', 'clientes.nombre');
