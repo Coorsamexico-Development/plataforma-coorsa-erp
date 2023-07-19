@@ -346,7 +346,7 @@ class OrganigramaController extends Controller
 
         if ($DP->areas_id === $area->id) return back();
         $DP->update([
-            'areas_id' => $request->area,
+            'areas_id' => strtoupper($request->area),
         ]);
 
         $relaciones = Padres_hijos::where([['departamento_puestos_id_padre', $DP->id], ['activo', 1]])->orWhere([['departamento_puestos_id_hijo', $DP->id], ['activo', 1]])->get();

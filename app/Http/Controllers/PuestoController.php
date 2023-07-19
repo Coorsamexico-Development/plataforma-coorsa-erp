@@ -76,7 +76,7 @@ class PuestoController extends Controller
      */
     public function destroy(Puesto $puesto)
     {
-
+        dd('hola');
         $this->authorize('puestos.delete');
         $puesto->delete();
         return response()->json([

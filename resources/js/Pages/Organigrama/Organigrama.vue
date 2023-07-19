@@ -1,6 +1,6 @@
 <script setup>
 import { useForm } from "@inertiajs/inertia-vue3";
-import { ref, onBeforeUpdate } from "vue";
+import { ref, onBeforeUpdate, watch, computed } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import DiagramaModal from "./Modals/DiagramaModal.vue";
 import DiagramaAreas from "./Partials/DiagramaAreas.vue";
@@ -23,6 +23,8 @@ const form = useForm({
 const addAreaF = useForm({
     area: "",
 });
+
+const search = ref("");
 
 const area = () => {
     form.transform((data) => ({
@@ -56,8 +58,6 @@ const open = (e) => {
     arean.value = props.areas[e.a - 2];
     modal.value = true;
     let son = [];
-    console.log(e.a - 2);
-    console.log(props.areas);
 
     if (props.areaRel) {
         props.areaRel.forEach((element) => {
@@ -80,8 +80,17 @@ const elemento = (elm) => {
     form.area = elm.element;
     area();
 };
-onBeforeUpdate(() => {
+/* onBeforeUpdate(() => {
     rela.value = props.rels[ar.value.a];
+}); */
+
+let nodes0 = computed(() => {
+    if (search.value === "") return (nodes0.value = props.nodes[0]);
+    return props.nodes[0].filter((area) => {
+        if (area.Puesto.toLowerCase().includes(search.value.toLowerCase())) {
+            return area;
+        }
+    });
 });
 </script>
 <template>
@@ -89,12 +98,12 @@ onBeforeUpdate(() => {
         <div class="flex overflow-hidden">
             <Dragable
                 v-if="$page.props.can['organigrama.edit']"
-                :list="nodes[0]"
+                :list="nodes0"
                 item-key="id"
                 group="elementos"
                 animation="300"
                 tag="div"
-                class="p-[1vw] w-[25%] grid gap-[2px] justify-center h-[90vh] overflow-auto"
+                class="p-[1vw] w-[25%] flex flex-col gap-[2px] h-[90vh] overflow-auto"
                 drag-class="drag"
                 ghost-class="ghost"
             >
@@ -102,8 +111,16 @@ onBeforeUpdate(() => {
                     <h1
                         class="text-[20px] h-fit font-bold text-center py-[10px] uppercase"
                     >
-                        Lista Empleados
+                        Lista de Puestos
                     </h1>
+
+                    <input
+                        type="search"
+                        v-model="search"
+                        placeholder="Buscar puesto"
+                        aria-label="Search"
+                        class="rounded-2xl text-[12px] px-2 py-1 focus:border-transparent uppercase border"
+                    />
                 </template>
                 <template #item="{ element }">
                     <Elemento
@@ -123,7 +140,7 @@ onBeforeUpdate(() => {
                         <input
                             style="border: 1px black solid"
                             :disabled="disable"
-                            class="border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 read-only:bg-gray-300"
+                            class="uppercase border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 read-only:bg-gray-300"
                             type="text"
                             required
                             v-model="addAreaF.area"
