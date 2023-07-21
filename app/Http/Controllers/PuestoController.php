@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\empleados_puesto;
 use App\Models\puesto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class PuestoController extends Controller
 {
@@ -74,13 +76,18 @@ class PuestoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Puesto $puesto)
+    public function destroy(puesto $puesto)
     {
-        dd('hola');
         $this->authorize('puestos.delete');
-        $puesto->delete();
-        return response()->json([
-            'message' => 'ok'
-        ]);
+
+        $empleado = empleados_puesto::select('users.*')
+            ->join('users', 'users.id', 'empleados_puestos.empleado_id')
+            ->where([['puesto_id', $puesto->id], ['empleados_puestos.activo', 1]])->get();
+        if (!empleados_puesto::where([['puesto_id', $puesto->id], ['activo', 1]])->exists()) {
+            puesto::where('id', $puesto->id)->delete();
+            return response()->json(['empleado' => 'succes']);
+        } else {
+            return response()->json(['empleado' => $empleado]);
+        }
     }
 }

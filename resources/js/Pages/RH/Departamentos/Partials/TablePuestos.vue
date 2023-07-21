@@ -283,9 +283,16 @@
                 <danger-button @click="deletePuesto">Eliminar </danger-button>
             </template>
         </jet-dialog-modal>
+        <ErrorPuesto
+            :show="errorPuesto"
+            @close="errorPuesto = false"
+            :empleado="empleado"
+            :puesto="puesto"
+        />
     </div>
 </template>
 <script>
+import { ref } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
 import { pickBy, throttle } from "lodash";
 import InfoButton from "@/Components/Buttoninfo.vue";
@@ -300,6 +307,8 @@ import swal from "sweetalert";
 import InputSearch from "@/Components/InputSearch.vue";
 import Titlecomponent from "@/Components/Title.vue";
 import PaginationAxios from "@/Components/PaginationAxios.vue";
+import axios from "axios";
+import ErrorPuesto from "../Modal/ErrorPuesto.vue";
 
 export default {
     props: {
@@ -321,6 +330,17 @@ export default {
         InputSearch,
         Titlecomponent,
         PaginationAxios,
+        ErrorPuesto,
+    },
+    setup() {
+        const errorPuesto = ref(false);
+        const empleado = ref();
+        const puesto = ref();
+        return {
+            errorPuesto,
+            empleado,
+            puesto,
+        };
     },
     data() {
         return {
@@ -488,12 +508,18 @@ export default {
             this.showingConfirmDeletion = false;
         },
         deletePuesto() {
-            console.log(this.puestoSelect.id);
             axios
                 .delete(this.route("puestos.destroy", this.puestoSelect.id))
-                .then(() => {
-                    this.searchPuestos();
-                    this.closeModalDelete();
+                .then((response) => {
+                    if (response.data.empleado != "succes") {
+                        this.empleado = response.data.empleado;
+                        this.puesto = this.puestoSelect;
+                        this.errorPuesto = true;
+                        this.closeModalDelete();
+                    } else {
+                        this.searchPuestos();
+                        this.closeModalDelete();
+                    }
                 });
         },
     },

@@ -26,6 +26,7 @@
         "@amcharts/amcharts5": "^5.3.16",
         "@fancyapps/ui": "^4.0.31",
         "@vuepic/vue-datepicker": "^4.2.0",
+        "animejs": "^3.2.1",
         "bootstrap": "^5.2.2",
         "bootstrap-vue": "^2.23.1",
         "datatables.net": "^1.12.1",
