@@ -12,7 +12,7 @@ defineProps({
     },
     maxWidth: {
         type: String,
-        default: "2xl",
+        default: "3xl",
     },
     closeable: {
         type: Boolean,
@@ -47,23 +47,34 @@ const close = () => {
         </template>
         <template #content>
             <span>
-                El puesto
-                <span class="font-bold">{{ puesto.name }}</span> no puede ser
-                eliminado ya que esta asignado actulmente a los empleados:
-                <br />
-                <ul v-for="emp in empleado" :key="id">
-                    <li>
-                        <span class="font-bold">
-                            {{ emp.name }}
-                            {{ emp.apellido_paterno }}
-                            {{ emp.apellido_materno }}
-                        </span>
-                        con numero de empleado
-                        <span class="font-bold id">
-                            {{ emp.numero_empleado }}
-                        </span>
-                    </li>
-                </ul>
+                <span class="text-[20px]">
+                    El puesto
+                    <span class="font-bold">{{ puesto.name }}</span> no puede
+                    ser eliminado ya que esta asignado actulmente a los
+                    siguientes empleados:
+                    <br />
+                </span>
+                <div
+                    class="text-[15px] mt-2 max-h-[79vh] overflow-y-auto overflow-x-visible"
+                >
+                    <ul class="">
+                        <li
+                            v-for="emp in empleado"
+                            :key="id"
+                            class="py-1 pl-4 even:bg-gray-50 shadow-sm even:shadow-[#DADBDC] odd:shadow-[#202020]"
+                        >
+                            <span class="font-bold capitalize">
+                                {{ emp.name }}
+                                {{ emp.apellido_paterno }}
+                                {{ emp.apellido_materno }}
+                            </span>
+                            con numero de empleado
+                            <span class="font-bold id">
+                                {{ emp.numero_empleado }}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
             </span>
         </template>
     </DialogModal>
