@@ -43,6 +43,7 @@ class DepartamentoController extends Controller
                     ->on('users.activo', '=', DB::raw(1));
             })
             ->groupby('cecos.id')
+            ->orderBy('cecos.nombre')
             ->where('cecos.activo_erp', 1);
 
         $ubicaciones = Ubicacion::select('ubicaciones.id', 'ubicaciones.name');
