@@ -13,6 +13,7 @@ import ButtonAdd from "@/Components/ButtonAdd.vue";
 import { onMounted, reactive, ref, watch } from "vue";
 import ModalAddNoticia from "./PartialsDashboard/ModalAddNoticia.vue";
 import { Fancybox } from "@fancyapps/ui/src/Fancybox/Fancybox.js";
+import Carrusel from "./PartialsDashboard/Carrusel.vue";
 
 var props = defineProps({
     menus: Object,
@@ -101,55 +102,11 @@ const closeModalAgregarNoticia = () => {
                 </div>
             </div>
         </section>
-        <section class="inicio_mv">
-            <div class="flex flex-col items-center align-middle inicio_m">
-                <img
-                    class="mt-8 sm:mt-24 icon_m"
-                    src="../../img/Icono_Mision.png"
-                />
-                <div class="p-2 sm:p-8">
-                    <h3
-                        class="mt-2 text-3xl text-white md:mt-10"
-                        style="font-family: 'Montserrat'"
-                    >
-                        Misión
-                    </h3>
-                    <p
-                        class="mt-5 text-sm text-white sm:text-2xl"
-                        style="font-family: 'Montserrat'; line-height: 1.8"
-                    >
-                        Eficientar los procesos de la cadena de suministros, a
-                        través de servicios de alta calidad que generan
-                        ambientes de innovación logística, haciendo de lo bueno
-                        algo mejor
-                    </p>
-                </div>
-            </div>
-            <div class="flex flex-col items-center inicio_v">
-                <img
-                    class="mt-8 sm:mt-24 icon_v"
-                    src="../../img/Icono_Vision.png"
-                />
-                <div class="p-2 sm:p-8">
-                    <h3
-                        class="mt-2 text-3xl text-white md:mt-10"
-                        style="font-family: 'Montserrat'"
-                    >
-                        Visión
-                    </h3>
-                    <p
-                        class="mt-5 mb-8 text-sm text-white sm:mb-16 sm:text-2xl"
-                        style="font-family: 'Montserrat'; line-height: 1.8"
-                    >
-                        Ser para 2026 la empresa líder en soluciones logísticas
-                        en zona centro y norte de México, innovando procesos y
-                        herramientas en la cadena de suministros,
-                        convirtiéndonos en socios estratégicos de nuestros
-                        clientes.
-                    </p>
-                </div>
-            </div>
+
+        <section class="w-full h-[30rem] mt-[20rem] grid bg-black">
+            <Carrusel />
         </section>
+
         <section class="section_video">
             <div class="video_section">
                 <div class="pt-40 ml-48 sm:pt-20 sm:pb-48">

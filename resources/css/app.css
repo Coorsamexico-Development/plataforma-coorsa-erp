@@ -447,7 +447,6 @@ input:checked ~ .tab-content {
 
     .inicio_mv {
         display: grid;
-        grid-template-rows: repeat(2, 1fr);
         margin-top: 28rem;
         height: 30rem;
     }
