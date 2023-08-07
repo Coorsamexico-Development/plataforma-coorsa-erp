@@ -49,7 +49,7 @@ class DepartamentoController extends Controller
         $ubicaciones = Ubicacion::select('ubicaciones.id', 'ubicaciones.name');
         $clientes = Cliente::select('clientes.id', 'clientes.nombre');
         if (request('search')) {
-            $departamentos->orWhere('nombre', 'LIKE', '%' . request('search') . '%');
+            $departamentos->where('nombre', 'LIKE', '%' . request('search') . '%');
         }
 
         if (request()->has(['field', 'direction'])) {
