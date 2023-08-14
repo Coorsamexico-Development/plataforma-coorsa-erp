@@ -38,6 +38,14 @@ onMounted(() => {
             position: 7,
             el: document.getElementById("carousel-item-8"),
         },
+        {
+            position: 8,
+            el: document.getElementById("carousel-item-9"),
+        },
+        {
+            position: 9,
+            el: document.getElementById("carousel-item-10"),
+        },
     ];
 
     const options = {
@@ -80,6 +88,14 @@ onMounted(() => {
                 {
                     position: 7,
                     el: document.getElementById("carousel-indicator-8"),
+                },
+                {
+                    position: 8,
+                    el: document.getElementById("carousel-indicator-9"),
+                },
+                {
+                    position: 9,
+                    el: document.getElementById("carousel-indicator-10"),
                 },
             ],
         },
@@ -163,6 +179,22 @@ onMounted(() => {
                     alt="..."
                 />
             </div>
+            <!-- Item 9 -->
+            <div id="carousel-item-9" class="hidden duration-700 ease-in-out">
+                <img
+                    src="/assets/img/MisionDes.png"
+                    class="absolute block w-full h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                    alt="..."
+                />
+            </div>
+            <!-- Item 10 -->
+            <div id="carousel-item-10" class="hidden duration-700 ease-in-out">
+                <img
+                    src="/assets/img/VisionDes.png"
+                    class="absolute block w-full h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                    alt="..."
+                />
+            </div>
         </div>
         <!-- Slider indicators -->
         <div
@@ -223,6 +255,20 @@ onMounted(() => {
                 class="w-3 h-3 rounded-full"
                 aria-current="false"
                 aria-label="Slide 8"
+            ></button>
+            <button
+                type="button"
+                id="carousel-indicator-9"
+                class="w-3 h-3 rounded-full"
+                aria-current="false"
+                aria-label="Slide 9"
+            ></button>
+            <button
+                type="button"
+                id="carousel-indicator-10"
+                class="w-3 h-3 rounded-full"
+                aria-current="false"
+                aria-label="Slide 10"
             ></button>
         </div>
     </div>
