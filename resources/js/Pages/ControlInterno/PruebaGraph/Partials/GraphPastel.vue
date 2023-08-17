@@ -7,46 +7,44 @@ import Am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 const props = defineProps(["rubro", "proceso", "meses"]);
 
 const auxArray = ref([]);
+let root = "";
+let chart = null;
+let data = [];
+let series = null;
+let legend = null;
 
-onBeforeUpdate(() => {
-    const i = props.meses.length;
-    let auxObj = [];
-    for (let a = 0; a < props.meses.length; a++) {
-        auxObj = {
-            mes: new Date(
-                "2023-0" + (Number(props.meses[a].date.split("-")[1]) + 1)
-            ).toLocaleDateString("es-MX", {
-                month: "long",
-            }),
-            riesgo: props.rubro[a].calificacion,
-            sAlta: props.rubro[a + i].calificacion,
-            riesgo2: props.rubro[a + i * 2].calificacion,
-            cotStra: props.rubro[a + i * 3].calificacion,
-            riesIn: props.rubro[a + i * 4].calificacion,
-        };
-
-        auxArray.value[a] = auxObj;
+onMounted(() => {
+    const now = new Date().getMonth();
+    if (props.proceso === undefined) {
+        props.rubro.forEach((element) => {
+            if (element.mes === now)
+                auxArray.value.push({
+                    value: element.calificacion,
+                    category: element.name,
+                });
+        });
+    } else {
+        props.rubro.forEach((element) => {
+            if (element.mes === Number(props.proceso.split("-")[1]))
+                auxArray.value.push({
+                    value: element.calificacion,
+                    category: element.name,
+                });
+        });
     }
+
     Am5.ready(function () {
+        root = Am5.Root.new("chartPastel");
         // Create root element
-        // https://www.amcharts.com/docs/v5/getting-started/#Root_element
-        var root = Am5.Root.new("chartPastel");
-
         // Set themes
-        // https://www.amcharts.com/docs/v5/concepts/themes/
         root.setThemes([Am5themes_Animated.new(root)]);
-
-        // Create chart
-        // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/
-        var chart = root.container.children.push(
+        chart = root.container.children.push(
             Am5percent.PieChart.new(root, {
                 layout: root.verticalLayout,
             })
         );
-
         // Create series
-        // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Series
-        var series = chart.series.push(
+        series = chart.series.push(
             Am5percent.PieSeries.new(root, {
                 valueField: "value",
                 categoryField: "category",
@@ -54,20 +52,16 @@ onBeforeUpdate(() => {
         );
 
         // Set data
-        // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Setting_data
         auxArray.value.forEach((element) => {
-            console.log(element);
-            series.data.setAll([
-                {
-                    value: element.riesgo,
-                    category: "riesfgo",
-                },
-            ]);
+            data.push({
+                value: element.value,
+                category: element.category,
+            });
         });
+        series.data.setAll(data);
 
         // Create legend
-        // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
-        var legend = chart.children.push(
+        legend = chart.children.push(
             Am5.Legend.new(root, {
                 centerX: Am5.percent(50),
                 x: Am5.percent(50),
@@ -79,9 +73,54 @@ onBeforeUpdate(() => {
         legend.data.setAll(series.dataItems);
 
         // Play initial series animation
-        // https://www.amcharts.com/docs/v5/concepts/animations/#Animation_of_series
         series.appear(1000, 100);
     }); // end Am5.ready()
+});
+onBeforeUpdate(() => {
+    const now = new Date().getMonth();
+    auxArray.value = [];
+    if (props.proceso === undefined) {
+        props.rubro.forEach((element) => {
+            if (element.mes === now)
+                auxArray.value.push({
+                    value: element.calificacion,
+                    category: element.name,
+                });
+        });
+    } else {
+        props.rubro.forEach((element) => {
+            if (element.mes === Number(props.proceso.split("-")[1]))
+                auxArray.value.push({
+                    value: element.calificacion,
+                    category: element.name,
+                });
+        });
+    }
+    chart.series.pop();
+    series.data.pop();
+    legend.data.pop();
+
+    series = chart.series.push(
+        Am5percent.PieSeries.new(root, {
+            valueField: "value",
+            categoryField: "category",
+        })
+    );
+
+    // Set data
+    data = [];
+    auxArray.value.forEach((element) => {
+        data.push({
+            value: element.value,
+            category: element.category,
+        });
+    });
+    series.data.setAll(data);
+
+    legend.data.setAll(series.dataItems);
+
+    // Play initial series animation
+    series.appear(1000, 100);
 });
 </script>
 <template>
