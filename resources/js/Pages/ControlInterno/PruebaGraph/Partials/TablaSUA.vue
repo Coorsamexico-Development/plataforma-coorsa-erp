@@ -26,10 +26,10 @@ onBeforeUpdate(() => {
 </script>
 <template>
     <table
-        class="w-full overflow-hidden text-sm text-left text-gray-500 rounded-lg dark:text-gray-400"
+        class="w-full overflow-hidden text-sm text-left text-gray-500 rounded-lg shadow-xl dark:text-gray-400"
     >
         <thead
-            class="text-xs text-gray-700 uppercase bg-red-500 dark:bg-gray-700 dark:text-gray-400"
+            class="text-xs text-white uppercase bg-[#3A7D7F] dark:bg-gray-700 dark:text-gray-400"
         >
             <tr>
                 <th scope="col" class="px-6 py-3 rounded-tl-lg"></th>
@@ -44,7 +44,7 @@ onBeforeUpdate(() => {
         </thead>
         <tbody>
             <tr
-                class="overflow-hidden bg-black dark:bg-gray-800"
+                class="overflow-hidden bg-white dark:bg-gray-800"
                 v-for="rubro in auxArray"
                 :key="id"
             >
