@@ -37,9 +37,8 @@ onBeforeUpdate(() => {
                 <th scope="col" class="px-6 py-3">Sin Alta en IMSS</th>
                 <th scope="col" class="px-6 py-3">En 2 Riesgos</th>
                 <th scope="col" class="px-6 py-3">Cotizando sin Trabajar</th>
-                <th scope="col" class="px-6 py-3 rounded-tr-lg">
-                    Riesgo Incorrecto
-                </th>
+                <th scope="col" class="px-6 py-3">Riesgo Incorrecto</th>
+                <th scope="col" class="px-6 py-3 rounded-tr-lg">Total</th>
             </tr>
         </thead>
         <tbody>
@@ -68,6 +67,15 @@ onBeforeUpdate(() => {
                 </td>
                 <td class="px-6 py-4">
                     {{ rubro.riesIn }}
+                </td>
+                <td>
+                    {{
+                        rubro.riesgo +
+                        rubro.sAlta +
+                        rubro.riesgo2 +
+                        rubro.cotStra +
+                        rubro.riesIn
+                    }}
                 </td>
             </tr>
         </tbody>
