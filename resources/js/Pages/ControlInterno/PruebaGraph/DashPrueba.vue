@@ -16,7 +16,7 @@ import "@fancyapps/ui/dist/fancybox.css";
 import moment from "moment";
 import { Inertia } from "@inertiajs/inertia";
 import TablaSUA from "./Partials/TablaSUA.vue";
-
+const now = new Date().getMonth();
 let props = defineProps({
     departamentosAuditoria: {
         type: Object,
@@ -784,7 +784,14 @@ const consultar = async (mes, año) => {
                                         {{ departamento.nombre }}
                                     </h1>
 
-                                    <h2 class="text-xl font-bold" v-if="proc">
+                                    <h2
+                                        class="text-xl font-bold"
+                                        v-if="
+                                            proc &&
+                                            params.departamento_auditoria_id !=
+                                                6
+                                        "
+                                    >
                                         {{ proc.nombre }}
                                     </h2>
                                 </div>
@@ -1218,8 +1225,16 @@ const consultar = async (mes, año) => {
                                     >
                                         <BotonProc
                                             v-for="pro in arregloParametros"
-                                            @click="proc = pro"
-                                            :active="pro.date === proc.date"
+                                            @click="
+                                                proc = pro;
+                                                now = '';
+                                            "
+                                            :active="
+                                                pro.date === proc.date ||
+                                                Number(
+                                                    pro.date.split('-')[1]
+                                                ) == now
+                                            "
                                             class="uppercase"
                                         >
                                             {{
