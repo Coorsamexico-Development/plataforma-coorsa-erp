@@ -350,8 +350,8 @@ const isDownload = computed((file) => {
 
                         <div
                             v-if="$page.props.can['politics.update']"
-                            style="white-space: normal margin-top:-11rem;"
-                            class="z-10 w-6 h-6 py-1 bg-white rounded-full shadow -right-1 hover:bg-gray-500 hover:text-white"
+                            style="white-space: normal "
+                            class="z-10 w-6 h-6 py-1 bg-white rounded-full shadow -mt-44 -right-1 hover:bg-gray-500 hover:text-white"
                             @click="showFormPolitic('update', politica)"
                         >
                             <svg
@@ -481,8 +481,8 @@ const isDownload = computed((file) => {
                                         v-if="
                                             $page.props.can['politics.update']
                                         "
-                                        style="white-space: normal; margin-top:-11rem;"
-                                        class="absolute z-10 w-6 h-6 py-1 bg-white rounded-full shadow -bottom-2 -right-1 hover:bg-gray-500 hover:text-white"
+                                        style="white-space: normal;"
+                                        class="absolute z-10 w-6 h-6 py-1 bg-white rounded-full shadow -mt-44 -bottom-2 -right-1 hover:bg-gray-500 hover:text-white"
                                         @click="
                                             showFormPolitic('update', politica)
                                         "
