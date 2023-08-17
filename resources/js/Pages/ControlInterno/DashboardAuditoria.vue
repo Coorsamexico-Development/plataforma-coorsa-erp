@@ -50,6 +50,7 @@ const departamento = computed(() => {
 });
 
 watch(params, (newParams) => {
+    console.log(newParams);
     //console.log(newParams);
     Inertia.visit(route("control-interno.departamentos-aditorias.index"), {
         data: newParams,
@@ -778,6 +779,7 @@ const consultar = async (mes, año) => {
                         <div class="col-start-1 col-end-3">
                             <!--Graficas-->
                             <h2 class="text-lg font-bold">Graficas</h2>
+
                             <div>
                                 <Graph1
                                     :calificaciones="

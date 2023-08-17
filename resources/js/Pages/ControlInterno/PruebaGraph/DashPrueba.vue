@@ -9,12 +9,13 @@ import ShowDocumentoModal from "../Modals/ShowDocumentoModal.vue";
 import ShowCalificacionesModal from "../Modals/ShowCalificacionesModal.vue";
 import Graph2 from "../Partials/Graph2.vue";
 import GraphRub from "./GraphRub.vue";
-import GraphRubLine from "./GraphRubLine.vue";
+import GraphPastel from "./Partials/GraphPastel.vue";
 import GraphRubMonth from "./GraphRubMonth.vue";
 import BotonProc from "./Partials/BotonProc.vue";
 import "@fancyapps/ui/dist/fancybox.css";
 import moment from "moment";
 import { Inertia } from "@inertiajs/inertia";
+import TablaSUA from "./Partials/TablaSUA.vue";
 
 let props = defineProps({
     departamentosAuditoria: {
@@ -694,7 +695,6 @@ const consultar = async (mes, año) => {
 <template>
     <AppLayout title="Dashboard" :nominas="nominas">
         <div class="bg-[#f8f8f8]">
-            {{ rubrosCalculados }}
             <section class="p-2 pt-8 objetivo_auditoria sm:p-8">
                 <div
                     class="mr-0 sm:text-center sm:mr-96 sm:pt-8"
@@ -798,7 +798,12 @@ const consultar = async (mes, año) => {
                         </div>
                     </div>
                     <div class="mt-4">
-                        <section v-if="!cambio" class="grid grid-cols-3 gap-12">
+                        <section
+                            v-if="
+                                !cambio && params.departamento_auditoria_id != 6
+                            "
+                            class="grid grid-cols-3 gap-12"
+                        >
                             <div class="col-start-1 col-end-3">
                                 <!--Graficas-->
                                 <div class="flex justify-between">
@@ -835,12 +840,6 @@ const consultar = async (mes, año) => {
                                         :proceso="proc.id"
                                     />
                                 </div>
-                                <!-- <div class="mt-[2rem]">
-                                <GraphRubLine
-                                    :rubro="rubTot"
-                                    :proceso="proc.id"
-                                />
-                            </div> -->
                                 <div
                                     class="mt-[2rem] bg-white rounded-2xl p-2"
                                     v-if="proc"
@@ -1199,6 +1198,60 @@ const consultar = async (mes, año) => {
                                 </div>
                             </div>
                         </section>
+
+                        <section
+                            v-if="
+                                params.departamento_auditoria_id === 6 &&
+                                !cambio
+                            "
+                            class="grid mb-8"
+                        >
+                            <div class="flex justify-between">
+                                <h2 class="text-lg font-bold">Graficas</h2>
+                            </div>
+
+                            <div class="grid gap-8">
+                                <div>
+                                    <div
+                                        class="flex justify-between gap-[1rem] select-none mt-[2rem]"
+                                        v-if="proc"
+                                    >
+                                        <BotonProc
+                                            v-for="pro in arregloParametros"
+                                            @click="proc = pro"
+                                            :active="pro.date === proc.date"
+                                            class="uppercase"
+                                        >
+                                            {{
+                                                new Date(
+                                                    "2023-0" +
+                                                        (Number(
+                                                            pro.date.split(
+                                                                "-"
+                                                            )[1]
+                                                        ) +
+                                                            1)
+                                                ).toLocaleDateString("es-MX", {
+                                                    month: "long",
+                                                })
+                                            }}
+                                        </BotonProc>
+                                    </div>
+                                    <GraphPastel
+                                        :rubro="rubTot"
+                                        :proceso="proc.date"
+                                        :meses="arregloParametros"
+                                    />
+                                </div>
+                                <div>
+                                    <TablaSUA
+                                        :rubTot="rubTot"
+                                        :meses="arregloParametros"
+                                    />
+                                </div>
+                            </div>
+                        </section>
+
                         <section v-if="cambio">
                             <h1 class="text-sm font-bold">Procesos</h1>
                             <ButtonAdd
