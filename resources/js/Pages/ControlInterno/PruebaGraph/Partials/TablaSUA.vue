@@ -43,7 +43,7 @@ onBeforeUpdate(() => {
         </thead>
         <tbody>
             <tr
-                class="overflow-hidden bg-white dark:bg-gray-800 even:bg-[#3A7D7F]/5"
+                class="overflow-hidden bg-white dark:bg-gray-800 even:bg-[#3A7D7F]/5 text-center"
                 v-for="rubro in auxArray"
                 :key="id"
             >
