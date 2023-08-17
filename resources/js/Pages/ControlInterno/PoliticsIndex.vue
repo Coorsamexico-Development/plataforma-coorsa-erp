@@ -75,7 +75,7 @@ const hover = computed(() => {
 
 const updateHoverState = (isHover) => {
     hoverState.value = isHover;
-    console.log(hoverState.value);
+    /* console.log(hoverState.value); */
 };
 
 const isDownload = computed((file) => {
@@ -85,13 +85,13 @@ const isDownload = computed((file) => {
 
 <template>
     <AppLayout title="Dashboard" :nominas="nominas">
-        <section class="objetivo p-4">
+        <section class="p-4 objetivo">
             <div
                 class="text-center pt-14 objetivos"
                 style="font-family: 'Montserrat'"
             >
                 <h1
-                    class="text-xl mr-12 sm:mr-16 sm:text-4xl font-semibold text-white"
+                    class="mr-12 text-xl font-semibold text-white sm:mr-16 sm:text-4xl"
                 >
                     Objetivo de documentos
                 </h1>
@@ -101,7 +101,7 @@ const isDownload = computed((file) => {
                 ></span>
             </div>
             <p
-                class="sm:mt-6 mt-4 mb-4 sm:mb-16 text-sm sm:text-xl sm:ml-96 text-white"
+                class="mt-4 mb-4 text-sm text-white sm:mt-6 sm:mb-16 sm:text-xl sm:ml-96"
                 style="font-family: 'Montserrat'; line-height: 1.8"
             >
                 En esta sección tendrás acceso a toda la documentación normativa
@@ -371,7 +371,7 @@ const isDownload = computed((file) => {
             </div>
         </section>
         <!--Files Mobiles-->
-        <section class="sm:hidden block">
+        <section class="block sm:hidden">
             <div class="pl-8 pr-8">
                 <InputSearch class="mt-8" v-model="params.search"></InputSearch>
             </div>
@@ -390,7 +390,7 @@ const isDownload = computed((file) => {
                             }"
                         ></span>
                         <h1
-                            class="text-xl font-bold ml-4"
+                            class="ml-4 text-xl font-bold"
                             :style="{ color: '#' + tipoPolitica.color }"
                         >
                             {{ tipoPolitica.name }}

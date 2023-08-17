@@ -27,7 +27,7 @@ let props = defineProps({
         required: true,
     },
     nominas: Object,
-    seccion_id:Number
+    seccion_id: Number,
 });
 
 const params = reactive({
@@ -79,7 +79,6 @@ const hover = computed(() => {
 
 const updateHoverState = (isHover) => {
     hoverState.value = isHover;
-    console.log(hoverState.value);
 };
 </script>
 
@@ -90,9 +89,7 @@ const updateHoverState = (isHover) => {
                 class="text-center pt-14 objetivos"
                 style="font-family: 'Montserrat'"
             >
-                <h1
-                    class="ml-4 text-4xl font-semibold text-white"
-                >
+                <h1 class="ml-4 text-4xl font-semibold text-white">
                     Objetivo de documentos
                 </h1>
                 <span
@@ -264,8 +261,11 @@ const updateHoverState = (isHover) => {
                     </div>
                 </ul>
                 <ButtonAdd
-                    v-if="$page.props.can['direccion-general.create'] || $page.props.can['informacion-financiera.create'] 
-                    || $page.props.can['documentos-nominas.create'] || $page.props.can['documentos-diseño.create'] 
+                    v-if="
+                        $page.props.can['direccion-general.create'] ||
+                        $page.props.can['informacion-financiera.create'] ||
+                        $page.props.can['documentos-nominas.create'] ||
+                        $page.props.can['documentos-diseño.create']
                     "
                     @click="showFormPolitic('create')"
                     style="
@@ -340,8 +340,14 @@ const updateHoverState = (isHover) => {
                         </div>
 
                         <div
-                            v-if="$page.props.can['direccion-general.update'] || $page.props.can['informacion-financiera.update']
-                            || $page.props.can['documentos-nominas.update'] || $page.props.can['documentos-diseño.update'] "
+                            v-if="
+                                $page.props.can['direccion-general.update'] ||
+                                $page.props.can[
+                                    'informacion-financiera.update'
+                                ] ||
+                                $page.props.can['documentos-nominas.update'] ||
+                                $page.props.can['documentos-diseño.update']
+                            "
                             style="white-space: normal"
                             class="absolute z-10 w-6 h-6 py-1 bg-white rounded-full shadow -bottom-2 -right-1 hover:bg-gray-500 hover:text-white"
                             @click="showFormPolitic('update', politica)"
