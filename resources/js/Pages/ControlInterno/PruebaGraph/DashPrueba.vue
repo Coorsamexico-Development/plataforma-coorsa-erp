@@ -1233,7 +1233,7 @@ const consultar = async (mes, año) => {
                                                 pro.date === proc.date ||
                                                 Number(
                                                     pro.date.split('-')[1]
-                                                ) == now
+                                                ) === now
                                             "
                                             class="uppercase"
                                         >
