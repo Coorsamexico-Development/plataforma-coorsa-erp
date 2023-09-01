@@ -99,42 +99,19 @@ const form = useForm({
     hijos: props.empleado.hijos,
     clave_bancaria: props.empleado.clave_bancaria,
     numero_cuenta_bancaria: props.empleado.numero_cuenta_bancaria,
-    direccion_estado_id: 
-    props.direccion !== null
-            ? props.direccion.estado_id
-            : "",
-    direccion_municipio_id: 
-    props.direccion !== null
-            ? props.direccion.municipio_id
-            : "",
+    direccion_estado_id:
+        props.direccion !== null ? props.direccion.estado_id : "",
+    direccion_municipio_id:
+        props.direccion !== null ? props.direccion.municipio_id : "",
     direccion_localidade_id:
-    props.direccion !== null
-            ? props.direccion.localidad_id
-            : "",
-    calle: 
-    props.direccion !== null
-            ? props.direccion.calle
-            : "",
-    numero: 
-    props.direccion !== null
-            ? props.direccion.numero
-            : "",
-    colonia: 
-    props.direccion !== null
-            ? props.direccion.colonia
-            : "",
-    codigo_postal: 
-    props.direccion !== null
-            ? props.direccion.codigo_postal
-            : "",
-    lote: 
-    props.direccion !== null
-            ? props.direccion.lote
-            : "",
-    manzana: 
-        props.direccion !== null
-            ? props.direccion.manzana
-            : "",
+        props.direccion !== null ? props.direccion.localidad_id : "",
+    calle: props.direccion !== null ? props.direccion.calle : "",
+    numero: props.direccion !== null ? props.direccion.numero : "",
+    colonia: props.direccion !== null ? props.direccion.colonia : "",
+    codigo_postal:
+        props.direccion !== null ? props.direccion.codigo_postal : "",
+    lote: props.direccion !== null ? props.direccion.lote : "",
+    manzana: props.direccion !== null ? props.direccion.manzana : "",
     cat_tipos_nomina_id: props.empleado.cat_tipos_nomina_id,
     tipos_contrato_id: props.empleado.tipos_contrato_id,
     salario_bruto: props.empleado.salario_bruto,
@@ -164,7 +141,7 @@ const form = useForm({
     foto_empresarial_url: props.empleado.foto_empresarial,
     telefono_empresarial: props.empleado.telefono_empresarial,
     fotografia_url: props.empleado.fotografia,
-    direccion_id: props.empleado.direccion_id
+    direccion_id: props.empleado.direccion_id,
 });
 
 onMounted(() => {
@@ -211,12 +188,9 @@ const cambiar = (id) => {
     menuSeleted.value = id;
 };
 
-
 const canEdit = computed(() => {
-    return usePage().props.value.can['edit-users'];
-})
-
-
+    return usePage().props.value.can["edit-users"];
+});
 </script>
 
 <template>
@@ -235,6 +209,7 @@ const canEdit = computed(() => {
                     v-if="$page.props.can['users.update-finiquito']"
                     @click="cambiar(8)"
                     :active="menuSeleted === 8"
+                    :disabled="!$page.props.can['empleados.finiquito']"
                 >
                     <div
                         class="grid grid-rows-2"
