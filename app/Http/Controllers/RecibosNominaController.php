@@ -34,7 +34,7 @@ class RecibosNominaController extends Controller
         $files = Storage::disk('docs')->files($folder);
 
         foreach ($files as $file) {
-            $noEmpleado = explode('.', explode('_', explode('/', $file)[1])[3])[0];
+            $noEmpleado = explode('_', explode('/', $file)[1])[0];
             $user = User::where('numero_empleado', $noEmpleado)->first();
             $extension = explode('.', explode('_', explode('/', $file)[1])[3])[1];
             if ($extension === 'pdf') {
