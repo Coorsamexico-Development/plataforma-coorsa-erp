@@ -243,6 +243,23 @@ const cambio2 = () => {
                                             :href="
                                                 route(
                                                     'documentos-internos.socios.index',
+                                                    7
+                                                )
+                                            "
+                                        >
+                                            <span class="text-xs">
+                                              Documentos Operaciones
+                                            </span>
+                                        </DropdownLink>
+                                        <DropdownLink
+                                            v-if="
+                                                $page.props.can[
+                                                    'documentos-gerencia.show'
+                                                ]
+                                            "
+                                            :href="
+                                                route(
+                                                    'documentos-internos.socios.index',
                                                     6
                                                 )
                                             "
