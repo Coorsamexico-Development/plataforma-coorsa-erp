@@ -86,7 +86,6 @@ watchEffect(async () => {
 
             <table
                 class="w-full mt-4 border-separate table-auto border-spacing-1"
-                v-if="empleados !== ''"
             >
                 <tr class="text-left text-[#374151]">
                     <th class="px-2 rounded-2xl text-[17px] text-center">
