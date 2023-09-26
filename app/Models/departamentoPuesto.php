@@ -12,7 +12,8 @@ class departamentoPuesto extends Model
     protected $fillable = [
         'departamento_id',
         'puesto_id',
-        'areas_id'
+        'areas_id',
+        'plantilla_auth'
     ];
     public function relaciones()
     {

@@ -27,6 +27,7 @@ const close = () => {
 };
 
 const empleados = ref({ data: [] });
+const search = ref("");
 
 async function loadPage(page) {
     await axios
@@ -68,6 +69,25 @@ watchEffect(async () => {
         }
     }
 });
+
+watchEffect(async () => {
+    if (props.show) {
+        await axios
+            .get(
+                route("dpto.puesto.emp.search", [
+                    props.dpto.id,
+                    props.puesto.id,
+                    search.value,
+                ])
+            )
+            .then(({ data }) => {
+                console.log(data);
+            })
+            .catch((e) => {
+                console.log(e.response);
+            });
+    }
+});
 </script>
 <template>
     <Modal
@@ -84,28 +104,43 @@ watchEffect(async () => {
                 <h2 class="font-bold">{{ puesto.name }}</h2>
             </div>
 
-            <table
-                class="w-full mt-4 border-separate table-auto border-spacing-1"
-            >
-                <tr class="text-left text-[#374151]">
-                    <th class="px-2 rounded-2xl text-[17px] text-center">
-                        No. Empleado
-                    </th>
-                    <th class="px-2 rounded-2xl text-[17px]">Nombre</th>
-                </tr>
-                <tr
-                    v-for="(emp, index) in empleados.data"
-                    :key="index"
-                    class="text-[#404957]"
+            <div class="mt-4">
+                <div>
+                    <input
+                        type="search"
+                        placeholder="Buscador"
+                        class="text-[14px] h-fit px-2 py-1 rounded-2xl w-full border-0 focus:border-0 focus:ring-0"
+                        v-model="search"
+                    />
+                </div>
+
+                <table
+                    class="w-full border-separate table-auto border-spacing-1"
                 >
-                    <td class="px-3 py-[2px] rounded-2xl text-center bg-white">
-                        {{ emp.numero_empleado }}
-                    </td>
-                    <td class="px-3 py-[2px] rounded-2xl normal-case bg-white">
-                        {{ emp.fullname }}
-                    </td>
-                </tr>
-            </table>
+                    <tr class="text-left text-[#374151]">
+                        <th class="px-2 rounded-2xl text-[17px] text-center">
+                            No. Empleado
+                        </th>
+                        <th class="px-2 rounded-2xl text-[17px]">Nombre</th>
+                    </tr>
+                    <tr
+                        v-for="(emp, index) in empleados.data"
+                        :key="index"
+                        class="text-[#404957]"
+                    >
+                        <td
+                            class="px-3 py-[2px] rounded-2xl text-center bg-white"
+                        >
+                            {{ emp.numero_empleado }}
+                        </td>
+                        <td
+                            class="px-3 py-[2px] rounded-2xl normal-case bg-white"
+                        >
+                            {{ emp.fullname }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
             <div class="mt-1">
                 <PaginationAxios :pagination="empleados" @loadPage="loadPage" />

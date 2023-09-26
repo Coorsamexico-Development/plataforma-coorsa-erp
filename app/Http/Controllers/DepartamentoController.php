@@ -75,9 +75,26 @@ class DepartamentoController extends Controller
 
     public function puestosIndex(Ceco $departamento)
     {
-        $departamentoPuestos = $departamento->puestos()->select('puestos.id')->get();
-
-        return $departamentoPuestos->pluck('id');
+        $plantilla = [];
+        $empleados = [];
+        $departamentoPuestos = $departamento->puestos()->select('puestos.id', 'departamento_puestos.plantilla_auth')->get();
+        foreach ($departamentoPuestos as $dp) {
+            $emp = empleados_puesto::select(
+                'puesto_id',
+                DB::raw('COUNT(empleado_id) as plantillaAct')
+            )
+                ->join('users', 'users.id', 'empleado_id')
+                ->groupBy('puesto_id')
+                ->where([['puesto_id', $dp->id], ['departamento_id', $departamento->id], ['users.activo', 1]])
+                ->first();
+            $plantilla[$dp->id] = $dp->plantilla_auth;
+            $empleados[$dp->id] = $emp->plantillaAct;
+        }
+        return response()->json([
+            'dptoPues' => $departamentoPuestos->pluck('id'),
+            'plantilla' => $plantilla,
+            'empleados' => $empleados,
+        ]);
     }
 
     public function puestosUpdate(Ceco $departamento)

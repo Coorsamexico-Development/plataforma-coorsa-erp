@@ -97,6 +97,15 @@
                         </svg>
                     </span>
                 </th>
+
+                <th
+                    scope="col"
+                    class="w-1/6 text-xs font-semibold tracking-wider text-gray-500 uppercase"
+                    v-if="departamento.id != -1"
+                >
+                    Plantilla Autorizada
+                </th>
+
                 <th
                     scope="col"
                     class="w-1/6 text-xs font-semibold tracking-wider text-gray-500 uppercase"
@@ -217,6 +226,24 @@
                     >
                         {{ puesto.name }}
                     </td>
+
+                    <td
+                        class="flex justify-center px-1 py-2 text-sm text-center text-gray-500 uppercase break-all"
+                        v-if="departamento.id != -1"
+                    >
+                        <div v-if="puestosDepartamento.includes(puesto.id)">
+                            <span>{{ plantAct[puesto.id] }} / </span
+                            ><input
+                                type="text"
+                                class="p-0 text-sm border-0 w-[25px] focus:ring-0 ml-[4px]"
+                                onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
+                                v-model="plantAuth[puesto.id]"
+                                @change="
+                                    updatePlantilla($event.target.value, puesto)
+                                "
+                            />
+                        </div>
+                    </td>
                     <td
                         class="px-1 py-2 text-sm text-center text-gray-500 uppercase break-all"
                     >
@@ -299,7 +326,7 @@
 </template>
 <script>
 import { ref } from "vue";
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link, useForm } from "@inertiajs/inertia-vue3";
 import { pickBy, throttle } from "lodash";
 import InfoButton from "@/Components/Buttoninfo.vue";
 import DataTable from "@/Components/DataTable.vue";
@@ -347,11 +374,22 @@ export default {
         const empleado = ref();
         const puesto = ref();
         const empPues = ref(false);
+        const plantAuth = ref([]);
+        const plantAct = ref([]);
+        const plantAuthF = useForm({
+            puesto: "",
+            departamento: "",
+            plantilla: 0,
+        });
+
         return {
             errorPuesto,
             empleado,
             puesto,
             empPues,
+            plantAuth,
+            plantAuthF,
+            plantAct,
         };
     },
     data() {
@@ -410,8 +448,10 @@ export default {
         async getPuestosDepartemento() {
             await axios
                 .get(route("departamento.puestos.index", this.departamento.id))
-                .then((response) => {
-                    this.puestosDepartamento = response.data;
+                .then(({ data }) => {
+                    this.puestosDepartamento = data.dptoPues;
+                    this.plantAuth = data.plantilla;
+                    this.plantAct = data.empleados;
                 })
                 .catch((error) => {
                     if (error.response) {
@@ -543,6 +583,15 @@ export default {
         modalEmp(puestoId) {
             this.empPues = true;
             this.puesto = puestoId;
+        },
+        updatePlantilla(e, puesto) {
+            this.plantAuthF.puesto = puesto.id;
+            this.plantAuthF.plantilla = e;
+            this.plantAuthF.departamento = this.departamento.id;
+            axios
+                .post(route("emp.puesto.plantilla"), this.plantAuthF, {})
+                .then(() => this.getPuestosDepartemento())
+                .catch((e) => console.log(e.response));
         },
     },
     watch: {

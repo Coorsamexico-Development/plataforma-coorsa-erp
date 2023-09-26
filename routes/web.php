@@ -148,6 +148,8 @@ Route::middleware([
         ->middleware('can:departamentos.update');
     Route::apiResource('/departamentos', DepartamentoController::class)->except('destroy');
     Route::get('/{departamento}/{puesto}/empleados', [PuestoEmpleadoController::class, 'search'])->name('dpto.puesto.emp');
+    Route::get('/{departamento}/{puesto}/{empleados}/search', [PuestoEmpleadoController::class, 'searchType'])->name('dpto.puesto.emp.search');
+    Route::post('/empleados/puesto/plantilla', [PuestoEmpleadoController::class, 'update'])->name('emp.puesto.plantilla');
 
     Route::post('ubicaciones', [UbicacionController::class, 'store'])->name('ubicaciones.store')->middleware('can:ubicaciones.create');
     Route::match(['put', 'patch'], 'ubicaciones/{ubicacion}', [UbicacionController::class, 'update'])->name('ubicaciones.update')->middleware('can:ubicaciones.update');
