@@ -201,7 +201,10 @@
                         </danger-button>
                         <info-button
                             class="relative w-5 h-5 px-0"
-                            v-if="puestosDepartamento.includes(puesto.id)"
+                            v-if="
+                                puestosDepartamento.includes(puesto.id) &&
+                                $page.props.can['puestos.empleados']
+                            "
                             @click="modalEmp(puesto)"
                         >
                             <Eye
