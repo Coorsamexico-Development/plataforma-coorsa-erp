@@ -17,6 +17,7 @@ use App\Http\Controllers\PlantillasAutorizadaController;
 use App\Http\Controllers\PoliticController;
 use App\Http\Controllers\PruebaGraphController;
 use App\Http\Controllers\PuestoController;
+use App\Http\Controllers\PuestoEmpleadoController;
 use App\Http\Controllers\RecibosNominaController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\RoleController;
@@ -146,6 +147,7 @@ Route::middleware([
     Route::put('/departamentos/{departamento}/puestos', [DepartamentoController::class, 'puestosUpdate'])->name('departamento.puestos.update')
         ->middleware('can:departamentos.update');
     Route::apiResource('/departamentos', DepartamentoController::class)->except('destroy');
+    Route::get('/{departamento}/{puesto}/empleados', [PuestoEmpleadoController::class, 'search'])->name('dpto.puesto.emp');
 
     Route::post('ubicaciones', [UbicacionController::class, 'store'])->name('ubicaciones.store')->middleware('can:ubicaciones.create');
     Route::match(['put', 'patch'], 'ubicaciones/{ubicacion}', [UbicacionController::class, 'update'])->name('ubicaciones.update')->middleware('can:ubicaciones.update');

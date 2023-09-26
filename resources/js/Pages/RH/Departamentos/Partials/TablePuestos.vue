@@ -199,6 +199,15 @@
                                 />
                             </svg>
                         </danger-button>
+                        <info-button
+                            class="relative w-5 h-5 px-0"
+                            v-if="puestosDepartamento.includes(puesto.id)"
+                            @click="modalEmp(puesto)"
+                        >
+                            <Eye
+                                class="absolute z-10 w-6 h-6 py-1 text-white left-1"
+                            />
+                        </info-button>
                     </td>
                     <td
                         class="px-1 py-2 text-sm text-left text-gray-500 uppercase break-all"
@@ -277,6 +286,12 @@
             :empleado="empleado"
             :puesto="puesto"
         />
+        <ModalEmpPues
+            :puesto="puesto"
+            :dpto="departamento"
+            :show="empPues"
+            @close="empPues = false"
+        />
     </div>
 </template>
 <script>
@@ -297,6 +312,8 @@ import Titlecomponent from "@/Components/Title.vue";
 import PaginationAxios from "@/Components/PaginationAxios.vue";
 import axios from "axios";
 import ErrorPuesto from "../Modal/ErrorPuesto.vue";
+import Eye from "@/Iconos/Eye.vue";
+import ModalEmpPues from "../Modal/ModalEmp-Pues.vue";
 
 export default {
     props: {
@@ -319,15 +336,19 @@ export default {
         Titlecomponent,
         PaginationAxios,
         ErrorPuesto,
+        Eye,
+        ModalEmpPues,
     },
     setup() {
         const errorPuesto = ref(false);
         const empleado = ref();
         const puesto = ref();
+        const empPues = ref(false);
         return {
             errorPuesto,
             empleado,
             puesto,
+            empPues,
         };
     },
     data() {
@@ -336,6 +357,7 @@ export default {
                 search: null,
                 field: null,
                 direction: null,
+                ceco: "",
             },
             puestos: {
                 data: [],
@@ -471,7 +493,6 @@ export default {
                 });
         },
         sort(field) {
-            console.log(field);
             this.filters.field = field;
             if (field !== "") {
                 this.filters.ceco = "";
@@ -515,6 +536,10 @@ export default {
                         this.closeModalDelete();
                     }
                 });
+        },
+        modalEmp(puestoId) {
+            this.empPues = true;
+            this.puesto = puestoId;
         },
     },
     watch: {
