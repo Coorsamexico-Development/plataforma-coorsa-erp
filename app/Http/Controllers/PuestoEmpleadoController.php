@@ -17,7 +17,7 @@ class PuestoEmpleadoController extends Controller
         $empleados = User::select('users.*', DB::raw('CONCAT(users.name," ",users.apellido_paterno," ", users.apellido_materno) as fullname'))
             ->join('empleados_puestos as ep', 'ep.empleado_id', 'users.id')
             ->where([['ep.puesto_id', $puesto->id], ['ep.departamento_id', $dpto->id], ['users.activo', 1]])
-            ->get();
-        return response()->json($empleados);
+            ->orderBy('fullname', 'asc');
+        return response()->json($empleados->paginate(20));
     }
 }

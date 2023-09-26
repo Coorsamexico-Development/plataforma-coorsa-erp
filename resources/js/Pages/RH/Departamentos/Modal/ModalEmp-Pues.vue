@@ -1,5 +1,6 @@
 <script setup>
 import Modal from "@/Components/Modal.vue";
+import PaginationAxios from "@/Components/PaginationAxios.vue";
 import axios from "axios";
 import { watchEffect, ref } from "vue";
 
@@ -25,12 +26,36 @@ const close = () => {
     emit("close");
 };
 
-const empleados = ref();
+const empleados = ref({ data: [] });
 
-watchEffect(() => {
+async function loadPage(page) {
+    await axios
+        .get(route("dpto.puesto.emp", [props.dpto.id, props.puesto.id]), {
+            params: {
+                page: page,
+            },
+        })
+        .then(({ data }) => {
+            empleados.value = data;
+        })
+        .catch((error) => {
+            if (error.response) {
+                let messageError = "";
+                const messageServer = error.response.data.message;
+                if (error.response.status != 500) {
+                    messageError = messageServer;
+                } else {
+                    messageError = "Internal Server Error";
+                }
+                swal("Error PAGINATE PUESTO", messageError, "error");
+            }
+        });
+}
+
+watchEffect(async () => {
     if (props.show) {
         try {
-            axios
+            await axios
                 .get(route("dpto.puesto.emp", [props.dpto.id, props.puesto.id]))
                 .then(({ data }) => {
                     empleados.value = data;
@@ -61,6 +86,7 @@ watchEffect(() => {
 
             <table
                 class="w-full mt-4 border-separate table-auto border-spacing-1"
+                v-if="empleados !== ''"
             >
                 <tr class="text-left text-[#374151]">
                     <th class="px-2 rounded-2xl text-[17px] text-center">
@@ -68,7 +94,11 @@ watchEffect(() => {
                     </th>
                     <th class="px-2 rounded-2xl text-[17px]">Nombre</th>
                 </tr>
-                <tr v-for="emp in empleados" :key="id" class="text-[#404957]">
+                <tr
+                    v-for="(emp, index) in empleados.data"
+                    :key="index"
+                    class="text-[#404957]"
+                >
                     <td class="px-3 py-[2px] rounded-2xl text-center bg-white">
                         {{ emp.numero_empleado }}
                     </td>
@@ -77,6 +107,10 @@ watchEffect(() => {
                     </td>
                 </tr>
             </table>
+
+            <div class="mt-1">
+                <PaginationAxios :pagination="empleados" @loadPage="loadPage" />
+            </div>
         </div>
     </Modal>
 </template>

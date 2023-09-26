@@ -19,7 +19,7 @@
         <template #table-header>
             <th
                 scope="col"
-                class="w-1/6 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase"
+                class="w-1/6 text-xs font-semibold tracking-wider text-center text-gray-500 uppercase"
             >
                 ACCION
             </th>
