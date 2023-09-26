@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ceco;
 use App\Models\empleados_puesto;
 use App\Models\puesto;
 use Illuminate\Http\Request;
@@ -24,7 +25,17 @@ class PuestoController extends Controller
 
         if (request()->has(['field', 'direction'])) {
             $puestos->orderBy(request('field'), request('direction'));
-        }
+        } else if (request()->has('ceco')) {
+            $ceco = request('ceco');
+            $ceco = Ceco::where('id', $ceco['id'])->first();
+            $puestos = puesto::select('puestos.id', 'puestos.name', 'puestos.activo')
+                ->join('departamento_puestos as dePu', 'dePu.puesto_id', 'puestos.id')
+                ->where('dePu.departamento_id', $ceco->id)
+                ->orderBy('activo', 'desc')
+                ->orderBy('puestos.name', 'asc');
+        } else
+            $puestos->orderBy('activo', 'desc')->orderBy('name', 'asc');
+
         $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
         return response()->json([
             'puestos' => $puestos->paginate(20),

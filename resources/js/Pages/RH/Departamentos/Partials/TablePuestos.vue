@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="select-none">
         <data-table>
             <template #section-header>
                 <div
@@ -43,26 +43,10 @@
                     <span
                         class="inline-flex justify-between w-full px-6 py-3"
                         @click="sort('')"
-                        >Acciones
+                    >
+                        Acciones
                         <svg
-                            v-if="
-                                filters.field === 'nombre' &&
-                                filters.direction === 'asc'
-                            "
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="w-4 h-4"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                        >
-                            <path
-                                d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z"
-                            />
-                        </svg>
-                        <svg
-                            v-if="
-                                filters.field === 'activo' &&
-                                filters.direction === 'desc'
-                            "
+                            v-if="filters.field === '' && filters.ceco != ''"
                             xmlns="http://www.w3.org/2000/svg"
                             class="w-4 h-4"
                             viewBox="0 0 20 20"
@@ -81,11 +65,11 @@
                 >
                     <span
                         class="inline-flex justify-between w-full px-6 py-3"
-                        @click="sort('nombre')"
+                        @click="sort('name')"
                         >Nombre
                         <svg
                             v-if="
-                                filters.field === 'nombre' &&
+                                filters.field === 'name' &&
                                 filters.direction === 'asc'
                             "
                             xmlns="http://www.w3.org/2000/svg"
@@ -99,7 +83,7 @@
                         </svg>
                         <svg
                             v-if="
-                                filters.field === 'nombre' &&
+                                filters.field === 'name' &&
                                 filters.direction === 'desc'
                             "
                             xmlns="http://www.w3.org/2000/svg"
@@ -153,7 +137,11 @@
                 </th>
             </template>
             <template #table-body>
-                <tr v-for="(puesto, index) in puestos.data" :key="index">
+                <tr
+                    v-for="(puesto, index) in puestos.data"
+                    :key="index"
+                    class="select-none"
+                >
                     <td class="flex gap-1 px-2 py-2 text-sm">
                         <input
                             v-if="$page.props.can['departamentos.update']"
@@ -398,7 +386,6 @@ export default {
             await axios
                 .get(route("departamento.puestos.index", this.departamento.id))
                 .then((response) => {
-                    // console.log(response.data);
                     this.puestosDepartamento = response.data;
                 })
                 .catch((error) => {
@@ -484,9 +471,16 @@ export default {
                 });
         },
         sort(field) {
+            console.log(field);
             this.filters.field = field;
-            this.filters.direction =
-                this.filters.direction === "asc" ? "desc" : "asc";
+            if (field !== "") {
+                this.filters.ceco = "";
+                this.filters.direction =
+                    this.filters.direction === "asc" ? "desc" : "asc";
+            } else if (this.filters.ceco === "") {
+                this.filters.direction = "";
+                this.filters.ceco = this.departamento;
+            } else this.filters.ceco = "";
         },
         showModalPuesto() {
             this.typeForm = "create";

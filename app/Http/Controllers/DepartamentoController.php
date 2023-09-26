@@ -43,7 +43,6 @@ class DepartamentoController extends Controller
                     ->on('users.activo', '=', DB::raw(1));
             })
             ->groupby('cecos.id')
-            ->orderBy('cecos.nombre')
             ->where('cecos.activo_erp', 1);
 
         $ubicaciones = Ubicacion::select('ubicaciones.id', 'ubicaciones.name');
@@ -54,7 +53,8 @@ class DepartamentoController extends Controller
 
         if (request()->has(['field', 'direction'])) {
             $departamentos->orderBy(request('field'), request('direction'));
-        }
+        } else
+            $departamentos->orderBy('cecos.nombre', 'asc');
         $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
 
         return Inertia::render('RH/Departamentos/Departamento.Index', [
