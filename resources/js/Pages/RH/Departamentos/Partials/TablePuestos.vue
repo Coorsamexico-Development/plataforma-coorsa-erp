@@ -454,6 +454,7 @@ export default {
                     this.plantAct = data.empleados;
                 })
                 .catch((error) => {
+                    console.log(error.response);
                     if (error.response) {
                         let messageError = "";
                         const messageServer = error.response.data.message;

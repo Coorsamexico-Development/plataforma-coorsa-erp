@@ -87,8 +87,15 @@ class DepartamentoController extends Controller
                 ->groupBy('puesto_id')
                 ->where([['puesto_id', $dp->id], ['departamento_id', $departamento->id], ['users.activo', 1]])
                 ->first();
-            $plantilla[$dp->id] = $dp->plantilla_auth;
-            $empleados[$dp->id] = $emp->plantillaAct;
+            if ($dp->plantilla_auth != null)
+                $plantilla[$dp->id] = $dp->plantilla_auth;
+            else
+                $plantilla[$dp->id] = 0;
+
+            if ($emp)
+                $empleados[$dp->id] = $emp->plantillaAct;
+            else
+                $empleados[$dp->id] = 0;
         }
         return response()->json([
             'dptoPues' => $departamentoPuestos->pluck('id'),
