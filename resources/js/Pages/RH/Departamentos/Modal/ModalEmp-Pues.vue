@@ -74,17 +74,17 @@ watchEffect(async () => {
     if (props.show) {
         await axios
             .get(
-                route("dpto.puesto.emp.search", [
+                route("dpto.puesto.search", [
                     props.dpto.id,
                     props.puesto.id,
                     search.value,
                 ])
             )
             .then(({ data }) => {
-                console.log(data);
+                empleados.value = data;
             })
             .catch((e) => {
-                console.log(e.response);
+                loadPage();
             });
     }
 });
