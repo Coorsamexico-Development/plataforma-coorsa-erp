@@ -3,6 +3,8 @@ import Modal from "@/Components/Modal.vue";
 import PaginationAxios from "@/Components/PaginationAxios.vue";
 import axios from "axios";
 import { watchEffect, ref } from "vue";
+import Eye from "@/Iconos/Eye.vue";
+import { Inertia } from "@inertiajs/inertia";
 
 const props = defineProps({
     show: {
@@ -70,9 +72,9 @@ watchEffect(async () => {
     }
 });
 
-watchEffect(async () => {
+function buscar() {
     if (props.show) {
-        await axios
+        axios
             .get(
                 route("dpto.puesto.search", [
                     props.dpto.id,
@@ -87,12 +89,12 @@ watchEffect(async () => {
                 loadPage();
             });
     }
-});
+}
 </script>
 <template>
     <Modal
         :show="show"
-        :max-width="maxWidth"
+        :max-width="'3xl'"
         :closeable="closeable"
         @close="close"
     >
@@ -111,17 +113,25 @@ watchEffect(async () => {
                         placeholder="Buscador"
                         class="text-[14px] h-fit px-2 py-1 rounded-2xl w-full border-0 focus:border-0 focus:ring-0"
                         v-model="search"
+                        @input="buscar()"
                     />
                 </div>
 
                 <table
-                    class="w-full border-separate table-auto border-spacing-1"
+                    class="w-full mt-2 border-separate table-auto border-spacing-1"
                 >
                     <tr class="text-left text-[#374151]">
-                        <th class="px-2 rounded-2xl text-[17px] text-center">
+                        <th
+                            class="px-2 rounded-2xl text-[17px] text-center w-3/12"
+                        >
                             No. Empleado
                         </th>
-                        <th class="px-2 rounded-2xl text-[17px]">Nombre</th>
+                        <th class="px-2 rounded-2xl text-[17px] w-8/12">
+                            Nombre
+                        </th>
+                        <th class="px-2 rounded-2xl text-[17px] w-1/12">
+                            Expediente
+                        </th>
                     </tr>
                     <tr
                         v-for="(emp, index) in empleados.data"
@@ -137,6 +147,18 @@ watchEffect(async () => {
                             class="px-3 py-[2px] rounded-2xl normal-case bg-white"
                         >
                             {{ emp.fullname }}
+                        </td>
+                        <td
+                            class="px-3 py-[2px] rounded-2xl normal-case grid place-content-center"
+                        >
+                            <a
+                                class="grid px-2 text-white bg-blue-500 hover:cursor-pointer hover:scale-110 rounded-2xl place-content-center w-fit"
+                                :href="route('empleado.edit', emp.id)"
+                            >
+                                <Eye
+                                    class="w-[22px] h-[22px] transition-all duration-200"
+                                />
+                            </a>
                         </td>
                     </tr>
                 </table>
