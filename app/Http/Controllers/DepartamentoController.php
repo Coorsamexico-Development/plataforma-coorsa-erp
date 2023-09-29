@@ -147,4 +147,13 @@ class DepartamentoController extends Controller
             return response()->json($e->getMessage(), 500);
         }
     }
+
+    public function cambiosPuestos()
+    {
+        $dps = departamentoPuesto::select()->get();
+        foreach ($dps as $dp) {
+            $emPus = empleados_puesto::where([['departamento_id', $dp->departamento_id], ['puesto_id', $dp->puesto_id]])->get();
+            foreach ($emPus as $emPu) $emPu->update(['dpto_puesto_id' => $dp->id]);
+        }
+    }
 }

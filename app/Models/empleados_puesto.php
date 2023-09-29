@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class empleados_puesto extends Model
 {
     use HasFactory;
-    protected $fillable = 
-    ['departamento_id',
-     'puesto_id',
-     'empleado_id'
+    protected $fillable =
+    [
+        'departamento_id',
+        'puesto_id',
+        'empleado_id',
+        'dpto_puesto_id'
     ];
 }

@@ -241,3 +241,5 @@ Route::controller(AreaController::class)->group(function () {
 Route::controller(PruebaGraphController::class)->group(function () {
     Route::get('/pruebaGrpah', 'index')->name('graph.prueba');
 });
+
+Route::get('/cambios/puestos', [DepartamentoController::class, 'cambiosPuestos']);

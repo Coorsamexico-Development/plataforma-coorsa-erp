@@ -4,6 +4,7 @@
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
                 Lista de Departamentos
             </h2>
+            <button>Cambios</button>
         </template>
         <div class="py-6">
             <div class="mx-auto sm:px-3 lg:px-8">
