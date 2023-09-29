@@ -30,7 +30,7 @@ class PuestoController extends Controller
             $ceco = Ceco::where('id', $ceco['id'])->first();
             $puestos = puesto::select('puestos.id', 'puestos.name', 'puestos.activo')
                 ->join('departamento_puestos as dePu', 'dePu.puesto_id', 'puestos.id')
-                ->where('dePu.departamento_id', $ceco->id)
+                ->where([['dePu.departamento_id', $ceco->id], ['dePu.activo', 1]])
                 ->orderBy('activo', 'desc')
                 ->orderBy('puestos.name', 'asc');
         } else

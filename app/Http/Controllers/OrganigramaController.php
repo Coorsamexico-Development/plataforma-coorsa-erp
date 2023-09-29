@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Area;
 use App\Models\Areas_padres_hijos;
-use App\Models\Ceco;
 use App\Models\departamentoPuesto;
 use App\Models\Padres_hijos;
 use Inertia\Inertia;
@@ -26,8 +25,8 @@ class OrganigramaController extends Controller
                 'Ce.Nombre as Ceco',
                 'Ce.descripcion as CecoName',
             )
-            ->where('DP.areas_id', null)
-            ->orWhere('DP.areas_id', 1)
+            ->where([['DP.areas_id', null], ['DP.activo', 1]])
+            ->orWhere([['DP.areas_id', 1], ['DP.activo', 1]])
             ->orderBy('Ceco')
             ->get();
 
@@ -42,7 +41,7 @@ class OrganigramaController extends Controller
                     'Ce.Nombre as Ceco',
                     'Ce.descripcion as CecoName',
                 )
-                ->where('DP.areas_id', $area->id)
+                ->where([['DP.areas_id', $area->id], ['DP.activo', 1]])
                 ->orderBy('Ceco')
                 ->get();
         }
@@ -63,7 +62,7 @@ class OrganigramaController extends Controller
                             'Ce.Nombre as Ceco',
                             'Ce.descripcion as CecoName',
                         )
-                        ->where('DP.id', $r->departamento_puestos_id_padre)
+                        ->where([['DP.id', $r->departamento_puestos_id_padre], ['DP.activo', 1]])
                         ->orderBy('Ceco')
                         ->first();
 
@@ -77,7 +76,7 @@ class OrganigramaController extends Controller
                             'Ce.Nombre as Ceco',
                             'Ce.descripcion as CecoName',
                         )
-                        ->where('DP.id', $r->departamento_puestos_id_hijo)
+                        ->where([['DP.id', $r->departamento_puestos_id_hijo], ['DP.activo', 1]])
                         ->orderBy('Ceco')
                         ->first();
 
@@ -108,7 +107,7 @@ class OrganigramaController extends Controller
                     'DP.*',
                 )
                     ->join('departamento_puestos as DP', 'DP.areas_id', 'areas.id')
-                    ->where([['areas.nombre', $b->nombre]])
+                    ->where([['areas.nombre', $b->nombre], ['DP.activo', 1]])
                     ->get();
                 if (sizeof($ph) != 0) {
                     foreach ($ph as $p) {
@@ -125,7 +124,7 @@ class OrganigramaController extends Controller
                             ->join('departamento_puestos as DP2', 'DP2.id', 'padres_hijos.departamento_puestos_id_hijo')
                             ->join('cecos as c2', 'c2.id', 'DP2.departamento_id')
                             ->join('puestos as P2', 'P2.id', 'DP2.puesto_id')
-                            ->where([['departamento_puestos_id_hijo', $p['id']], ['padres_hijos.activo', 2]])
+                            ->where([['departamento_puestos_id_hijo', $p['id']], ['padres_hijos.activo', 2], ['DP.activo', 1], ['DP2.activo', 1]])
                             ->first();
                         if ($h != null) {
                             $hijo = $h;
@@ -207,7 +206,7 @@ class OrganigramaController extends Controller
                     'P.name as Puesto',
                     'Ce.Nombre as Ceco',
                 )
-                ->where([['P.name', $nodoF[0]], ['Ce.nombre', $nodoF[1]]])
+                ->where([['P.name', $nodoF[0]], ['Ce.nombre', $nodoF[1]], ['DP.activo', 1]])
                 ->first());
         }
 
@@ -298,7 +297,7 @@ class OrganigramaController extends Controller
                         'P.name as Puesto',
                         'Ce.Nombre as Ceco',
                     )
-                    ->where([['P.name', $nodoF[0]], ['Ce.nombre', $nodoF[1]]])
+                    ->where([['P.name', $nodoF[0]], ['Ce.nombre', $nodoF[1]], ['DP.activo', 1]])
                     ->first());
 
                 $relBef = Padres_hijos::where([['departamento_puestos_id_padre', $nodoA['Nodeid']], ['departamento_puestos_id_hijo', $nodoD['Nodeid']]])->first();
@@ -310,7 +309,7 @@ class OrganigramaController extends Controller
         } else {
             $padre = null;
             $DP = DB::table('departamento_puestos as DP')
-                ->where([['DP.areas_id', $area['idB']]])
+                ->where([['DP.areas_id', $area['idB']], ['DP.activo', 1]])
                 ->get();
             foreach ($DP as $p) {
                 $rel = Padres_hijos::where([['departamento_puestos_id_hijo', $p->id], ['activo', 1]])
@@ -398,7 +397,7 @@ class OrganigramaController extends Controller
                 'DP.*',
             )
                 ->join('departamento_puestos as DP', 'DP.areas_id', 'areas.id')
-                ->where([['areas.nombre', $area->nodoB]])
+                ->where([['areas.nombre', $area->nodoB], ['DP.activo', 1]])
                 ->get();
 
             foreach ($ph as $p) {

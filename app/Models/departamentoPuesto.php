@@ -13,7 +13,8 @@ class departamentoPuesto extends Model
         'departamento_id',
         'puesto_id',
         'areas_id',
-        'plantilla_auth'
+        'plantilla_auth',
+        'activo'
     ];
     public function relaciones()
     {

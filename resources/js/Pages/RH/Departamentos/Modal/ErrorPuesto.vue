@@ -1,7 +1,5 @@
 <script setup>
 import DialogModal from "@/Components/DialogModal.vue";
-import Anime from "animejs/lib/anime.es.js";
-import { onUpdated } from "vue";
 
 const emit = defineEmits(["close"]);
 
@@ -25,14 +23,6 @@ defineProps({
 const close = () => {
     emit("close");
 };
-
-/* onUpdated(() => {
-    Anime({
-        targets: "span .id",
-        delay: 500,
-        backgroundColor: "#F0F055",
-    });
-}); */
 </script>
 
 <template>

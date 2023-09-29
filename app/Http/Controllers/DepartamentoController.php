@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CecoRequest;
+use App\Models\Area;
 use App\Models\Ceco;
 use App\Models\Cliente;
+use App\Models\departamentoPuesto;
 use App\Models\empleados_puesto;
 use App\Models\Ubicacion;
 use Illuminate\Http\Request;
@@ -18,6 +20,7 @@ class DepartamentoController extends Controller
     public function listPuestoDep(Ceco $departamento)
     {
         $puestos = $departamento->puestos()
+            ->where('departamento_puestos.activo', 1)
             ->get();
 
         return $puestos;
@@ -77,7 +80,7 @@ class DepartamentoController extends Controller
     {
         $plantilla = [];
         $empleados = [];
-        $departamentoPuestos = $departamento->puestos()->select('puestos.id', 'departamento_puestos.plantilla_auth')->get();
+        $departamentoPuestos = $departamento->puestos()->select('puestos.id', 'departamento_puestos.plantilla_auth')->where('departamento_puestos.activo', 1)->get();
         foreach ($departamentoPuestos as $dp) {
             $emp = empleados_puesto::select(
                 'puesto_id',
@@ -110,14 +113,34 @@ class DepartamentoController extends Controller
             'checked' => ['required', 'boolean'],
             'puesto_id' => ['required', 'exists:puestos,id']
         ]);
+        $area = Area::select(
+            'areas.nombre',
+            'puestos.name as puesto',
+            DB::raw('CONCAT(cecos.nombre, " - ", cecos.descripcion) as ceco'),
+        )
+            ->join('departamento_puestos as dp', 'dp.areas_id', 'areas.id')
+            ->join('cecos', 'cecos.id', 'dp.departamento_id')
+            ->join('puestos', 'puestos.id', 'dp.puesto_id')
+            ->leftJoin('padres_hijos as ph', 'ph.departamento_puestos_id_padre', 'dp.id')
+            ->leftJoin('padres_hijos as hp', 'hp.departamento_puestos_id_padre', 'dp.id')
+            ->where([['dp.departamento_id', $departamento->id], ['dp.puesto_id', request('puesto_id')], ['dp.activo', 1], ['ph.activo', 1], ['hp.activo', 1]]);
         try {
-            DB::beginTransaction();
             if (request('checked')) {
-                $departamento->puestos()->attach(request('puesto_id'));
-            } else {
-                $departamento->puestos()->detach(request('puesto_id'));
+                $dp = departamentoPuesto::where([['departamento_id', $departamento->id], ['puesto_id', request('puesto_id')], ['activo', 0]]);
+                if ($dp->exists()) {
+                    $dp = $dp->first();
+                    $dp->update(['activo' => 1]);
+                } else {
+                    DB::beginTransaction();
+                    $departamento->puestos()->attach(request('puesto_id'));
+                    DB::commit();
+                }
+            } else if ($area->exists()) return response()->json($area->first());
+            else {
+                $dp = departamentoPuesto::where([['departamento_id', $departamento->id], ['puesto_id', request('puesto_id')], ['activo', 1]])->first();
+                $dp->update(['activo' => 0]);
+                /* $departamento->puestos()->detach(request('puesto_id')); */
             }
-            DB::commit();
             return "ok";
         } catch (QueryException $e) {
             DB::rollback();

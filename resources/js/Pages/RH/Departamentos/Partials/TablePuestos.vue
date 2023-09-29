@@ -316,6 +316,11 @@
             :empleado="empleado"
             :puesto="puesto"
         />
+        <ErrorOrganigrama
+            :show="errorOrg"
+            @close="errorOrg = false"
+            :area="area"
+        />
         <ModalEmpPues
             :puesto="puesto"
             :dpto="departamento"
@@ -342,6 +347,7 @@ import Titlecomponent from "@/Components/Title.vue";
 import PaginationAxios from "@/Components/PaginationAxios.vue";
 import axios from "axios";
 import ErrorPuesto from "../Modal/ErrorPuesto.vue";
+import ErrorOrganigrama from "../Modal/ErrorOrganigrama.vue";
 import Eye from "@/Iconos/Eye.vue";
 import ModalEmpPues from "../Modal/ModalEmp-Pues.vue";
 
@@ -368,9 +374,11 @@ export default {
         ErrorPuesto,
         Eye,
         ModalEmpPues,
+        ErrorOrganigrama,
     },
     setup() {
         const errorPuesto = ref(false);
+        const errorOrg = ref(false);
         const empleado = ref();
         const puesto = ref();
         const empPues = ref(false);
@@ -381,6 +389,7 @@ export default {
             departamento: "",
             plantilla: 0,
         });
+        const area = ref("");
 
         return {
             errorPuesto,
@@ -390,6 +399,8 @@ export default {
             plantAuth,
             plantAuthF,
             plantAct,
+            errorOrg,
+            area,
         };
     },
     data() {
@@ -428,7 +439,16 @@ export default {
                         checked,
                     }
                 )
+                .then(({ data }) => {
+                    console.log(data);
+                    if (data != "ok") {
+                        this.errorOrg = true;
+                        this.area = data;
+                    }
+                    this.getPuestosDepartemento();
+                })
                 .catch((error) => {
+                    console.log(error.response);
                     if (error.response) {
                         let messageError = "";
                         const messageServer = error.response.data.message;
