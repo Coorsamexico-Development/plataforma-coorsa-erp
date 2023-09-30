@@ -10,6 +10,7 @@ use App\Models\CatTipoDocumento;
 use App\Models\CatTipoDocumeto;
 use App\Models\catTipoSangre;
 use App\Models\Ceco;
+use App\Models\departamentoPuesto;
 use App\Models\direccione;
 use App\Models\empleados_puesto;
 use App\Models\Escolaridad;
@@ -56,9 +57,11 @@ class EmpleadoController extends Controller
                     'expedientes.empleado_id'
                 )
                     ->join('cat_tipo_documentos', 'expedientes.cat_tipos_documento_id', '=', 'cat_tipo_documentos.id');
-            }])->leftjoin('empleados_puestos', 'empleados_puestos.empleado_id', 'users.id')
-            ->leftjoin('cecos', 'empleados_puestos.departamento_id', 'cecos.id')
-            ->leftjoin('puestos', 'empleados_puestos.puesto_id', 'puestos.id');
+            }])
+            ->leftjoin('empleados_puestos', 'empleados_puestos.empleado_id', 'users.id')
+            ->leftJoin('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
+            ->leftjoin('cecos', 'dp.departamento_id', 'cecos.id')
+            ->leftjoin('puestos', 'dp.puesto_id', 'puestos.id');
 
 
 
@@ -366,7 +369,8 @@ class EmpleadoController extends Controller
             ->firstWhere('users.direccion_id', '=', $empleado_direccion_id);
 
 
-        $dept_puesto = empleados_puesto::select('puesto_id', 'departamento_id')
+        $dept_puesto = empleados_puesto::select('dp.puesto_id', 'dp.departamento_id')
+            ->leftJoin('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
             ->where('empleado_id', '=', $id)
             ->firstWhere('empleados_puestos.activo', '=', 1);
 
@@ -434,7 +438,7 @@ class EmpleadoController extends Controller
 
     public function update(Request $request, User $empleado)
     {
-/*
+        /*
         $request->validate([ //validaciones
             'correo_electronico' => 'required',
             'numero_empleado' => 'required|unique:users,numero_empleado,' . $empleado->id . ',id',
@@ -487,7 +491,7 @@ class EmpleadoController extends Controller
             'rol_id' => 'required',
         ]);
     */
-    
+
 
         $urlFoto = '';
         $urlFotografiaEmpresarial = '';
@@ -516,7 +520,7 @@ class EmpleadoController extends Controller
             $urlFotografiaEmpresarial = $empleado->foto_empresarial;
         }
         // Guarda nueva direccion si el campo no existe
-        $direccion='';
+        $direccion = '';
         if ($request['direccion_id'] == null) {
             //creamos la direccion
             $newDireccion = direccione::create([
@@ -535,10 +539,10 @@ class EmpleadoController extends Controller
         } else //sino actualizamos el existente
         {
             $updateDirection  = direccione::select('direcciones.*')
-            ->where('id', $request['direccion_id'])
-            ->first();
-            
-           $updateDirection->update([
+                ->where('id', $request['direccion_id'])
+                ->first();
+
+            $updateDirection->update([
                 "direccion_localidade_id" => $request['direccion_localidade_id'],
                 "calle" => $request['calle'],
                 "numero" => $request['numero'],
@@ -549,7 +553,7 @@ class EmpleadoController extends Controller
             ]);
 
 
-             $direccion = $updateDirection->id;
+            $direccion = $updateDirection->id;
         }
 
 
@@ -605,6 +609,7 @@ class EmpleadoController extends Controller
         }
 
         if (!empty($request->puesto_id) && !empty($request->departamento_id)) {
+            $dp = departamentoPuesto::where([['departamento_id', $request['departamento_id']], ['puesto_id', $request['puesto_id']], ['activo', 1]])->first();
             $exist_empleados_puesto = empleados_puesto::select('*')
                 ->where('empleado_id', '=', $request['id'])
                 ->get();
@@ -613,21 +618,18 @@ class EmpleadoController extends Controller
                 if ($exist_empleados_puesto[0]->empleado_id == $request['id']) {
                     empleados_puesto::where('empleado_id', '=', $request['id'])
                         ->update([
-                            'puesto_id' => $request['puesto_id'],
-                            'departamento_id' => $request['departamento_id']
+                            'dpto_puesto_id' => $dp->id,
                         ]);
                 } else {
                     empleados_puesto::create([
                         'empleado_id' => $request['id'],
-                        'puesto_id' => $request['puesto_id'],
-                        'departamento_id' => $request['departamento_id']
+                        'dpto_puesto_id' => $dp->id,
                     ]);
                 }
             } else {
                 empleados_puesto::create([
                     'empleado_id' => $request['id'],
-                    'puesto_id' => $request['puesto_id'],
-                    'departamento_id' => $request['departamento_id']
+                    'dpto_puesto_id' => $dp->id,
                 ]);
             }
         }

@@ -47,9 +47,12 @@ class PlantillasAutorizadaController extends Controller
                             $join->on('plantillas_autorizadas.ubicacione_id', '=', 'cecos.ubicacione_id')
                                 ->on('cecos.activo_erp', '=', DB::raw(1));
                         })
+                        ->leftJoin('departamento_puestos as dp', function ($join) {
+                            $join->on('dp.departamento_id', 'cecos.id')
+                                ->on('dp.puesto_id', 'plantillas_autorizadas.puesto_id');
+                        })
                         ->leftJoin('empleados_puestos', function ($join) {
-                            $join->on('cecos.id', '=', 'empleados_puestos.departamento_id')
-                                ->on('plantillas_autorizadas.puesto_id', '=', 'empleados_puestos.puesto_id')
+                            $join->on('dp.id', '=', 'empleados_puestos.dpto_puesto_id')
                                 ->on('empleados_puestos.activo', '=', DB::raw(1));
                         })
                         ->leftJoin('users', function ($join) {

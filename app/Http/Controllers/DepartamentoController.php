@@ -37,8 +37,9 @@ class DepartamentoController extends Controller
             'cecos.*',
             DB::raw('COUNT(users.id) AS personal')
         )
+            ->leftJoin('departamento_puestos as dp', 'dp.departamento_id', 'cecos.id')
             ->leftjoin('empleados_puestos', function ($join) {
-                $join->on('cecos.id', '=', 'empleados_puestos.departamento_id')
+                $join->on('dp.id', '=', 'empleados_puestos.dpto_puesto_id')
                     ->on('empleados_puestos.activo', '=', DB::raw(1));
             })
             ->leftjoin('users', function ($join) {
@@ -87,8 +88,9 @@ class DepartamentoController extends Controller
                 DB::raw('COUNT(empleado_id) as plantillaAct')
             )
                 ->join('users', 'users.id', 'empleado_id')
-                ->groupBy('puesto_id')
-                ->where([['puesto_id', $dp->id], ['departamento_id', $departamento->id], ['users.activo', 1]])
+                ->leftJoin('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
+                ->groupBy('dp.puesto_id')
+                ->where([['dp.puesto_id', $dp->id], ['dp.departamento_id', $departamento->id], ['users.activo', 1], ['dp.activo', 1]])
                 ->first();
             if ($dp->plantilla_auth != null)
                 $plantilla[$dp->id] = $dp->plantilla_auth;

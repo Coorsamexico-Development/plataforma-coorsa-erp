@@ -26,7 +26,7 @@ class ActivoController extends Controller
   {
     //traemos todos los tipos de activos
     $tipo_activos = tipos_activo::select('tipos_activos.*')
-     /* ->with([
+      /* ->with([
         'activos_items' => function ($query) use ($request) {
           $query->select(
             'activos_items.*',
@@ -72,8 +72,7 @@ class ActivoController extends Controller
             $query->where("valor_campo_activos.valor", "LIKE", "%" . $search . "%");
           }
         }
-      ])*/
-      ;
+      ])*/;
 
     $tipo_inputs = TipoInput::all();
 
@@ -119,8 +118,9 @@ class ActivoController extends Controller
           )
             ->join('users', 'activos_empleados.empleado_id', 'users.id')
             ->join('empleados_puestos', 'empleados_puestos.empleado_id', 'users.id')
-            ->leftjoin('puestos', 'empleados_puestos.puesto_id', 'puestos.id')
-            ->leftjoin('cecos', 'empleados_puestos.departamento_id', 'cecos.id')
+            ->leftJoin('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
+            ->leftjoin('puestos', 'dp.puesto_id', 'puestos.id')
+            ->leftjoin('cecos', 'dp.departamento_id', 'cecos.id')
             ->leftJoin('ubicaciones', 'cecos.ubicacione_id', 'ubicaciones.id')
             ->where('activos_empleados.status', '=', 1);;
         }, 'valor_campos_activos',
@@ -254,8 +254,9 @@ class ActivoController extends Controller
       'puestos.name AS puesto',
       'cecos.nombre AS departamento'
     )
-      ->join('puestos', 'empleados_puestos.puesto_id', 'puestos.id', 'ubicaciones.name AS ubicacion')
-      ->join('cecos', 'empleados_puestos.departamento_id', 'cecos.id')
+      ->join('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
+      ->join('puestos', 'dp.puesto_id', 'puestos.id', 'ubicaciones.name AS ubicacion')
+      ->join('cecos', 'dp.departamento_id', 'cecos.id')
       ->leftjoin('ubicaciones', 'cecos.ubicacione_id', 'ubicaciones.id')
       ->where('empleado_id', '=', $id)
       ->get();

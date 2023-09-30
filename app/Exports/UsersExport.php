@@ -21,46 +21,49 @@ class UsersExport implements FromQuery, WithHeadings
     public function query()
     {
         return DB::table('users')
-        ->select(
-            'users.id',
-            'users.numero_empleado',
-            'users.name',
-            'users.apellido_paterno',
-            'users.apellido_materno',
-            'users.email',
-            'puestos.name AS puesto',
-            'cecos.nombre  AS departamento',
-            'users.fecha_nacimiento',
-            'users.fecha_ingreso',
-            'users.fecha_ingreso_real',
-            'users.salario_bruto',
-            'users.fotografia',
-            'expedientes.ruta'
+            ->select(
+                'users.id',
+                'users.numero_empleado',
+                'users.name',
+                'users.apellido_paterno',
+                'users.apellido_materno',
+                'users.email',
+                'puestos.name AS puesto',
+                'cecos.nombre  AS departamento',
+                'users.fecha_nacimiento',
+                'users.fecha_ingreso',
+                'users.fecha_ingreso_real',
+                'users.salario_bruto',
+                'users.fotografia',
+                'expedientes.ruta'
             )
-        ->leftjoin('expedientes', 'expedientes.empleado_id', 'users.id')
-        ->leftjoin('empleados_puestos','empleados_puestos.empleado_id','users.id')
-        ->leftjoin('puestos','empleados_puestos.puesto_id','puestos.id')
-        ->leftjoin('cecos', 'empleados_puestos.departamento_id', 'cecos.id')
-        ->groupBy('users.id')
-        ->where('users.activo','=',$this->activo)
-        ->orderBy('users.id');
+            ->leftjoin('expedientes', 'expedientes.empleado_id', 'users.id')
+            ->leftjoin('empleados_puestos', 'empleados_puestos.empleado_id', 'users.id')
+            ->leftJoin('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
+            ->leftjoin('puestos', 'dp.puesto_id', 'puestos.id')
+            ->leftjoin('cecos', 'dp.departamento_id', 'cecos.id')
+            ->groupBy('users.id')
+            ->where('users.activo', '=', $this->activo)
+            ->orderBy('users.id');
     }
 
     public function headings(): array
     {
-        return ["ID", 
-        "No.Empleado", 
-        "Nombre", 
-        "Apellido paterno", 
-        "Apellido materno", 
-        "email", 
-        "Puesto",
-        'Departamento',
-        'Fecha de nacimiento', 
-        'Fecha de ingreso', 
-        'Fecha de ingreso real',
-        'Salario bruto',
-        'Fotografía',
-        'Documento'];
+        return [
+            "ID",
+            "No.Empleado",
+            "Nombre",
+            "Apellido paterno",
+            "Apellido materno",
+            "email",
+            "Puesto",
+            'Departamento',
+            'Fecha de nacimiento',
+            'Fecha de ingreso',
+            'Fecha de ingreso real',
+            'Salario bruto',
+            'Fotografía',
+            'Documento'
+        ];
     }
 }
