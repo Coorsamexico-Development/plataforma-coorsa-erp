@@ -61,11 +61,9 @@ const messageCurp = computed(() => {
             props.form.curp.length === 18 &&
             props.form.curp.startsWith(generateCurp.value)
         ) {
-            console.log(props.form.curp.length);
             props.form.errors.curp = "";
             return "CURP VALIDA";
         } else {
-            console.log(props.form.curp.length);
             props.form.errors.curp = "CURP INVALIDA.";
             return "";
         }
