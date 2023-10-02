@@ -64,7 +64,6 @@ watchEffect(async () => {
                 .get(route("dpto.puesto.emp", [props.dpto.id, props.puesto.id]))
                 .then(({ data }) => {
                     empleados.value = data;
-                    console.log(data);
                 })
                 .catch((e) => {
                     console.log(e.response);
