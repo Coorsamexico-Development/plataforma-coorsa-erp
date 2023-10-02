@@ -315,6 +315,7 @@
             @close="errorPuesto = false"
             :empleado="empleado"
             :puesto="puesto"
+            :dpto="departamento"
         />
         <ErrorOrganigrama
             :show="errorOrg"

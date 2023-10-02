@@ -17,7 +17,8 @@ class PuestoEmpleadoController extends Controller
         $puesto = puesto::where('id', $puesto)->first();
         $empleados = User::select('users.*', DB::raw('CONCAT(users.name," ",users.apellido_paterno," ", users.apellido_materno) as fullname'))
             ->join('empleados_puestos as ep', 'ep.empleado_id', 'users.id')
-            ->where([['ep.puesto_id', $puesto->id], ['ep.departamento_id', $dpto->id], ['users.activo', 1]])
+            ->join('departamento_puestos as dp', 'dp.id', 'ep.dpto_puesto_id')
+            ->where([['dp.puesto_id', $puesto->id], ['dp.departamento_id', $dpto->id], ['users.activo', 1], ['dp.activo', 1]])
             ->orderBy('fullname', 'asc');
         return response()->json($empleados->paginate(20));
     }
@@ -28,9 +29,10 @@ class PuestoEmpleadoController extends Controller
         $puesto = puesto::where('id', $puesto)->first();
         $empleados = User::select('users.*', DB::raw('CONCAT(users.name," ",users.apellido_paterno," ", users.apellido_materno) as fullname'))
             ->join('empleados_puestos as ep', 'ep.empleado_id', 'users.id')
-            ->where([['ep.puesto_id', $puesto->id], ['ep.departamento_id', $dpto->id], ['users.activo', 1], ['users.name', 'like', '%' . $empleado . '%']])
-            ->orWhere([['ep.puesto_id', $puesto->id], ['ep.departamento_id', $dpto->id], ['users.activo', 1], ['users.apellido_paterno', 'like', '%' . $empleado . '%']])
-            ->orWhere([['ep.puesto_id', $puesto->id], ['ep.departamento_id', $dpto->id], ['users.activo', 1], ['users.apellido_materno', 'like', '%' . $empleado . '%']])
+            ->join('departamento_puestos as dp', 'dp.id', 'ep.dpto_puesto_id')
+            ->where([['dp.puesto_id', $puesto->id], ['dp.departamento_id', $dpto->id], ['users.activo', 1], ['users.name', 'like', '%' . $empleado . '%'], ['dp.activo', 1]])
+            ->orWhere([['dp.puesto_id', $puesto->id], ['dp.departamento_id', $dpto->id], ['users.activo', 1], ['users.apellido_paterno', 'like', '%' . $empleado . '%'], ['dp.activo', 1]])
+            ->orWhere([['dp.puesto_id', $puesto->id], ['dp.departamento_id', $dpto->id], ['users.activo', 1], ['users.apellido_materno', 'like', '%' . $empleado . '%'], ['dp.activo', 1]])
             ->orderBy('fullname', 'asc');
         return response()->json($empleados->paginate(20));
     }

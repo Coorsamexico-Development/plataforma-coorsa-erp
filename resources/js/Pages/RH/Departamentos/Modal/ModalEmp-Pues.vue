@@ -4,7 +4,6 @@ import PaginationAxios from "@/Components/PaginationAxios.vue";
 import axios from "axios";
 import { watchEffect, ref } from "vue";
 import Eye from "@/Iconos/Eye.vue";
-import { Inertia } from "@inertiajs/inertia";
 
 const props = defineProps({
     show: {

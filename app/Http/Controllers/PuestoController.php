@@ -91,14 +91,15 @@ class PuestoController extends Controller
     {
         $this->authorize('puestos.delete');
 
-        $empleado = empleados_puesto::select('users.*')
+        $empleado = empleados_puesto::select('users.*', DB::raw('CONCAT(users.name," ",users.apellido_paterno," ", users.apellido_materno) as fullname'))
             ->join('users', 'users.id', 'empleados_puestos.empleado_id')
-            ->where([['puesto_id', $puesto->id], ['empleados_puestos.activo', 1]])->get();
-        if (!empleados_puesto::where([['puesto_id', $puesto->id], ['activo', 1]])->exists()) {
+            ->join('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
+            ->where([['puesto_id', $puesto->id], ['empleados_puestos.activo', 1], ['dp.activo', 1]]);
+        if (!$empleado->exists()) {
             puesto::where('id', $puesto->id)->delete();
             return response()->json(['empleado' => 'succes']);
         } else {
-            return response()->json(['empleado' => $empleado]);
+            return response()->json(['empleado' => $empleado->get()]);
         }
     }
 }

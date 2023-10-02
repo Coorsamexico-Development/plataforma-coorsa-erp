@@ -1,9 +1,14 @@
 <script setup>
+import Modal from "@/Components/Modal.vue";
 import DialogModal from "@/Components/DialogModal.vue";
+import PaginationAxios from "@/Components/PaginationAxios.vue";
+import axios from "axios";
+import { watchEffect, ref } from "vue";
+import Eye from "@/Iconos/Eye.vue";
 
 const emit = defineEmits(["close"]);
 
-defineProps({
+const props = defineProps({
     show: {
         type: Boolean,
         default: false,
@@ -18,54 +23,160 @@ defineProps({
     },
     empleado: {},
     puesto: {},
+    dpto: {},
 });
 
 const close = () => {
     emit("close");
 };
+
+const empleados = ref({ data: [] });
+const search = ref("");
+
+async function loadPage(page) {
+    await axios
+        .get(route("dpto.puesto.emp", [props.dpto.id, props.puesto.id]), {
+            params: {
+                page: page,
+            },
+        })
+        .then(({ data }) => {
+            empleados.value = data;
+        })
+        .catch((error) => {
+            if (error.response) {
+                let messageError = "";
+                const messageServer = error.response.data.message;
+                if (error.response.status != 500) {
+                    messageError = messageServer;
+                } else {
+                    messageError = "Internal Server Error";
+                }
+                swal("Error PAGINATE PUESTO", messageError, "error");
+            }
+        });
+}
+
+watchEffect(async () => {
+    if (props.show) {
+        try {
+            await axios
+                .get(route("dpto.puesto.emp", [props.dpto.id, props.puesto.id]))
+                .then(({ data }) => {
+                    empleados.value = data;
+                    console.log(data);
+                })
+                .catch((e) => {
+                    console.log(e.response);
+                });
+        } catch (e) {
+            console.log(e);
+        }
+    }
+});
+
+function buscar() {
+    if (props.show) {
+        axios
+            .get(
+                route("dpto.puesto.search", [
+                    props.dpto.id,
+                    props.puesto.id,
+                    search.value,
+                ])
+            )
+            .then(({ data }) => {
+                empleados.value = data;
+            })
+            .catch((e) => {
+                loadPage();
+            });
+    }
+}
 </script>
 
 <template>
-    <DialogModal
+    <Modal
         :show="show"
         :max-width="maxWidth"
         :closeable="closeable"
         @close="close"
     >
-        <template #title>
-            <h1 class="text-[40px] pt-4"></h1>
-        </template>
-        <template #content>
-            <span>
-                <span class="text-[20px]">
-                    El puesto
-                    <span class="font-bold">{{ puesto.name }}</span> no puede
-                    ser eliminado ya que esta asignado actulmente a los
-                    siguientes empleados:
-                    <br />
-                </span>
-                <div
-                    class="text-[15px] mt-2 max-h-[79vh] overflow-y-auto overflow-x-visible"
-                >
-                    <ul class="">
-                        <li
-                            v-for="emp in empleado"
-                            :key="id"
-                            class="py-1 pl-4 even:bg-gray-50 shadow-sm even:shadow-[#DADBDC] odd:shadow-[#202020]"
-                        >
-                            <span class="font-bold capitalize">
-                                {{ emp.name }}
-                                {{ emp.apellido_paterno }}
-                                {{ emp.apellido_materno }}
-                            </span>
-                            con numero de empleado
-                            <span class="font-bold id">
-                                {{ emp.numero_empleado }}
-                            </span>
-                        </li>
-                    </ul>
+        <div class="px-6 py-4 bg-[#F5F5F5]">
+            <div class="text-[24px] text-[#505967] leading-4">
+                <h2 class="font-bold">{{ puesto.name }}</h2>
+                <h2 class="text-[14px] font-semibold">
+                    {{ dpto.nombre }} {{ dpto.descripcion }}
+                </h2>
+            </div>
+
+            <div>
+                <h2 class="text-[#505967] text-[18px] font-semibold">
+                    No fue posible eliminarlo debido a que aun hay empleados
+                    asociados al puesto
+                </h2>
+            </div>
+
+            <div class="mt-5">
+                <div>
+                    <input
+                        type="search"
+                        placeholder="Buscador"
+                        class="text-[14px] h-fit px-2 py-1 rounded-2xl w-full border-0 focus:border-0 focus:ring-0"
+                        v-model="search"
+                        @input="buscar()"
+                    />
                 </div>
-            </span>
-        </template>
-    </DialogModal>
+                <table
+                    class="w-full mt-2 border-separate table-auto border-spacing-1"
+                >
+                    <tr class="text-left text-[#374151]">
+                        <th
+                            class="px-2 rounded-2xl text-[17px] text-center w-3/12"
+                        >
+                            No. Empleado
+                        </th>
+                        <th class="px-2 rounded-2xl text-[17px] w-8/12">
+                            Nombre
+                        </th>
+                        <th class="px-2 rounded-2xl text-[17px] w-1/12">
+                            Expediente
+                        </th>
+                    </tr>
+                    <tr
+                        v-for="(emp, index) in empleados.data"
+                        :key="index"
+                        class="text-[#404957]"
+                    >
+                        <td
+                            class="px-3 py-[2px] rounded-2xl text-center bg-white"
+                        >
+                            {{ emp.numero_empleado }}
+                        </td>
+                        <td
+                            class="px-3 py-[2px] rounded-2xl normal-case bg-white"
+                        >
+                            {{ emp.fullname }}
+                        </td>
+                        <td
+                            class="px-3 py-[2px] rounded-2xl normal-case grid place-content-center"
+                        >
+                            <a
+                                class="grid px-2 text-white bg-blue-500 hover:cursor-pointer hover:scale-110 rounded-2xl place-content-center w-fit"
+                                :href="route('empleado.edit', emp.id)"
+                            >
+                                <Eye
+                                    class="w-[22px] h-[22px] transition-all duration-200"
+                                />
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="mt-1">
+                <PaginationAxios :pagination="empleados" @loadPage="loadPage" />
+            </div>
+        </div>
+    </Modal>
 </template>
