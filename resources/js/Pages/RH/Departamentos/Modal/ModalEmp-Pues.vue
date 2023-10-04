@@ -98,11 +98,11 @@ function buscar() {
         @close="close"
     >
         <div class="px-6 py-4 bg-[#F5F5F5]">
-            <div class="text-[25px] text-[#505967]">
-                <h2 class="text-[20px] font-semibold">
+            <div class="text-[24px] text-[#505967]">
+                <h2 class="font-bold leading-3">{{ puesto.name }}</h2>
+                <h2 class="text-[14px] font-semibold">
                     {{ dpto.nombre }} {{ dpto.descripcion }}
                 </h2>
-                <h2 class="font-bold">{{ puesto.name }}</h2>
             </div>
 
             <div class="mt-4">
