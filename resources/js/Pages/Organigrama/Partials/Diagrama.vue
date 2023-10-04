@@ -19,7 +19,7 @@
                         <svg
                             v-if="$page.props.can['organigrama.edit']"
                             xmlns="http://www.w3.org/2000/svg"
-                            class="absolute icon icon-tabler icon-tabler-x w-[14px] z-[2] cursor-pointer right-[3px] top-[3px] hover:scale-110 transition-all duration-200 stroke-[#F3798A] hover:stroke-[#ec2944]"
+                            class="absolute icon icon-tabler icon-tabler-x w-[0.5vw] h-[1vh] z-[2] cursor-pointer right-[3px] top-[3px] hover:scale-110 transition-all duration-200 stroke-[#F3798A] hover:stroke-[#ec2944]"
                             viewBox="0 0 24 24"
                             stroke-width="1.5"
                             fill="none"
@@ -34,6 +34,10 @@
                             <path d="M18 6l-12 12" />
                             <path d="M6 6l12 12" />
                         </svg>
+                        <Eye
+                            class="w-[0.5vw] h-[1vh] absolute text-[#0097F2] z-[2] right-[11px] top-[3px] cursor-pointer hover:scale-105 transition-all duration-200 hover:text-[#2091D5]"
+                            @click="empPues(node.data)"
+                        />
                     </div>
                     <div class="grid">
                         <div style="border-bottom: none">
@@ -48,7 +52,7 @@
                                     :edgesTo="getInputEdges(node, input)"
                                 >
                                     <div
-                                        class="port-inner text-center px-[15px]"
+                                        class="port-inner text-center px-[25px]"
                                         @mousedown.prevent.stop="
                                             (evt) =>
                                                 startConnect(
@@ -127,10 +131,12 @@
                     </div>
                 </node>
             </screen>
-            <div class="flex items-center justify-evenly">
+            <div
+                class="grid items-center max-w-full grid-cols-4 justify-evenly max-h-[8.5vh] overflow-auto"
+            >
                 <template v-for="son in sons" :key="idB">
                     <div
-                        class="text-[20px] text-center cursor-pointer select-none relative px-[2rem] py-2"
+                        class="text-[16px] text-center cursor-pointer select-none relative px-[2rem] py-2 min-w-fit"
                         @mouseover="form.area = son"
                         @mouseout="form.area = null"
                     >
@@ -165,13 +171,21 @@
             </div>
         </div>
     </div>
+    <ModalEmpPues
+        @close="modEmpPues = false"
+        :show="modEmpPues"
+        :dpto="dpto"
+        :puesto="pues"
+    />
 </template>
 
 <script>
 import { Screen, Node, Edge, graph, Port } from "vnodes";
 import { useForm } from "@inertiajs/inertia-vue3";
 import Dragable from "vuedraggable";
+import Eye from "@/Iconos/Eye.vue";
 import { ref } from "vue";
+import ModalEmpPues from "../../RH/Departamentos/Modal/ModalEmp-Pues.vue";
 
 export default {
     components: {
@@ -180,6 +194,8 @@ export default {
         Edge,
         Port,
         Dragable,
+        Eye,
+        ModalEmpPues,
     },
     setup() {
         const form = useForm({
@@ -191,9 +207,15 @@ export default {
             area: null,
         });
         const gerencia = "";
+        const modEmpPues = ref(false);
+        const dpto = ref();
+        const pues = ref();
         return {
             form,
             gerencia,
+            modEmpPues,
+            dpto,
+            pues,
         };
     },
     data() {
@@ -386,6 +408,15 @@ export default {
             let a = this.$props.area;
             this.$emit("area", { a });
         },
+        empPues(e) {
+            this.dpto = {
+                id: e.cId,
+            };
+            this.pues = {
+                id: e.pId,
+            };
+            this.modEmpPues = true;
+        },
     },
     computed: {
         activeEdge: (vm) => vm.graph.edges.find((e) => e.active),
@@ -401,6 +432,7 @@ export default {
                 Puesto: nodo.Puesto,
                 inputs: ["i"],
                 outputs: ["o"],
+                data: nodo,
             });
         });
         if (this.rels) {
@@ -435,6 +467,7 @@ export default {
                     Puesto: nodo.Puesto,
                     inputs: ["i"],
                     outputs: ["o"],
+                    data: nodo,
                 });
             });
             if (this.rels) {

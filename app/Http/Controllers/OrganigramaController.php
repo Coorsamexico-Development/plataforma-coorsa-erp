@@ -22,8 +22,10 @@ class OrganigramaController extends Controller
             ->select(
                 'DP.id as id',
                 'P.name as Puesto',
+                'P.id as pId',
                 'Ce.Nombre as Ceco',
                 'Ce.descripcion as CecoName',
+                'Ce.id as cId',
             )
             ->where([['DP.areas_id', null], ['DP.activo', 1]])
             ->orWhere([['DP.areas_id', 1], ['DP.activo', 1]])
@@ -38,8 +40,10 @@ class OrganigramaController extends Controller
                 ->select(
                     'DP.id as id',
                     'P.name as Puesto',
+                    'P.id as pId',
                     'Ce.Nombre as Ceco',
                     'Ce.descripcion as CecoName',
+                    'Ce.id as cId',
                 )
                 ->where([['DP.areas_id', $area->id], ['DP.activo', 1]])
                 ->orderBy('Ceco')
@@ -59,8 +63,10 @@ class OrganigramaController extends Controller
                         ->select(
                             'DP.id as id',
                             'P.name as Puesto',
+                            'P.id as pId',
                             'Ce.Nombre as Ceco',
                             'Ce.descripcion as CecoName',
+                            'Ce.id as cId',
                         )
                         ->where([['DP.id', $r->departamento_puestos_id_padre], ['DP.activo', 1]])
                         ->orderBy('Ceco')
@@ -73,8 +79,10 @@ class OrganigramaController extends Controller
                         ->select(
                             'DP.id as id',
                             'P.name as Puesto',
+                            'P.id as pId',
                             'Ce.Nombre as Ceco',
                             'Ce.descripcion as CecoName',
+                            'Ce.id as cId',
                         )
                         ->where([['DP.id', $r->departamento_puestos_id_hijo], ['DP.activo', 1]])
                         ->orderBy('Ceco')
