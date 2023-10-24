@@ -237,7 +237,7 @@ const cambio2 = () => {
                                         <DropdownLink
                                             v-if="
                                                 $page.props.can[
-                                                    'documentos-gerencia.show'
+                                                    'documentos-operaciones.show'
                                                 ]
                                             "
                                             :href="
@@ -248,7 +248,7 @@ const cambio2 = () => {
                                             "
                                         >
                                             <span class="text-xs">
-                                              Documentos Operaciones
+                                                Documentos Operaciones
                                             </span>
                                         </DropdownLink>
                                         <DropdownLink
