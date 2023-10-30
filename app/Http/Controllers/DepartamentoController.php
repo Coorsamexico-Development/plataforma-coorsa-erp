@@ -124,8 +124,19 @@ class DepartamentoController extends Controller
             ->join('cecos', 'cecos.id', 'dp.departamento_id')
             ->join('puestos', 'puestos.id', 'dp.puesto_id')
             ->leftJoin('padres_hijos as ph', 'ph.departamento_puestos_id_padre', 'dp.id')
-            ->leftJoin('padres_hijos as hp', 'hp.departamento_puestos_id_padre', 'dp.id')
-            ->where([['dp.departamento_id', $departamento->id], ['dp.puesto_id', request('puesto_id')], ['dp.activo', 1], ['ph.activo', 1], ['hp.activo', 1]]);
+            ->where([['dp.departamento_id', $departamento->id], ['dp.puesto_id', request('puesto_id')], ['dp.activo', 1], ['ph.activo', 1]]);
+        if (!$area->exists())
+            $area = Area::select(
+                'areas.nombre',
+                'puestos.name as puesto',
+                DB::raw('CONCAT(cecos.nombre, " - ", cecos.descripcion) as ceco'),
+            )
+                ->join('departamento_puestos as dp', 'dp.areas_id', 'areas.id')
+                ->join('cecos', 'cecos.id', 'dp.departamento_id')
+                ->join('puestos', 'puestos.id', 'dp.puesto_id')
+                ->leftJoin('padres_hijos as ph', 'ph.departamento_puestos_id_hijo', 'dp.id')
+                ->where([['dp.departamento_id', $departamento->id], ['dp.puesto_id', request('puesto_id')], ['dp.activo', 1], ['ph.activo', 1]]);
+
         try {
             if (request('checked')) {
                 $dp = departamentoPuesto::where([['departamento_id', $departamento->id], ['puesto_id', request('puesto_id')], ['activo', 0]]);

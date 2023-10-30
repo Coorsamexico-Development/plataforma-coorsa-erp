@@ -87,7 +87,6 @@ class OrganigramaController extends Controller
                         ->where([['DP.id', $r->departamento_puestos_id_hijo], ['DP.activo', 1]])
                         ->orderBy('Ceco')
                         ->first();
-
                     /* Establecemos las relaciones con el nombre de los nodos */
                     $rela[] = [
                         'nodoA' => $a->Puesto . '/' . $a->Ceco,
