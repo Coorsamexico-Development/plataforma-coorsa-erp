@@ -16,6 +16,8 @@ import "@fancyapps/ui/dist/fancybox.css";
 import moment from "moment";
 import { Inertia } from "@inertiajs/inertia";
 import TablaSUA from "./Partials/TablaSUA.vue";
+import "moment/locale/es";
+
 const now = new Date().getMonth();
 let props = defineProps({
     departamentosAuditoria: {
@@ -690,6 +692,23 @@ const consultar = async (mes, año) => {
         });
     proc.value = props.procesos[0];
 };
+
+moment.updateLocale("en", {
+    months: [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre",
+    ],
+});
 </script>
 
 <template>
@@ -1238,17 +1257,9 @@ const consultar = async (mes, año) => {
                                             class="uppercase"
                                         >
                                             {{
-                                                new Date(
-                                                    "2023-0" +
-                                                        (Number(
-                                                            pro.date.split(
-                                                                "-"
-                                                            )[1]
-                                                        ) +
-                                                            1)
-                                                ).toLocaleDateString("es-MX", {
-                                                    month: "long",
-                                                })
+                                                moment(pro.date)
+                                                    .locale("es")
+                                                    .format("MMMM")
                                             }}
                                         </BotonProc>
                                     </div>

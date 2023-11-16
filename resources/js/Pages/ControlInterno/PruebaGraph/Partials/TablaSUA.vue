@@ -1,18 +1,32 @@
 <script setup>
 import { onBeforeUpdate, ref } from "vue";
+import moment from "moment";
+
 const props = defineProps(["rubTot", "meses"]);
 const auxArray = ref([]);
 
+moment.updateLocale("en", {
+    months: [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre",
+    ],
+});
 onBeforeUpdate(() => {
     const i = props.meses.length;
     let auxObj = [];
     for (let a = 0; a < props.meses.length; a++) {
         auxObj = {
-            mes: new Date(
-                "2023-0" + (Number(props.meses[a].date.split("-")[1]) + 1)
-            ).toLocaleDateString("es-MX", {
-                month: "long",
-            }),
+            mes: moment(props.meses[a].date).format("MMMM"),
             riesgo: props.rubTot[a].calificacion,
             sAlta: props.rubTot[a + i].calificacion,
             riesgo2: props.rubTot[a + i * 2].calificacion,
