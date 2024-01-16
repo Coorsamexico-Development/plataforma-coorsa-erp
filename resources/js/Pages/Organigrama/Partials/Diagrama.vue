@@ -318,7 +318,10 @@ export default {
                 .transform((data) => ({
                     ...data,
                 }))
-                .post(route("organigrama.destroy"), {});
+                .post(route("organigrama.destroy"), {
+                    preserveScroll: true,
+                    preserveState: true,
+                });
         },
         remove() {
             this.form
