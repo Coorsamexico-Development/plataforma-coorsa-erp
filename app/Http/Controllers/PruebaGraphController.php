@@ -62,6 +62,25 @@ class PruebaGraphController extends Controller
 
             //$calificaciones = $departamento->documentosCalificacionesMes()->orderBy('mes', 'asc');
 
+            //Buscamos la fecha actual para poder mostrar los datos del mes anterior
+            date_default_timezone_set('America/Mexico_City');
+            $fecha_actual = getdate();
+            $mes_anterior = date('m', strtotime('-1 month'));
+            $año_anterior = date('Y',strtotime('-1 year'));
+
+            $año_actual = $fecha_actual['year'];
+            $fecha_a_consultar = '';
+
+            if($mes_anterior == 12) //ya es año pasado
+            {
+              $fecha_a_consultar = ['año' => $año_anterior , 'mes' => $mes_anterior];
+            }
+            else //año corriente
+            {
+              $fecha_a_consultar = ['año' => $año_actual, 'mes' => $mes_anterior];
+            }
+            
+            
             $rubTot = Rubro::select(
                 'rubros.id as id',
                 'rubros.nombre as name',
@@ -73,7 +92,7 @@ class PruebaGraphController extends Controller
             )
                 ->join('calf_rubro_mes as CRM', 'CRM.rubro_id', 'rubros.id')
                 ->join('procesos as P', 'P.id', 'rubros.proceso_id')
-                ->where([['P.departamento_auditoria_id', request('departamento_auditoria_id')], ['CRM.año', date('o')]])
+                ->where([['P.departamento_auditoria_id', request('departamento_auditoria_id')], ['CRM.año', $fecha_a_consultar['año']], ['CRM.mes', $fecha_a_consultar['mes']]])
                 ->orderBy('P.departamento_auditoria_id', 'asc')
                 ->orderBy('CRM.rubro_id', 'ASC')
                 ->orderBy('año', 'ASC')

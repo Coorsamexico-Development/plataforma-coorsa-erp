@@ -861,10 +861,12 @@ moment.updateLocale("en", {
                                     class="mt-[2rem] bg-white rounded-2xl p-2"
                                     v-if="proc"
                                 >
+                                <!--
                                     <GraphRub
                                         :rubro="rubTot"
                                         :proceso="proc.id"
                                     />
+                                    -->
                                 </div>
                                 <div
                                     class="mt-[2rem] bg-white rounded-2xl p-2"
