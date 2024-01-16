@@ -1,15 +1,10 @@
 <script setup>
 import { reactive, ref, watch, computed } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import ButtonSeccion from "../../Components/ButtonSeccion.vue";
-import Title from "../../Components/Title.vue";
 import CardImage from "@/Components/CardImage.vue";
-import InputSearch from "@/Components/InputSearch.vue";
-import FormPoliticsModal from "./Modals/FormPoliticsModal.vue";
 import { Inertia } from "@inertiajs/inertia";
 import { pickBy } from "lodash";
 import AnimationCard from "../../Components/AnimationCard.vue";
-import { Fancybox } from "@fancyapps/ui/src/Fancybox/Fancybox.js";
 import ButtonAdd from "@/Components/ButtonAdd.vue";
 import FormDocsInternosModal from "./Modals/FormDocsInternosModal.vue";
 

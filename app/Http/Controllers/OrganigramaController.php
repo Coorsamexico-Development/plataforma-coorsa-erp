@@ -307,11 +307,17 @@ class OrganigramaController extends Controller
                     ->where([['P.name', $nodoF[0]], ['Ce.nombre', $nodoF[1]], ['DP.activo', 1]])
                     ->first());
 
-                $relBef = Padres_hijos::where([['departamento_puestos_id_padre', $nodoA['Nodeid']], ['departamento_puestos_id_hijo', $nodoD['Nodeid']]])->first();
-
-                $relBef->update([
-                    'activo' => 0
-                ]);
+                $relBef = Padres_hijos::where([['departamento_puestos_id_padre', $nodoA['Nodeid']], ['departamento_puestos_id_hijo', $nodoD['Nodeid']]])
+                    ->first()
+                    ->update([
+                        'activo' => 0
+                    ]);
+            } else {
+                $relBef = Padres_hijos::where([['departamento_puestos_id_padre', $nodoA['Nodeid']], ['departamento_puestos_id_hijo', $nodoD['Nodeid']]])
+                    ->first()
+                    ->update([
+                        'activo' => 0
+                    ]);
             }
         } else {
             $padre = null;
@@ -319,18 +325,17 @@ class OrganigramaController extends Controller
                 ->where([['DP.areas_id', $area['idB']], ['DP.activo', 1]])
                 ->get();
             foreach ($DP as $p) {
-                $rel = Padres_hijos::where([['departamento_puestos_id_hijo', $p->id], ['activo', 1]])
-                    ->get();
-                if ($rel->count() === 0)
+                $rel = Padres_hijos::where([['departamento_puestos_id_hijo', $p->id], ['activo', 1]]);
+                if ($rel->exists() === 0)
                     $padre = $p;
             }
             if ($padre === null)
                 return back();
 
-            $relBef = Padres_hijos::where([['departamento_puestos_id_padre', $nodoA['Nodeid']], ['departamento_puestos_id_hijo', $padre->id]])->first();
+            $relBef = Padres_hijos::where([['departamento_puestos_id_padre', $nodoA['Nodeid']], ['departamento_puestos_id_hijo', $padre->id]]);
 
-            if ($relBef) {
-                $relBef->update([
+            if ($relBef->exists()) {
+                $relBef->first()->update([
                     'activo' => 0
                 ]);
             } else {
