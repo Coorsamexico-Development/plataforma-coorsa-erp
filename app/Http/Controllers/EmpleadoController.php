@@ -16,6 +16,7 @@ use App\Models\empleados_puesto;
 use App\Models\Escolaridad;
 use App\Models\expediente;
 use App\Models\finiquito;
+use App\Models\Padres_hijos;
 use App\Models\puesto;
 use App\Models\Role;
 use App\Models\tipoContrato;
@@ -638,6 +639,7 @@ class EmpleadoController extends Controller
 
         //En caso de que contenga la baja
         if (!empty($request->cat_bajas_empleado_id)) {
+            $this->recalcularAutorizacion($empleado->id);
             bajasEmpleado::updateOrCreate(
                 [
                     'cat_bajas_empleado_id' => $request['cat_bajas_empleado_id'],
@@ -646,9 +648,9 @@ class EmpleadoController extends Controller
                 ]
             );
 
-            User::where('id', '=', $empleado->id)  //desactivamos el usuario
-                ->update(['activo' => 0]);
+            User::where('id', '=', $empleado->id)->update(['activo' => 0]); //desactivamos el usuario
             DB::table('comites')->where([['user_id', $empleado->id], ['activo', 1]])->update(['activo' => 0]);
+            DB::table('lineanegocios_users')->where('user_id', $empleado->id)->update(['activo' => 0]);
         }
         //finiquito_pagado
         if (!empty($request->fecha_finiquito)) {
@@ -664,11 +666,37 @@ class EmpleadoController extends Controller
         return redirect()->back();
     }
 
-
     public function empleadosData()
     {
         return $empleados = User::select(
             'users.*',
         )->get();
+    }
+
+    protected function recalcularAutorizacion($userId)
+    {
+        $puesto = empleados_puesto::select('empleados_puestos.*')
+            ->join('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
+            ->where([['empleado_id', $userId], ['dp.activo', 1]])->first()->dpto_puesto_id;
+        $padre = departamentoPuesto::where([['id', $puesto], ['activo', 1]])->first()->id;
+        $padre = Padres_hijos::where([['departamento_puestos_id_hijo', $padre], ['activo', '<>', 0]])->first()->departamento_puestos_id_padre;
+        $padre = departamentoPuesto::where('id', $padre)->first();
+
+        $userAuth = empleados_puesto::select('empleados_puestos.*')
+            ->join('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
+            ->join('users', 'users.id', 'empleados_puestos.empleado_id')
+            ->where([['puesto_id', $padre->puesto_id], ['dp.activo', 1], ['empleados_puestos.activo', 1], ['users.activo', 1]]);
+
+        while (!$userAuth->exists()) {
+            $padre = Padres_hijos::where([['departamento_puestos_id_hijo', $padre->id], ['activo', '<>', 0]])->first()->departamento_puestos_id_padre;
+            $padre = departamentoPuesto::where('id', $padre)->first();
+            $userAuth = empleados_puesto::select('empleados_puestos.*')
+                ->join('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
+                ->join('users', 'users.id', 'empleados_puestos.empleado_id')
+                ->where([['puesto_id', $padre->puesto_id], ['dp.activo', 1], ['empleados_puestos.activo', 1], ['users.activo', 1]]);
+        }
+
+        DB::table('autorizas')->where('users_id', $userId)->update(['users_id' => $userAuth->first()->empleado_id]);
+        DB::table('procuser_auths')->where('auth', $userId)->update(['auth' => $userAuth->first()->empleado_id]);
     }
 }
