@@ -360,6 +360,11 @@ const cambio2 = () => {
                                         >
                                             Organigrama
                                         </DropdownLink>
+                                        <DropdownLink
+                                            href="https://maniobristas.coorsamexico.com/"
+                                        >
+                                            Altas P&G
+                                        </DropdownLink>
                                         <div class="border-t border-gray-100" />
                                     </template>
                                 </Dropdown>
