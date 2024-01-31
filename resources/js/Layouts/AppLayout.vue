@@ -362,14 +362,9 @@ const cambio2 = () => {
                                         </DropdownLink>
                                         <DropdownLink
                                             as="a"
-                                            href="https://maniobristas.coorsamexico.com/login"
+                                            href="https://maniobristas.coorsamexico.com//erp"
                                             method="post"
                                             target="_blank"
-                                            :data="{
-                                                email: 'admin@coorsamexico.com',
-                                                password: 'admin1234',
-                                                remember: true,
-                                            }"
                                         >
                                             Altas P&G
                                         </DropdownLink>
