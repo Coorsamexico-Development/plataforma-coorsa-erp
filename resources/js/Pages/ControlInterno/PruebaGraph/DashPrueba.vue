@@ -1165,6 +1165,7 @@ moment.updateLocale("en", {
                                     </div>
                                 </div>
                             </div>
+                            {{ rubTot }}
                             <div class="col-start-1 col-end-4">
                                 <h2 class="mb-4 text-lg font-bold">
                                     Documentos que comprueban

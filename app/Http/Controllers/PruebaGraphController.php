@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Models\Rubro;
 use App\Models\Proceso;
 use App\Models\CalfRubroMe;
+use App\Models\CalificacionMes;
 use App\Models\DocumentosMe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -79,6 +80,7 @@ class PruebaGraphController extends Controller
             {
               $fecha_a_consultar = ['año' => $año_actual, 'mes' => $mes_anterior];
             }
+
             
             
             $rubTot = Rubro::select(
@@ -92,7 +94,7 @@ class PruebaGraphController extends Controller
             )
                 ->join('calf_rubro_mes as CRM', 'CRM.rubro_id', 'rubros.id')
                 ->join('procesos as P', 'P.id', 'rubros.proceso_id')
-                ->where([['P.departamento_auditoria_id', request('departamento_auditoria_id')], ['CRM.año', $fecha_a_consultar['año']], ['CRM.mes', $fecha_a_consultar['mes']]])
+                //->where([['P.departamento_auditoria_id', request('departamento_auditoria_id')], ['CRM.año', $fecha_a_consultar['año']], ['CRM.mes', $fecha_a_consultar['mes']]])
                 ->orderBy('P.departamento_auditoria_id', 'asc')
                 ->orderBy('CRM.rubro_id', 'ASC')
                 ->orderBy('año', 'ASC')
