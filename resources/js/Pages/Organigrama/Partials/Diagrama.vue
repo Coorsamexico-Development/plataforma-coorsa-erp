@@ -84,6 +84,9 @@
                                 {{ input.slice(1) }}
                             </div>
                         </div>
+                        <div
+                            class="h-[1vh] hover:cursor-grab active:cursor-grabbing"
+                        ></div>
                         <div style="border-bottom: none">
                             <div
                                 v-for="output in node.outputs"

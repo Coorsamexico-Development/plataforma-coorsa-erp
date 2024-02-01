@@ -2,7 +2,7 @@
 import { ref, computed } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import { Head, Link, usePage } from "@inertiajs/inertia-vue3";
-import ApplicationMark from "@/Components/ApplicationMark.vue";
+import { router } from "@inertiajs/inertia-vue3";
 import Banner from "@/Components/Banner.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
@@ -359,6 +359,14 @@ const cambio2 = () => {
                                             :href="route('organigrama.index')"
                                         >
                                             Organigrama
+                                        </DropdownLink>
+                                        <DropdownLink
+                                            as="a"
+                                            href="https://maniobristas.coorsamexico.com/erp"
+                                            method="post"
+                                            target="_blank"
+                                        >
+                                            Altas P&G
                                         </DropdownLink>
                                         <div class="border-t border-gray-100" />
                                     </template>
