@@ -40,7 +40,7 @@ class RecibosNominaController extends Controller
             if ($extension === 'pdf') {
                 if ($user) {
                     $docs = new UploadedFile(Storage::disk('docs')->path($file), explode('/', $file)[1], 'application/pdf');
-                    $name = explode('.', $docs->getClientOriginalName())[0] . '_' . $semana;
+                    $name = explode('.', $docs->getClientOriginalName())[0] . date('y') . "_{$semana}";
                     $pathfile = $docs->storeAs("nominas/{$user->id}", "{$name}.{$docs->getClientOriginalExtension()}", 'gcs');
                     $pathGCS = Storage::disk('gcs')->url($pathfile);
 
