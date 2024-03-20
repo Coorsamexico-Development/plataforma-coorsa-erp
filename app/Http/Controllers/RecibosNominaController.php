@@ -36,18 +36,20 @@ class RecibosNominaController extends Controller
         foreach ($files as $file) {
             $noEmpleado = explode('_', explode('/', $file)[1])[0];
             $user = User::where('numero_empleado', $noEmpleado)->first();
-            $extension = explode('.', explode('_', explode('/', $file)[1])[3])[1];
+            $extension = explode('.', $file)[1];
             if ($extension === 'pdf') {
                 if ($user) {
                     $docs = new UploadedFile(Storage::disk('docs')->path($file), explode('/', $file)[1], 'application/pdf');
-                    $pathfile = $docs->storeAs("nominas/{$user->id}", $docs->getClientOriginalName(), 'gcs');
+                    $name = explode('.', $docs->getClientOriginalName())[0] . '_' . $semana;
+                    $pathfile = $docs->storeAs("nominas/{$user->id}", "{$name}.{$docs->getClientOriginalExtension()}", 'gcs');
                     $pathGCS = Storage::disk('gcs')->url($pathfile);
 
-                    NominasEmpleado::create([
+                    NominasEmpleado::updateOrCreate([
                         'empleado_id' => $user->id,
-                        'nomina_doc' => $pathGCS,
                         'fecha_doc' => $fecha,
                         'periodo' => $semana,
+                    ], [
+                        'nomina_doc' => $pathGCS,
                     ]);
                 }
             }
