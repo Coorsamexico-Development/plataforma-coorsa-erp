@@ -17,6 +17,8 @@ import moment from "moment";
 import { Inertia } from "@inertiajs/inertia";
 import TablaSUA from "./Partials/TablaSUA.vue";
 import "moment/locale/es";
+//New modules
+import RegistroPatronal from './Partials/RegistroPatronal.vue'
 
 const now = new Date().getMonth();
 let props = defineProps({
@@ -1329,6 +1331,9 @@ moment.updateLocale("en", {
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div v-if="params.departamento_auditoria_id == 6 && cambio" style="font-family: 'Montserrat'" >
+                                <RegistroPatronal />
                             </div>
                         </section>
                     </div>

@@ -688,7 +688,6 @@ const consultar = async (mes, año) => {
 
 <template>
     <AppLayout title="Dashboard" :nominas="nominas">
-        {{ rubrosCalculados }}
         <section class="p-2 pt-8 objetivo_auditoria sm:p-8">
             <div
                 class="mr-0 sm:text-center sm:mr-96 sm:pt-8"
