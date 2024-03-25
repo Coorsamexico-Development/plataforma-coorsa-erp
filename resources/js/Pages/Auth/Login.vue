@@ -62,9 +62,9 @@ const submitReset = () => {
 
 <template>
     <Head title="Log in" />
-    <div class="login">
+    <div class="h-screen login">
         <div
-            class="flex justify-between p-8 mb-2 items-center sm:hidden text-white col-start-1 col-span-3 row-start-1"
+            class="flex items-center justify-between col-span-3 col-start-1 row-start-1 p-8 mb-2 text-white sm:hidden"
             style="text-align: left"
         >
             <div class="pl-4">
@@ -120,7 +120,7 @@ const submitReset = () => {
                             </div>
                         </div>
                         <div class="info-item s log-in">
-                            <div class="table sm:ml-8 ml-10">
+                            <div class="table ml-10 sm:ml-8">
                                 <div class="table-cell">
                                     <p
                                         style="
@@ -148,7 +148,7 @@ const submitReset = () => {
                             </div>
                         </div>
                     </div>
-                    <div class="container-info hidden sm:block">
+                    <div class="hidden container-info sm:block">
                         <div class="info-item">
                             <div class="table">
                                 <div class="table-cell">
@@ -222,7 +222,7 @@ const submitReset = () => {
                             <div class="table">
                                 <div class="table-cell">
                                     <div
-                                        class="mt-4 hidden sm:flex"
+                                        class="hidden mt-4 sm:flex"
                                         style="
                                             text-align: justify;
                                             margin-left: 2rem;
@@ -374,10 +374,10 @@ const submitReset = () => {
                                         </h1>
                                     </div>
                                     <div class="ml-2 mr-2">
-                                      <div class="sm:hidden static mt-8 ml-2">
+                                      <div class="static mt-8 ml-2 sm:hidden">
                                         <span class="bg-[#EC2944] absolute w-2 h-12"></span>
-                                        <h1 class="text-xl ml-4">Reestablece<br>
-                                            <span class="uppercase font-bold">Tu contraseña</span>
+                                        <h1 class="ml-4 text-xl">Reestablece<br>
+                                            <span class="font-bold uppercase">Tu contraseña</span>
                                         </h1>
                                       </div>
                                         <form>
@@ -386,7 +386,7 @@ const submitReset = () => {
                                                     id="email"
                                                     v-model="formReset.email"
                                                     type="email"
-                                                    class="block w-full  mt-1 text-gray-500 opacity-80"
+                                                    class="block w-full mt-1 text-gray-500 opacity-80"
                                                     required
                                                     autofocus
                                                     placeholder="Usuario"
@@ -433,7 +433,7 @@ const submitReset = () => {
         </div>
     </div>
     <div
-        class="col-start-1 sm:col-start-2 col-span-3 sm:row-start-4"
+        class="col-span-3 col-start-1 sm:col-start-2 sm:row-start-4"
         style="
             margin-top: -5rem;
             display: flex;
@@ -442,7 +442,7 @@ const submitReset = () => {
         "
     >
         <h2 class="text-white">
-            <a class="text-xs sm:xl  text_link" href="https://coorsamexico.com/">WWW.COORSAMEXICO.COM</a>
+            <a class="text-xs sm:xl text_link" href="https://coorsamexico.com/">WWW.COORSAMEXICO.COM</a>
         </h2>
     </div>
 </template>

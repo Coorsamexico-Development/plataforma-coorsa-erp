@@ -345,7 +345,7 @@ input:checked ~ .tab-content {
     background-size: cover;
     background-position: center;
     font-family: var(--fuentePrincipal);
-    height: 200%;
+    /*height: 200%;*/
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(5, 1fr);
@@ -353,7 +353,7 @@ input:checked ~ .tab-content {
 
 @media (min-width: 640px) {
     .login {
-        height: 46.8rem;
+      /*  height: 46.8rem; */
         grid-template-columns: repeat(5, 1fr);
         grid-template-rows: repeat(3, 1fr);
         justify-items: center;
