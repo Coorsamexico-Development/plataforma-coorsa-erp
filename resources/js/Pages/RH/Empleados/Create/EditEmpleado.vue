@@ -285,7 +285,10 @@ const canEdit = computed(() => {
                     <!--Fin Expediente -->
                     <!-- Finiquitos -->
                     <SectionFiniquitos
-                        v-if="menuSeleted == 8 && canEdit"
+                        v-if="
+                            menuSeleted == 8 &&
+                            (canEdit || $page.props.can['empleados.finiquito'])
+                        "
                         :form="form"
                         :motivos-bajas="props.cat_bajas"
                     />
