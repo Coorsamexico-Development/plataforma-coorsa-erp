@@ -13,6 +13,8 @@ class UsersExport implements FromQuery, WithHeadings
 {
     use Exportable;
 
+    protected $activo;
+
     public function __construct(int $activo)
     {
         $this->activo = $activo;
@@ -38,7 +40,8 @@ class UsersExport implements FromQuery, WithHeadings
                 'users.fecha_ingreso_real',
                 'users.salario_bruto',
                 'users.fotografia',
-                'expedientes.ruta'
+                'expedientes.ruta',
+                DB::raw('IF(users.activo = 0,users.updated_at,"")')
             )
             ->leftjoin('expedientes', 'expedientes.empleado_id', 'users.id')
             ->leftjoin('empleados_puestos', 'empleados_puestos.empleado_id', 'users.id')
@@ -69,7 +72,8 @@ class UsersExport implements FromQuery, WithHeadings
             'Fecha de ingreso real',
             'Salario bruto',
             'Fotografía',
-            'Documento'
+            'Documento',
+            $this->activo === 0 ? 'Fecha Baja' : null
         ];
     }
 }
