@@ -13,5 +13,6 @@ class bajasEmpleado extends Model
         'cat_bajas_empleado_id',
         'empleado_id',
         'fecha_finiquito',
+        'fecha_baja',
     ];
 }

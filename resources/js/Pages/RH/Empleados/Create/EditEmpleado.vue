@@ -19,6 +19,7 @@ import SectionDatosSalud from "../Partials/SectionDatosSalud.vue";
 import SectionFiniquitos from "../Partials/SectionFiniquitos.vue";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox.css";
+import moment from "moment";
 
 var props = defineProps({
     escolaridades: Object,
@@ -129,7 +130,7 @@ const form = useForm({
     enfermedades_cronicas: props.empleado.enfermedades_cronicas,
     cat_genero_id: props.empleado.cat_genero_id,
     cat_bajas_empleado_id: "",
-    fecha_baja: "",
+    fecha_baja: props.empleado.fecha_baja ?? "",
     fecha_finiquito: "",
     monto_finiquito: 0,
     finiquito_pagado: false,
@@ -147,11 +148,15 @@ const form = useForm({
 onMounted(() => {
     if (props.empleado_baja !== null) {
         form.cat_bajas_empleado_id = props.empleado_baja.cat_bajas_empleado_id;
-        form.fecha_baja = props.empleado_baja.fecha_baja;
+        form.fecha_baja = moment(props.empleado_baja.fecha_baja).format(
+            "YYYY-MM-DD"
+        );
     }
 
     if (props.finiquito !== null) {
-        form.fecha_finiquito = props.finiquito.fecha_finiquito;
+        form.fecha_finiquito = moment(props.finiquito.fecha_finiquito).format(
+            "YYYY-MM-DD"
+        );
         form.monto_finiquito = props.finiquito.monto;
         form.finiquito_pagado = props.finiquito.pagado;
     }

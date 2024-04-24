@@ -2,31 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\bajasEmpleado;
+use Exception;
+use App\Models\Ceco;
+use App\Models\Role;
+use App\Models\User;
+use Inertia\Inertia;
 use App\Models\Banco;
+use App\Models\puesto;
+use App\Models\finiquito;
+use App\Models\direccione;
+use App\Models\expediente;
+use App\Models\Escolaridad;
+use App\Models\Padres_hijos;
+use App\Models\tipoContrato;
+use Illuminate\Http\Request;
+use App\Models\bajasEmpleado;
+use App\Models\catTipoSangre;
+use App\Models\CatTipoDocumeto;
+use App\Models\CatTipoDocumento;
+use App\Models\empleados_puesto;
 use App\Models\CatBajasEmpleados;
 use App\Models\catEstadosCiviles;
-use App\Models\CatTipoDocumento;
-use App\Models\CatTipoDocumeto;
-use App\Models\catTipoSangre;
-use App\Models\Ceco;
 use App\Models\departamentoPuesto;
-use App\Models\direccione;
-use App\Models\empleados_puesto;
-use App\Models\Escolaridad;
-use App\Models\expediente;
-use App\Models\finiquito;
-use App\Models\Padres_hijos;
-use App\Models\puesto;
-use App\Models\Role;
-use App\Models\tipoContrato;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use PhpOffice\PhpSpreadsheet\Calculation\Logical\Boolean;
 
 class EmpleadoController extends Controller
@@ -673,30 +675,37 @@ class EmpleadoController extends Controller
         )->get();
     }
 
-    protected function recalcularAutorizacion($userId)
+    protected function recalcularAutorizacion($userId): void
     {
-        $puesto = empleados_puesto::select('empleados_puestos.*')
-            ->join('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
-            ->where([['empleado_id', $userId], ['dp.activo', 1]])->first()->dpto_puesto_id;
-        $padre = departamentoPuesto::where([['id', $puesto], ['activo', 1]])->first()->id;
-        $padre = Padres_hijos::where([['departamento_puestos_id_hijo', $padre], ['activo', '<>', 0]])->first()->departamento_puestos_id_padre;
-        $padre = departamentoPuesto::where('id', $padre)->first();
-
-        $userAuth = empleados_puesto::select('empleados_puestos.*')
-            ->join('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
-            ->join('users', 'users.id', 'empleados_puestos.empleado_id')
-            ->where([['puesto_id', $padre->puesto_id], ['dp.activo', 1], ['empleados_puestos.activo', 1], ['users.activo', 1]]);
-
-        while (!$userAuth->exists()) {
-            $padre = Padres_hijos::where([['departamento_puestos_id_hijo', $padre->id], ['activo', '<>', 0]])->first()->departamento_puestos_id_padre;
+        try {
+            DB::beginTransaction();
+            $puesto = empleados_puesto::select('empleados_puestos.*')
+                ->join('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
+                ->where([['empleado_id', $userId], ['dp.activo', 1]])->first()->dpto_puesto_id;
+            $padre = departamentoPuesto::where([['id', $puesto], ['activo', 1]])->first()->id;
+            $padre = Padres_hijos::where([['departamento_puestos_id_hijo', $padre], ['activo', '<>', 0]])->first()->departamento_puestos_id_padre;
             $padre = departamentoPuesto::where('id', $padre)->first();
+
             $userAuth = empleados_puesto::select('empleados_puestos.*')
                 ->join('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
                 ->join('users', 'users.id', 'empleados_puestos.empleado_id')
                 ->where([['puesto_id', $padre->puesto_id], ['dp.activo', 1], ['empleados_puestos.activo', 1], ['users.activo', 1]]);
-        }
 
-        DB::table('autorizas')->where('users_id', $userId)->update(['users_id' => $userAuth->first()->empleado_id]);
-        DB::table('procuser_auths')->where('auth', $userId)->update(['auth' => $userAuth->first()->empleado_id]);
+            while (!$userAuth->exists()) {
+                $padre = Padres_hijos::where([['departamento_puestos_id_hijo', $padre->id], ['activo', '<>', 0]])->first()->departamento_puestos_id_padre;
+                $padre = departamentoPuesto::where('id', $padre)->first();
+                $userAuth = empleados_puesto::select('empleados_puestos.*')
+                    ->join('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
+                    ->join('users', 'users.id', 'empleados_puestos.empleado_id')
+                    ->where([['puesto_id', $padre->puesto_id], ['dp.activo', 1], ['empleados_puestos.activo', 1], ['users.activo', 1]]);
+            }
+
+            DB::table('autorizas')->where('users_id', $userId)->update(['users_id' => $userAuth->first()->empleado_id]);
+            DB::table('procuser_auths')->where('auth', $userId)->update(['auth' => $userAuth->first()->empleado_id]);
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+        }
     }
 }
