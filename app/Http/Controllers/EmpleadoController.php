@@ -390,15 +390,13 @@ class EmpleadoController extends Controller
         $empleado_baja = bajasEmpleado::select(
             'cat_bajas_empleado_id',
             'fecha_baja'
-        )->where('activo', '=', 1)
-            ->firstwhere('empleado_id', '=', $id);
+        )->where([['activo', '=', 1], ['empleado_id', $id]])->orderBy('created_at', 'desc')->first();
 
         $finiquito = finiquito::select(
             'monto',
             'fecha_finiquito',
             'pagado',
-        )->where('activo', '=', 1)
-            ->firstwhere('empleado_id', '=', $id);
+        )->where([['activo', '=', 1], ['empleado_id', $id]])->orderBy('created_at', 'desc')->first();
 
         $expedientes = CatTipoDocumento::select(
             'expedientes.*',
