@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\EmpleadoController;
+use App\Http\Controllers\VariablesNominaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('empleados/send-sign', [EmpleadoController::class, 'sendFirma']);
 Route::get('empleados/show-firma', [EmpleadoController::class, 'showFirma']);
+
+Route::controller(VariablesNominaController::class)->group(function () {
+    Route::post('getVariablesNomina', 'getVariablesNomina')->name('getVariablesNomina');
+});
