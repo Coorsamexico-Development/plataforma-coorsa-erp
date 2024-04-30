@@ -636,7 +636,6 @@ class EmpleadoController extends Controller
             }
         }
 
-
         //En caso de que contenga la baja
         if (!empty($request->cat_bajas_empleado_id)) {
             $this->recalcularAutorizacion($empleado->id);
@@ -652,6 +651,7 @@ class EmpleadoController extends Controller
             DB::table('comites')->where([['user_id', $empleado->id], ['activo', 1]])->update(['activo' => 0]);
             DB::table('lineanegocios_users')->where('user_id', $empleado->id)->update(['activo' => 0]);
         }
+
         //finiquito_pagado
         if (!empty($request->fecha_finiquito)) {
             finiquito::updateOrCreate(
