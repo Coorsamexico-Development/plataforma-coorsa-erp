@@ -146,17 +146,25 @@ const form = useForm({
 });
 
 onMounted(() => {
-    if (props.empleado_baja !== null) {
+    if (props.empleado_baja != null) {
         form.cat_bajas_empleado_id = props.empleado_baja.cat_bajas_empleado_id;
-        form.fecha_baja = moment(props.empleado_baja.fecha_baja).format(
-            "YYYY-MM-DD"
-        );
+        if (
+            moment(props.empleado_baja.fecha_baja).format("YYYY-MM-DD") !=
+            "Invalid date"
+        )
+            form.fecha_baja = moment(props.empleado_baja.fecha_baja).format(
+                "YYYY-MM-DD"
+            );
     }
 
-    if (props.finiquito !== null) {
-        form.fecha_finiquito = moment(props.finiquito.fecha_finiquito).format(
-            "YYYY-MM-DD"
-        );
+    if (props.finiquito != null) {
+        if (
+            moment(props.finiquito.fecha_finiquito).format("YYYY") !=
+            "Invalid date"
+        )
+            form.fecha_finiquito = moment(
+                props.finiquito.fecha_finiquito
+            ).format("YYYY-MM-DD");
         form.monto_finiquito = props.finiquito.monto;
         form.finiquito_pagado = props.finiquito.pagado;
     }
