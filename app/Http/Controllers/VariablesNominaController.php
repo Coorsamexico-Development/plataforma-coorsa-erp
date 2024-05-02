@@ -23,7 +23,7 @@ class VariablesNominaController extends Controller
         return response()->json([
             'uma' => VariablesNomina::where([['activo', 1], ['tipo_id', 1]])->first()->valor,
             'aguinaldo' => VariablesNomina::where([['activo', 1], ['tipo_id', 2]])->first()->valor,
-            'vacaciones' => $vacaciones->dias,
+            'vacaciones' => $vacaciones->dias ?? 12,
             'deducible'  => VariablesNomina::where([['activo', 1], ['tipo_id', 3]])->first()->valor,
             'salarioMinimo'  => VariablesNomina::where([['activo', 1], ['tipo_id', 4]])->first()->valor,
         ]);
