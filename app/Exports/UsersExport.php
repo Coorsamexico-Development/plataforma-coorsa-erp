@@ -42,7 +42,7 @@ class UsersExport implements FromQuery, WithHeadings
                 'users.fotografia',
                 'expedientes.ruta',
                 'direcciones.codigo_postal',
-                DB::raw('concat(cecos.name, " ", cecos.descripcion) as ceco'),
+                DB::raw('concat(cecos.nombre, " ", cecos.descripcion) as ceco'),
                 DB::raw('IF(users.activo = 0,users.updated_at,"")')
             )
             ->leftjoin('expedientes', 'expedientes.empleado_id', 'users.id')
