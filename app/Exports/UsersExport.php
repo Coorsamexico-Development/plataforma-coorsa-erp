@@ -41,7 +41,8 @@ class UsersExport implements FromQuery, WithHeadings
                 'users.salario_bruto',
                 'users.fotografia',
                 'expedientes.ruta',
-                'users.curp',
+                'direcciones.codigo_postal',
+                DB::raw('concat(cecos.name, " ", cecos.descripcion) as ceco'),
                 DB::raw('IF(users.activo = 0,users.updated_at,"")')
             )
             ->leftjoin('expedientes', 'expedientes.empleado_id', 'users.id')
@@ -49,6 +50,7 @@ class UsersExport implements FromQuery, WithHeadings
             ->leftJoin('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
             ->leftjoin('puestos', 'dp.puesto_id', 'puestos.id')
             ->leftjoin('cecos', 'dp.departamento_id', 'cecos.id')
+            ->leftJoin('direcciones', 'direcciones.id', 'users.direccion_id')
             ->groupBy('users.id')
             ->where('users.activo', '=', $this->activo)
             ->orderBy('users.id');
@@ -74,7 +76,8 @@ class UsersExport implements FromQuery, WithHeadings
             'Salario bruto',
             'Fotografía',
             'Documento',
-            'CURP',
+            'CP',
+            'Ceco',
             $this->activo === 0 ? 'Fecha Baja' : null
         ];
     }
