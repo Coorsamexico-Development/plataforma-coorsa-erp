@@ -25,5 +25,5 @@ Route::get('empleados/show-firma', [EmpleadoController::class, 'showFirma']);
 
 Route::controller(VariablesNominaController::class)->group(function () {
     Route::post('getVariablesNomina', 'getVariablesNomina')->name('getVariablesNomina');
-    Route::get('actualizarSalarios', 'actualizarSalarios')->name('actualizarSalarios');
+    Route::post('actualizarSalarios', 'actualizarSalarios')->name('actualizarSalarios');
 });
