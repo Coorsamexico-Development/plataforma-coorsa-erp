@@ -41,7 +41,6 @@ const calculoSalario = async () => {
     }
 
     const salarioDiario = sueldoImss / (factor * diasMes);
-    console.log(factor);
     const salarioDiaInt = salarioDiario * factor;
 
     props.form.salario_diario = salarioDiario.toFixed(2);

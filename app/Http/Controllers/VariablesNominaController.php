@@ -28,4 +28,50 @@ class VariablesNominaController extends Controller
             'salarioMinimo'  => VariablesNomina::where([['activo', 1], ['tipo_id', 4]])->first()->valor,
         ]);
     }
+
+    public function actualizarSalarios(): void
+    {
+        $users = User::where('activo', 1)->get();
+        $uma = VariablesNomina::where([['activo', 1], ['tipo_id', 1]])->first()->valor;
+        $aguinaldo = VariablesNomina::where([['activo', 1], ['tipo_id', 2]])->first()->valor;
+        $deducible = VariablesNomina::where([['activo', 1], ['tipo_id', 3]])->first()->valor;
+        $salarioMinimo = VariablesNomina::where([['activo', 1], ['tipo_id', 4]])->first()->valor;
+        $diasMes = 365 / 12;
+        $valesDespensa = $diasMes * $uma * $deducible;
+
+        foreach ($users as $user) {
+            $fechaIngreso = new DateTime($user->fecha_ingreso_real);
+            $fechaAtual = new DateTime(date('Y-m-d'));
+            $diferencia = $fechaIngreso->diff($fechaAtual);
+
+            $vacaciones = DiasVacaciones::where([['año', $diferencia->y], ['activo', 1]])->first()->dias ?? 12;
+            $factor = (365 + $aguinaldo + $vacaciones * 0.25) / 365;
+            $salarioMinimoMes = $salarioMinimo * $factor * $diasMes;
+
+            //Calculos del salario
+            $sueldoBruto = $user->salario_bruto ?? 0;
+            $sueldoImss = ($sueldoBruto - $valesDespensa) / 1.22;
+            $bonoPunt = $sueldoImss * 0.1;
+            $fondoAhorro = $sueldoImss * 0.02;
+
+            if ($salarioMinimoMes >= $sueldoImss) {
+                $sueldoImss = $salarioMinimoMes;
+                $diff = $sueldoBruto - $sueldoImss < 0 ? 0 : $sueldoBruto - $sueldoImss;
+                $bonoPunt = $diff / 3;
+                $fondoAhorro = $diff / 3;
+            }
+            $salarioDiario = $sueldoImss / ($factor * $diasMes);
+            $salarioDiarioInt = $salarioDiario * $factor;
+
+            $user->update([
+                'salario_diario' => $salarioDiario,
+                'salario_bruto' => $sueldoBruto,
+                'salario_imss' => $sueldoImss,
+                'bono_puntualidad' => $bonoPunt,
+                'bono_asistencia' => $bonoPunt,
+                'despensa' => $valesDespensa,
+                'fondo_ahorro' => $fondoAhorro,
+            ]);
+        }
+    }
 }
