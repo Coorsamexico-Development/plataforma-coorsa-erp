@@ -54,8 +54,11 @@ class VariablesNominaController extends Controller
             $bonoPunt = $sueldoImss * 0.1;
             $fondoAhorro = $sueldoImss * 0.02;
 
+
             if ($salarioMinimoMes >= $sueldoImss) {
                 $sueldoImss = $salarioMinimoMes;
+                if ($sueldoBruto < $salarioMinimoMes)
+                    $sueldoBruto = $salarioMinimoMes;
                 $diff = $sueldoBruto - $sueldoImss < 0 ? 0 : $sueldoBruto - $sueldoImss;
                 $bonoPunt = $diff / 3;
                 $fondoAhorro = $diff / 3;
@@ -64,13 +67,13 @@ class VariablesNominaController extends Controller
             $salarioDiarioInt = $salarioDiario * $factor;
 
             $user->update([
-                'salario_diario' => $salarioDiario,
-                'salario_bruto' => $sueldoBruto,
-                'salario_imss' => $sueldoImss,
-                'bono_puntualidad' => $bonoPunt,
-                'bono_asistencia' => $bonoPunt,
-                'despensa' => $valesDespensa,
-                'fondo_ahorro' => $fondoAhorro,
+                'salario_diario' => round($salarioDiario, 2),
+                'salario_bruto' => round($sueldoBruto, 2),
+                'salario_imss' => round($sueldoImss, 2),
+                'bono_puntualidad' => round($bonoPunt, 2),
+                'bono_asistencia' => round($bonoPunt, 2),
+                'despensa' => round($valesDespensa, 2),
+                'fondo_ahorro' => round($fondoAhorro, 2),
             ]);
         }
     }
