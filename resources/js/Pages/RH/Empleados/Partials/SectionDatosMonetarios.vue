@@ -70,6 +70,15 @@ watchEffect(async () => {
     diasMes = 365 / 12;
     salarioMinimoMes = salarioMinimo * factor * diasMes;
 });
+
+function calculoSalarioMinimo() {
+    const salarioBruto = props.form.salario_bruto;
+
+    if (salarioBruto < salarioMinimoMes) {
+        props.form.salario_bruto = salarioMinimoMes.toFixed(2);
+        calculoSalario();
+    }
+}
 </script>
 
 <template>
@@ -140,6 +149,7 @@ watchEffect(async () => {
                                 placeholder="$ 00.0"
                                 @keyup="calculoSalario()"
                                 :min="salarioMinimoMes"
+                                @change="calculoSalarioMinimo()"
                             />
                             <p v-else class="block w-full mt-1">
                                 {{ props.form.salario_bruto }}
