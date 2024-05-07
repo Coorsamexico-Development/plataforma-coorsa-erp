@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DiasVacaciones;
 use App\Models\User;
+use App\Models\UserVacacions;
 use Illuminate\Http\Request;
 use App\Models\VariablesNomina;
 use DateTime;
@@ -75,6 +76,18 @@ class VariablesNominaController extends Controller
                 'despensa' => round($valesDespensa, 2),
                 'fondo_ahorro' => round($fondoAhorro, 2),
             ]);
+            $this->actualizarVacaciones($user, DiasVacaciones::where([['año', $diferencia->y], ['activo', 1]])->first());
         }
+    }
+
+    private function actualizarVacaciones($user, $vacaciones)
+    {
+        if ($vacaciones != null)
+            if (!UserVacacions::where([['user_id', $user->id], ['dias_vacaciones_id', $vacaciones->id]])->exists())
+                UserVacacions::create([
+                    'user_id' => $user->id,
+                    'dias_vacaciones_id' => $vacaciones->id,
+                    'contador' => $vacaciones->dias,
+                ]);
     }
 }
