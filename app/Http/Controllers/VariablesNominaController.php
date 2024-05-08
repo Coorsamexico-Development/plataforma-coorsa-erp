@@ -43,7 +43,9 @@ class VariablesNominaController extends Controller
         foreach ($users as $user) {
             $fechaIngreso = new DateTime($user->fecha_ingreso_real);
             $fechaAtual = new DateTime(date('Y-m-d'));
-            $diferencia = $fechaIngreso->diff($fechaAtual);
+            if ($fechaAtual > $fechaIngreso)
+                $diferencia = $fechaIngreso->diff($fechaAtual);
+            else $diferencia = (object)['y' => 0];
 
             $vacaciones = DiasVacaciones::where([['año', $diferencia->y], ['activo', 1]])->first()->dias ?? 12;
             $factor = (365 + $aguinaldo + $vacaciones * 0.25) / 365;
