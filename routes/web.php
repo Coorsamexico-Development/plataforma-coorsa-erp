@@ -74,6 +74,7 @@ Route::middleware([
             )
             ->join('noticia_descrs', 'noticia_descrs.noticia_id', 'noticias.id')
             ->where('noticias.activo', '=', '1')
+            ->orderBy('noticias.created_at', 'desc')
             ->limit(3)
             ->get();
 
