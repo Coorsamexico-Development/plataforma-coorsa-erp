@@ -106,7 +106,7 @@ Route::middleware([
     //Reenvio de correo de bienvenida
     Route::post('/welcome-password/{user}', [ResetPasswordController::class, 'store'])->name('welcome.password.first');
 
-    Route::get('/control-interno/departamentos-aditorias', [PruebaGraphController::class, 'index'])
+    Route::get('/control-interno/departamentos-aditorias', [DepartamentosAuditoriaController::class, 'index'])
         ->name('control-interno.departamentos-aditorias.index');
 
     Route::post('departamentos-aditorias/{departamentosAuditoria}/calificacion', [PruebaGraphController::class, 'storeCalificacion'])
@@ -244,3 +244,15 @@ Route::controller(PruebaGraphController::class)->group(function () {
 });
 
 Route::get('/cambios/puestos', [DepartamentoController::class, 'cambiosPuestos']);
+
+Route::controller(DepartamentosAuditoriaController::class)->middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    //Getters
+    Route::get('dataSua', 'dataSua')->name('dataSua');
+    //Posts
+    Route::post('dataEvolucionImss', 'dataEvolucionImss')->name('dataEvolucionImss');
+    Route::post('dataEvolucionColab', 'dataEvolucionColab')->name('dataEvolucionColab');
+});
