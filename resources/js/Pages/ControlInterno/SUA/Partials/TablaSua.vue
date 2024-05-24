@@ -28,24 +28,29 @@ const money = [1, 2, 3, 6];
             class="w-full text-left border-separate table-auto border-spacing-1"
         >
             <thead>
-                <template
-                    v-for="(añoMes, index) in tabla.añoMeses"
-                    :key="index"
-                >
-                    <tr>
+                <tr>
+                    <template
+                        v-for="(añoMes, index) in tabla.añoMeses"
+                        :key="index"
+                    >
                         <th
                             :colspan="Object.keys(añoMes).length"
                             class="text-[20px] text-center"
                         >
                             {{ index }}
                         </th>
-                    </tr>
-                    <tr>
+                    </template>
+                </tr>
+                <tr>
+                    <template
+                        v-for="(añoMes, index) in tabla.añoMeses"
+                        :key="index"
+                    >
                         <template v-for="(index, mes) in añoMes" :key="index">
                             <th class="px-1">{{ mes }}</th>
                         </template>
-                    </tr>
-                </template>
+                    </template>
+                </tr>
             </thead>
             <tbody>
                 <tr v-for="(data, index) in tabla.dataTable" :key="index">
