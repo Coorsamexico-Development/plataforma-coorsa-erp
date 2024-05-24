@@ -1,10 +1,12 @@
 <script setup>
+import { formatMoney } from "@/utils/formatMoney.js";
 defineProps({
     tabla: {
         type: Object,
         required: true,
     },
 });
+const money = [1, 2, 3, 6];
 </script>
 <template>
     <table class="w-2/12 border-separate border-spacing-1 text-end">
@@ -46,7 +48,13 @@ defineProps({
                 <tr v-for="(data, index) in tabla.dataTable" :key="index">
                     <template v-for="(value, index) in data" :key="index">
                         <td class="px-1">
-                            {{ value.value }}
+                            {{
+                                money.includes(value.atributo)
+                                    ? formatMoney(value.value)
+                                    : value.atributo == 4
+                                    ? `${value.value}%`
+                                    : Number(value.value).toFixed(0)
+                            }}
                         </td>
                     </template>
                 </tr>

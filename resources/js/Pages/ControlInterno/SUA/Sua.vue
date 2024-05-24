@@ -35,11 +35,11 @@ function getData() {
         })
         .catch((err) => console.log(err.response ?? err));
 }
-/* onMounted(
-    Echo.channel("EvolucionImss").listen("SuaEvent", function (data) {
-        getData();
-    })
-); */
+onMounted(() =>
+    Echo.channel("EvolucionImss").listen("SuaEvent", () =>
+        props.show ? getData() : null
+    )
+);
 </script>
 <template>
     <CardCi>

@@ -20,6 +20,7 @@ let yAxis;
 let yRenderer;
 let series;
 let data = [];
+let cursor;
 
 onMounted(() => {
     root = am5.Root.new(graphSua.value);
@@ -35,6 +36,8 @@ onMounted(() => {
             paddingRight: 1,
         })
     );
+    cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
+    cursor.lineY.set("visible", false);
 
     xRenderer = am5xy.AxisRendererX.new(root, {
         minGridDistance: 30,
@@ -115,6 +118,7 @@ onMounted(() => {
 
 watchEffect(() => {
     if (props.data != 0) {
+        data = [];
         props.data[5].forEach((e) => {
             data.push({
                 mes: e.mes,
@@ -124,11 +128,6 @@ watchEffect(() => {
 
         xAxis.data.setAll(data);
         series.data.setAll(data);
-
-        // Make stuff animate on load
-        // https://www.amcharts.com/docs/v5/concepts/animations/
-        series.appear(1000);
-        chart.appear(1000, 100);
     }
 });
 </script>
