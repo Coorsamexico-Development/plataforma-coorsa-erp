@@ -43,32 +43,53 @@ onMounted(() =>
 </script>
 <template>
     <CardCi>
-        <div class="flex items-center gap-1 h-fit">
-            <TablaSua :tabla="T1" />
-            <button
-                class="w-[4rem] h-[4rem] transition-all duration-200 -rotate-90 active:scale-90"
-                @click="
-                    position = $event.target.getBoundingClientRect();
-                    modalImssShow = true;
-                "
+        <div class="grid content-center gap-1 justify-items-center">
+            <span
+                class="text-[28px] uppercase font-semibold bg-blue-500 px-4 rounded-xl text-white py-1 h-fit"
             >
-                <Add />
-            </button>
-        </div>
-        <div class="flex items-center justify-between gap-10">
-            <div class="flex items-center w-1/2 overflow-hidden">
-                <TablaSua :tabla="T2" />
+                Evolucion de colaboradores inactivos vs imss
+            </span>
+            <div class="flex items-center w-full h-fit">
+                <TablaSua :tabla="T1" titulo="Evolucion" />
                 <button
-                    class="w-[4rem] h-[4rem] transition-all duration-200 -rotate-90 active:scale-90"
+                    class="w-[4rem] h-[4rem] transition-all duration-200 -rotate-90 active:scale-90 -ml-4"
                     @click="
                         position = $event.target.getBoundingClientRect();
-                        modalColabShow = true;
+                        modalImssShow = true;
                     "
                 >
                     <Add />
                 </button>
             </div>
-            <GraficaSua :data="T2.dataTable" />
+        </div>
+        <div class="flex items-center justify-between gap-5">
+            <div class="grid w-full gap-1 justify-items-center">
+                <span
+                    class="text-[20px] uppercase font-semibold bg-blue-500 px-4 rounded-xl text-white py-1"
+                >
+                    Evolucion de colaboradores inactivos vs imss
+                </span>
+                <div class="flex items-center w-full overflow-hidden">
+                    <TablaSua :tabla="T2" />
+                    <button
+                        class="w-[4rem] h-[4rem] transition-all duration-200 -rotate-90 active:scale-90 -ml-3"
+                        @click="
+                            position = $event.target.getBoundingClientRect();
+                            modalColabShow = true;
+                        "
+                    >
+                        <Add />
+                    </button>
+                </div>
+            </div>
+            <div class="grid w-full gap-1 justify-items-center">
+                <span
+                    class="text-[20px] uppercase font-semibold bg-blue-500 px-4 rounded-xl text-white py-1"
+                >
+                    Evolucion de colaboradores inactivos vs imss
+                </span>
+                <GraficaSua :data="T2.dataTable" class="" />
+            </div>
         </div>
     </CardCi>
     <ModalEvolucionImss
