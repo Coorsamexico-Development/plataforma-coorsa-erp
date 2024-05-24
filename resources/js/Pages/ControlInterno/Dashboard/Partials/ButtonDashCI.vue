@@ -14,7 +14,7 @@ defineEmits(["click"]);
 </script>
 <template>
     <button
-        class="px-2 py-1 font-medium max-h-fit w-fit text-[#0A0F2C] disabled:cursor-auto disabled:text-[#474b61]"
+        class="px-[4rem] py-1 font-medium max-h-fit text-[#FFFFFF] disabled:cursor-auto disabled:text-[#9f9f9f] text-[25px] bg-blue-500 rounded-full enabled:active:scale-90 transition-all duration-200"
         @click="$emit('click')"
         :disabled="disabled"
     >

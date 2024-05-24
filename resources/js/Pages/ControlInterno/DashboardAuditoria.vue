@@ -3,6 +3,8 @@ import { ref, watchEffect } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import BotonCi from "@/Pages/ControlInterno/Partials/BotonCI.vue";
 import Sua from "./SUA/Sua.vue";
+import DahsboardCi from "./Dashboard/DahsboardCi.vue";
+import NextTime from "./NextTime.vue";
 
 defineProps({
     nominas: {
@@ -56,9 +58,41 @@ const menu = ref(0);
                     :disabled="menu === 0"
                 />
                 <BotonCi value="SUA" @click="menu = 1" :disabled="menu === 1" />
+                <BotonCi
+                    value="Nominas"
+                    @click="menu = 2"
+                    :disabled="menu === 2"
+                />
+                <BotonCi value="CXP" @click="menu = 3" :disabled="menu === 3" />
+                <BotonCi
+                    value="Atas"
+                    @click="menu = 4"
+                    :disabled="menu === 4"
+                />
+                <BotonCi
+                    value="Bajas"
+                    @click="menu = 5"
+                    :disabled="menu === 5"
+                />
+                <BotonCi
+                    value="Maniobras"
+                    @click="menu = 6"
+                    :disabled="menu === 6"
+                />
             </div>
             <div class="w-11/12">
+                <DahsboardCi
+                    v-if="menu === 0"
+                    :show="menu === 0"
+                    @menu="(e) => (menu = e)"
+                />
                 <Sua v-if="menu === 1" :show="menu === 1" />
+                <NextTime
+                    v-if="[2, 3, 4, 5, 6].includes(menu)"
+                    :show="[2, 3, 4, 5, 6].includes(menu)"
+                    @menu="menu = 0"
+                />
+                />
             </div>
         </section>
     </AppLayout>
