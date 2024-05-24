@@ -11,6 +11,8 @@ use App\Models\CalfRubroMe;
 use App\Models\CiAtributo;
 use App\Models\CiAño;
 use App\Models\CiDatas;
+use App\Models\CiParametro;
+use App\Models\CiParametroAtributo;
 use App\Models\DocumentosMe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +21,7 @@ use Illuminate\Support\Facades\Storage;
 
 class DepartamentosAuditoriaController extends Controller
 {
+    //Gets
     public function index()
     {
         return Inertia::render('ControlInterno/DashboardAuditoria', [
@@ -87,6 +90,21 @@ class DepartamentosAuditoriaController extends Controller
         ]);
     }
 
+    public function dataNomina()
+    {
+        $atributos = CiAtributo::whereIn('id', ["7", "8", "9", "10", "11", "12", "13", "14"])->get();
+        $parametros = CiParametro::whereIn('id', ["1", "2"])->get();
+
+        $data = CiParametroAtributo::select()->where('seccion_id', 2);
+
+        return response()->json([
+            'atributos' => $atributos,
+            'parametros' => $parametros,
+            'data' => $data->exists() ? $data->get()->groupBy('atributo_id') : []
+        ]);
+    }
+
+    //Posts
     public function dataEvolucionImss(Request $request): void
     {
         $request->validate([
@@ -165,5 +183,20 @@ class DepartamentosAuditoriaController extends Controller
         ]);
 
         event(new SuaEvent());
+    }
+
+    public function addNomina(Request $request)
+    {
+        $request->validate([
+            'nombre.*' => ['required'],
+            'nss.*' => ['required'],
+            'rfc.*' => ['required'],
+            'ingreso.*' => ['required'],
+            'puesto.*' => ['required'],
+            'infonavit.*' => ['required'],
+            'fonacot.*' => ['required'],
+            'bancos.*' => ['required'],
+        ]);
+        return response()->json($request);
     }
 }

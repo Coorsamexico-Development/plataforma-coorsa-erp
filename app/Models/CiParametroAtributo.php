@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CiDatas extends Model
+class CiParametroAtributo extends Model
 {
     use HasFactory;
 
@@ -13,7 +13,8 @@ class CiDatas extends Model
         'año_id',
         'mes_id',
         'atributo_id',
-        'value',
+        'parametro_id',
         'seccion_id',
+        'value',
     ];
 }

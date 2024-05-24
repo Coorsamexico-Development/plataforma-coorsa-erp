@@ -6,6 +6,8 @@ import TablaSua from "./Partials/TablaSua.vue";
 import Add from "@/Iconos/Add.vue";
 import ModalEvolucionImss from "./Modals/ModalEvolucionImss.vue";
 import ModalEvolucionColab from "./Modals/ModalEvolucionColab.vue";
+import Titulos from "../Partials/Titulos.vue";
+import { value } from "dom7";
 
 const props = defineProps({
     show: {
@@ -44,11 +46,10 @@ onMounted(() =>
 <template>
     <CardCi>
         <div class="grid content-center gap-1 justify-items-center">
-            <span
-                class="text-[28px] uppercase font-semibold bg-blue-500 px-4 rounded-xl text-white py-1 h-fit"
-            >
-                Evolucion de colaboradores inactivos vs imss
-            </span>
+            <Titulos
+                value="Evolucion de colaboradores inactivos vs imss"
+                class="text-[28px]"
+            />
             <div class="flex items-center w-full h-fit">
                 <TablaSua :tabla="T1" titulo="Evolucion" />
                 <button
@@ -64,11 +65,10 @@ onMounted(() =>
         </div>
         <div class="flex items-center justify-between gap-5">
             <div class="grid w-full gap-1 justify-items-center">
-                <span
-                    class="text-[20px] uppercase font-semibold bg-blue-500 px-4 rounded-xl text-white py-1"
-                >
-                    Evolucion de colaboradores inactivos vs imss
-                </span>
+                <Titulos
+                    value="Evolucion de colaboradores inactivos vs imss"
+                    class="text-[20px]"
+                />
                 <div class="flex items-center w-full overflow-hidden">
                     <TablaSua :tabla="T2" />
                     <button
@@ -83,11 +83,10 @@ onMounted(() =>
                 </div>
             </div>
             <div class="grid w-full gap-1 justify-items-center">
-                <span
-                    class="text-[20px] uppercase font-semibold bg-blue-500 px-4 rounded-xl text-white py-1"
-                >
-                    Evolucion de colaboradores inactivos vs imss
-                </span>
+                <Titulos
+                    value="Evolucion de colaboradores inactivos vs imss"
+                    class="text-[20px]"
+                />
                 <GraficaSua :data="T2.dataTable" class="" />
             </div>
         </div>
