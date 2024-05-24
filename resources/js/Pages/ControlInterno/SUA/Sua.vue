@@ -1,5 +1,5 @@
 <script setup>
-import { watchEffect, ref, reactive } from "vue";
+import { watchEffect, ref, reactive, onMounted } from "vue";
 import CardCi from "../Partials/CardCi.vue";
 import GraficaSua from "./Partials/GraficaSua.vue";
 import TablaSua from "./Partials/TablaSua.vue";
@@ -35,6 +35,11 @@ function getData() {
         })
         .catch((err) => console.log(err.response ?? err));
 }
+/* onMounted(
+    Echo.channel("EvolucionImss").listen("SuaEvent", function (data) {
+        getData();
+    })
+); */
 </script>
 <template>
     <CardCi>

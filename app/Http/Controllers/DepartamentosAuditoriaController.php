@@ -36,8 +36,8 @@ class DepartamentosAuditoriaController extends Controller
             ->join('ci_años as cia', 'cia.id', 'ci_datas.año_id')
             ->whereIn('ci_datas.atributo_id', [1, 2, 3, 4])
             ->orderBy('cia.año')
-            ->orderBy('cim.id')
-            ->get();
+            ->orderBy('cim.id');
+
         $añoMesT2 = CiDatas::select(
             'cia.año as año',
             'cim.mes as mes',
@@ -46,8 +46,7 @@ class DepartamentosAuditoriaController extends Controller
             ->join('ci_años as cia', 'cia.id', 'ci_datas.año_id')
             ->whereIn('ci_datas.atributo_id', [5, 6])
             ->orderBy('cia.año')
-            ->orderBy('cim.id')
-            ->get();
+            ->orderBy('cim.id');
 
         $atributos = CiAtributo::whereIn('id', [1, 2, 3, 4])->get();
         $atributosT2 = CiAtributo::whereIn('id', [5, 6])->get();
@@ -63,8 +62,7 @@ class DepartamentosAuditoriaController extends Controller
             ->join('ci_años as cia', 'cia.id', 'ci_datas.año_id')
             ->whereIn('ci_datas.atributo_id', [1, 2, 3, 4])
             ->orderBy('cia.año')
-            ->orderBy('cim.id')
-            ->get();
+            ->orderBy('cim.id');
 
         $dataT2 =
             CiDatas::select(
@@ -77,16 +75,15 @@ class DepartamentosAuditoriaController extends Controller
             ->join('ci_años as cia', 'cia.id', 'ci_datas.año_id')
             ->whereIn('ci_datas.atributo_id', [5, 6])
             ->orderBy('cia.año')
-            ->orderBy('cim.id')
-            ->get();
+            ->orderBy('cim.id');
 
         return response()->json([
-            'añoMeses' => $añoMes->exists() ? $añoMes->groupBy(['año', 'mes']) : null,
-            'añoMesesT2' => $añoMesT2->exists() ? $añoMesT2->groupBy(['año', 'mes']) : null,
+            'añoMeses' => $añoMes->exists() ? $añoMes->get()->groupBy(['año', 'mes']) : null,
+            'añoMesesT2' => $añoMesT2->exists() ? $añoMesT2->get()->groupBy(['año', 'mes']) : null,
             'atributos' => $atributos,
             'atributosT2' => $atributosT2,
-            'data' => $data->exists() ? $data->groupBy('atributo') : null,
-            'dataT2' => $dataT2->exists() ? $dataT2->groupBy('atributo') : null,
+            'data' => $data->exists() ? $data->get()->groupBy('atributo') : null,
+            'dataT2' => $dataT2->exists() ? $dataT2->get()->groupBy('atributo') : null,
         ]);
     }
 
