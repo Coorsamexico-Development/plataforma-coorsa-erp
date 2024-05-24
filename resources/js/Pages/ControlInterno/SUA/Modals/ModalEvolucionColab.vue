@@ -56,6 +56,8 @@ function subirSua() {
         .catch((err) => console.log(err.response ?? err))
         .finally(() => {
             dataValues.processing = false;
+            close();
+            dataValues.reset();
         });
 }
 </script>
