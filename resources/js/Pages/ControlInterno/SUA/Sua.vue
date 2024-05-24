@@ -46,7 +46,7 @@ onMounted(() =>
         <div class="flex items-center gap-1 h-fit">
             <TablaSua :tabla="T1" />
             <button
-                class="w-10 h-10 transition-all duration-200 -rotate-90 active:scale-90"
+                class="w-[4rem] h-[4rem] transition-all duration-200 -rotate-90 active:scale-90"
                 @click="
                     position = $event.target.getBoundingClientRect();
                     modalImssShow = true;
@@ -59,7 +59,7 @@ onMounted(() =>
             <div class="flex items-center w-1/2 overflow-hidden">
                 <TablaSua :tabla="T2" />
                 <button
-                    class="w-10 h-10 transition-all duration-200 -rotate-90 active:scale-90"
+                    class="w-[4rem] h-[4rem] transition-all duration-200 -rotate-90 active:scale-90"
                     @click="
                         position = $event.target.getBoundingClientRect();
                         modalColabShow = true;
