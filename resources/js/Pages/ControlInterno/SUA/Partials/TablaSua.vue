@@ -33,7 +33,10 @@ const money = [1, 2, 3, 6];
                     :key="index"
                 >
                     <tr>
-                        <th colspan="12" class="text-[20px] text-center">
+                        <th
+                            :colspan="Object.keys(añoMes).length"
+                            class="text-[20px] text-center"
+                        >
                             {{ index }}
                         </th>
                     </tr>
