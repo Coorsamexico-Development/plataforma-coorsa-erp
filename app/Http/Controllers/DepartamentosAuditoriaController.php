@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SuaEvent;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Rubro;
@@ -80,12 +81,12 @@ class DepartamentosAuditoriaController extends Controller
             ->get();
 
         return response()->json([
-            'añoMeses' => $añoMes->groupBy(['año', 'mes']),
-            'añoMesesT2' => $añoMesT2->groupBy(['año', 'mes']),
+            'añoMeses' => $añoMes->exists() ? $añoMes->groupBy(['año', 'mes']) : null,
+            'añoMesesT2' => $añoMesT2->exists() ? $añoMesT2->groupBy(['año', 'mes']) : null,
             'atributos' => $atributos,
             'atributosT2' => $atributosT2,
-            'data' => $data->groupBy('atributo'),
-            'dataT2' => $dataT2->groupBy('atributo'),
+            'data' => $data->exists() ? $data->groupBy('atributo') : null,
+            'dataT2' => $dataT2->exists() ? $dataT2->groupBy('atributo') : null,
         ]);
     }
 
@@ -133,6 +134,8 @@ class DepartamentosAuditoriaController extends Controller
         ], [
             'value' => $request->incre
         ]);
+
+        event(new SuaEvent());
     }
 
     public function dataEvolucionColab(Request $request): void
@@ -163,5 +166,7 @@ class DepartamentosAuditoriaController extends Controller
         ], [
             'value' => $request->cotizado
         ]);
+
+        event(new SuaEvent());
     }
 }
