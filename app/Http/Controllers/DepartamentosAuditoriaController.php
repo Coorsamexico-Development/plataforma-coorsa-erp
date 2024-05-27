@@ -214,8 +214,7 @@ class DepartamentosAuditoriaController extends Controller
             'value' => $request->incre
         ]);
 
-        Broadcast::channel('EvolucionImss', SuaEvent::class);
-        /* event(new SuaEvent()); */
+        event(new SuaEvent());
     }
 
     public function dataEvolucionColab(Request $request): void
@@ -290,6 +289,6 @@ class DepartamentosAuditoriaController extends Controller
             ]);
         }
 
-        Broadcast::channel('NominasData', SuaEvent::class);
+        event(new SuaEvent());
     }
 }
