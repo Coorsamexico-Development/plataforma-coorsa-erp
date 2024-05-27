@@ -6,6 +6,7 @@ import Titulos from "../Partials/Titulos.vue";
 import ModalAddNomina from "./Modals/ModalAddNomina.vue";
 import GraficaBarrasNomina from "./Partials/GraficaBarrasNomina.vue";
 import GraficaLineasNomina from "./Partials/GraficaLineasNomina.vue";
+import RiesgoRadarNomina from "./Partials/RiesgoRadarNomina.vue";
 
 const props = defineProps({
     show: {
@@ -22,6 +23,7 @@ const tabla = reactive({
 
 const graphBar = reactive({});
 const graphLine = ref({});
+const riesgoRadar = ref(0);
 
 const modalAddNomina = ref(false);
 const position = ref();
@@ -65,6 +67,7 @@ function getData() {
                 }
             });
             graphLine.value = data.garphLine;
+            riesgoRadar.value = data.dataRadar;
         })
         .catch((err) => console.log(err.response ?? err));
 }
@@ -80,8 +83,12 @@ onMounted(() =>
         <div class="grid">
             <div class="flex items-center justify-between">
                 <div class="grid w-full justify-items-center">
-                    <Titulos value="Promedio" class="text-[28px]" />
+                    <Titulos value="Promedio" class="text-[20px]" />
                     <GraficaLineasNomina :data="graphLine" />
+                </div>
+                <div class="grid w-full justify-items-center">
+                    <Titulos value="Riesgo Inherente" class="text-[20px]" />
+                    <RiesgoRadarNomina :riesgo="riesgoRadar" />
                 </div>
             </div>
             <div class="flex items-center justify-between">

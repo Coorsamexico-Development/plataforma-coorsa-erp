@@ -140,11 +140,24 @@ class DepartamentosAuditoriaController extends Controller
 
         $garphLine = $this->getGraphLineNomina($dataGraphLine);
 
+        $dataRadar = CiParametroAtributo::select(
+            DB::raw('sum(value) as riesgo'),
+        )
+            ->where([
+                ['seccion_id', 2],
+                ['mes_id', $paramsFecha->mes],
+                ['año_id', $paramsFecha->año],
+                ['parametro_id', 2]
+            ])
+            ->groupBy('parametro_id')
+            ->first();
+
         return response()->json([
             'atributos' => $atributos,
             'parametros' => $parametros,
             'data' => $data->exists() ? $data->get()->groupBy('atributo') : [],
             'garphLine' => $garphLine,
+            'dataRadar' => $dataRadar->riesgo / count($atributos),
         ]);
     }
 
