@@ -103,7 +103,7 @@ onMounted(() => {
             valueYField: "value",
             valueXField: "date",
             tooltip: am5.Tooltip.new(root, {
-                labelText: "{valueY}",
+                labelText: "{valueY}%",
             }),
             connect: false,
         })

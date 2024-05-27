@@ -158,15 +158,16 @@ onMounted(() => {
         axisRange.get("axisFill").setAll({
             visible: true,
             fill: am5.color(data.color),
-            fillOpacity: 0.8,
+            fillOpacity: 0.9,
         });
 
         axisRange.get("label").setAll({
             text: data.title,
             inside: true,
             radius: 15,
-            fontSize: "0.9em",
+            fontSize: "1rem",
             fill: root.interfaceColors.get("background"),
+            fontWeight: 600,
         });
     });
 
