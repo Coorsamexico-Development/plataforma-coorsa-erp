@@ -4,6 +4,8 @@ import CardCi from "../Partials/CardCi.vue";
 import TablaNomina from "./Partials/TablaNomina.vue";
 import Titulos from "../Partials/Titulos.vue";
 import ModalAddNomina from "./Modals/ModalAddNomina.vue";
+import GraficaBarrasNomina from "./Partials/GraficaBarrasNomina.vue";
+import GraficaLineasNomina from "./Partials/GraficaLineasNomina.vue";
 
 const props = defineProps({
     show: {
@@ -18,6 +20,9 @@ const tabla = reactive({
     value: [],
 });
 
+const graphBar = reactive({});
+const graphLine = ref({});
+
 const modalAddNomina = ref(false);
 const position = ref();
 
@@ -29,6 +34,36 @@ function getData() {
         .then(({ data }) => {
             tabla.atributos = data.atributos;
             tabla.parametros = data.parametros;
+            tabla.data = data.data;
+            Object.values(data.data).forEach((element) => {
+                switch (element[0].atributo) {
+                    case 7:
+                        graphBar.Nombre = element[0].value;
+                        break;
+                    case 8:
+                        graphBar.NSS = element[0].value;
+                        break;
+                    case 9:
+                        graphBar.RFC = element[0].value;
+                        break;
+                    case 10:
+                        graphBar.Ingreso = element[0].value;
+                        break;
+                    case 11:
+                        graphBar.Puesto = element[0].value;
+                        break;
+                    case 12:
+                        graphBar.Infonavit = element[0].value;
+                        break;
+                    case 13:
+                        graphBar.Fonacot = element[0].value;
+                        break;
+                    case 14:
+                        graphBar.Bancos = element[0].value;
+                        break;
+                }
+            });
+            graphLine.value = data.garphLine;
         })
         .catch((err) => console.log(err.response ?? err));
 }
@@ -39,6 +74,7 @@ function getData() {
             <div class="flex items-center justify-between">
                 <div class="grid w-full justify-items-center">
                     <Titulos value="Promedio" class="text-[28px]" />
+                    <GraficaLineasNomina :data="graphLine" />
                 </div>
             </div>
             <div class="flex items-center justify-between">
@@ -47,6 +83,7 @@ function getData() {
                         value="Rango Porcentual de Cumplimiento"
                         class="text-[20px]"
                     />
+                    <GraficaBarrasNomina :data="graphBar" />
                 </div>
                 <div class="grid w-full justify-items-center">
                     <TablaNomina

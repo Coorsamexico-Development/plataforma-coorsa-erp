@@ -128,6 +128,7 @@ watchEffect(() => {
 
         xAxis.data.setAll(data);
         series.data.setAll(data);
+        series.appear(1000);
     }
 });
 </script>

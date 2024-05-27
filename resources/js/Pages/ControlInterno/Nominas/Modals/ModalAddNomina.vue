@@ -32,34 +32,42 @@ const close = () => {
 const dataValues = useForm({
     fecha: null,
     nombre: {
+        id: 7,
         porcentaje: null,
         riesgo: null,
     },
     nss: {
+        id: 8,
         porcentaje: null,
         riesgo: null,
     },
     rfc: {
+        id: 9,
         porcentaje: null,
         riesgo: null,
     },
     ingreso: {
+        id: 10,
         porcentaje: null,
         riesgo: null,
     },
     puesto: {
+        id: 11,
         porcentaje: null,
         riesgo: null,
     },
     infonavit: {
+        id: 12,
         porcentaje: null,
         riesgo: null,
     },
     fonacot: {
+        id: 13,
         porcentaje: null,
         riesgo: null,
     },
     bancos: {
+        id: 14,
         porcentaje: null,
         riesgo: null,
     },
@@ -80,8 +88,6 @@ function subirSua() {
         .catch((err) => console.log(err.response ?? err))
         .finally(() => {
             dataValues.processing = false;
-            close();
-            dataValues.reset();
         });
 }
 </script>

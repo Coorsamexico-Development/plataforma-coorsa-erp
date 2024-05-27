@@ -17,7 +17,10 @@ use App\Models\DocumentosMe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\DepartamentosAuditoria;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Support\Facades\Storage;
+
+use function PHPUnit\Framework\returnSelf;
 
 class DepartamentosAuditoriaController extends Controller
 {
@@ -94,14 +97,73 @@ class DepartamentosAuditoriaController extends Controller
     {
         $atributos = CiAtributo::whereIn('id', ["7", "8", "9", "10", "11", "12", "13", "14"])->get();
         $parametros = CiParametro::whereIn('id', ["1", "2"])->get();
+        $paramsFecha = CiParametroAtributo::select(
+            'cim.id as mes',
+            'cia.id as año'
+        )
+            ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
+            ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
+            ->orderBy('cia.año', 'desc')
+            ->orderBy('cim.id', 'desc')
+            ->where('seccion_id', 2)
+            ->first();
 
-        $data = CiParametroAtributo::select()->where('seccion_id', 2);
+        $data = CiParametroAtributo::select(
+            'atributo_id as atributo',
+            'parametro_id as parametro',
+            'value',
+        )
+            ->where([
+                ['seccion_id', 2],
+                ['mes_id', $paramsFecha->mes],
+                ['año_id', $paramsFecha->año],
+            ]);
+
+        $dataGraphLine = CiParametroAtributo::select(
+            'value',
+            'cim.id as mes_id',
+            'cim.mes as mes',
+            'cia.año as año'
+
+        )
+            ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
+            ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
+            ->orderBy('cia.año', 'desc')
+            ->orderBy('cim.id', 'desc')
+            ->where([
+                ['seccion_id', 2],
+                ['parametro_id', 1]
+            ])
+            ->get()
+            ->groupBy(['año', 'mes']);
+
+        $garphLine = $this->getGraphLineNomina($dataGraphLine);
 
         return response()->json([
             'atributos' => $atributos,
             'parametros' => $parametros,
-            'data' => $data->exists() ? $data->get()->groupBy('atributo_id') : []
+            'data' => $data->exists() ? $data->get()->groupBy('atributo') : [],
+            'garphLine' => $garphLine,
         ]);
+    }
+
+    public function getGraphLineNomina($dataGraphLine)
+    {
+        $garphLine = (object)[];
+        foreach ($dataGraphLine as $años => $values) {
+            foreach ($values as $mes => $value) {
+                $sumatoria = 0;
+                foreach ($value as $data) {
+                    $sumatoria += $data->value;
+                    $garphLine->$mes = (object)[
+                        'value' => $sumatoria / count($value),
+                        'mes' => $data->mes_id,
+                        'año' => $data->año
+                    ];
+                }
+            }
+        }
+        return $garphLine;
     }
 
     //Posts
@@ -185,9 +247,10 @@ class DepartamentosAuditoriaController extends Controller
         event(new SuaEvent());
     }
 
-    public function addNomina(Request $request)
+    public function addNomina(Request $request): void
     {
         $request->validate([
+            'fecha' => ['required'],
             'nombre.*' => ['required'],
             'nss.*' => ['required'],
             'rfc.*' => ['required'],
@@ -197,6 +260,31 @@ class DepartamentosAuditoriaController extends Controller
             'fonacot.*' => ['required'],
             'bancos.*' => ['required'],
         ]);
-        return response()->json($request);
+
+        $values = [$request->nombre, $request->nss, $request->rfc, $request->ingreso, $request->puesto, $request->infonavit, $request->fonacot, $request->bancos];
+        $mes = explode("-", $request->fecha)[0];
+        $año = CiAño::where('año', explode("-", $request->fecha)[1])->first();
+
+        foreach ($values as $value) {
+            $value = (object) $value;
+            CiParametroAtributo::updateOrCreate([
+                'año_id' => $año->id,
+                'mes_id' => $mes,
+                'atributo_id' => $value->id,
+                'parametro_id' => 1,
+                'seccion_id' => 2,
+            ], [
+                'value' => $value->porcentaje,
+            ]);
+            CiParametroAtributo::updateOrCreate([
+                'año_id' => $año->id,
+                'mes_id' => $mes,
+                'atributo_id' => $value->id,
+                'parametro_id' => 2,
+                'seccion_id' => 2,
+            ], [
+                'value' => $value->riesgo,
+            ]);
+        }
     }
 }

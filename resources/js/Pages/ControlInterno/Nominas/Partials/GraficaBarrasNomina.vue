@@ -3,7 +3,6 @@ import * as am5 from "@amcharts/amcharts5";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import { onMounted, ref, watchEffect } from "vue";
-import { isArray, isObject } from "lodash";
 
 const graphBarNomina = ref(null);
 const props = defineProps({
@@ -70,13 +69,12 @@ onMounted(() => {
 
     yAxis = chart.yAxes.push(
         am5xy.ValueAxis.new(root, {
+            minGridDistance: 10,
             maxDeviation: 0.3,
             renderer: yRenderer,
         })
     );
 
-    // Create series
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
     series = chart.series.push(
         am5xy.ColumnSeries.new(root, {
             name: "Series 1",
@@ -104,30 +102,28 @@ onMounted(() => {
         return chart.get("colors").getIndex(series.columns.indexOf(target));
     });
 
-    // Set data
     data = [];
 
     xAxis.data.setAll(data);
     series.data.setAll(data);
 
-    // Make stuff animate on load
-    // https://www.amcharts.com/docs/v5/concepts/animations/
     series.appear(1000);
     chart.appear(1000, 100);
 });
 
 watchEffect(() => {
-    if (props.data != 0) {
+    if (props.data.Nombre != undefined) {
         data = [];
-        props.data[5].forEach((e) => {
+        Object.entries(props.data).forEach(([key, value]) => {
             data.push({
-                mes: e.mes,
-                value: e.value,
+                mes: key,
+                value: value,
             });
         });
 
         xAxis.data.setAll(data);
         series.data.setAll(data);
+        series.appear(1000);
     }
 });
 </script>

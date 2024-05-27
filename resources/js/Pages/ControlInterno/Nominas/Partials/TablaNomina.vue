@@ -40,8 +40,15 @@ defineEmits(["add"]);
             <template v-for="(atributo, index) in data.atributos" :key="index">
                 <tr>
                     <ThCi>{{ atributo.name }}</ThCi>
-                    <template v-for="(datos, index) in data.data" :key="index">
-                        <TdCi></TdCi>
+                    <template
+                        v-for="(datos, index) in data.data[atributo.id]"
+                        :key="index"
+                    >
+                        <TdCi class="tetx-center">{{
+                            datos.parametro === 1
+                                ? `${datos.value}%`
+                                : datos.value
+                        }}</TdCi>
                     </template>
                 </tr>
             </template>

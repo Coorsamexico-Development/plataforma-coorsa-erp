@@ -8,6 +8,7 @@ import { isArray, isObject } from "lodash";
 const graphLineNomina = ref(null);
 const props = defineProps({
     data: {
+        type: Object,
         required: true,
     },
 });
@@ -24,19 +25,34 @@ let cursor;
 
 onMounted(() => {
     root = am5.Root.new(graphLineNomina.value);
-    root.setThemes([am5themes_Animated.new(root)]);
+
+    const myTheme = am5.Theme.new(root);
+
+    myTheme.rule("AxisLabel", ["minor"]).setAll({
+        dy: 1,
+    });
+
+    myTheme.rule("Grid", ["minor"]).setAll({
+        strokeOpacity: 0.08,
+    });
+    root.setThemes([am5themes_Animated.new(root), myTheme]);
+
     chart = root.container.children.push(
         am5xy.XYChart.new(root, {
-            panX: true,
-            panY: true,
+            panX: false,
+            panY: false,
             wheelX: "panX",
             wheelY: "zoomX",
-            pinchZoomX: true,
             paddingLeft: 0,
-            paddingRight: 1,
         })
     );
-    cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
+
+    cursor = chart.set(
+        "cursor",
+        am5xy.XYCursor.new(root, {
+            behavior: "zoomX",
+        })
+    );
     cursor.lineY.set("visible", false);
 
     xRenderer = am5xy.AxisRendererX.new(root, {
@@ -52,56 +68,58 @@ onMounted(() => {
     });
 
     xRenderer.grid.template.setAll({
+        minGridDistance: 10,
         location: 1,
     });
 
     xAxis = chart.xAxes.push(
-        am5xy.CategoryAxis.new(root, {
-            maxDeviation: 0.3,
-            categoryField: "mes",
+        am5xy.DateAxis.new(root, {
+            maxDeviation: 0,
+            baseInterval: {
+                timeUnit: "month",
+                count: 1,
+            },
             renderer: xRenderer,
             tooltip: am5.Tooltip.new(root, {}),
         })
     );
 
-    yRenderer = am5xy.AxisRendererY.new(root, {
-        strokeOpacity: 0.1,
-    });
+    yRenderer = am5xy.AxisRendererY.new(root, {});
 
     yAxis = chart.yAxes.push(
         am5xy.ValueAxis.new(root, {
-            maxDeviation: 0.3,
+            numberFormat: "#'%'",
+            maxPrecision: 0,
             renderer: yRenderer,
+            tooltip: am5.Tooltip.new(root, {}),
         })
     );
 
-    // Create series
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
     series = chart.series.push(
-        am5xy.ColumnSeries.new(root, {
-            name: "Series 1",
+        am5xy.LineSeries.new(root, {
+            name: "Series",
             xAxis: xAxis,
             yAxis: yAxis,
             valueYField: "value",
-            sequencedInterpolation: true,
-            categoryXField: "mes",
+            valueXField: "date",
             tooltip: am5.Tooltip.new(root, {
                 labelText: "{valueY}",
             }),
         })
     );
 
-    series.columns.template.setAll({
-        cornerRadiusTL: 5,
-        cornerRadiusTR: 5,
-        strokeOpacity: 0,
-    });
-    series.columns.template.adapters.add("fill", function (fill, target) {
-        return chart.get("colors").getIndex(series.columns.indexOf(target));
+    series.bullets.push(function () {
+        let bulletCircle = am5.Circle.new(root, {
+            radius: 5,
+            fill: series.get("fill"),
+        });
+        return am5.Bullet.new(root, {
+            sprite: bulletCircle,
+        });
     });
 
-    series.columns.template.adapters.add("stroke", function (stroke, target) {
-        return chart.get("colors").getIndex(series.columns.indexOf(target));
+    series.strokes.template.setAll({
+        strokeWidth: 2,
     });
 
     // Set data
@@ -110,19 +128,22 @@ onMounted(() => {
     xAxis.data.setAll(data);
     series.data.setAll(data);
 
-    // Make stuff animate on load
-    // https://www.amcharts.com/docs/v5/concepts/animations/
     series.appear(1000);
     chart.appear(1000, 100);
 });
 
+let date = new Date();
+date.setHours(0, 0, 0, 0);
+
 watchEffect(() => {
-    if (props.data != 0) {
+    if (Object.keys(props.data).length != 0) {
+        console.log(date.toLocaleDateString("es-MX"));
         data = [];
-        props.data[5].forEach((e) => {
+        Object.entries(props.data).forEach(([key, value]) => {
+            date.setFullYear(value.año, value.mes - 1, 1);
             data.push({
-                mes: e.mes,
-                value: e.value,
+                date: date.getTime(),
+                value: value.value,
             });
         });
 
@@ -132,5 +153,5 @@ watchEffect(() => {
 });
 </script>
 <template>
-    <div ref="graphLineNomina" class="w-full h-[45vh]"></div>
+    <div ref="graphLineNomina" class="w-full h-[40vh]"></div>
 </template>

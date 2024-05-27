@@ -88,10 +88,10 @@ const menu = ref(0);
                     @menu="(e) => (menu = e)"
                 />
                 <Sua v-if="menu === 1" :show="menu === 1" />
-                <!-- <NominasCi v-if="menu === 2" :show="menu === 2" /> -->
+                <NominasCi v-if="menu === 2" :show="menu === 2" />
                 <NextTime
-                    v-if="[2, 3, 4, 5, 6].includes(menu)"
-                    :show="[2, 3, 4, 5, 6].includes(menu)"
+                    v-if="[3, 4, 5, 6].includes(menu)"
+                    :show="[3, 4, 5, 6].includes(menu)"
                     @menu="menu = 0"
                 />
             </div>
