@@ -27,6 +27,7 @@ defineProps({
 });
 const close = () => {
     emit("close");
+    dataValues.reset();
 };
 
 const dataValues = useForm({
@@ -84,7 +85,7 @@ function subirSua() {
                 },
             }
         )
-        .then(({ data }) => console.log(data))
+        .then(({ data }) => close())
         .catch((err) => console.log(err.response ?? err))
         .finally(() => {
             dataValues.processing = false;

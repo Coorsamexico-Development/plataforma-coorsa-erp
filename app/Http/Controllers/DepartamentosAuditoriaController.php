@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\DepartamentosAuditoria;
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Storage;
 
 use function PHPUnit\Framework\returnSelf;
@@ -151,11 +152,12 @@ class DepartamentosAuditoriaController extends Controller
     {
         $garphLine = (object)[];
         foreach ($dataGraphLine as $años => $values) {
+            $garphLine->$años = (object)[];
             foreach ($values as $mes => $value) {
                 $sumatoria = 0;
                 foreach ($value as $data) {
                     $sumatoria += $data->value;
-                    $garphLine->$mes = (object)[
+                    $garphLine->$años->$mes = (object)[
                         'value' => $sumatoria / count($value),
                         'mes' => $data->mes_id,
                         'año' => $data->año
@@ -212,7 +214,8 @@ class DepartamentosAuditoriaController extends Controller
             'value' => $request->incre
         ]);
 
-        event(new SuaEvent());
+        Broadcast::channel('EvolucionImss', SuaEvent::class);
+        /* event(new SuaEvent()); */
     }
 
     public function dataEvolucionColab(Request $request): void
@@ -286,5 +289,7 @@ class DepartamentosAuditoriaController extends Controller
                 'value' => $value->riesgo,
             ]);
         }
+
+        Broadcast::channel('NominasData', SuaEvent::class);
     }
 }

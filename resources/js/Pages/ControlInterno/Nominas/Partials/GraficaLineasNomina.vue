@@ -105,6 +105,7 @@ onMounted(() => {
             tooltip: am5.Tooltip.new(root, {
                 labelText: "{valueY}",
             }),
+            connect: false,
         })
     );
 
@@ -137,13 +138,14 @@ date.setHours(0, 0, 0, 0);
 
 watchEffect(() => {
     if (Object.keys(props.data).length != 0) {
-        console.log(date.toLocaleDateString("es-MX"));
         data = [];
-        Object.entries(props.data).forEach(([key, value]) => {
-            date.setFullYear(value.año, value.mes - 1, 1);
-            data.push({
-                date: date.getTime(),
-                value: value.value,
+        Object.entries(props.data).forEach(([año, meses]) => {
+            Object.entries(meses).forEach(([mes, value]) => {
+                date.setFullYear(value.año, value.mes - 1, 1);
+                data.push({
+                    date: date.getTime(),
+                    value: value.value,
+                });
             });
         });
 
