@@ -1111,7 +1111,7 @@ const cambio2 = () => {
             </header>
 
             <!-- Page Content -->
-            <main class="overflow-x-hidden">
+            <main>
                 <slot />
             </main>
         </div>
