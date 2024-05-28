@@ -252,9 +252,11 @@ Route::controller(DepartamentosAuditoriaController::class)->middleware([
 ])->group(function () {
     //Getters
     Route::get('dataSua', 'dataSua')->name('dataSua');
-    Route::get('dataNomina','dataNomina')->name('dataNomina');
+    Route::get('dataNomina', 'dataNomina')->name('dataNomina');
+    Route::get('dataCXP', 'dataCXP')->name('dataCXP');
     //Posts
     Route::post('dataEvolucionImss', 'dataEvolucionImss')->name('dataEvolucionImss');
     Route::post('dataEvolucionColab', 'dataEvolucionColab')->name('dataEvolucionColab');
     Route::post('addNomina', 'addNomina')->name('addNomina');
+    Route::post('addCXP', 'addCXP')->name('addCXP');
 });

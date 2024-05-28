@@ -7,6 +7,7 @@ import ModalAddNomina from "./Modals/ModalAddNomina.vue";
 import GraficaBarrasNomina from "./Partials/GraficaBarrasNomina.vue";
 import GraficaLineasNomina from "./Partials/GraficaLineasNomina.vue";
 import RiesgoRadarNomina from "./Partials/RiesgoRadarNomina.vue";
+import { data } from "jquery";
 
 const props = defineProps({
     show: {
@@ -18,7 +19,7 @@ const props = defineProps({
 const tabla = reactive({
     atributos: [],
     parametros: [],
-    value: [],
+    data: [],
 });
 
 const graphBar = reactive({});

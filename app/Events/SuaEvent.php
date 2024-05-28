@@ -34,6 +34,7 @@ class SuaEvent implements ShouldBroadcast
         return [
             new Channel('EvolucionImss'),
             new Channel('dataNomina'),
+            new Channel('dataCXP'),
         ];
     }
 }
