@@ -31,9 +31,9 @@ class SuaEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel([
-            'EvolucionImss',
-            'NominasData'
-        ]);
+        return [
+            new Channel('EvolucionImss'),
+            new Channel('dataNomina'),
+        ];
     }
 }
