@@ -46,8 +46,8 @@ defineEmits(["add"]);
                     >
                         <TdCi class="tetx-center">{{
                             datos.parametro === 1
-                                ? `${datos.value}%`
-                                : datos.value
+                                ? `${Number(datos.value).toFixed(2)}%`
+                                : Number(datos.value).toFixed(2)
                         }}</TdCi>
                     </template>
                 </tr>
