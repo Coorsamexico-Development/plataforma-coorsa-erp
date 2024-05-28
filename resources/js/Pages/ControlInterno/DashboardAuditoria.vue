@@ -6,6 +6,7 @@ import Sua from "./SUA/Sua.vue";
 import DahsboardCi from "./Dashboard/DahsboardCi.vue";
 import NextTime from "./NextTime.vue";
 import NominasCi from "./Nominas/NominasCi.vue";
+import CXP from "./CXP/CXP.vue";
 
 defineProps({
     nominas: {
@@ -89,9 +90,10 @@ const menu = ref(0);
                 />
                 <Sua v-if="menu === 1" :show="menu === 1" />
                 <NominasCi v-if="menu === 2" :show="menu === 2" />
+                <CXP v-if="menu === 3" :show="menu === 3" />
                 <NextTime
-                    v-if="[3, 4, 5, 6].includes(menu)"
-                    :show="[3, 4, 5, 6].includes(menu)"
+                    v-if="[4, 5, 6].includes(menu)"
+                    :show="[4, 5, 6].includes(menu)"
                     @menu="menu = 0"
                 />
             </div>

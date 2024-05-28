@@ -95,7 +95,7 @@ onMounted(() => {
             }
         });
 
-        label.set("text", Number(value).toFixed(2).toString());
+        /* label.set("text", Number(value).toFixed(2).toString()); */
 
         clockHand.pin.animate({
             key: "fill",
