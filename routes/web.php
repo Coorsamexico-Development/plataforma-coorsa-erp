@@ -255,10 +255,12 @@ Route::controller(DepartamentosAuditoriaController::class)->middleware([
     Route::get('dataNomina', 'dataNomina')->name('dataNomina');
     Route::get('dataCXP', 'dataCXP')->name('dataCXP');
     Route::get('dataAltas', 'dataAltas')->name('dataAltas');
+    Route::get('dataBajas', 'dataBajas')->name('dataBajas');
     //Posts
     Route::post('dataEvolucionImss', 'dataEvolucionImss')->name('dataEvolucionImss');
     Route::post('dataEvolucionColab', 'dataEvolucionColab')->name('dataEvolucionColab');
     Route::post('addNomina', 'addNomina')->name('addNomina');
     Route::post('addCXP', 'addCXP')->name('addCXP');
     Route::post('addAltas', 'addAltas')->name('addAltas');
+    Route::post('addBajas', 'addBajas')->name('addBajas');
 });

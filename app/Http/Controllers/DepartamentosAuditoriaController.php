@@ -320,6 +320,72 @@ class DepartamentosAuditoriaController extends Controller
         ]);
     }
 
+    public function dataBajas()
+    {
+        $atributos = CiAtributo::whereIn('id', [27, 28, 29, 30, 31, 32, 33, 34, 35])->get();
+        $parametros = CiParametro::whereIn('id', ["1", "2", "3"])->get();
+        $data = null;
+        $dataRadar = (object)['riesgo' => 0];
+        $dataPorcentaje = (object)['porcentaje' => 0];
+
+        $paramsFecha = CiParametroAtributo::select(
+            'cim.id as mes',
+            'cia.id as año'
+        )
+            ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
+            ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
+            ->orderBy('cia.año', 'desc')
+            ->orderBy('cim.id', 'desc')
+            ->where('seccion_id', 5);
+
+        if ($paramsFecha->exists()) {
+            $paramsFecha = $paramsFecha->first();
+
+            $data = CiParametroAtributo::select(
+                'atributo_id as atributo',
+                'parametro_id as parametro',
+                'value',
+            )
+                ->where([
+                    ['seccion_id', 5],
+                    ['mes_id', $paramsFecha->mes],
+                    ['año_id', $paramsFecha->año],
+                ]);
+
+            $dataRadar = CiParametroAtributo::select(
+                DB::raw('sum(value) as riesgo'),
+            )
+                ->where([
+                    ['seccion_id', 5],
+                    ['mes_id', $paramsFecha->mes],
+                    ['año_id', $paramsFecha->año],
+                    ['parametro_id', 2]
+                ])
+                ->groupBy('parametro_id')
+                ->first();
+
+            $dataPorcentaje = CiParametroAtributo::select(
+                DB::raw('sum(value) as porcentaje'),
+            )
+                ->where([
+                    ['seccion_id', 5],
+                    ['mes_id', $paramsFecha->mes],
+                    ['año_id', $paramsFecha->año],
+                    ['parametro_id', 1]
+                ])
+                ->groupBy('parametro_id')
+                ->first();
+        }
+
+        return response()->json([
+            'atributos' => $atributos,
+            'parametros' => $parametros,
+            'data' => $data != null && $data->exists() ? $data->get()->groupBy('atributo') : [],
+            'dataRadar' => $dataRadar->riesgo / count($atributos) ?? 0,
+            'dataPorcentaje' => $dataPorcentaje->porcentaje / count($atributos) ?? 0,
+        ]);
+    }
+
     //Posts
     public function dataEvolucionImss(Request $request): void
     {
@@ -539,6 +605,59 @@ class DepartamentosAuditoriaController extends Controller
                 'atributo_id' => $value->id,
                 'parametro_id' => 3,
                 'seccion_id' => 4,
+            ], [
+                'value' => $value->riesgo,
+            ]);
+        }
+        event(new SuaEvent);
+    }
+
+    public function addBajas(Request $request)
+    {
+        $request->validate([
+            'fecha' => ['required'],
+            'nombre.*' => ['required'],
+            'rfc.*' => ['required'],
+            'curp.*' => ['required'],
+            'alta.*' => ['required'],
+            'envTyF.*' => ['required'],
+            'RnPRH.*' => ['required'],
+            'DocCorr.*' => ['required'],
+            'ClasRies.*' => ['required'],
+            'FormAuth.*' => ['required'],
+        ]);
+
+        $values = [$request->nombre, $request->rfc, $request->curp, $request->alta, $request->envTyF, $request->RnPRH, $request->DocCorr, $request->ClasRies, $request->FormAuth];
+
+        $mes = explode("-", $request->fecha)[0];
+        $año = CiAño::where('año', explode("-", $request->fecha)[1])->first();
+
+        foreach ($values as $value) {
+            $value = (object) $value;
+            CiParametroAtributo::updateOrCreate([
+                'año_id' => $año->id,
+                'mes_id' => $mes,
+                'atributo_id' => $value->id,
+                'parametro_id' => 1,
+                'seccion_id' => 5,
+            ], [
+                'value' => $value->porcentaje,
+            ]);
+            CiParametroAtributo::updateOrCreate([
+                'año_id' => $año->id,
+                'mes_id' => $mes,
+                'atributo_id' => $value->id,
+                'parametro_id' => 2,
+                'seccion_id' => 5,
+            ], [
+                'value' => $value->riesgo,
+            ]);
+            CiParametroAtributo::updateOrCreate([
+                'año_id' => $año->id,
+                'mes_id' => $mes,
+                'atributo_id' => $value->id,
+                'parametro_id' => 3,
+                'seccion_id' => 5,
             ], [
                 'value' => $value->riesgo,
             ]);
