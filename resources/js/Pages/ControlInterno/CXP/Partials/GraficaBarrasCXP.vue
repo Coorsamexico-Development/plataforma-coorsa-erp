@@ -47,7 +47,7 @@ onMounted(() => {
         centerY: am5.p50,
         paddingRight: 15,
         oversizedBehavior: "truncate",
-        maxWidth: 150,
+        maxWidth: 100,
     });
 
     xRenderer.grid.template.setAll({

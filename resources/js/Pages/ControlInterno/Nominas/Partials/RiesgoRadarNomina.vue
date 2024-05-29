@@ -116,31 +116,31 @@ onMounted(() => {
 
     let bandsData = [
         {
-            title: "Riesgo Alto",
+            title: " Alto",
             color: "#ee1f25",
             lowScore: 4,
             highScore: 5,
         },
         {
-            title: "Riesgo Moderado",
+            title: " Moderado",
             color: "#fdae19",
             lowScore: 3,
             highScore: 4,
         },
         {
-            title: "Riesgo Medio",
+            title: " Medio",
             color: "#f3eb0c",
             lowScore: 2,
             highScore: 3,
         },
         {
-            title: "Riesgo Bajo",
+            title: " Bajo",
             color: "#b0d136",
             lowScore: 1,
             highScore: 2,
         },
         {
-            title: "Sin Riesgo",
+            title: "Sin ",
             color: "#0f9747",
             lowScore: 0,
             highScore: 1,
