@@ -9,6 +9,7 @@ import NominasCi from "./Nominas/NominasCi.vue";
 import CXP from "./CXP/CXP.vue";
 import AltasCi from "./Altas/AltasCi.vue";
 import BajasCI from "./Bajas/BajasCI.vue";
+import ComprasCi from "./Compras/ComprasCi.vue";
 
 defineProps({
     nominas: {
@@ -79,9 +80,14 @@ const menu = ref(0);
                     :disabled="menu === 5"
                 />
                 <BotonCi
-                    value="Maniobras"
+                    value="Compras"
                     @click="menu = 6"
                     :disabled="menu === 6"
+                />
+                <BotonCi
+                    value="Maniobras"
+                    @click="menu = 7"
+                    :disabled="menu === 7"
                 />
             </div>
             <div class="w-11/12">
@@ -95,9 +101,10 @@ const menu = ref(0);
                 <CXP v-if="menu === 3" :show="menu === 3" />
                 <AltasCi v-if="menu === 4" :show="menu === 4" />
                 <BajasCI v-if="menu === 5" :show="menu === 5" />
+                <ComprasCi v-if="menu === 6" :show="menu === 6" />
                 <NextTime
-                    v-if="[6].includes(menu)"
-                    :show="[6].includes(menu)"
+                    v-if="[7].includes(menu)"
+                    :show="[7].includes(menu)"
                     @menu="menu = 0"
                 />
             </div>

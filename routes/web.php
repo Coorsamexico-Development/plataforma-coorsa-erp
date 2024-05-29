@@ -256,6 +256,7 @@ Route::controller(DepartamentosAuditoriaController::class)->middleware([
     Route::get('dataCXP', 'dataCXP')->name('dataCXP');
     Route::get('dataAltas', 'dataAltas')->name('dataAltas');
     Route::get('dataBajas', 'dataBajas')->name('dataBajas');
+    Route::get('dataCompras', 'dataCompras')->name('dataCompras');
     //Posts
     Route::post('dataEvolucionImss', 'dataEvolucionImss')->name('dataEvolucionImss');
     Route::post('dataEvolucionColab', 'dataEvolucionColab')->name('dataEvolucionColab');
@@ -263,4 +264,5 @@ Route::controller(DepartamentosAuditoriaController::class)->middleware([
     Route::post('addCXP', 'addCXP')->name('addCXP');
     Route::post('addAltas', 'addAltas')->name('addAltas');
     Route::post('addBajas', 'addBajas')->name('addBajas');
+    Route::post('addCompras', 'addCompras')->name('addCompras');
 });
