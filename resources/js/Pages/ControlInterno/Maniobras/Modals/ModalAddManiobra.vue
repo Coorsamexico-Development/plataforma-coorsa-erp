@@ -33,37 +33,27 @@ const close = () => {
 const dataValues = useForm({
     fecha: null,
     formReq: {
-        id: 36,
+        id: 43,
         porcentaje: null,
         riesgo: null,
     },
     VoBo: {
-        id: 37,
+        id: 44,
         porcentaje: null,
         riesgo: null,
     },
     cuenta: {
-        id: 38,
+        id: 45,
         porcentaje: null,
         riesgo: null,
     },
     ventas: {
-        id: 39,
+        id: 46,
         porcentaje: null,
         riesgo: null,
     },
     pago: {
-        id: 40,
-        porcentaje: null,
-        riesgo: null,
-    },
-    gastDiv: {
-        id: 41,
-        porcentaje: null,
-        riesgo: null,
-    },
-    cumplimiento: {
-        id: 42,
+        id: 47,
         porcentaje: null,
         riesgo: null,
     },
@@ -72,7 +62,7 @@ const dataValues = useForm({
 function subirSua() {
     axios
         .post(
-            route("addCompras", { ...dataValues }),
+            route("addManiobra", { ...dataValues }),
             { ...dataValues },
             {
                 onUploadProgress: () => {
@@ -110,7 +100,7 @@ function subirSua() {
                 <div class="flex items-center justify-between gap-2">
                     <div class="grid font-medium">
                         <span class="text-[18px]">
-                            Formato de Req. de compras
+                            Formato de requisicion
                         </span>
                         <div class="flex items-center justify-between gap-2">
                             <TextInputWhitLabel
@@ -119,7 +109,7 @@ function subirSua() {
                                 onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
                                 :value="dataValues.pago"
                                 @input="
-                                    (e) => (dataValues.reqComp.porcentaje = e)
+                                    (e) => (dataValues.formReq.porcentaje = e)
                                 "
                             />
                             <TextInputWhitLabel
@@ -127,37 +117,35 @@ function subirSua() {
                                 id="pagar"
                                 onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
                                 :value="dataValues.pagar"
-                                @input="(e) => (dataValues.reqComp.riesgo = e)"
+                                @input="(e) => (dataValues.formReq.riesgo = e)"
                             />
                         </div>
                     </div>
                     <div class="grid font-medium">
-                        <span class="text-[18px]"> Tiempo de Respuesta </span>
+                        <span class="text-[18px]">
+                            Correo Vo. Bo. del cliente
+                        </span>
                         <div class="flex items-center justify-between gap-2">
                             <TextInputWhitLabel
                                 label="Rango Porcentual"
                                 id="pago"
                                 onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
                                 :value="dataValues.pago"
-                                @input="
-                                    (e) => (dataValues.timeResp.porcentaje = e)
-                                "
+                                @input="(e) => (dataValues.VoBo.porcentaje = e)"
                             />
                             <TextInputWhitLabel
                                 label="Riesgo Inherente"
                                 id="pagar"
                                 onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
                                 :value="dataValues.pagar"
-                                @input="(e) => (dataValues.timeResp.riesgo = e)"
+                                @input="(e) => (dataValues.VoBo.riesgo = e)"
                             />
                         </div>
                     </div>
                 </div>
                 <div class="flex items-center justify-between gap-2">
                     <div class="grid font-medium">
-                        <span class="text-[18px]">
-                            Cuadro comparativo / cotizacion
-                        </span>
+                        <span class="text-[18px]"> Estado de cuenta </span>
                         <div class="flex items-center justify-between gap-2">
                             <TextInputWhitLabel
                                 label="Rango Porcentual"
@@ -165,8 +153,7 @@ function subirSua() {
                                 onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
                                 :value="dataValues.pago"
                                 @input="
-                                    (e) =>
-                                        (dataValues.cotizacion.porcentaje = e)
+                                    (e) => (dataValues.cuenta.porcentaje = e)
                                 "
                             />
                             <TextInputWhitLabel
@@ -174,16 +161,12 @@ function subirSua() {
                                 id="pagar"
                                 onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
                                 :value="dataValues.pagar"
-                                @input="
-                                    (e) => (dataValues.cotizacion.riesgo = e)
-                                "
+                                @input="(e) => (dataValues.cuenta.riesgo = e)"
                             />
                         </div>
                     </div>
                     <div class="grid font-medium">
-                        <span class="text-[18px]">
-                            Formato de autorizacion de compra
-                        </span>
+                        <span class="text-[18px]"> Cuadro Ventas </span>
                         <div class="flex items-center justify-between gap-2">
                             <TextInputWhitLabel
                                 label="Rango Porcentual"
@@ -191,8 +174,7 @@ function subirSua() {
                                 onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
                                 :value="dataValues.pago"
                                 @input="
-                                    (e) =>
-                                        (dataValues.authCompra.porcentaje = e)
+                                    (e) => (dataValues.ventas.porcentaje = e)
                                 "
                             />
                             <TextInputWhitLabel
@@ -200,86 +182,28 @@ function subirSua() {
                                 id="pagar"
                                 onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
                                 :value="dataValues.pagar"
-                                @input="
-                                    (e) => (dataValues.authCompra.riesgo = e)
-                                "
+                                @input="(e) => (dataValues.ventas.riesgo = e)"
                             />
                         </div>
                     </div>
                 </div>
                 <div class="flex items-center justify-between gap-2">
                     <div class="grid font-medium">
-                        <span class="text-[18px]"> Contrarecibo </span>
+                        <span class="text-[18px]"> Comprobante de pago </span>
                         <div class="flex items-center justify-between gap-2">
                             <TextInputWhitLabel
                                 label="Rango Porcentual"
                                 id="pago"
                                 onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
                                 :value="dataValues.pago"
-                                @input="
-                                    (e) =>
-                                        (dataValues.contrarecibo.porcentaje = e)
-                                "
+                                @input="(e) => (dataValues.pago.porcentaje = e)"
                             />
                             <TextInputWhitLabel
                                 label="Riesgo Inherente"
                                 id="pagar"
                                 onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
                                 :value="dataValues.pagar"
-                                @input="
-                                    (e) => (dataValues.contrarecibo.riesgo = e)
-                                "
-                            />
-                        </div>
-                    </div>
-                    <div class="grid font-medium">
-                        <span class="text-[18px]">
-                            Formato unico de gastos diversos / factura
-                        </span>
-                        <div class="flex items-center justify-between gap-2">
-                            <TextInputWhitLabel
-                                label="Rango Porcentual"
-                                id="pago"
-                                onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
-                                :value="dataValues.pago"
-                                @input="
-                                    (e) => (dataValues.gastDiv.porcentaje = e)
-                                "
-                            />
-                            <TextInputWhitLabel
-                                label="Riesgo Inherente"
-                                id="pagar"
-                                onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
-                                :value="dataValues.pagar"
-                                @input="(e) => (dataValues.gastDiv.riesgo = e)"
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center justify-between gap-2">
-                    <div class="grid font-medium">
-                        <span class="text-[18px]">
-                            Cumplimiento del proceso de inicio a fin
-                        </span>
-                        <div class="flex items-center justify-between gap-2">
-                            <TextInputWhitLabel
-                                label="Rango Porcentual"
-                                id="pago"
-                                onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
-                                :value="dataValues.pago"
-                                @input="
-                                    (e) =>
-                                        (dataValues.cumplimiento.porcentaje = e)
-                                "
-                            />
-                            <TextInputWhitLabel
-                                label="Riesgo Inherente"
-                                id="pagar"
-                                onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
-                                :value="dataValues.pagar"
-                                @input="
-                                    (e) => (dataValues.cumplimiento.riesgo = e)
-                                "
+                                @input="(e) => (dataValues.pago.riesgo = e)"
                             />
                         </div>
                     </div>

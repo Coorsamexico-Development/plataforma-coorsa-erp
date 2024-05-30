@@ -38,6 +38,7 @@ class SuaEvent implements ShouldBroadcast
             new Channel('dataAltas'),
             new Channel('dataBajas'),
             new Channel('dataCompras'),
+            new Channel('dataManiobras'),
         ];
     }
 }

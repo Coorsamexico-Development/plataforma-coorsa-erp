@@ -257,6 +257,7 @@ Route::controller(DepartamentosAuditoriaController::class)->middleware([
     Route::get('dataAltas', 'dataAltas')->name('dataAltas');
     Route::get('dataBajas', 'dataBajas')->name('dataBajas');
     Route::get('dataCompras', 'dataCompras')->name('dataCompras');
+    Route::get('dataManiobras', 'dataManiobras')->name('dataManiobras');
     //Posts
     Route::post('dataEvolucionImss', 'dataEvolucionImss')->name('dataEvolucionImss');
     Route::post('dataEvolucionColab', 'dataEvolucionColab')->name('dataEvolucionColab');
@@ -265,4 +266,5 @@ Route::controller(DepartamentosAuditoriaController::class)->middleware([
     Route::post('addAltas', 'addAltas')->name('addAltas');
     Route::post('addBajas', 'addBajas')->name('addBajas');
     Route::post('addCompras', 'addCompras')->name('addCompras');
+    Route::post('addManiobra', 'addManiobra')->name('addManiobra');
 });

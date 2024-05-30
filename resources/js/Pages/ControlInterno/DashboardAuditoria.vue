@@ -10,6 +10,7 @@ import CXP from "./CXP/CXP.vue";
 import AltasCi from "./Altas/AltasCi.vue";
 import BajasCI from "./Bajas/BajasCI.vue";
 import ComprasCi from "./Compras/ComprasCi.vue";
+import ManiobraCi from "./Maniobras/ManiobraCi.vue";
 
 defineProps({
     nominas: {
@@ -102,11 +103,7 @@ const menu = ref(0);
                 <AltasCi v-if="menu === 4" :show="menu === 4" />
                 <BajasCI v-if="menu === 5" :show="menu === 5" />
                 <ComprasCi v-if="menu === 6" :show="menu === 6" />
-                <NextTime
-                    v-if="[7].includes(menu)"
-                    :show="[7].includes(menu)"
-                    @menu="menu = 0"
-                />
+                <ManiobraCi v-if="menu === 7" :show="menu === 7" />
             </div>
         </section>
     </AppLayout>
