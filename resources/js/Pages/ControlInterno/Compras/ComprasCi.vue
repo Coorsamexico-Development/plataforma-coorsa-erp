@@ -6,6 +6,7 @@ import GraficaBarrasCXP from "../CXP/Partials/GraficaBarrasCXP.vue";
 import RiesgoRadarNomina from "../Nominas/Partials/RiesgoRadarNomina.vue";
 import GraficaLineasNomina from "../Nominas/Partials/GraficaLineasNomina.vue";
 import ModalAddCompras from "./Modals/ModalAddCompras.vue";
+import Titulos from "../Partials/Titulos.vue";
 
 const props = defineProps({
     show: {
@@ -99,7 +100,11 @@ onMounted(() =>
                     <GraficaLineasNomina :data="graphLine" />
                     <RiesgoRadarNomina :riesgo="riesgoRadar" />
                 </div>
-                <div>
+                <div class="grid w-full justify-items-center">
+                    <Titulos
+                        value="Rango porcentual de cumplimiento"
+                        class="text-[20px] w-fit"
+                    />
                     <GraficaBarrasCXP :data="graphBar" />
                 </div>
             </div>

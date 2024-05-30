@@ -7,7 +7,6 @@ import Add from "@/Iconos/Add.vue";
 import ModalEvolucionImss from "./Modals/ModalEvolucionImss.vue";
 import ModalEvolucionColab from "./Modals/ModalEvolucionColab.vue";
 import Titulos from "../Partials/Titulos.vue";
-import { value } from "dom7";
 
 const props = defineProps({
     show: {

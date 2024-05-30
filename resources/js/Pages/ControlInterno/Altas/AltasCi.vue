@@ -6,6 +6,7 @@ import GraficaBarrasCXP from "../CXP/Partials/GraficaBarrasCXP.vue";
 import RiesgoRadarNomina from "../Nominas/Partials/RiesgoRadarNomina.vue";
 import GraficaPorcentaje from "../Partials/GraficaPorcentaje.vue";
 import ModalAddAltas from "./Modals/ModalAddAltas.vue";
+import Titulos from "../Partials/Titulos.vue";
 
 const props = defineProps({
     show: {
@@ -117,7 +118,11 @@ onMounted(() =>
                     <GraficaPorcentaje :porcentaje="graphPorcentaje" />
                     <RiesgoRadarNomina :riesgo="riesgoRadar" />
                 </div>
-                <div>
+                <div class="grid w-full justify-items-center">
+                    <Titulos
+                        value="Rango porcentual de cumplimiento"
+                        class="text-[20px] w-fit"
+                    />
                     <GraficaBarrasCXP :data="graphBar" />
                 </div>
             </div>
