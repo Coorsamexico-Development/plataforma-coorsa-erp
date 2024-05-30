@@ -35,7 +35,6 @@ function getData() {
     axios
         .get(route("dataNomina"))
         .then(({ data }) => {
-            console.log(data);
             tabla.atributos = data.atributos;
             tabla.parametros = data.parametros;
             tabla.data = data.data;
