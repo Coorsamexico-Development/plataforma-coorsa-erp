@@ -106,9 +106,6 @@ Route::middleware([
     //Reenvio de correo de bienvenida
     Route::post('/welcome-password/{user}', [ResetPasswordController::class, 'store'])->name('welcome.password.first');
 
-    Route::get('/control-interno/departamentos-aditorias', [DepartamentosAuditoriaController::class, 'index'])
-        ->name('control-interno.departamentos-aditorias.index');
-
     Route::post('departamentos-aditorias/{departamentosAuditoria}/calificacion', [PruebaGraphController::class, 'storeCalificacion'])
         ->name('departamentos-aditorias.calificacion.store')->middleware('can:calificacion.create');
     Route::delete('documentos-calificacion-mes/{documentosCalificacionMes}', [DocumentosCalificacionMesController::class, 'destroy'])
@@ -251,6 +248,7 @@ Route::controller(DepartamentosAuditoriaController::class)->middleware([
     'verified',
 ])->group(function () {
     //Getters
+    Route::get('dashboardAuditoria','index')->name('dashboardAuditoria');
     Route::get('dataSua', 'dataSua')->name('dataSua');
     Route::get('dataNomina', 'dataNomina')->name('dataNomina');
     Route::get('dataCXP', 'dataCXP')->name('dataCXP');
