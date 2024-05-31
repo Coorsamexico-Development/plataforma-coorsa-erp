@@ -32,27 +32,27 @@ const close = () => {
 
 const dataValues = useForm({
     fecha: null,
-    formReq: {
+    reqComp: {
         id: 36,
         porcentaje: null,
         riesgo: null,
     },
-    VoBo: {
+    timeResp: {
         id: 37,
         porcentaje: null,
         riesgo: null,
     },
-    cuenta: {
+    cotizacion: {
         id: 38,
         porcentaje: null,
         riesgo: null,
     },
-    ventas: {
+    authCompra: {
         id: 39,
         porcentaje: null,
         riesgo: null,
     },
-    pago: {
+    contrarecibo: {
         id: 40,
         porcentaje: null,
         riesgo: null,
