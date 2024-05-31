@@ -21,7 +21,7 @@ var props = defineProps({
         required: true,
     },
     nominas: Object,
-    activos:Object
+    activos: Object,
 });
 
 /*Comentario*/
