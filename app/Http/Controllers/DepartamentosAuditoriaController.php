@@ -698,7 +698,7 @@ class DepartamentosAuditoriaController extends Controller
                 'parametro_id' => 3,
                 'seccion_id' => 3,
             ], [
-                'value' => $value->riesgo,
+                'value' => $value->calificacion,
             ]);
         }
         event(new SuaEvent);
@@ -752,7 +752,7 @@ class DepartamentosAuditoriaController extends Controller
                 'parametro_id' => 3,
                 'seccion_id' => 4,
             ], [
-                'value' => $value->riesgo,
+                'value' => $value->calificacion,
             ]);
         }
         event(new SuaEvent);
@@ -805,7 +805,7 @@ class DepartamentosAuditoriaController extends Controller
                 'parametro_id' => 3,
                 'seccion_id' => 5,
             ], [
-                'value' => $value->riesgo,
+                'value' => $value->calificacion,
             ]);
         }
         event(new SuaEvent);
