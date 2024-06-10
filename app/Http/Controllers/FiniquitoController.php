@@ -112,13 +112,25 @@ class FiniquitoController extends Controller
                     
                 return $propAguinaldo; 
             }else {
-                $mesesTrabajados = $fechaIngreso->diffInMonths($fechaBaja);
-                $fechaInicioPlusMonths = $fechaIngreso->copy()->addMonths($mesesTrabajados);
-                $diasTrabajados = $fechaInicioPlusMonths->diffInDays($fechaBaja);
 
-                $propAguinaldo = (($mesesTrabajados * $aguinaldoXmes) + ($diasTrabajados * $aguinaldoXdia)) * $salarioDiario;
+                if($fechaIngreso->year == $fechaBaja->year){
+                    $mesesTrabajados = $fechaIngreso->diffInMonths($fechaBaja);
+                    $fechaInicioPlusMonths = $fechaIngreso->copy()->addMonths($mesesTrabajados);
+                    $diasTrabajados = $fechaInicioPlusMonths->diffInDays($fechaBaja);
+              
+                    $propAguinaldo = (($mesesTrabajados * $aguinaldoXmes) + ($diasTrabajados * $aguinaldoXdia)) * $salarioDiario;
 
-                return $propAguinaldo; 
+                    return $propAguinaldo; 
+                }else{
+                    $fechaCorte = Carbon::create($fechaBaja->year, 1, 1);
+                    $mesesTrabajados = $fechaCorte->diffInMonths($fechaBaja);
+                    $fechaInicioPlusMonths = $fechaCorte->copy()->addMonths($mesesTrabajados);
+                    $diasTrabajados = $fechaInicioPlusMonths->diffInDays($fechaBaja);
+
+                    $propAguinaldo = (($mesesTrabajados * $aguinaldoXmes) + ($diasTrabajados * $aguinaldoXdia)) * $salarioDiario;
+
+                    return $propAguinaldo; 
+                }   
             }
                 
         }     

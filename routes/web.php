@@ -58,6 +58,7 @@ Route::middleware('guest')->name('password.reset.')->group(function () {
 });
 
 
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -275,7 +276,6 @@ Route::get('/finiquito', [FiniquitoController::class,'calcularFiniquito'])->name
 //Rutas Control Nominas
 Route::get('/control-nominas', [NominasController::class, 'index'])->name('users.index');
 Route::get('/search-users', [NominasController::class, 'search'])->name('users.search');
-Route::get('/deducciones-nominas', [NominasController::class,'deducciones'])->name('users.deducciones');
+Route::get('/deducciones-nominas/{id}', [NominasController::class,'deducciones'])->name('users.deducciones');
 Route::post('/dibujarGrafico', [NominasController::class, 'dibujarTableroRetardos'])->name('tableroRetardos');
     
-
