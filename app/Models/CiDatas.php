@@ -14,5 +14,6 @@ class CiDatas extends Model
         'mes_id',
         'atributo_id',
         'value',
+        'seccion_id',
     ];
 }

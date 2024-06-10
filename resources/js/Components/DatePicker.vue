@@ -13,7 +13,7 @@ const props = defineProps({
     },
     placeholder: String,
     minDate: {
-        default: moment(),
+        default: moment().subtract(1, "year"),
     },
     dates: {
         type: Array,

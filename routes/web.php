@@ -109,9 +109,6 @@ Route::middleware([
     //Reenvio de correo de bienvenida
     Route::post('/welcome-password/{user}', [ResetPasswordController::class, 'store'])->name('welcome.password.first');
 
-    Route::get('/control-interno/departamentos-aditorias', [DepartamentosAuditoriaController::class, 'index'])
-        ->name('control-interno.departamentos-aditorias.index');
-
     Route::post('departamentos-aditorias/{departamentosAuditoria}/calificacion', [PruebaGraphController::class, 'storeCalificacion'])
         ->name('departamentos-aditorias.calificacion.store')->middleware('can:calificacion.create');
     Route::delete('documentos-calificacion-mes/{documentosCalificacionMes}', [DocumentosCalificacionMesController::class, 'destroy'])
@@ -252,7 +249,14 @@ Route::controller(DepartamentosAuditoriaController::class)->middleware([
     'verified',
 ])->group(function () {
     //Getters
+    Route::get('dashboardAuditoria','index')->name('dashboardAuditoria');
     Route::get('dataSua', 'dataSua')->name('dataSua');
+    Route::get('dataNomina', 'dataNomina')->name('dataNomina');
+    Route::get('dataCXP', 'dataCXP')->name('dataCXP');
+    Route::get('dataAltas', 'dataAltas')->name('dataAltas');
+    Route::get('dataBajas', 'dataBajas')->name('dataBajas');
+    Route::get('dataCompras', 'dataCompras')->name('dataCompras');
+    Route::get('dataManiobras', 'dataManiobras')->name('dataManiobras');
     //Posts
     Route::post('dataEvolucionImss', 'dataEvolucionImss')->name('dataEvolucionImss');
     Route::post('dataEvolucionColab', 'dataEvolucionColab')->name('dataEvolucionColab');
@@ -262,9 +266,15 @@ Route::controller(DepartamentosAuditoriaController::class)->middleware([
 Route::get('/finiquito', [FiniquitoController::class,'calcularFiniquito'])->name('calcularFiniquito');
 
 
-
 //Rutas Control Nominas
 Route::get('/control-nominas', [NominasController::class, 'index'])->name('users.index');
 Route::get('/search-users', [NominasController::class, 'search'])->name('users.search');
 Route::get('/deducciones-nominas', [NominasController::class,'deducciones'])->name('users.deducciones');
 Route::post('/dibujarGrafico', [NominasController::class, 'dibujarTableroRetardos'])->name('tableroRetardos');
+    Route::post('addNomina', 'addNomina')->name('addNomina');
+    Route::post('addCXP', 'addCXP')->name('addCXP');
+    Route::post('addAltas', 'addAltas')->name('addAltas');
+    Route::post('addBajas', 'addBajas')->name('addBajas');
+    Route::post('addCompras', 'addCompras')->name('addCompras');
+    Route::post('addManiobra', 'addManiobra')->name('addManiobra');
+

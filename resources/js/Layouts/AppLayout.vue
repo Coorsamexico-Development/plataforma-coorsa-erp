@@ -141,15 +141,7 @@ const cambio2 = () => {
                                     </template>
                                     <template #content>
                                         <DropdownLink
-                                            :href="
-                                                route(
-                                                    'control-interno.departamentos-aditorias.index',
-                                                    {
-                                                        departamento_auditoria_id:
-                                                            '1',
-                                                    }
-                                                )
-                                            "
+                                            :href="route('dashboardAuditoria')"
                                         >
                                             <span class="text-xs">
                                                 Dashboard Auditorias

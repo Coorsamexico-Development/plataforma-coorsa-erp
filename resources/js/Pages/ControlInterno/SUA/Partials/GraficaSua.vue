@@ -128,9 +128,10 @@ watchEffect(() => {
 
         xAxis.data.setAll(data);
         series.data.setAll(data);
+        series.appear(1000);
     }
 });
 </script>
 <template>
-    <div ref="graphSua" class="w-1/2 h-[45vh]"></div>
+    <div ref="graphSua" class="w-full h-[45vh]"></div>
 </template>

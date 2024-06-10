@@ -5,6 +5,12 @@ import BotonCi from "@/Pages/ControlInterno/Partials/BotonCI.vue";
 import Sua from "./SUA/Sua.vue";
 import DahsboardCi from "./Dashboard/DahsboardCi.vue";
 import NextTime from "./NextTime.vue";
+import NominasCi from "./Nominas/NominasCi.vue";
+import CXP from "./CXP/CXP.vue";
+import AltasCi from "./Altas/AltasCi.vue";
+import BajasCI from "./Bajas/BajasCI.vue";
+import ComprasCi from "./Compras/ComprasCi.vue";
+import ManiobraCi from "./Maniobras/ManiobraCi.vue";
 
 defineProps({
     nominas: {
@@ -65,7 +71,7 @@ const menu = ref(0);
                 />
                 <BotonCi value="CXP" @click="menu = 3" :disabled="menu === 3" />
                 <BotonCi
-                    value="Atas"
+                    value="Altas"
                     @click="menu = 4"
                     :disabled="menu === 4"
                 />
@@ -75,9 +81,14 @@ const menu = ref(0);
                     :disabled="menu === 5"
                 />
                 <BotonCi
-                    value="Maniobras"
+                    value="Compras"
                     @click="menu = 6"
                     :disabled="menu === 6"
+                />
+                <BotonCi
+                    value="Maniobras"
+                    @click="menu = 7"
+                    :disabled="menu === 7"
                 />
             </div>
             <div class="w-11/12">
@@ -87,12 +98,12 @@ const menu = ref(0);
                     @menu="(e) => (menu = e)"
                 />
                 <Sua v-if="menu === 1" :show="menu === 1" />
-                <NextTime
-                    v-if="[2, 3, 4, 5, 6].includes(menu)"
-                    :show="[2, 3, 4, 5, 6].includes(menu)"
-                    @menu="menu = 0"
-                />
-                />
+                <NominasCi v-if="menu === 2" :show="menu === 2" />
+                <CXP v-if="menu === 3" :show="menu === 3" />
+                <AltasCi v-if="menu === 4" :show="menu === 4" />
+                <BajasCI v-if="menu === 5" :show="menu === 5" />
+                <ComprasCi v-if="menu === 6" :show="menu === 6" />
+                <ManiobraCi v-if="menu === 7" :show="menu === 7" />
             </div>
         </section>
     </AppLayout>

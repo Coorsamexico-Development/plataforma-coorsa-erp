@@ -115,7 +115,6 @@ function subirSua() {
                         onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
                         :value="dataValuesConsult.incre"
                         @input="(e) => (dataValues.incre = e)"
-                        maxlength="3"
                     />
                 </div>
             </div>
