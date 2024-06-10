@@ -59,7 +59,6 @@ const searchUsers = async (search) => {
         });
 };
 
-const sendDates = ()
 
 
 </script>
