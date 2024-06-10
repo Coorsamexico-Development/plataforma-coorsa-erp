@@ -195,7 +195,7 @@ class FiniquitoController extends Controller
             }else{
                 $mesesRestantes = $fechaIngreso->diffInMonths($fechaBaja);
 
-                $propVacaciones = $mesesTrabajados * $salarioDiario;
+                $propVacaciones = $mesesRestantes * $salarioDiario;
                 
                 return $propVacaciones;
             }
