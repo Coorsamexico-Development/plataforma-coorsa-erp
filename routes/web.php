@@ -1,34 +1,37 @@
 <?php
 
-use App\Http\Controllers\ActivoController;
-use App\Http\Controllers\AreaController;
-use App\Http\Controllers\CatalogoController;
-use App\Http\Controllers\DepartamentoController;
-use App\Http\Controllers\DepartamentosAuditoriaController;
-use App\Http\Controllers\DocsPoliticasController;
-use App\Http\Controllers\DocumentosCalificacionMesController;
-use App\Http\Controllers\EmpleadoController;
-use App\Http\Controllers\LocalidadesController;
-use App\Http\Controllers\MenuController;
-use App\Http\Controllers\MunicipioController;
-use App\Http\Controllers\NoticiaController;
-use App\Http\Controllers\OrganigramaController;
-use App\Http\Controllers\PlantillasAutorizadaController;
-use App\Http\Controllers\PoliticController;
-use App\Http\Controllers\PruebaGraphController;
-use App\Http\Controllers\PuestoController;
-use App\Http\Controllers\PuestoEmpleadoController;
-use App\Http\Controllers\RecibosNominaController;
-use App\Http\Controllers\ResetPasswordController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\UbicacionController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\VideoController;
-use App\Models\DepartamentosAuditoria;
-use Illuminate\Foundation\Application;
+use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Models\DepartamentosAuditoria;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\AreaController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\VideoController;
+use App\Http\Controllers\ActivoController;
+use App\Http\Controllers\PuestoController;
+use App\Http\Controllers\NominasController;
+use App\Http\Controllers\NoticiaController;
+use App\Http\Controllers\PoliticController;
+use App\Http\Controllers\CatalogoController;
+use App\Http\Controllers\EmpleadoController;
+use App\Http\Controllers\FiniquitoController;
+use App\Http\Controllers\MunicipioController;
+use App\Http\Controllers\UbicacionController;
+use App\Http\Controllers\LocalidadesController;
+use App\Http\Controllers\OrganigramaController;
+use App\Http\Controllers\PruebaGraphController;
+use App\Http\Controllers\DepartamentoController;
+use App\Http\Controllers\DocsPoliticasController;
+use App\Http\Controllers\RecibosNominaController;
+use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\PuestoEmpleadoController;
+use App\Http\Controllers\VariablesNominaController;
+use App\Http\Controllers\PlantillasAutorizadaController;
+use App\Http\Controllers\DepartamentosAuditoriaController;
+use App\Http\Controllers\DocumentosCalificacionMesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -138,8 +141,6 @@ Route::middleware([
     Route::apiResource('/menu', MenuController::class);
     Route::apiResource('/noticia', NoticiaController::class);
     Route::apiResource('/video', VideoController::class);
-
-
 
 
     Route::apiResource('/puestos', PuestoController::class);
@@ -256,3 +257,14 @@ Route::controller(DepartamentosAuditoriaController::class)->middleware([
     Route::post('dataEvolucionImss', 'dataEvolucionImss')->name('dataEvolucionImss');
     Route::post('dataEvolucionColab', 'dataEvolucionColab')->name('dataEvolucionColab');
 });
+
+
+Route::get('/finiquito', [FiniquitoController::class,'calcularFiniquito'])->name('calcularFiniquito');
+
+
+
+//Rutas Control Nominas
+Route::get('/control-nominas', [NominasController::class, 'index'])->name('users.index');
+Route::get('/search-users', [NominasController::class, 'search'])->name('users.search');
+Route::get('/deducciones-nominas', [NominasController::class,'deducciones'])->name('users.deducciones');
+Route::post('/dibujarGrafico', [NominasController::class, 'dibujarTableroRetardos'])->name('tableroRetardos');
