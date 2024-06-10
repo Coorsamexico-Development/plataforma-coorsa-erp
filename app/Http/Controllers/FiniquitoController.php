@@ -21,7 +21,7 @@ class FiniquitoController extends Controller
         $fecha = $request->input('fecha');
 
         $usuario = User::where('name', 'like', "%{$query}%")
-                ->orWhere('id', $query)
+                ->orWhere('numero_empleado', $query)
                 ->where('activo', 1)
                 ->first();
 
@@ -112,13 +112,25 @@ class FiniquitoController extends Controller
                     
                 return $propAguinaldo; 
             }else {
-                $mesesTrabajados = $fechaIngreso->diffInMonths($fechaBaja);
-                $fechaInicioPlusMonths = $fechaIngreso->copy()->addMonths($mesesTrabajados);
-                $diasTrabajados = $fechaInicioPlusMonths->diffInDays($fechaBaja);
 
-                $propAguinaldo = (($mesesTrabajados * $aguinaldoXmes) + ($diasTrabajados * $aguinaldoXdia)) * $salarioDiario;
+                if($fechaIngreso->year == $fechaBaja->year){
+                    $mesesTrabajados = $fechaIngreso->diffInMonths($fechaBaja);
+                    $fechaInicioPlusMonths = $fechaIngreso->copy()->addMonths($mesesTrabajados);
+                    $diasTrabajados = $fechaInicioPlusMonths->diffInDays($fechaBaja);
+              
+                    $propAguinaldo = (($mesesTrabajados * $aguinaldoXmes) + ($diasTrabajados * $aguinaldoXdia)) * $salarioDiario;
 
-                return $propAguinaldo; 
+                    return $propAguinaldo; 
+                }else{
+                    $fechaCorte = Carbon::create($fechaBaja->year, 1, 1);
+                    $mesesTrabajados = $fechaCorte->diffInMonths($fechaBaja);
+                    $fechaInicioPlusMonths = $fechaCorte->copy()->addMonths($mesesTrabajados);
+                    $diasTrabajados = $fechaInicioPlusMonths->diffInDays($fechaBaja);
+
+                    $propAguinaldo = (($mesesTrabajados * $aguinaldoXmes) + ($diasTrabajados * $aguinaldoXdia)) * $salarioDiario;
+
+                    return $propAguinaldo; 
+                }   
             }
                 
         }     
@@ -195,7 +207,9 @@ class FiniquitoController extends Controller
             }else{
                 $mesesRestantes = $fechaIngreso->diffInMonths($fechaBaja);
 
-                $propVacaciones = $mesesTrabajados * $salarioDiario;
+                $vacacionesRestantes = $mesesRestantes * $salarioDiario;
+
+                $propVacaciones = $vacacionesRestantes;
                 
                 return $propVacaciones;
             }
@@ -248,25 +262,68 @@ class FiniquitoController extends Controller
 
             $fechaIngreso = Carbon::createFromFormat('Y-m-d', $usuario->fecha_ingreso_real);
             $fechaBaja = Carbon::createFromFormat('Y-m-d', $fecha);
+            $fechaActual = Carbon::now();
+            $estanciaEmpresa=$fechaIngreso->diffInYears($fechaActual);
             $diaSalida = $fechaBaja->day;
 
-            $fechaCorte = Carbon::create($fechaBaja->year, 1, 1);
+            if($estanciaEmpresa >= 1){
+                $fechaCorte = Carbon::create($fechaBaja->year, 1, 1);
+                $mesesTrabajados = $fechaCorte->diffInMonths($fechaBaja);
 
-            $mesesTrabajados = $fechaCorte->diffInMonths($fechaBaja);
-
-           
-            if ($diaSalida <= 15 && $diaSalida >= 1) {
+                if ($diaSalida <= 15 && $diaSalida >= 1) {
                 
-                $propFondoAhorro = (($mesesTrabajados) * $fondoAhorro) - $fondoAhorro / 2;
+                    $propFondoAhorro = (($mesesTrabajados) * $fondoAhorro) - $fondoAhorro / 2;
+    
+                    return $propFondoAhorro;
+    
+                } else if ($diaSalida <= 31 && $diaSalida > 15) {
+                    
+                    $propFondoAhorro = ($mesesTrabajados + 1) * $fondoAhorro;
+    
+                    return $propFondoAhorro;
+                }
 
-                return $propFondoAhorro;
+            }else{
+                if($fechaIngreso->year == $fechaBaja->year){
+                    $mesesTrabajados = $fechaIngreso->diffInMonths($fechaBaja);
 
-            } else if ($diaSalida <= 31 && $diaSalida > 15) {
+                    if ($diaSalida <= 15 && $diaSalida >= 1) {
                 
-                $propFondoAhorro = ($mesesTrabajados + 1) * $fondoAhorro;
+                        $propFondoAhorro = (($mesesTrabajados) * $fondoAhorro) - $fondoAhorro / 2;
+        
+                        return $propFondoAhorro;
+        
+                    } else if ($diaSalida <= 31 && $diaSalida > 15) {
+                        
+                        $propFondoAhorro = ($mesesTrabajados + 1) * $fondoAhorro;
+        
+                        return $propFondoAhorro;
+                    }
 
-                return $propFondoAhorro;
+                }else{
+                    $fechaCorte = Carbon::create($fechaBaja->year, 1, 1);
+                    
+                    $mesesTrabajados = $fechaCorte->diffInMonths($fechaBaja);
+
+                    if ($diaSalida <= 15 && $diaSalida >= 1) {
+                    
+                        $propFondoAhorro = (($mesesTrabajados) * $fondoAhorro) - $fondoAhorro / 2;
+        
+                        return $propFondoAhorro;
+        
+                    } else if ($diaSalida <= 31 && $diaSalida > 15) {
+                        
+                        $propFondoAhorro = ($mesesTrabajados + 1) * $fondoAhorro;
+        
+                        return $propFondoAhorro;
+                    }
+                }
             }
+            
+
+            
+           
+            
                        
         }
         
