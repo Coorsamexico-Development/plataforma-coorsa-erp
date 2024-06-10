@@ -262,25 +262,68 @@ class FiniquitoController extends Controller
 
             $fechaIngreso = Carbon::createFromFormat('Y-m-d', $usuario->fecha_ingreso_real);
             $fechaBaja = Carbon::createFromFormat('Y-m-d', $fecha);
+            $fechaActual = Carbon::now();
+            $estanciaEmpresa=$fechaIngreso->diffInYears($fechaActual);
             $diaSalida = $fechaBaja->day;
 
-            $fechaCorte = Carbon::create($fechaBaja->year, 1, 1);
+            if($estanciaEmpresa >= 1){
+                $fechaCorte = Carbon::create($fechaBaja->year, 1, 1);
+                $mesesTrabajados = $fechaCorte->diffInMonths($fechaBaja);
 
-            $mesesTrabajados = $fechaCorte->diffInMonths($fechaBaja);
-
-           
-            if ($diaSalida <= 15 && $diaSalida >= 1) {
+                if ($diaSalida <= 15 && $diaSalida >= 1) {
                 
-                $propFondoAhorro = (($mesesTrabajados) * $fondoAhorro) - $fondoAhorro / 2;
+                    $propFondoAhorro = (($mesesTrabajados) * $fondoAhorro) - $fondoAhorro / 2;
+    
+                    return $propFondoAhorro;
+    
+                } else if ($diaSalida <= 31 && $diaSalida > 15) {
+                    
+                    $propFondoAhorro = ($mesesTrabajados + 1) * $fondoAhorro;
+    
+                    return $propFondoAhorro;
+                }
 
-                return $propFondoAhorro;
+            }else{
+                if($fechaIngreso->year == $fechaBaja->year){
+                    $mesesTrabajados = $fechaIngreso->diffInMonths($fechaBaja);
 
-            } else if ($diaSalida <= 31 && $diaSalida > 15) {
+                    if ($diaSalida <= 15 && $diaSalida >= 1) {
                 
-                $propFondoAhorro = ($mesesTrabajados + 1) * $fondoAhorro;
+                        $propFondoAhorro = (($mesesTrabajados) * $fondoAhorro) - $fondoAhorro / 2;
+        
+                        return $propFondoAhorro;
+        
+                    } else if ($diaSalida <= 31 && $diaSalida > 15) {
+                        
+                        $propFondoAhorro = ($mesesTrabajados + 1) * $fondoAhorro;
+        
+                        return $propFondoAhorro;
+                    }
 
-                return $propFondoAhorro;
+                }else{
+                    $fechaCorte = Carbon::create($fechaBaja->year, 1, 1);
+                    
+                    $mesesTrabajados = $fechaCorte->diffInMonths($fechaBaja);
+
+                    if ($diaSalida <= 15 && $diaSalida >= 1) {
+                    
+                        $propFondoAhorro = (($mesesTrabajados) * $fondoAhorro) - $fondoAhorro / 2;
+        
+                        return $propFondoAhorro;
+        
+                    } else if ($diaSalida <= 31 && $diaSalida > 15) {
+                        
+                        $propFondoAhorro = ($mesesTrabajados + 1) * $fondoAhorro;
+        
+                        return $propFondoAhorro;
+                    }
+                }
             }
+            
+
+            
+           
+            
                        
         }
         
