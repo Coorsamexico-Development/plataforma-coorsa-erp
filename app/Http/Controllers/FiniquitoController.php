@@ -21,7 +21,7 @@ class FiniquitoController extends Controller
         $fecha = $request->input('fecha');
 
         $usuario = User::where('name', 'like', "%{$query}%")
-                ->orWhere('id', $query)
+                ->orWhere('numero_empleado', $query)
                 ->where('activo', 1)
                 ->first();
 
