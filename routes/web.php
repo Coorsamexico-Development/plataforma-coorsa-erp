@@ -260,6 +260,12 @@ Route::controller(DepartamentosAuditoriaController::class)->middleware([
     //Posts
     Route::post('dataEvolucionImss', 'dataEvolucionImss')->name('dataEvolucionImss');
     Route::post('dataEvolucionColab', 'dataEvolucionColab')->name('dataEvolucionColab');
+    Route::post('addNomina', 'addNomina')->name('addNomina');
+    Route::post('addCXP', 'addCXP')->name('addCXP');
+    Route::post('addAltas', 'addAltas')->name('addAltas');
+    Route::post('addBajas', 'addBajas')->name('addBajas');
+    Route::post('addCompras', 'addCompras')->name('addCompras');
+    Route::post('addManiobra', 'addManiobra')->name('addManiobra');
 });
 
 
@@ -271,10 +277,5 @@ Route::get('/control-nominas', [NominasController::class, 'index'])->name('users
 Route::get('/search-users', [NominasController::class, 'search'])->name('users.search');
 Route::get('/deducciones-nominas', [NominasController::class,'deducciones'])->name('users.deducciones');
 Route::post('/dibujarGrafico', [NominasController::class, 'dibujarTableroRetardos'])->name('tableroRetardos');
-    Route::post('addNomina', 'addNomina')->name('addNomina');
-    Route::post('addCXP', 'addCXP')->name('addCXP');
-    Route::post('addAltas', 'addAltas')->name('addAltas');
-    Route::post('addBajas', 'addBajas')->name('addBajas');
-    Route::post('addCompras', 'addCompras')->name('addCompras');
-    Route::post('addManiobra', 'addManiobra')->name('addManiobra');
+    
 
