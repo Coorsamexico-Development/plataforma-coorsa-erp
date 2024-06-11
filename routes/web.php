@@ -278,7 +278,11 @@ Route::get('/control-nominas', [NominasController::class, 'index'])->name('users
 Route::get('/search-users', [NominasController::class, 'search'])->name('users.search');
 Route::get('/deducciones-nominas/{id}', [NominasController::class, 'deducciones'])->name('users.deducciones');
 Route::post('/dibujarGrafico', [NominasController::class, 'dibujarTableroRetardos'])->name('tableroRetardos');
+
 //Rutas ChatBot
 Route::get('chatBot', function () {
     return Inertia::render('ChatBot/ChatBot');
+});
+Route::post('chatBotData', function (Request $request) {
+    event(new ChatBot($request));
 });
