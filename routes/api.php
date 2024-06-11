@@ -33,5 +33,5 @@ Route::controller(ChatBotController::class)->group(function () {
     //Gets
     /* Route::get('chatBot', 'chatBot')->name('chatBot'); */
     //Posts
-    Route::post('chatBotData', 'chatBotData')->name('chatBotData');
+    Route::get('chatBotData', 'chatBotData')->name('chatBotData');
 });
