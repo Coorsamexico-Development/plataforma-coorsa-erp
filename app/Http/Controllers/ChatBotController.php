@@ -13,8 +13,8 @@ class ChatBotController extends Controller
         return Inertia::render('ChatBot/ChatBot');
     }
 
-    public function chatBotData(Request $request): void
+    public function chatBotData(Request $request)
     {
-        /* event(new ChatBot($request->mensaje)); */
+        event(new ChatBot($request->mensaje));
     }
 }
