@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\ChatBot;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,7 @@ use App\Http\Controllers\VariablesNominaController;
 use App\Http\Controllers\PlantillasAutorizadaController;
 use App\Http\Controllers\DepartamentosAuditoriaController;
 use App\Http\Controllers\DocumentosCalificacionMesController;
+use GuzzleHttp\Psr7\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -249,7 +251,7 @@ Route::controller(DepartamentosAuditoriaController::class)->middleware([
     'verified',
 ])->group(function () {
     //Getters
-    Route::get('dashboardAuditoria','index')->name('dashboardAuditoria');
+    Route::get('dashboardAuditoria', 'index')->name('dashboardAuditoria');
     Route::get('dataSua', 'dataSua')->name('dataSua');
     Route::get('dataNomina', 'dataNomina')->name('dataNomina');
     Route::get('dataCXP', 'dataCXP')->name('dataCXP');
@@ -268,14 +270,18 @@ Route::controller(DepartamentosAuditoriaController::class)->middleware([
     Route::post('addManiobra', 'addManiobra')->name('addManiobra');
 });
 
-
-Route::get('/finiquito', [FiniquitoController::class,'calcularFiniquito'])->name('calcularFiniquito');
-
+Route::get('/finiquito', [FiniquitoController::class, 'calcularFiniquito'])->name('calcularFiniquito');
 
 //Rutas Control Nominas
 Route::get('/control-nominas', [NominasController::class, 'index'])->name('users.index');
 Route::get('/search-users', [NominasController::class, 'search'])->name('users.search');
-Route::get('/deducciones-nominas', [NominasController::class,'deducciones'])->name('users.deducciones');
+Route::get('/deducciones-nominas', [NominasController::class, 'deducciones'])->name('users.deducciones');
 Route::post('/dibujarGrafico', [NominasController::class, 'dibujarTableroRetardos'])->name('tableroRetardos');
-    
 
+//Rutas ChatBot
+Route::get('chatBot', function () {
+    return Inertia::render('ChatBot/ChatBot');
+});
+Route::post('chatBotData', function (Request $request) {
+    event(new ChatBot($request));
+});
