@@ -17,6 +17,7 @@ use App\Http\Controllers\NominasController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\PoliticController;
 use App\Http\Controllers\CatalogoController;
+use App\Http\Controllers\ChatBotController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\FiniquitoController;
 use App\Http\Controllers\MunicipioController;
@@ -33,7 +34,7 @@ use App\Http\Controllers\VariablesNominaController;
 use App\Http\Controllers\PlantillasAutorizadaController;
 use App\Http\Controllers\DepartamentosAuditoriaController;
 use App\Http\Controllers\DocumentosCalificacionMesController;
-use GuzzleHttp\Psr7\Request;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -280,9 +281,9 @@ Route::get('/deducciones-nominas/{id}', [NominasController::class, 'deducciones'
 Route::post('/dibujarGrafico', [NominasController::class, 'dibujarTableroRetardos'])->name('tableroRetardos');
 
 //Rutas ChatBot
-Route::get('chatBot', function () {
-    return Inertia::render('ChatBot/ChatBot');
-});
-Route::post('chatBotData', function (Request $request) {
-    event(new ChatBot($request));
+Route::controller(ChatBotController::class)->group(function () {
+    //Gets
+    Route::get('chatBot', 'chatBot')->name('chatBot');
+    //Posts
+    Route::post('chatBotData', 'chatBotData')->name('chatBotData');
 });
