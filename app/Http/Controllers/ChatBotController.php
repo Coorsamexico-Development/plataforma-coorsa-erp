@@ -15,6 +15,6 @@ class ChatBotController extends Controller
 
     public function chatBotData(Request $request): void
     {
-        event(new ChatBot($request->mensaje));
+        /* event(new ChatBot($request->mensaje)); */
     }
 }
