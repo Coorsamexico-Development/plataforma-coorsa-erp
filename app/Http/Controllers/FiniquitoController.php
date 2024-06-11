@@ -21,7 +21,7 @@ class FiniquitoController extends Controller
         $fecha = $request->input('fecha');
 
         $usuario = User::where('name', 'like', "%{$query}%")
-                ->orWhere('id', $query)
+                ->orWhere('numero_empleado', $query)
                 ->where('activo', 1)
                 ->first();
 
@@ -38,8 +38,9 @@ class FiniquitoController extends Controller
 
         //Total mesesRestantes 
         $vacacionesRestantes = 0;
-        $mesesTrabajados = 0;
-        $vacacionesProporcionales = round($this->calcularVacaciones($usuario, $fecha, $vacacionesRestantes, $mesesTrabajados), 2);
+        $mesesRestantes = 0;
+        $vacacionesNoTomadas = 0;
+        $vacacionesProporcionales = round($this->calcularVacaciones($usuario, $fecha, $vacacionesRestantes, $mesesRestantes, $vacacionesNoTomadas), 2);
 
         $aguinaldoNeto = $propAguinaldo -$isrAguinaldo;
 
@@ -61,13 +62,14 @@ class FiniquitoController extends Controller
             'isr_aguinaldo' => round($isrAguinaldo,2),
             'aguinaldo_neto' => round($aguinaldoNeto,2),
             'vacaciones' => round($this->calcularVacaciones($usuario,$fecha),2),
-            'total_vacaciones_restantes' => round($vacacionesRestantes,2),
-            'meses_trabajados' => $mesesTrabajados,
+            'vacaciones_no_tomadas' => round($vacacionesNoTomadas,2),
+            'periodo_vacaciones' => round($vacacionesRestantes,2),
+            'meses_restantes' => $mesesRestantes,
         ];
 
         // Filtrar los valores que no quieres incluir en el total
         $valoresIncluir = array_filter($finiquito, function($key) {
-            return !in_array($key, ['isr_aguinaldo', 'aguinaldo_proporcional', 'fecha_baja','isr_prima','prima_vacacional']);
+            return !in_array($key, ['isr_aguinaldo', 'aguinaldo_proporcional', 'fecha_baja','isr_prima','prima_vacacional', 'periodo_vacaciones','dias_vacaciones','meses_restantes', 'vacaciones_no_tomadas']);
         }, ARRAY_FILTER_USE_KEY);
 
         // Calcular el total del finiquito
@@ -110,13 +112,25 @@ class FiniquitoController extends Controller
                     
                 return $propAguinaldo; 
             }else {
-                $mesesTrabajados = $fechaIngreso->diffInMonths($fechaBaja);
-                $fechaInicioPlusMonths = $fechaIngreso->copy()->addMonths($mesesTrabajados);
-                $diasTrabajados = $fechaInicioPlusMonths->diffInDays($fechaBaja);
 
-                $propAguinaldo = (($mesesTrabajados * $aguinaldoXmes) + ($diasTrabajados * $aguinaldoXdia)) * $salarioDiario;
+                if($fechaIngreso->year == $fechaBaja->year){
+                    $mesesTrabajados = $fechaIngreso->diffInMonths($fechaBaja);
+                    $fechaInicioPlusMonths = $fechaIngreso->copy()->addMonths($mesesTrabajados);
+                    $diasTrabajados = $fechaInicioPlusMonths->diffInDays($fechaBaja);
+              
+                    $propAguinaldo = (($mesesTrabajados * $aguinaldoXmes) + ($diasTrabajados * $aguinaldoXdia)) * $salarioDiario;
 
-                return $propAguinaldo; 
+                    return $propAguinaldo; 
+                }else{
+                    $fechaCorte = Carbon::create($fechaBaja->year, 1, 1);
+                    $mesesTrabajados = $fechaCorte->diffInMonths($fechaBaja);
+                    $fechaInicioPlusMonths = $fechaCorte->copy()->addMonths($mesesTrabajados);
+                    $diasTrabajados = $fechaInicioPlusMonths->diffInDays($fechaBaja);
+
+                    $propAguinaldo = (($mesesTrabajados * $aguinaldoXmes) + ($diasTrabajados * $aguinaldoXdia)) * $salarioDiario;
+
+                    return $propAguinaldo; 
+                }   
             }
                 
         }     
@@ -143,56 +157,63 @@ class FiniquitoController extends Controller
         return $isrAguinaldo;   
     }
 
-    public function calcularVacaciones($usuario, $fecha, &$vacacionesRestantes = 0, &$mesesTrabajados = 0){
+    public function calcularVacaciones($usuario, $fecha, &$vacacionesRestantes = 0, &$mesesRestantes = 0, &$vacacionesNoTomadas = 0){
         $user_id = $usuario->id;
 
-    if($fecha){
-        $fechaIngreso = Carbon::createFromFormat('Y-m-d',$usuario->fecha_ingreso_real);
-        $fechaBaja = Carbon::createFromFormat('Y-m-d', $fecha);
-        $fechaActual = Carbon::now();
-        $estanciaEmpresa=$fechaIngreso->diffInYears($fechaActual);
+        if($fecha){
+            $fechaIngreso = Carbon::createFromFormat('Y-m-d',$usuario->fecha_ingreso_real);
+            $fechaBaja = Carbon::createFromFormat('Y-m-d', $fecha);
+            $fechaActual = Carbon::now();
+            $estanciaEmpresa=$fechaIngreso->diffInYears($fechaActual);
 
-        $salarioDiario = $usuario->salario_diario;
+            $salarioDiario = $usuario->salario_diario;
 
-        $vacaciones = UserVacacions::where('user_id', $user_id)->value('contador');
+            $vacaciones = UserVacacions::where('user_id', $user_id)->value('contador');
 
-        $fechaPreisncripcion = Carbon::create($fechaBaja->year, $fechaIngreso->month, $fechaIngreso->day + 1);
-        $fechaPreinscripcionAnterior=Carbon::create($fechaPreisncripcion->year-1,$fechaPreisncripcion->month,$fechaPreisncripcion->day);
+            $fechaPreisncripcion = Carbon::create($fechaBaja->year, $fechaIngreso->month, $fechaIngreso->day + 1);
+            $fechaPreinscripcionAnterior=Carbon::create($fechaPreisncripcion->year-1,$fechaPreisncripcion->month,$fechaPreisncripcion->day);
 
-        if($estanciaEmpresa>=1){
-            if($fechaBaja > $fechaPreisncripcion){
-                $mesesRestantes=$fechaPreisncripcion->diffInMonths($fechaBaja);
+            if($estanciaEmpresa>=1){
+                if($fechaBaja > $fechaPreisncripcion){
+                    $mesesRestantes=$fechaPreisncripcion->diffInMonths($fechaBaja);
 
-                $totalMesesRestantes=($vacaciones/12)*$mesesRestantes;
+                    $totalMesesRestantes=($vacaciones/12)*$mesesRestantes;
 
-                $diasVacaciones = $vacaciones + $totalMesesRestantes;
+                    $diasVacaciones = $vacaciones + $totalMesesRestantes;
 
-                $vacacionesRestantes = $totalMesesRestantes * $salarioDiario;
+                    $vacacionesNoTomadas = $vacaciones * $salarioDiario;
 
-                $propVacaciones = $diasVacaciones * $salarioDiario;
+                    $vacacionesRestantes = $totalMesesRestantes * $salarioDiario;
+
+                    $propVacaciones = $vacacionesNoTomadas + $vacacionesRestantes;
+                    
+                    return $propVacaciones;
+                }else{
+                    $mesesRestantes=$fechaPreinscripcionAnterior->diffInMonths($fechaBaja);
+
+                    $totalMesesRestantes=($vacaciones/12)*$mesesRestantes;
+
+                    $diasVacaciones = $vacaciones + $totalMesesRestantes;
+
+                    $vacacionesNoTomadas = $vacaciones * $salarioDiario;
+
+                    $vacacionesRestantes = $totalMesesRestantes * $salarioDiario;
+
+                    $propVacaciones = $vacacionesNoTomadas + $vacacionesRestantes;
+
+                    return $propVacaciones;
+                }
+
+            }else{
+                $mesesRestantes = $fechaIngreso->diffInMonths($fechaBaja);
+
+                $vacacionesRestantes = $mesesRestantes * $salarioDiario;
+
+                $propVacaciones = $vacacionesRestantes;
                 
                 return $propVacaciones;
-            }else{
-                $mesesRestantes=$fechaPreinscripcionAnterior->diffInMonths($fechaBaja);
-
-                $totalMesesRestantes=($vacaciones/12)*$mesesRestantes;
-                $diasVacaciones = $vacaciones + $totalMesesRestantes;
-
-                $vacacionesRestantes = $totalMesesRestantes * $salarioDiario;
-
-                $propVacaciones = $diasVacaciones * $salarioDiario;
-
-                return $propVacaciones;
             }
-
-        }else{
-            $mesesTrabajados = $fechaIngreso->diffInMonths($fechaBaja);
-
-            $propVacaciones = $mesesTrabajados * $salarioDiario;
-            
-            return $propVacaciones;
         }
-    }
     }
 
     public function calcularPrimaVacacional($usuario)
@@ -241,25 +262,68 @@ class FiniquitoController extends Controller
 
             $fechaIngreso = Carbon::createFromFormat('Y-m-d', $usuario->fecha_ingreso_real);
             $fechaBaja = Carbon::createFromFormat('Y-m-d', $fecha);
+            $fechaActual = Carbon::now();
+            $estanciaEmpresa=$fechaIngreso->diffInYears($fechaActual);
             $diaSalida = $fechaBaja->day;
 
-            $fechaCorte = Carbon::create($fechaBaja->year, 1, 1);
+            if($estanciaEmpresa >= 1){
+                $fechaCorte = Carbon::create($fechaBaja->year, 1, 1);
+                $mesesTrabajados = $fechaCorte->diffInMonths($fechaBaja);
 
-            $mesesTrabajados = $fechaCorte->diffInMonths($fechaBaja);
-
-           
-            if ($diaSalida <= 15 && $diaSalida >= 1) {
+                if ($diaSalida <= 15 && $diaSalida >= 1) {
                 
-                $propFondoAhorro = (($mesesTrabajados) * $fondoAhorro) - $fondoAhorro / 2;
+                    $propFondoAhorro = (($mesesTrabajados) * $fondoAhorro) - $fondoAhorro / 2;
+    
+                    return $propFondoAhorro;
+    
+                } else if ($diaSalida <= 31 && $diaSalida > 15) {
+                    
+                    $propFondoAhorro = ($mesesTrabajados + 1) * $fondoAhorro;
+    
+                    return $propFondoAhorro;
+                }
 
-                return $propFondoAhorro;
+            }else{
+                if($fechaIngreso->year == $fechaBaja->year){
+                    $mesesTrabajados = $fechaIngreso->diffInMonths($fechaBaja);
 
-            } else if ($diaSalida <= 31 && $diaSalida > 15) {
+                    if ($diaSalida <= 15 && $diaSalida >= 1) {
                 
-                $propFondoAhorro = ($mesesTrabajados + 1) * $fondoAhorro;
+                        $propFondoAhorro = (($mesesTrabajados) * $fondoAhorro) - $fondoAhorro / 2;
+        
+                        return $propFondoAhorro;
+        
+                    } else if ($diaSalida <= 31 && $diaSalida > 15) {
+                        
+                        $propFondoAhorro = ($mesesTrabajados + 1) * $fondoAhorro;
+        
+                        return $propFondoAhorro;
+                    }
 
-                return $propFondoAhorro;
+                }else{
+                    $fechaCorte = Carbon::create($fechaBaja->year, 1, 1);
+                    
+                    $mesesTrabajados = $fechaCorte->diffInMonths($fechaBaja);
+
+                    if ($diaSalida <= 15 && $diaSalida >= 1) {
+                    
+                        $propFondoAhorro = (($mesesTrabajados) * $fondoAhorro) - $fondoAhorro / 2;
+        
+                        return $propFondoAhorro;
+        
+                    } else if ($diaSalida <= 31 && $diaSalida > 15) {
+                        
+                        $propFondoAhorro = ($mesesTrabajados + 1) * $fondoAhorro;
+        
+                        return $propFondoAhorro;
+                    }
+                }
             }
+            
+
+            
+           
+            
                        
         }
         

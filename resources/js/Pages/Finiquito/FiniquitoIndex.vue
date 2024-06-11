@@ -28,9 +28,11 @@
             <p>Isr Aguinaldo: {{  $page.props.finiquito.isr_aguinaldo }}</p>
             <p class="font-bold">Aguinaldo Neto: {{ $page.props.finiquito.aguinaldo_neto }}</p>
             <hr class="m-3">
-            <p>Vacaciones: {{ $page.props.finiquito.vacaciones }}</p>
-            <p>Meses Trabajados: {{ $page.props.finiquito.meses_trabajados }}</p>
-            <p>Total Vacaciones Restantes: {{ $page.props.finiquito.total_vacaciones_restantes }}</p>
+            <p>Vacaciones No Tomadas: {{ $page.props.finiquito.vacaciones_no_tomadas }}</p>
+            <p>Meses Trabajados: {{ $page.props.finiquito.meses_restantes }}</p>
+            <p>Periodo Vacaciones: {{ $page.props.finiquito.periodo_vacaciones }}</p>
+            <p class="font-bold">Vacaciones: {{ $page.props.finiquito.vacaciones }}</p>
+            <hr class="m-3">
             <p>Prima Vacacional: {{ $page.props.finiquito.prima_vacacional }}</p>
             <p>Isr prima: {{ $page.props.finiquito.isr_prima }}</p>
             <p class="font-bold">Prima Vacacional Neta: {{ $page.props.finiquito.prima_vacacional_neta }}</p>
