@@ -10,6 +10,7 @@ class ChatBotController extends Controller
 {
     public function chatBot()
     {
+        event(new ChatBot('hola'));
         return Inertia::render('ChatBot/ChatBot');
     }
 

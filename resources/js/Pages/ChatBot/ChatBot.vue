@@ -8,13 +8,13 @@ const form = useForm({
 });
 
 function sendData() {
-    /*  axios
+    axios
         .post(route("chatBotData", { mensaje: "HolaMundo" }))
         .then(({ data }) => console.log(data))
-        .catch((err) => console.log(err.response ?? err)); */
-    form.transform((data) => ({
+        .catch((err) => console.log(err.response ?? err));
+    /* form.transform((data) => ({
         ...data,
-    })).post(route("chatBotData"));
+    })).post(route("chatBotData")); */
 }
 
 onMounted(() =>
