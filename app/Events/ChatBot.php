@@ -14,7 +14,7 @@ class ChatBot implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    protected $data;
+    public $data;
 
     /**
      * Create a new event instance.

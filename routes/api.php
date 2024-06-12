@@ -34,5 +34,5 @@ Route::controller(ChatBotController::class)->group(function () {
     //Gets
     Route::get('/webhook', 'chatBot')->name('chatBot');
     //Posts
-    Route::post('/webhook', 'chatBotData')->name('chatBot');
+    Route::post('/webhook', 'chatBotData')->name('chatBotData');
 });
