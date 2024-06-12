@@ -17,6 +17,10 @@ class ChatBotController extends Controller
     public function chatBotData(Request $request)
     {
         event(new ChatBot($request->mensaje));
-        return response('OK', 200);
+        return response('OK', 200,)->withHeaders([
+            'Content-Type' => 'text/plain; charset=utf-8',
+            'X-Powered-By' => 'Express',
+            'x-powered-by' => 'Express',
+        ]);
     }
 }
