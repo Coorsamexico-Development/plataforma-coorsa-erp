@@ -28,10 +28,3 @@ Route::controller(VariablesNominaController::class)->group(function () {
     Route::post('getVariablesNomina', 'getVariablesNomina')->name('getVariablesNomina');
     Route::post('actualizarSalarios', 'actualizarSalarios')->name('actualizarSalarios');
 });
-
-Route::controller(ChatBotController::class)->group(function () {
-    //Gets
-    /* Route::get('chatBot', 'chatBot')->name('chatBot'); */
-    //Posts
-    Route::get('chatBotData', 'chatBotData')->name('chatBotData');
-});

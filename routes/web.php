@@ -283,7 +283,7 @@ Route::post('/dibujarGrafico', [NominasController::class, 'dibujarTableroRetardo
 //Rutas ChatBot
 Route::controller(ChatBotController::class)->group(function () {
     //Gets
-    Route::get('chatBot', 'chatBot')->name('chatBot');
+    Route::get('/webhook', 'chatBot')->name('chatBot');
     //Posts
-    /* Route::post('chatBotData', 'chatBotData')->name('chatBotData'); */
+    Route::post('/webhook', 'chatBotData')->name('chatBot');
 });
