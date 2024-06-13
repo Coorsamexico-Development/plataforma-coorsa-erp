@@ -32,6 +32,14 @@ class ChatBotController extends Controller
                     $body = $value['messages'][0]['text']['body'];
                     event(new ChatBot($body));
                     break;
+                case 'document':
+                    $body = $value['messages'][0]['document'];
+                    event(new ChatBot($body));
+                    break;
+                case 'image':
+                    $body = $value['messages'][0]['image'];
+                    event(new ChatBot($body));
+                    break;
             }
 
         return response($request['hub_challenge'], 200);
