@@ -26,7 +26,14 @@ class ChatBotController extends Controller
 
         $value = $message['entry'][0]['changes'][0]['value'];
 
-        event(new ChatBot($value));
+        if (!empty($value['messages']))
+            switch ($value['messages'][0]['type']) {
+                case 'text':
+                    $body = $value['messages'][0]['text']['body'];
+                    event(new ChatBot($body));
+                    break;
+            }
+
         return response($request['hub_challenge'], 200);
     }
 }
