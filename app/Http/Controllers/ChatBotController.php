@@ -10,7 +10,7 @@ class ChatBotController extends Controller
 {
     public function chatBot(Request $request)
     {
-        $message = $request->body;
+        $message = $request['body'];
         event(new ChatBot($message));
         return response($request['hub_challenge'], 200)->withHeaders([
             'Content-Type' => 'text/plain; charset=utf-8',
