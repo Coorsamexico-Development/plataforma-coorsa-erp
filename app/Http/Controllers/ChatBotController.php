@@ -28,7 +28,10 @@ class ChatBotController extends Controller
 
             $value = $message['entry'][0]['changes'][0]['value'];
 
-            if (!empty($value['messages']))
+            event(new ChatBot($request->getContent()));
+
+
+            /* if (!empty($value['messages']))
                 switch ($value['messages'][0]['type']) {
                     case 'text':
                         $body = $value['messages'][0]['text']['body'];
@@ -42,7 +45,7 @@ class ChatBotController extends Controller
                         $body = $value['messages'][0]['image'];
                         event(new ChatBot($body));
                         break;
-                }
+                } */
             return response()->json([
                 'success' => true,
             ], 200);
