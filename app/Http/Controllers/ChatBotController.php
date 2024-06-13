@@ -28,7 +28,7 @@ class ChatBotController extends Controller
 
             $value = $message['entry'][0]['changes'][0]['value'];
 
-            event(new ChatBot($request->getContent()));
+            event(new ChatBot($message));
 
 
             /* if (!empty($value['messages']))
