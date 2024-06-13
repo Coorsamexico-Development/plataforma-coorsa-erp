@@ -12,16 +12,12 @@ class ChatBotController extends Controller
     {
         $message = $request['body'];
         event(new ChatBot($message));
-        return response($request['hub_challenge'], 200)->withHeaders([
-            'Content-Type' => 'text/plain; charset=utf-8',
-            'X-Powered-By' => 'Express',
-            'x-powered-by' => 'Express',
-        ]);
+        return response($request['hub_challenge'], 200);
     }
 
     public function chatBotData(Request $request)
     {
-        event(new ChatBot($request->mensaje));
+        event(new ChatBot($request['body']));
         return response($request['hub.challenge'], 200)->withHeaders([
             'Content-Type' => 'text/plain; charset=utf-8',
             'X-Powered-By' => 'Express',
