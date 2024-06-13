@@ -15,8 +15,8 @@ class ChatBotController extends Controller
 
     public function chatBot(Request $request)
     {
-        $message = json_decode($request);
-        event(new ChatBot($message));
+        //$message = json_decode($request);
+        event(new ChatBot($request));
         return response($request['hub_challenge'], 200);
     }
 
