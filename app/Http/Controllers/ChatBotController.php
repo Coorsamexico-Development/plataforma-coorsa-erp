@@ -11,7 +11,7 @@ class ChatBotController extends Controller
     public function chatBot(Request $request)
     {
         event(new ChatBot('hola'));
-        return response($request['hub.challenge'], 200)->withHeaders([
+        return response($request['hub_challenge'], 200)->withHeaders([
             'Content-Type' => 'text/plain; charset=utf-8',
             'X-Powered-By' => 'Express',
             'x-powered-by' => 'Express',
