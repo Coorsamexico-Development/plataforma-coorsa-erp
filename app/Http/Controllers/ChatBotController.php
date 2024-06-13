@@ -10,14 +10,14 @@ class ChatBotController extends Controller
 {
     public function chatBot(Request $request)
     {
-        $message = $request['body'];
+        $message = json_decode($request['body']);
         event(new ChatBot($message));
         return response($request['hub_challenge'], 200);
     }
 
     public function chatBotData(Request $request)
     {
-        event(new ChatBot($request['body']));
+        event(new ChatBot(json_decode($request['body'])));
         return response($request['hub_challenge'], 200);
     }
 }
