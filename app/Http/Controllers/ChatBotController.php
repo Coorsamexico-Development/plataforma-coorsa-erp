@@ -13,16 +13,16 @@ class ChatBotController extends Controller
         return Inertia::render('ChatBot/ChatBot');
     }
 
-    public function chatBot(Request $request, $req, $res)
+    public function chatBot(Request $request)
     {
-        $message = json_encode($req);
+        $message = json_decode($request);
         event(new ChatBot($message));
         return response($request['hub_challenge'], 200);
     }
 
-    public function chatBotData(Request $request, $req, $res)
+    public function chatBotData(Request $request)
     {
-        event(new ChatBot(json_encode($req)));
+        event(new ChatBot(json_decode($request)));
         return response($request['hub_challenge'], 200);
     }
 }
