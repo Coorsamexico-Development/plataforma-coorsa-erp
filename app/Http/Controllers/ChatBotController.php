@@ -23,7 +23,10 @@ class ChatBotController extends Controller
     public function chatBotData(Request $request)
     {
         $message = json_decode($request->getContent(), true);
-        event(new ChatBot($message['entry'][0]));
+
+        $value = $message['entry'][0]['changes'][0]['value'];
+
+        event(new ChatBot($value));
         return response($request['hub_challenge'], 200);
     }
 }
