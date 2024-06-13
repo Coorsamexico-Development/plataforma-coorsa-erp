@@ -279,3 +279,9 @@ Route::get('/control-nominas', [NominasController::class, 'index'])->name('users
 Route::get('/search-users', [NominasController::class, 'search'])->name('users.search');
 Route::get('/deducciones-nominas/{id}', [NominasController::class, 'deducciones'])->name('users.deducciones');
 Route::post('/dibujarGrafico', [NominasController::class, 'dibujarTableroRetardos'])->name('tableroRetardos');
+
+//Rutas ChatBot
+Route::controller(ChatBotController::class)->group(function () {
+    //Gets
+    Route::get('/chatBot', 'index')->name('chatBotIndex');
+});

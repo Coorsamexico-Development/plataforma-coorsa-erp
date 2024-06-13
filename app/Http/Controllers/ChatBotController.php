@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class ChatBotController extends Controller
 {
+    public function index()
+    {
+        return Inertia::render('ChatBot/ChatBot');
+    }
+
     public function chatBot(Request $request)
     {
         $message = json_encode($request->request);
