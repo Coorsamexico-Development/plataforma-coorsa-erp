@@ -47,19 +47,21 @@ class ChatBotController extends Controller
             if (!empty($value['messages']))
                 switch ($value['messages'][0]['type']) {
                     case 'text':
-                        $body = (object) $value['messages'][0]['text']['body'];
+                        $body = $value['messages'][0]['text']['body'];
+                        $message = $value['messages'][0];
+                        event(new ChatBot($message));
 
-                        /* Http::withToken($tokenWhats)->post(
+                        Http::withToken($tokenWhats)->post(
                             "https://graph.facebook.com/v20.0/340556352473138messages",
                             [
                                 'messaging_product' => "whatsapp",
-                                'to' => $body->from,
-                                'text' => ['body' => "Enviaste un 1"],
+                                'to' => $message->from,
+                                'text' => ['body' => "Esta es una respuesta automatica, le recordamos que este numero ya no esta disponible en whatsapp para ningun tipo de cconsulta"],
                                 'context' => [
-                                    'message_id' => $body->id, // shows the message as a reply to the original user message
+                                    'message_id' => $message->id, // shows the message as a reply to the original user message
                                 ],
                             ]
-                        ); */
+                        );
                         event(new ChatBot($body));
                         break;
                     case 'document':
