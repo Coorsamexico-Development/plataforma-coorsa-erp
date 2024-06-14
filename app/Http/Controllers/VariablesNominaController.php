@@ -19,7 +19,7 @@ class VariablesNominaController extends Controller
         $fechaIngreso = new DateTime($user->fecha_ingreso_real);
         $fechaAtual = new DateTime(date('Y-m-d'));
 
-        $mesIngreso=$fechaIngreso->format('m');
+        $mesIngreso = $fechaIngreso->format('m');
 
         $diferencia = $fechaIngreso->diff($fechaAtual);
 
@@ -48,7 +48,6 @@ class VariablesNominaController extends Controller
         $salarioMinimo = VariablesNomina::where([['activo', 1], ['tipo_id', 4]])->first()->valor;
 
         foreach ($users as $user) {
-            
             $diasMes = 365 / 12;
             $valesDespensa = $diasMes * $uma * $deducible;
 
@@ -68,7 +67,7 @@ class VariablesNominaController extends Controller
             $sueldoImss = ($sueldoBruto - $valesDespensa) / 1.22;
             $bonoPunt = $sueldoImss * 0.1;
             $fondoAhorro = $sueldoImss * 0.02;
-            $fondoAhorroAnual=$fondoAhorro*12;
+            $fondoAhorroAnual = $fondoAhorro * 12;
 
             if ($salarioMinimoMes >= $sueldoImss) {
                 $sueldoImss = $salarioMinimoMes;
@@ -106,4 +105,3 @@ class VariablesNominaController extends Controller
                 ]);
     }
 }
-  
