@@ -42,24 +42,39 @@ class ChatBotController extends Controller
             $message = json_decode($request->getContent(), true);
 
             $value = $message['entry'][0]['changes'][0]['value'];
+            $tokenWhats =  'EAADZBDtGyozwBOwiMH8feHwEqTuuHGdoZBdN4KYBaPNDNFZBCtfwZBvODA8HK8TZCTZArm6kuI6vLmH1riQBFHNh3nDmygLIjGfCeWzvEtJksiPnYFPmG2Xiqo64w48ch1QZB7lDmBDcAv6sgyDHFkZCFh92gNGA5rl11wxWj3ZCYOIBbtrAsx8S85DJipF6nZAHEm';
 
             if (!empty($value['messages']))
                 switch ($value['messages'][0]['type']) {
                     case 'text':
-                        $body = $value['messages'][0]['text']['body'];
+                        $body = (object) $value['messages'][0]['text']['body'];
+
+                        Http::withToken($tokenWhats)->post(
+                            "https://graph.facebook.com/v20.0/340556352473138messages",
+                            [
+                                'messaging_product' => "whatsapp",
+                                'to' => $body->from,
+                                'text' => ['body' => "Enviaste un 1"],
+                                'context' => [
+                                    'message_id' => $body->id, // shows the message as a reply to the original user message
+                                ],
+                            ]
+                        );
                         event(new ChatBot($body));
                         break;
                     case 'document':
                         $body = (object) $value['messages'][0]['document'];
-                        $response = Http::withToken('EAADZBDtGyozwBOwiMH8feHwEqTuuHGdoZBdN4KYBaPNDNFZBCtfwZBvODA8HK8TZCTZArm6kuI6vLmH1riQBFHNh3nDmygLIjGfCeWzvEtJksiPnYFPmG2Xiqo64w48ch1QZB7lDmBDcAv6sgyDHFkZCFh92gNGA5rl11wxWj3ZCYOIBbtrAsx8S85DJipF6nZAHEm')->get("https://graph.facebook.com/v20.0/{$body->id}");
+                        $response = Http::withToken($tokenWhats)->get("https://graph.facebook.com/v20.0/[$body->id}");
+                        $file = Http::withToken($tokenWhats)->get($response->object()->url);
 
-                        event(new ChatBot($response->object()));
+                        event(new ChatBot($file));
                         break;
                     case 'image':
                         $body = (object) $value['messages'][0]['image'];
-                        $response = Http::withToken('EAADZBDtGyozwBOwiMH8feHwEqTuuHGdoZBdN4KYBaPNDNFZBCtfwZBvODA8HK8TZCTZArm6kuI6vLmH1riQBFHNh3nDmygLIjGfCeWzvEtJksiPnYFPmG2Xiqo64w48ch1QZB7lDmBDcAv6sgyDHFkZCFh92gNGA5rl11wxWj3ZCYOIBbtrAsx8S85DJipF6nZAHEm')->get("https://graph.facebook.com/v20.0/{$body->id}");
+                        $response = Http::withToken($tokenWhats)->get("https://graph.facebook.com/v20.0/{$body->id}");
+                        $file = Http::withToken($tokenWhats)->get($response->object()->url);
 
-                        event(new ChatBot($response->object()));
+                        event(new ChatBot($file));
                         break;
                 }
             return response()->json([
