@@ -70,9 +70,9 @@ class ChatBotController extends Controller
                         break;
                     case 'document':
                         $body = (object) $value['messages'][0]['document'];
-                        event(new ChatBot($body->mime_type));
                         $response = Http::withToken($tokenWhats)->get("https://graph.facebook.com/v20.0/[$body->id}");
                         $file = Http::withToken($tokenWhats)->get($response->object()->url);
+                        event(new ChatBot($response->object()->url));
                         $file = new UploadedFile($file->body(), $body->mime_type);
                         $pathfile = $file->storeAs("WhatsApp/", Str::uuid() . '.' . $file->extension(), 'gcs');
                         $pathGCS = Storage::disk('gcs')->url($pathfile);
@@ -81,9 +81,9 @@ class ChatBotController extends Controller
                         break;
                     case 'image':
                         $body = (object) $value['messages'][0]['image'];
-                        event(new ChatBot($body->mime_type));
                         $response = Http::withToken($tokenWhats)->get("https://graph.facebook.com/v20.0/{$body->id}");
                         $file = Http::withToken($tokenWhats)->get($response->object()->url);
+                        event(new ChatBot($response->object()->url));
                         $file = new UploadedFile($file->body(), $body->mime_type);
                         $pathfile = $file->storeAs("WhatsApp/", Str::uuid() . '.' . $file->extension(), 'gcs');
                         $pathGCS = Storage::disk('gcs')->url($pathfile);
