@@ -19,8 +19,11 @@ class VariablesNominaController extends Controller
         $fechaIngreso = new DateTime($user->fecha_ingreso_real);
         $fechaAtual = new DateTime(date('Y-m-d'));
 
+<<<<<<< HEAD
         $mesIngreso = $fechaIngreso->format('m');
 
+=======
+>>>>>>> bf8f3e4b3aa7787d8e3ec03e9ef0852ebf9d9ed4
         $diferencia = $fechaIngreso->diff($fechaAtual);
 
         $vacaciones = DiasVacaciones::where([['año', $diferencia->y], ['activo', 1]])->first();
@@ -31,10 +34,6 @@ class VariablesNominaController extends Controller
             'vacaciones' => $vacaciones->dias ?? 12,
             'deducible'  => VariablesNomina::where([['activo', 1], ['tipo_id', 3]])->first()->valor,
             'salarioMinimo'  => VariablesNomina::where([['activo', 1], ['tipo_id', 4]])->first()->valor,
-            'mesIngreso' => $mesIngreso,
-            'vacaciones' => $vacaciones,
-            'fecha_ingreso' => $fechaIngreso,
-            'fecha_actual' => $fechaAtual
         ]);
     }
 
@@ -46,10 +45,10 @@ class VariablesNominaController extends Controller
         $aguinaldo = VariablesNomina::where([['activo', 1], ['tipo_id', 2]])->first()->valor;
         $deducible = VariablesNomina::where([['activo', 1], ['tipo_id', 3]])->first()->valor;
         $salarioMinimo = VariablesNomina::where([['activo', 1], ['tipo_id', 4]])->first()->valor;
+        $diasMes = 365 / 12;
+        $valesDespensa = $diasMes * $uma * $deducible;
 
         foreach ($users as $user) {
-            $diasMes = 365 / 12;
-            $valesDespensa = $diasMes * $uma * $deducible;
 
             $fechaIngreso = new DateTime($user->fecha_ingreso_real);
             $fechaAtual = new DateTime(date('Y-m-d'));
@@ -57,7 +56,7 @@ class VariablesNominaController extends Controller
                 $diferencia = $fechaIngreso->diff($fechaAtual);
             else $diferencia = (object)['y' => 0];
 
-            $diasTrabajados = $diferencia->days;
+            
             $vacaciones = DiasVacaciones::where([['año', $diferencia->y], ['activo', 1]])->first()->dias ?? 12;
             $factor = (365 + $aguinaldo + $vacaciones * 0.25) / 365;
             $salarioMinimoMes = $salarioMinimo * $factor * $diasMes;
@@ -67,7 +66,6 @@ class VariablesNominaController extends Controller
             $sueldoImss = ($sueldoBruto - $valesDespensa) / 1.22;
             $bonoPunt = $sueldoImss * 0.1;
             $fondoAhorro = $sueldoImss * 0.02;
-            $fondoAhorroAnual = $fondoAhorro * 12;
 
             if ($salarioMinimoMes >= $sueldoImss) {
                 $sueldoImss = $salarioMinimoMes;
