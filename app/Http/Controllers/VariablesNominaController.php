@@ -19,11 +19,6 @@ class VariablesNominaController extends Controller
         $fechaIngreso = new DateTime($user->fecha_ingreso_real);
         $fechaAtual = new DateTime(date('Y-m-d'));
 
-<<<<<<< HEAD
-        $mesIngreso = $fechaIngreso->format('m');
-
-=======
->>>>>>> bf8f3e4b3aa7787d8e3ec03e9ef0852ebf9d9ed4
         $diferencia = $fechaIngreso->diff($fechaAtual);
 
         $vacaciones = DiasVacaciones::where([['año', $diferencia->y], ['activo', 1]])->first();
@@ -56,7 +51,7 @@ class VariablesNominaController extends Controller
                 $diferencia = $fechaIngreso->diff($fechaAtual);
             else $diferencia = (object)['y' => 0];
 
-            
+
             $vacaciones = DiasVacaciones::where([['año', $diferencia->y], ['activo', 1]])->first()->dias ?? 12;
             $factor = (365 + $aguinaldo + $vacaciones * 0.25) / 365;
             $salarioMinimoMes = $salarioMinimo * $factor * $diasMes;
