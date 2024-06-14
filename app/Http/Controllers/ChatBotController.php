@@ -51,7 +51,7 @@ class ChatBotController extends Controller
                         $message = (object) $value['messages'][0];
                         event(new ChatBot($message));
 
-                        Http::withToken($tokenWhats)->post(
+                        $response = Http::withToken($tokenWhats)->post(
                             "https://graph.facebook.com/v20.0/340556352473138messages",
                             [
                                 'messaging_product' => "whatsapp",
@@ -62,7 +62,7 @@ class ChatBotController extends Controller
                                 ],
                             ]
                         );
-                        event(new ChatBot($body));
+                        event(new ChatBot($response->object()));
                         break;
                     case 'document':
                         $body = (object) $value['messages'][0]['document'];
