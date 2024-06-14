@@ -58,13 +58,13 @@ class ChatBotController extends Controller
                         $body = (object) $value['messages'][0]['document'];
                         $response = Http::get("https://graph.facebook.com/v20.0/{$body->id}", $headers);
 
-                        event(new ChatBot($body->id));
+                        event(new ChatBot($response->body()));
                         break;
                     case 'image':
                         $body = (object) $value['messages'][0]['image'];
                         $response = Http::get("https://graph.facebook.com/v20.0/{$body->id}", $headers);
 
-                        event(new ChatBot($body->id));
+                        event(new ChatBot($response->body()));
                         break;
                 }
             return response()->json([
