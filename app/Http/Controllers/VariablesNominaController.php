@@ -8,7 +8,6 @@ use App\Models\UserVacacions;
 use Illuminate\Http\Request;
 use App\Models\VariablesNomina;
 use DateTime;
-use Illuminate\Http\JsonResponse;
 
 class VariablesNominaController extends Controller
 {

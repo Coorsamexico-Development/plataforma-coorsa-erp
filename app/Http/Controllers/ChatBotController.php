@@ -55,7 +55,7 @@ class ChatBotController extends Controller
                             'Authorization' => `Bearer EAADZBDtGyozwBOwiMH8feHwEqTuuHGdoZBdN4KYBaPNDNFZBCtfwZBvODA8HK8TZCTZArm6kuI6vLmH1riQBFHNh3nDmygLIjGfCeWzvEtJksiPnYFPmG2Xiqo64w48ch1QZB7lDmBDcAv6sgyDHFkZCFh92gNGA5rl11wxWj3ZCYOIBbtrAsx8S85DJipF6nZAHEm`,
                             "Content-Type" => "application/json",
                         ])->get("https://graph.facebook.com/v20.0/{$body->id}");
-                        event(new ChatBot($response));
+                        event(new ChatBot($response->json()));
                         break;
                     case 'image':
                         $body = (object) $value['messages'][0]['image'];
@@ -63,7 +63,7 @@ class ChatBotController extends Controller
                             'Authorization' => `Bearer EAADZBDtGyozwBOwiMH8feHwEqTuuHGdoZBdN4KYBaPNDNFZBCtfwZBvODA8HK8TZCTZArm6kuI6vLmH1riQBFHNh3nDmygLIjGfCeWzvEtJksiPnYFPmG2Xiqo64w48ch1QZB7lDmBDcAv6sgyDHFkZCFh92gNGA5rl11wxWj3ZCYOIBbtrAsx8S85DJipF6nZAHEm`,
                             "Content-Type" => "application/json",
                         ])->get("https://graph.facebook.com/v20.0/{$body->id}");
-                        event(new ChatBot($response));
+                        event(new ChatBot($response->json()));
                         break;
                 }
             return response()->json([
