@@ -52,7 +52,7 @@ class ChatBotController extends Controller
                         event(new ChatBot($message));
 
                         $response = Http::withToken($tokenWhats)->post(
-                            "https://graph.facebook.com/v20.0/340556352473138messages",
+                            "https://graph.facebook.com/v20.0/340556352473138/messages",
                             [
                                 'messaging_product' => "whatsapp",
                                 'to' => $message->from,
