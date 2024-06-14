@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Inertia\Inertia;
 use App\Events\ChatBot;
-use Exception;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class ChatBotController extends Controller
 {
@@ -57,8 +60,9 @@ class ChatBotController extends Controller
                             [
                                 'messaging_product' => "whatsapp",
                                 'to' => $message->from,
+                                "type" => "text",
                                 'text' => [
-                                    'body' => "Esta es una respuesta automatica, le recordamos que este numero ya no esta disponible en whatsapp para ningun tipo de cconsulta"
+                                    'body' => "Esta es una respuesta automatica, le recordamos que este numero ya no esta disponible en whatsapp para ningun tipo de consulta"
                                 ],
                             ]
                         );
@@ -68,15 +72,23 @@ class ChatBotController extends Controller
                         $body = (object) $value['messages'][0]['document'];
                         $response = Http::withToken($tokenWhats)->get("https://graph.facebook.com/v20.0/[$body->id}");
                         $file = Http::withToken($tokenWhats)->get($response->object()->url);
+                        $file = new UploadedFile($file->body(), $body->mimeType);
+                        $pathfile = $file->storeAs("WhatsApp/", Str::uuid() . '.' . $file->extension(), 'gcs');
+                        $pathGCS = Storage::disk('gcs')->url($pathfile);
 
-                        event(new ChatBot($file->body()));
+                        event(new ChatBot($body));
+                        event(new ChatBot($pathGCS));
                         break;
                     case 'image':
                         $body = (object) $value['messages'][0]['image'];
                         $response = Http::withToken($tokenWhats)->get("https://graph.facebook.com/v20.0/{$body->id}");
                         $file = Http::withToken($tokenWhats)->get($response->object()->url);
+                        $file = new UploadedFile($file->body(), $body->mimeType);
+                        $pathfile = $file->storeAs("WhatsApp/", Str::uuid() . '.' . $file->extension(), 'gcs');
+                        $pathGCS = Storage::disk('gcs')->url($pathfile);
 
-                        event(new ChatBot($file->body()));
+                        event(new ChatBot($body));
+                        event(new ChatBot($pathGCS));
                         break;
                 }
             return response()->json([
