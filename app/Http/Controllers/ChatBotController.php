@@ -18,7 +18,7 @@ class ChatBotController extends Controller
     public function chatBot(Request $request)
     {
         try {
-            $verifyToken = '90e76a72d211d20f8d1f96316b45865af00ba7985473b4e30b526d9066b8bdef';
+            $verifyToken = env('VERIFY_TOKEN');
             $query = $request->query();
 
             $mode = $query['hub_mode'];
