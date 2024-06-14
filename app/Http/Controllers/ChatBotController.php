@@ -49,7 +49,7 @@ class ChatBotController extends Controller
                     case 'text':
                         $body = (object) $value['messages'][0]['text']['body'];
 
-                        Http::withToken($tokenWhats)->post(
+                        /* Http::withToken($tokenWhats)->post(
                             "https://graph.facebook.com/v20.0/340556352473138messages",
                             [
                                 'messaging_product' => "whatsapp",
@@ -59,7 +59,7 @@ class ChatBotController extends Controller
                                     'message_id' => $body->id, // shows the message as a reply to the original user message
                                 ],
                             ]
-                        );
+                        ); */
                         event(new ChatBot($body));
                         break;
                     case 'document':
@@ -67,14 +67,14 @@ class ChatBotController extends Controller
                         $response = Http::withToken($tokenWhats)->get("https://graph.facebook.com/v20.0/[$body->id}");
                         $file = Http::withToken($tokenWhats)->get($response->object()->url);
 
-                        event(new ChatBot($file));
+                        event(new ChatBot($file->body()));
                         break;
                     case 'image':
                         $body = (object) $value['messages'][0]['image'];
                         $response = Http::withToken($tokenWhats)->get("https://graph.facebook.com/v20.0/{$body->id}");
                         $file = Http::withToken($tokenWhats)->get($response->object()->url);
 
-                        event(new ChatBot($file));
+                        event(new ChatBot($file->body()));
                         break;
                 }
             return response()->json([
