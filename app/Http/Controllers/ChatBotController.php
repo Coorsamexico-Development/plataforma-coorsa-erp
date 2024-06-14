@@ -48,7 +48,7 @@ class ChatBotController extends Controller
                 switch ($value['messages'][0]['type']) {
                     case 'text':
                         $body = $value['messages'][0]['text']['body'];
-                        $message = $value['messages'][0];
+                        $message = (object) $value['messages'][0];
                         event(new ChatBot($message));
 
                         Http::withToken($tokenWhats)->post(
