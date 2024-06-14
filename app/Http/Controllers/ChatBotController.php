@@ -69,22 +69,32 @@ class ChatBotController extends Controller
                         event(new ChatBot($response->object()));
                         break;
                     case 'document':
+                        //Cuerpo del mensaje
                         $body = (object) $value['messages'][0]['document'];
+
+                        //Solicitud HTTP para obetner el archivo
                         $response = Http::withToken($tokenWhats)->get("https://graph.facebook.com/v20.0/[$body->id}");
                         $file = Http::withToken($tokenWhats)->get($response->object()->url);
-                        event(new ChatBot($response->object()->url));
+                        
+                        //Subir la Imagen al Bucket
                         $file = new UploadedFile($file->body(), $body->mime_type);
+                        event(new ChatBot($file));
                         $pathfile = $file->storeAs("WhatsApp/", Str::uuid() . '.' . $file->extension(), 'gcs');
                         $pathGCS = Storage::disk('gcs')->url($pathfile);
 
                         event(new ChatBot($pathGCS));
                         break;
                     case 'image':
+                        //Cuerpo del mensaje
                         $body = (object) $value['messages'][0]['image'];
+
+                        //Solicitud HTTP para obetner el archivo
                         $response = Http::withToken($tokenWhats)->get("https://graph.facebook.com/v20.0/{$body->id}");
                         $file = Http::withToken($tokenWhats)->get($response->object()->url);
-                        event(new ChatBot($response->object()->url));
+                        
+                        //Subir la Imagen al Bucket
                         $file = new UploadedFile($file->body(), $body->mime_type);
+                        event(new ChatBot($file));
                         $pathfile = $file->storeAs("WhatsApp/", Str::uuid() . '.' . $file->extension(), 'gcs');
                         $pathGCS = Storage::disk('gcs')->url($pathfile);
 
