@@ -51,18 +51,20 @@ class ChatBotController extends Controller
                         break;
                     case 'document':
                         $body = (object) $value['messages'][0]['document'];
-                        $response = Http::withHeaders([
+                        $response = Http::get("https://graph.facebook.com/v20.0/{$body->id}", [
                             'Authorization' => `Bearer EAADZBDtGyozwBOwiMH8feHwEqTuuHGdoZBdN4KYBaPNDNFZBCtfwZBvODA8HK8TZCTZArm6kuI6vLmH1riQBFHNh3nDmygLIjGfCeWzvEtJksiPnYFPmG2Xiqo64w48ch1QZB7lDmBDcAv6sgyDHFkZCFh92gNGA5rl11wxWj3ZCYOIBbtrAsx8S85DJipF6nZAHEm`,
                             "Content-Type" => "application/json",
-                        ])->get("https://graph.facebook.com/v20.0/{$body->id}");
+                        ]);
+
                         event(new ChatBot($response->json()));
                         break;
                     case 'image':
                         $body = (object) $value['messages'][0]['image'];
-                        $response = Http::withHeaders([
+                        $response = Http::get("https://graph.facebook.com/v20.0/{$body->id}", [
                             'Authorization' => `Bearer EAADZBDtGyozwBOwiMH8feHwEqTuuHGdoZBdN4KYBaPNDNFZBCtfwZBvODA8HK8TZCTZArm6kuI6vLmH1riQBFHNh3nDmygLIjGfCeWzvEtJksiPnYFPmG2Xiqo64w48ch1QZB7lDmBDcAv6sgyDHFkZCFh92gNGA5rl11wxWj3ZCYOIBbtrAsx8S85DJipF6nZAHEm`,
                             "Content-Type" => "application/json",
-                        ])->get("https://graph.facebook.com/v20.0/{$body->id}");
+                        ]);
+
                         event(new ChatBot($response->json()));
                         break;
                 }
