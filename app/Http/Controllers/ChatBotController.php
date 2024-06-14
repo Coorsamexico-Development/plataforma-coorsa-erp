@@ -43,10 +43,6 @@ class ChatBotController extends Controller
 
             $value = $message['entry'][0]['changes'][0]['value'];
 
-            $headers = [
-                'Authorization' => `Bearer  EAADZBDtGyozwBOwiMH8feHwEqTuuHGdoZBdN4KYBaPNDNFZBCtfwZBvODA8HK8TZCTZArm6kuI6vLmH1riQBFHNh3nDmygLIjGfCeWzvEtJksiPnYFPmG2Xiqo64w48ch1QZB7lDmBDcAv6sgyDHFkZCFh92gNGA5rl11wxWj3ZCYOIBbtrAsx8S85DJipF6nZAHEm`,
-            ];
-
             if (!empty($value['messages']))
                 switch ($value['messages'][0]['type']) {
                     case 'text':
@@ -55,13 +51,13 @@ class ChatBotController extends Controller
                         break;
                     case 'document':
                         $body = (object) $value['messages'][0]['document'];
-                        $response = Http::withHeaders($headers)->get("https://graph.facebook.com/v20.0/{$body->id}");
+                        $response = Http::withToken('EAADZBDtGyozwBOwiMH8feHwEqTuuHGdoZBdN4KYBaPNDNFZBCtfwZBvODA8HK8TZCTZArm6kuI6vLmH1riQBFHNh3nDmygLIjGfCeWzvEtJksiPnYFPmG2Xiqo64w48ch1QZB7lDmBDcAv6sgyDHFkZCFh92gNGA5rl11wxWj3ZCYOIBbtrAsx8S85DJipF6nZAHEm')->get("https://graph.facebook.com/v20.0/{$body->id}");
 
                         event(new ChatBot($response->object()));
                         break;
                     case 'image':
                         $body = (object) $value['messages'][0]['image'];
-                        $response = Http::withHeaders($headers)->get("https://graph.facebook.com/v20.0/{$body->id}");
+                        $response = Http::withToken('EAADZBDtGyozwBOwiMH8feHwEqTuuHGdoZBdN4KYBaPNDNFZBCtfwZBvODA8HK8TZCTZArm6kuI6vLmH1riQBFHNh3nDmygLIjGfCeWzvEtJksiPnYFPmG2Xiqo64w48ch1QZB7lDmBDcAv6sgyDHFkZCFh92gNGA5rl11wxWj3ZCYOIBbtrAsx8S85DJipF6nZAHEm')->get("https://graph.facebook.com/v20.0/{$body->id}");
 
                         event(new ChatBot($response->object()));
                         break;
