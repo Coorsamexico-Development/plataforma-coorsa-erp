@@ -42,17 +42,18 @@ class ChatBotController extends Controller
             $message = json_decode($request->getContent(), true);
 
             $value = $message['entry'][0]['changes'][0]['value'];
-            $tokenWhats =  'EAADZBDtGyozwBOwiMH8feHwEqTuuHGdoZBdN4KYBaPNDNFZBCtfwZBvODA8HK8TZCTZArm6kuI6vLmH1riQBFHNh3nDmygLIjGfCeWzvEtJksiPnYFPmG2Xiqo64w48ch1QZB7lDmBDcAv6sgyDHFkZCFh92gNGA5rl11wxWj3ZCYOIBbtrAsx8S85DJipF6nZAHEm';
+            $tokenWhats = env('WHATSAPP_TOKEN');
+            $phoneNumberId = env('PHONE_NUMBER');
 
             if (!empty($value['messages']))
                 switch ($value['messages'][0]['type']) {
                     case 'text':
                         $body = $value['messages'][0]['text']['body'];
                         $message = (object) $value['messages'][0];
-                        event(new ChatBot(env('WHATSAPP_TOKEN')));
+                        event(new ChatBot($message));
 
                         $response = Http::withToken($tokenWhats)->post(
-                            "https://graph.facebook.com/v20.0/340556352473138/messages",
+                            "https://graph.facebook.com/v20.0/{$phoneNumberId}/messages",
                             [
                                 'messaging_product' => "whatsapp",
                                 'to' => $message->from,
