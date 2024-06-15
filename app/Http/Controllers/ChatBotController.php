@@ -75,7 +75,7 @@ class ChatBotController extends Controller
                         //Solicitud HTTP para obetner el archivo
                         $response = Http::withToken($tokenWhats)->get("https://graph.facebook.com/v20.0/[$body->id}");
                         $file = Http::withToken($tokenWhats)->get($response->object()->url);
-                        
+
                         //Subir la Imagen al Bucket
                         $file = new UploadedFile($file->body(), $body->mime_type);
                         event(new ChatBot($file));
@@ -91,10 +91,10 @@ class ChatBotController extends Controller
                         //Solicitud HTTP para obetner el archivo
                         $response = Http::withToken($tokenWhats)->get("https://graph.facebook.com/v20.0/{$body->id}");
                         $file = Http::withToken($tokenWhats)->get($response->object()->url);
-                        
+
                         //Subir la Imagen al Bucket
                         $file = new UploadedFile($file->body(), $body->mime_type);
-                        event(new ChatBot($file));
+                        event(new ChatBot($file->extension()));
                         $pathfile = $file->storeAs("WhatsApp/", Str::uuid() . '.' . $file->extension(), 'gcs');
                         $pathGCS = Storage::disk('gcs')->url($pathfile);
 
