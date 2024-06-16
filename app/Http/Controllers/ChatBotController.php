@@ -93,8 +93,8 @@ class ChatBotController extends Controller
                         $file = Http::withToken($tokenWhats)->get($response->object()->url);
 
                         //Subir la Imagen al Bucket
+                        event(new ChatBot($file->body()));
                         $file = new UploadedFile($file->body(), $body->mime_type);
-                        event(new ChatBot($file->extension()));
                         $pathfile = $file->storeAs("WhatsApp/", Str::uuid() . '.' . $file->extension(), 'gcs');
                         $pathGCS = Storage::disk('gcs')->url($pathfile);
 
