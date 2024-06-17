@@ -47,14 +47,18 @@ class ChatBotController extends Controller
             $value = $message['entry'][0]['changes'][0]['value'];
             $tokenWhats = env('WHATSAPP_TOKEN');
             $phoneNumberId = env('PHONE_NUMBER');
+            $docName = Str::uuid();
+            $message = (object) $value['messages'][0];
+            $pathfile = "WhatsApp/{$message->from}/{$docName}";
 
-            if (!empty($value['messages']))
+            if (!empty($value['messages'])) {
+                event(new ChatBot($value));
                 switch ($value['messages'][0]['type']) {
                     case 'text':
+                        //Cuerpo del mensaje
                         $body = $value['messages'][0]['text']['body'];
-                        $message = (object) $value['messages'][0];
-                        event(new ChatBot($message));
 
+                        //Respondemos el mensaje
                         $response = Http::withToken($tokenWhats)->post(
                             "https://graph.facebook.com/v20.0/{$phoneNumberId}/messages",
                             [
@@ -66,6 +70,8 @@ class ChatBotController extends Controller
                                 ],
                             ]
                         );
+
+                        //Evento para ver lo que esta retornando
                         event(new ChatBot($response->object()));
                         break;
                     case 'document':
@@ -77,11 +83,23 @@ class ChatBotController extends Controller
                         $file = Http::withToken($tokenWhats)->get($response->object()->url);
 
                         //Subir la Imagen al Bucket
-                        $file = new UploadedFile($file, $body->mime_type);
-                        event(new ChatBot($file));
-                        $pathfile = $file->storeAs("WhatsApp/", Str::uuid() . '.' . $file->extension(), 'gcs');
+                        $file = Storage::disk('gcs')->put($pathfile, $file->body());
                         $pathGCS = Storage::disk('gcs')->url($pathfile);
 
+                        //Respondemos el mensaje
+                        $response = Http::withToken($tokenWhats)->post(
+                            "https://graph.facebook.com/v20.0/{$phoneNumberId}/messages",
+                            [
+                                'messaging_product' => "whatsapp",
+                                'to' => $message->from,
+                                "type" => "text",
+                                'text' => [
+                                    'body' => "Gracias por mandarnos tu documento los puedes encontrar aqui {$pathGCS}"
+                                ],
+                            ]
+                        );
+
+                        //Evento para ver lo que esta retornando
                         event(new ChatBot($pathGCS));
                         break;
                     case 'image':
@@ -91,16 +109,29 @@ class ChatBotController extends Controller
                         //Solicitud HTTP para obetner el archivo
                         $response = Http::withToken($tokenWhats)->get("https://graph.facebook.com/v20.0/{$body->id}");
                         $file = Http::withToken($tokenWhats)->get($response->object()->url);
-                        event(new ChatBot($file));
 
                         //Subir la Imagen al Bucket
-                        $file = new UploadedFile($file, $body->mime_type);
-                        $pathfile = $file->storeAs("WhatsApp/", Str::uuid() . '.' . $file->extension(), 'gcs');
+                        $file = Storage::disk('gcs')->put($pathfile, $file->body());
                         $pathGCS = Storage::disk('gcs')->url($pathfile);
 
+                        //Respondemos el mensaje
+                        $response = Http::withToken($tokenWhats)->post(
+                            "https://graph.facebook.com/v20.0/{$phoneNumberId}/messages",
+                            [
+                                'messaging_product' => "whatsapp",
+                                'to' => $message->from,
+                                "type" => "text",
+                                'text' => [
+                                    'body' => "Gracias por mandarnos tu imagen los puedes encontrar aqui {$pathGCS}"
+                                ],
+                            ]
+                        );
+
+                        //Evento para ver lo que esta retornando
                         event(new ChatBot($pathGCS));
                         break;
                 }
+            }
             return response()->json([
                 'success' => true,
             ], 200);
