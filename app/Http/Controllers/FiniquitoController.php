@@ -181,7 +181,7 @@ class FiniquitoController extends Controller
 
                     $diasVacaciones = $vacaciones + $totalMesesRestantes;
 
-                    $vacacionesNoTomadas = $vacaciones * $salarioDiario;
+                    $vacacionesNoTomadas = 0;//$vacaciones * $salarioDiario;
 
                     $vacacionesRestantes = $totalMesesRestantes * $salarioDiario;
 
@@ -195,7 +195,7 @@ class FiniquitoController extends Controller
 
                     $diasVacaciones = $vacaciones + $totalMesesRestantes;
 
-                    $vacacionesNoTomadas = $vacaciones * $salarioDiario;
+                    $vacacionesNoTomadas = 0; //$vacaciones * $salarioDiario;
 
                     $vacacionesRestantes = $totalMesesRestantes * $salarioDiario;
 
