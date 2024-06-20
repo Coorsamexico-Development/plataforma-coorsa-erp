@@ -24,9 +24,9 @@ let salarioMinimoMes;
 
 /*Calcular salario*/
 const calculoSalario = async () => {
-    const salarioBruto = props.form.salario_bruto;
+    const salarioBrutoCompuesto = props.form.salario_bruto;
     let valesDespensa = diasMes * uma * deducible;
-    let sueldoImss = (salarioBruto - valesDespensa) / 1.22;
+    let sueldoImss = (salarioBrutoCompuesto - valesDespensa) / 1.22;
     const salarioMinimoMes = salarioMinimo * factor * diasMes;
     let premioAsist = sueldoImss * 0.1;
     let premioPunt = sueldoImss * 0.1;
@@ -34,14 +34,15 @@ const calculoSalario = async () => {
 
     if (salarioMinimoMes >= sueldoImss) {
         sueldoImss = salarioMinimoMes;
-        const diff = salarioBruto - sueldoImss;
+        const diff = salarioBrutoCompuesto - sueldoImss;
         valesDespensa = diff / 3;
         premioAsist = diff / 3;
         premioPunt = diff / 3;
     }
 
-    const salarioDiario = sueldoImss / (factor * diasMes);
+    const salarioDiario = sueldoImss / diasMes;
     const salarioDiaInt = salarioDiario * factor;
+    console.log(salarioDiaInt);
 
     props.form.salario_diario = salarioDiario.toFixed(2);
     props.form.salario_imss = sueldoImss.toFixed(2);
@@ -66,8 +67,8 @@ watchEffect(async () => {
     vacaciones = data.vacaciones;
     deducible = data.deducible;
     salarioMinimo = data.salarioMinimo;
-    factor = (365 + aguinaldo + vacaciones * 0.25) / 365;
-    diasMes = 365 / 12;
+    factor = Number((365 + aguinaldo + vacaciones * 0.25) / 365).toFixed(4);
+    diasMes = 30.42;
     salarioMinimoMes = salarioMinimo * factor * diasMes;
 });
 
@@ -138,7 +139,7 @@ function calculoSalarioMinimo() {
                         <div class="col-span-2">
                             <InputLabel
                                 for="salario_bruto"
-                                value="Salario Bruto:*"
+                                value="Salario Bruto Compuesto:*"
                             />
                             <TextInput
                                 v-if="canEdit"
