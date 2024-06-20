@@ -276,6 +276,13 @@ Route::get('/finiquito', [FiniquitoController::class,'calcularFiniquito'])->name
 //Rutas Control Nominas
 Route::get('/control-nominas', [NominasController::class, 'index'])->name('users.index');
 Route::get('/search-users', [NominasController::class, 'search'])->name('users.search');
-Route::get('/deducciones-nominas/{id}', [NominasController::class,'deducciones'])->name('users.deducciones');
-Route::post('/dibujarGrafico', [NominasController::class, 'dibujarTableroRetardos'])->name('tableroRetardos');
-    
+Route::get('/menu-deducciones/{id}', [NominasController::class,'deducciones'])->name('users.deducciones');
+Route::post('/dibujar-grafico', [NominasController::class, 'dibujarTableroRetardos'])->name('tableroRetardos');
+Route::post('/procesar-retardos', [NominasController::class,'procesarRetardos'])->name('procesarRetardos');
+
+// Route::get('/menu-deducciones/retardos/{id}',[NominasController::class, 'retardos'])->name('retardos.view');
+
+// Rutas para comedor 
+Route::post('/procesar-comedor', [NominasController::class, 'procesarComedor'])->name('precesarComedor');
+
+

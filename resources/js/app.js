@@ -9,6 +9,8 @@ import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 
+
+
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
 
