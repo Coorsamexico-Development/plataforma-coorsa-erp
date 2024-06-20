@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatBotController;
 use App\Http\Controllers\Api\EmpleadoController;
+use App\Http\Controllers\FiniquitoController;
 use App\Http\Controllers\VariablesNominaController;
 
 /*
@@ -35,4 +36,10 @@ Route::controller(ChatBotController::class)->group(function () {
     Route::get('/webhook', 'chatBot')->name('chatBot');
     //Posts
     Route::post('/webhook', 'chatBotData')->name('chatBotData');
+});
+
+//Ruta Finiquitos
+Route::controller(FiniquitoController::class)->group(function () {
+    //Post
+    Route::post('getIsrCalculado', 'isr')->name('getIsrCalculado');
 });
