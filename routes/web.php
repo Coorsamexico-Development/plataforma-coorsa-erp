@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\ChatBot;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,7 @@ use App\Http\Controllers\NominasController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\PoliticController;
 use App\Http\Controllers\CatalogoController;
+use App\Http\Controllers\ChatBotController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\FiniquitoController;
 use App\Http\Controllers\MunicipioController;
@@ -32,6 +34,7 @@ use App\Http\Controllers\VariablesNominaController;
 use App\Http\Controllers\PlantillasAutorizadaController;
 use App\Http\Controllers\DepartamentosAuditoriaController;
 use App\Http\Controllers\DocumentosCalificacionMesController;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -250,7 +253,7 @@ Route::controller(DepartamentosAuditoriaController::class)->middleware([
     'verified',
 ])->group(function () {
     //Getters
-    Route::get('dashboardAuditoria','index')->name('dashboardAuditoria');
+    Route::get('dashboardAuditoria', 'index')->name('dashboardAuditoria');
     Route::get('dataSua', 'dataSua')->name('dataSua');
     Route::get('dataNomina', 'dataNomina')->name('dataNomina');
     Route::get('dataCXP', 'dataCXP')->name('dataCXP');
@@ -269,20 +272,21 @@ Route::controller(DepartamentosAuditoriaController::class)->middleware([
     Route::post('addManiobra', 'addManiobra')->name('addManiobra');
 });
 
-
-Route::get('/finiquito', [FiniquitoController::class,'calcularFiniquito'])->name('calcularFiniquito');
-
+Route::get('/finiquito', [FiniquitoController::class, 'calcularFiniquito'])->name('calcularFiniquito');
 
 //Rutas Control Nominas
 Route::get('/control-nominas', [NominasController::class, 'index'])->name('users.index');
 Route::get('/search-users', [NominasController::class, 'search'])->name('users.search');
+
 Route::get('/menu-deducciones/{id}', [NominasController::class,'deducciones'])->name('users.deducciones');
 Route::post('/dibujar-grafico', [NominasController::class, 'dibujarTableroRetardos'])->name('tableroRetardos');
 Route::post('/procesar-retardos', [NominasController::class,'procesarRetardos'])->name('procesarRetardos');
 
-// Route::get('/menu-deducciones/retardos/{id}',[NominasController::class, 'retardos'])->name('retardos.view');
-
 // Rutas para comedor 
 Route::post('/procesar-comedor', [NominasController::class, 'procesarComedor'])->name('precesarComedor');
 
-
+//Rutas ChatBot
+Route::controller(ChatBotController::class)->group(function () {
+    //Gets
+    Route::get('/chatBot', 'index')->name('chatBotIndex');
+});

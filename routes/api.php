@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Api\EmpleadoController;
-use App\Http\Controllers\VariablesNominaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChatBotController;
+use App\Http\Controllers\Api\EmpleadoController;
+use App\Http\Controllers\VariablesNominaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,4 +27,12 @@ Route::get('empleados/show-firma', [EmpleadoController::class, 'showFirma']);
 Route::controller(VariablesNominaController::class)->group(function () {
     Route::post('getVariablesNomina', 'getVariablesNomina')->name('getVariablesNomina');
     Route::post('actualizarSalarios', 'actualizarSalarios')->name('actualizarSalarios');
+});
+
+//Rutas ChatBot
+Route::controller(ChatBotController::class)->group(function () {
+    //Gets
+    Route::get('/webhook', 'chatBot')->name('chatBot');
+    //Posts
+    Route::post('/webhook', 'chatBotData')->name('chatBotData');
 });

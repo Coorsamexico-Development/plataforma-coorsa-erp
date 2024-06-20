@@ -10,18 +10,20 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SuaEvent implements ShouldBroadcast
+class ChatBot implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public $data;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($request)
     {
-        //
+        $this->data = $request;
     }
 
     /**
@@ -31,14 +33,6 @@ class SuaEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return [
-            new Channel('EvolucionImss'),
-            new Channel('dataNomina'),
-            new Channel('dataCXP'),
-            new Channel('dataAltas'),
-            new Channel('dataBajas'),
-            new Channel('dataCompras'),
-            new Channel('dataManiobras'),
-        ];
+        return new Channel('getData', $this->data);
     }
 }

@@ -8,7 +8,6 @@ use App\Models\UserVacacions;
 use Illuminate\Http\Request;
 use App\Models\VariablesNomina;
 use DateTime;
-use Illuminate\Http\JsonResponse;
 
 class VariablesNominaController extends Controller
 {
@@ -51,7 +50,7 @@ class VariablesNominaController extends Controller
                 $diferencia = $fechaIngreso->diff($fechaAtual);
             else $diferencia = (object)['y' => 0];
 
-            
+
             $vacaciones = DiasVacaciones::where([['año', $diferencia->y], ['activo', 1]])->first()->dias ?? 12;
             $factor = (365 + $aguinaldo + $vacaciones * 0.25) / 365;
             $salarioMinimoMes = $salarioMinimo * $factor * $diasMes;
@@ -98,4 +97,3 @@ class VariablesNominaController extends Controller
                 ]);
     }
 }
-  
