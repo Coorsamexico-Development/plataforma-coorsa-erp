@@ -44,6 +44,7 @@
         "swiper": "^8.4.5",
         "vnodes": "^1.2.0",
         "vue-nav-tabs": "^0.5.7",
+        "vue-router": "^4.0.13",
         "vue3-easy-data-table": "^1.5.10",
         "vue3-tabs-component": "^1.1.1",
         "vuedraggable": "^4.1.0"

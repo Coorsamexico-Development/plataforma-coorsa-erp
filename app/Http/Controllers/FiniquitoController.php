@@ -289,7 +289,7 @@ class FiniquitoController extends Controller
 
                     if ($diaSalida <= 15 && $diaSalida >= 1) {
                 
-                        $propFondoAhorro = (($mesesTrabajados) * $fondoAhorro) - $fondoAhorro / 2;
+                        $propFondoAhorro = (($mesesTrabajados) * $fondoAhorro) + $fondoAhorro / 2;
         
                         return $propFondoAhorro;
         
@@ -307,7 +307,7 @@ class FiniquitoController extends Controller
 
                     if ($diaSalida <= 15 && $diaSalida >= 1) {
                     
-                        $propFondoAhorro = (($mesesTrabajados) * $fondoAhorro) - $fondoAhorro / 2;
+                        $propFondoAhorro = (($mesesTrabajados) * $fondoAhorro) + $fondoAhorro / 2;
         
                         return $propFondoAhorro;
         

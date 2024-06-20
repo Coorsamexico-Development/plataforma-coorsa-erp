@@ -1,6 +1,12 @@
 <template>
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <input type="text" v-model="search" @input="searchUsers(search)" placeholder="Buscar usuario por ID o nombre...">
+    <input 
+      type="text" 
+      v-model="search" 
+      @input="searchUsers(search)" 
+      placeholder="Buscar usuario por numero empleado o nombre..."
+      class="w-80 flex mx-auto m-5 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    >
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" v-if="porcUsers.length > 0" >
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <th class="px-6 py-3">Id</th>
@@ -34,7 +40,7 @@
             </button>
           </a> 
         </td>
-      </tr>
+        </tr>
       </template>
     </table>
     <p v-else>No se encontraron usuarios.</p>
@@ -58,7 +64,4 @@ const searchUsers = async (search) => {
             console.log(e.response);
         });
 };
-
-
-
 </script>
