@@ -318,7 +318,7 @@ class FiniquitoController extends Controller
     }
 
 
-    public function isr(Request $request)
+    public function getIsrCalculado(Request $request)
     {
         $request->validate([
             'usuario' => ['required', 'exists:users,numero_empleado'],
@@ -337,5 +337,21 @@ class FiniquitoController extends Controller
         $isrCalculado = ($sueldoImss - $isr->limite_inferior) * $porcentajeExcedenteDecimal + $isr->cuota_fija;
 
         return response()->json($isrCalculado);
+    }
+
+    private function isr($usuario)
+    {
+        $sueldoImss = $usuario->salario_imss;
+
+        $isr = ISR::where('limite_inferior', '<=', $sueldoImss)
+            ->where('limite_superior', '>=', $sueldoImss)
+            ->where('activos', 1)
+            ->first();
+
+        $porcentajeExcedenteDecimal = $isr->porcentaje_excedente / 100;
+
+        $isrCalculado = ($sueldoImss - $isr->limite_inferior) * $porcentajeExcedenteDecimal + $isr->cuota_fija;
+
+        return $isrCalculado;
     }
 }

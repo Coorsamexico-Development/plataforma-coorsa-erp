@@ -41,5 +41,5 @@ Route::controller(ChatBotController::class)->group(function () {
 //Ruta Finiquitos
 Route::controller(FiniquitoController::class)->group(function () {
     //Post
-    Route::post('getIsrCalculado', 'isr')->name('getIsrCalculado');
+    Route::post('getIsrCalculado', 'getIsrCalculado')->name('getIsrCalculado');
 });
