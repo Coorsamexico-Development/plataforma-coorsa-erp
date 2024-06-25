@@ -2,9 +2,11 @@
 
 ::-webkit-scrollbar {
     width: 4px;
+    height: 4px;
 }
 ::-webkit-scrollbar:hover {
-    width: 10px;
+    width: 6px;
+    height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -353,7 +355,7 @@ input:checked ~ .tab-content {
 
 @media (min-width: 640px) {
     .login {
-      /*  height: 46.8rem; */
+        /*  height: 46.8rem; */
         grid-template-columns: repeat(5, 1fr);
         grid-template-rows: repeat(3, 1fr);
         justify-items: center;
