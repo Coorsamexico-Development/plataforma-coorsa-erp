@@ -4,7 +4,7 @@ import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import { onMounted, ref, watchEffect } from "vue";
 
-const graphLineNomina = ref(null);
+const graphLines = ref(null);
 const props = defineProps({
     data: {
         type: Object,
@@ -23,7 +23,7 @@ let data = [];
 let cursor;
 
 onMounted(() => {
-    root = am5.Root.new(graphLineNomina.value);
+    root = am5.Root.new(graphLines.value);
 
     const myTheme = am5.Theme.new(root);
 
@@ -154,5 +154,5 @@ watchEffect(() => {
 });
 </script>
 <template>
-    <div ref="graphLineNomina" class="w-full h-[40vh]"></div>
+    <div ref="graphLines" class="w-full h-[40vh]"></div>
 </template>

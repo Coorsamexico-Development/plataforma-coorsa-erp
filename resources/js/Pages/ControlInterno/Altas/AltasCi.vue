@@ -7,6 +7,7 @@ import RiesgoRadarNomina from "../Nominas/Partials/RiesgoRadarNomina.vue";
 import GraficaPorcentaje from "../Partials/GraficaPorcentaje.vue";
 import ModalAddAltas from "./Modals/ModalAddAltas.vue";
 import Titulos from "../Partials/Titulos.vue";
+import GraficaLineas from "../Partials/GraficaLineas.vue";
 
 const props = defineProps({
     show: {
@@ -22,6 +23,7 @@ const tabla = reactive({
 });
 
 const graphBar = reactive({});
+const graphLine = ref({});
 const graphPorcentaje = ref(0);
 const riesgoRadar = ref(0);
 const modalAddAlta = ref(false);
@@ -100,6 +102,7 @@ function getData() {
                 }
             });
             graphPorcentaje.value = data.dataPorcentaje;
+            graphLine.value = data.garphLine;
             riesgoRadar.value = data.dataRadar;
         })
         .catch((err) => console.log(err.response ?? err));
@@ -112,7 +115,7 @@ onMounted(() =>
 </script>
 <template>
     <CardCi>
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between gap-2">
             <div class="grid w-7/12">
                 <div class="flex justify-between">
                     <GraficaPorcentaje :porcentaje="graphPorcentaje" />
@@ -127,6 +130,10 @@ onMounted(() =>
                 </div>
             </div>
             <div class="grid w-5/12">
+                <div class="grid w-full justify-items-center">
+                    <Titulos value="Promedio" class="text-[16px] w-fit" />
+                    <GraficaLineas :data="graphLine" />
+                </div>
                 <TablaAltas
                     :data="tabla"
                     @add="

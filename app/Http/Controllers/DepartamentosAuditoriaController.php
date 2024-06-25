@@ -272,6 +272,26 @@ class DepartamentosAuditoriaController extends Controller
             ->orderBy('cim.id', 'desc')
             ->where('seccion_id', 4);
 
+        $dataGraphLine = CiParametroAtributo::select(
+            'value',
+            'cim.id as mes_id',
+            'cim.mes as mes',
+            'cia.año as año'
+
+        )
+            ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
+            ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
+            ->orderBy('cia.año', 'desc')
+            ->orderBy('cim.id', 'desc')
+            ->where([
+                ['seccion_id', 4],
+                ['parametro_id', 1]
+            ])
+            ->get()
+            ->groupBy(['año', 'mes']);
+
+        $garphLine = $this->getGraphLineNomina($dataGraphLine);
+
         if ($paramsFecha->exists()) {
             $paramsFecha = $paramsFecha->first();
 
@@ -317,6 +337,7 @@ class DepartamentosAuditoriaController extends Controller
             'data' => $data != null && $data->exists() ? $data->get()->groupBy('atributo') : [],
             'dataRadar' => $dataRadar->riesgo / count($atributos) ?? 0,
             'dataPorcentaje' => $dataPorcentaje->porcentaje / count($atributos) ?? 0,
+            'garphLine' => $garphLine,
         ]);
     }
 
@@ -338,6 +359,26 @@ class DepartamentosAuditoriaController extends Controller
             ->orderBy('cim.id', 'desc')
             ->where('seccion_id', 5);
 
+        $dataGraphLine = CiParametroAtributo::select(
+            'value',
+            'cim.id as mes_id',
+            'cim.mes as mes',
+            'cia.año as año'
+
+        )
+            ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
+            ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
+            ->orderBy('cia.año', 'desc')
+            ->orderBy('cim.id', 'desc')
+            ->where([
+                ['seccion_id', 5],
+                ['parametro_id', 1]
+            ])
+            ->get()
+            ->groupBy(['año', 'mes']);
+
+        $garphLine = $this->getGraphLineNomina($dataGraphLine);
+
         if ($paramsFecha->exists()) {
             $paramsFecha = $paramsFecha->first();
 
@@ -383,6 +424,7 @@ class DepartamentosAuditoriaController extends Controller
             'data' => $data != null && $data->exists() ? $data->get()->groupBy('atributo') : [],
             'dataRadar' => $dataRadar->riesgo / count($atributos) ?? 0,
             'dataPorcentaje' => $dataPorcentaje->porcentaje / count($atributos) ?? 0,
+            'garphLine' => $garphLine,
         ]);
     }
 
