@@ -7,6 +7,7 @@ import ModalAddCXP from "./Modals/ModalAddCXP.vue";
 import GraficaLineasNomina from "../Nominas/Partials/GraficaLineasNomina.vue";
 import RiesgoRadarNomina from "../Nominas/Partials/RiesgoRadarNomina.vue";
 import GraficaBarrasCXP from "./Partials/GraficaBarrasCXP.vue";
+import DatePicker from "@/Components/DatePicker.vue";
 
 const props = defineProps({
     show: {
@@ -26,44 +27,67 @@ const graphLine = ref({});
 const riesgoRadar = ref(0);
 const modalAddCXP = ref(false);
 const position = ref();
+const date = ref(null);
 
 watchEffect(() => (props.show ? getData() : null));
 
 function getData() {
     axios
-        .get(route("dataCXP"))
+        .get(route("dataCXP", { date: date.value }))
         .then(({ data }) => {
+            console.log(data);
             tabla.atributos = data.atributos;
             tabla.parametros = data.parametros;
             tabla.data = data.data;
-            Object.values(data.data).forEach((element) => {
-                switch (element[0].atributo) {
-                    case 15:
-                        graphBar.Nombre = {
-                            value: element[0].value,
-                            name: "Solicitud autorizasdas con fecha de de programacion de pago",
-                        };
-                        break;
-                    case 16:
-                        graphBar.NSS = {
-                            value: element[0].value,
-                            name: "Fecha Solicitud vs Fecha Programacion",
-                        };
-                        break;
-                    case 17:
-                        graphBar.RFC = {
-                            value: element[0].value,
-                            name: "Fecha Programacion vs Fecha Pago",
-                        };
-                        break;
-                    case 18:
-                        graphBar.Ingreso = {
-                            value: element[0].value,
-                            name: "Pagos Autorizado vs Estado de cuenta",
-                        };
-                        break;
-                }
-            });
+            if (data.data.length != 0)
+                Object.values(data.data).forEach((element) => {
+                    switch (element[0].atributo) {
+                        case 15:
+                            graphBar.Nombre = {
+                                value: element[0].value,
+                                name: "Solicitud autorizasdas con fecha de de programacion de pago",
+                            };
+                            break;
+                        case 16:
+                            graphBar.NSS = {
+                                value: element[0].value,
+                                name: "Fecha Solicitud vs Fecha Programacion",
+                            };
+                            break;
+                        case 17:
+                            graphBar.RFC = {
+                                value: element[0].value,
+                                name: "Fecha Programacion vs Fecha Pago",
+                            };
+                            break;
+                        case 18:
+                            graphBar.Ingreso = {
+                                value: element[0].value,
+                                name: "Pagos Autorizado vs Estado de cuenta",
+                            };
+                            break;
+                    }
+                });
+            else {
+                graphBar.Nombre = {
+                    value: 0,
+                    name: "Solicitud autorizasdas con fecha de de programacion de pago",
+                };
+                graphBar.NSS = {
+                    value: 0,
+                    name: "Fecha Solicitud vs Fecha Programacion",
+                };
+                graphBar.RFC = {
+                    value: 0,
+                    name: "Fecha Programacion vs Fecha Pago",
+                };
+                graphBar.Ingreso = {
+                    value: 0,
+                    name: "Pagos Autorizado vs Estado de cuenta",
+                };
+            }
+
+            date.value = data.paramsFecha;
             graphLine.value = data.garphLine;
             riesgoRadar.value = data.dataRadar;
         })
@@ -78,6 +102,18 @@ onMounted(() =>
 <template>
     <CardCi>
         <div class="grid content-between">
+            <div class="w-fit">
+                <DatePicker
+                    label="Mes visualizado"
+                    :dates="date"
+                    @selectDate="
+                        (e) => {
+                            date = e;
+                            getData();
+                        }
+                    "
+                />
+            </div>
             <div class="flex items-center justify-between">
                 <div class="grid w-full justify-items-center">
                     <GraficaLineasNomina :data="graphLine" />

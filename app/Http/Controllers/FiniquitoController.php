@@ -321,11 +321,10 @@ class FiniquitoController extends Controller
     public function getIsrCalculado(Request $request)
     {
         $request->validate([
-            'usuario' => ['required', 'exists:users,numero_empleado'],
+            'sueldoImss' => ['required', 'numeric'],
         ]);
 
-        $usuario = User::where('numero_empleado', $request->usuario)->first();
-        $sueldoImss = $usuario->salario_imss;
+        $sueldoImss = $request->sueldoImss;
 
         $isr = ISR::where('limite_inferior', '<=', $sueldoImss)
             ->where('limite_superior', '>=', $sueldoImss)

@@ -7,6 +7,7 @@ import { onMounted, ref, watchEffect } from "vue";
 const graphBarNomina = ref(null);
 const props = defineProps({
     data: {
+        default: [],
         required: true,
     },
 });

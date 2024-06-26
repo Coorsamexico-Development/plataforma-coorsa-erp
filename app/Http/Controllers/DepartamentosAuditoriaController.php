@@ -20,6 +20,7 @@ use App\Models\DepartamentosAuditoria;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Storage;
+use Mockery\Undefined;
 
 use function PHPUnit\Framework\returnSelf;
 
@@ -94,71 +95,12 @@ class DepartamentosAuditoriaController extends Controller
         ]);
     }
 
-    public function dataNomina()
+    public function dataNomina(Request $request)
     {
-        $atributos = CiAtributo::whereIn('id', ["7", "8", "9", "10", "11", "12", "13", "14"])->get();
-        $parametros = CiParametro::whereIn('id', ["1", "2"])->get();
-        $paramsFecha = CiParametroAtributo::select(
-            'cim.id as mes',
-            'cia.id as año'
-        )
-            ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
-            ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
-            ->orderBy('cia.año', 'desc')
-            ->orderBy('cim.id', 'desc')
-            ->where('seccion_id', 2)
-            ->first();
+        $atributos = ["7", "8", "9", "10", "11", "12", "13", "14"];
+        $parametros = ["1", "2"];
 
-        $data = CiParametroAtributo::select(
-            'atributo_id as atributo',
-            'parametro_id as parametro',
-            'value',
-        )
-            ->where([
-                ['seccion_id', 2],
-                ['mes_id', $paramsFecha->mes],
-                ['año_id', $paramsFecha->año],
-            ]);
-
-        $dataGraphLine = CiParametroAtributo::select(
-            'value',
-            'cim.id as mes_id',
-            'cim.mes as mes',
-            'cia.año as año'
-
-        )
-            ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
-            ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
-            ->orderBy('cia.año', 'desc')
-            ->orderBy('cim.id', 'desc')
-            ->where([
-                ['seccion_id', 2],
-                ['parametro_id', 1]
-            ])
-            ->get()
-            ->groupBy(['año', 'mes']);
-
-        $garphLine = $this->getGraphLineNomina($dataGraphLine);
-
-        $dataRadar = CiParametroAtributo::select(
-            DB::raw('sum(value) as riesgo'),
-        )
-            ->where([
-                ['seccion_id', 2],
-                ['mes_id', $paramsFecha->mes],
-                ['año_id', $paramsFecha->año],
-                ['parametro_id', 2]
-            ])
-            ->groupBy('parametro_id')
-            ->first();
-
-        return response()->json([
-            'atributos' => $atributos,
-            'parametros' => $parametros,
-            'data' => $data->exists() ? $data->get()->groupBy('atributo') : [],
-            'garphLine' => $garphLine,
-            'dataRadar' => $dataRadar->riesgo / count($atributos),
-        ]);
+        return response()->json($this->getData($request, $atributos, $parametros, 2));
     }
 
     public function getGraphLineNomina($dataGraphLine)
@@ -181,397 +123,43 @@ class DepartamentosAuditoriaController extends Controller
         return $garphLine;
     }
 
-    public function dataCXP()
+    public function dataCXP(Request $request)
     {
-        $atributos = CiAtributo::whereIn('id', [15, 16, 17, 18])->get();
-        $parametros = CiParametro::whereIn('id', ["1", "2", "3"])->get();
-        $data = null;
-        $dataRadar = (object)['riesgo' => 0];
-
-        $paramsFecha = CiParametroAtributo::select(
-            'cim.id as mes',
-            'cia.id as año'
-        )
-            ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
-            ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
-            ->orderBy('cia.año', 'desc')
-            ->orderBy('cim.id', 'desc')
-            ->where('seccion_id', 3);
-
-        if ($paramsFecha->exists()) {
-            $paramsFecha = $paramsFecha->first();
-
-            $data = CiParametroAtributo::select(
-                'atributo_id as atributo',
-                'parametro_id as parametro',
-                'value',
-            )
-                ->where([
-                    ['seccion_id', 3],
-                    ['mes_id', $paramsFecha->mes],
-                    ['año_id', $paramsFecha->año],
-                ]);
-
-            $dataGraphLine = CiParametroAtributo::select(
-                'value',
-                'cim.id as mes_id',
-                'cim.mes as mes',
-                'cia.año as año'
-
-            )
-                ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
-                ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
-                ->orderBy('cia.año', 'desc')
-                ->orderBy('cim.id', 'desc')
-                ->where([
-                    ['seccion_id', 3],
-                    ['parametro_id', 1]
-                ])
-                ->get()
-                ->groupBy(['año', 'mes']);
-
-            $garphLine = $this->getGraphLineNomina($dataGraphLine);
-
-            $dataRadar = CiParametroAtributo::select(
-                DB::raw('sum(value) as riesgo'),
-            )
-                ->where([
-                    ['seccion_id', 3],
-                    ['mes_id', $paramsFecha->mes],
-                    ['año_id', $paramsFecha->año],
-                    ['parametro_id', 2]
-                ])
-                ->groupBy('parametro_id')
-                ->first();
-        }
-
-        return response()->json([
-            'atributos' => $atributos,
-            'parametros' => $parametros,
-            'data' => $data != null && $data->exists() ? $data->get()->groupBy('atributo') : [],
-            'garphLine' => $garphLine ?? 0,
-            'dataRadar' => $dataRadar->riesgo / count($atributos) ?? 0,
-        ]);
+        $atributos = [15, 16, 17, 18];
+        $parametros = ["1", "2", "3"];
+        return response()->json($this->getData($request, $atributos, $parametros, 3));
     }
 
-    public function dataAltas()
+    public function dataAltas(Request $request)
     {
-        $atributos = CiAtributo::whereIn('id', [9, 19, 7, 20, 21, 22, 23, 24, 25, 26])->get();
-        $parametros = CiParametro::whereIn('id', ["1", "2", "3"])->get();
-        $data = null;
-        $dataRadar = (object)['riesgo' => 0];
-        $dataPorcentaje = (object)['porcentaje' => 0];
+        $atributos = [9, 19, 7, 20, 21, 22, 23, 24, 25, 26];
+        $parametros = ["1", "2", "3"];
 
-        $paramsFecha = CiParametroAtributo::select(
-            'cim.id as mes',
-            'cia.id as año'
-        )
-            ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
-            ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
-            ->orderBy('cia.año', 'desc')
-            ->orderBy('cim.id', 'desc')
-            ->where('seccion_id', 4);
-
-        $dataGraphLine = CiParametroAtributo::select(
-            'value',
-            'cim.id as mes_id',
-            'cim.mes as mes',
-            'cia.año as año'
-
-        )
-            ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
-            ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
-            ->orderBy('cia.año', 'desc')
-            ->orderBy('cim.id', 'desc')
-            ->where([
-                ['seccion_id', 4],
-                ['parametro_id', 1]
-            ])
-            ->get()
-            ->groupBy(['año', 'mes']);
-
-        $garphLine = $this->getGraphLineNomina($dataGraphLine);
-
-        if ($paramsFecha->exists()) {
-            $paramsFecha = $paramsFecha->first();
-
-            $data = CiParametroAtributo::select(
-                'atributo_id as atributo',
-                'parametro_id as parametro',
-                'value',
-            )
-                ->where([
-                    ['seccion_id', 4],
-                    ['mes_id', $paramsFecha->mes],
-                    ['año_id', $paramsFecha->año],
-                ]);
-
-            $dataRadar = CiParametroAtributo::select(
-                DB::raw('sum(value) as riesgo'),
-            )
-                ->where([
-                    ['seccion_id', 4],
-                    ['mes_id', $paramsFecha->mes],
-                    ['año_id', $paramsFecha->año],
-                    ['parametro_id', 2]
-                ])
-                ->groupBy('parametro_id')
-                ->first();
-
-            $dataPorcentaje = CiParametroAtributo::select(
-                DB::raw('sum(value) as porcentaje'),
-            )
-                ->where([
-                    ['seccion_id', 4],
-                    ['mes_id', $paramsFecha->mes],
-                    ['año_id', $paramsFecha->año],
-                    ['parametro_id', 1]
-                ])
-                ->groupBy('parametro_id')
-                ->first();
-        }
-
-        return response()->json([
-            'atributos' => $atributos,
-            'parametros' => $parametros,
-            'data' => $data != null && $data->exists() ? $data->get()->groupBy('atributo') : [],
-            'dataRadar' => $dataRadar->riesgo / count($atributos) ?? 0,
-            'dataPorcentaje' => $dataPorcentaje->porcentaje / count($atributos) ?? 0,
-            'garphLine' => $garphLine,
-        ]);
+        return response()->json($this->getData($request, $atributos, $parametros, 4));
     }
 
-    public function dataBajas()
+    public function dataBajas(Request $request)
     {
-        $atributos = CiAtributo::whereIn('id', [27, 28, 29, 30, 31, 32, 33, 34, 35])->get();
-        $parametros = CiParametro::whereIn('id', ["1", "2", "3"])->get();
-        $data = null;
-        $dataRadar = (object)['riesgo' => 0];
-        $dataPorcentaje = (object)['porcentaje' => 0];
+        $atributos = [27, 28, 29, 30, 31, 32, 33, 34, 35];
+        $parametros = ["1", "2", "3"];
 
-        $paramsFecha = CiParametroAtributo::select(
-            'cim.id as mes',
-            'cia.id as año'
-        )
-            ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
-            ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
-            ->orderBy('cia.año', 'desc')
-            ->orderBy('cim.id', 'desc')
-            ->where('seccion_id', 5);
-
-        $dataGraphLine = CiParametroAtributo::select(
-            'value',
-            'cim.id as mes_id',
-            'cim.mes as mes',
-            'cia.año as año'
-
-        )
-            ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
-            ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
-            ->orderBy('cia.año', 'desc')
-            ->orderBy('cim.id', 'desc')
-            ->where([
-                ['seccion_id', 5],
-                ['parametro_id', 1]
-            ])
-            ->get()
-            ->groupBy(['año', 'mes']);
-
-        $garphLine = $this->getGraphLineNomina($dataGraphLine);
-
-        if ($paramsFecha->exists()) {
-            $paramsFecha = $paramsFecha->first();
-
-            $data = CiParametroAtributo::select(
-                'atributo_id as atributo',
-                'parametro_id as parametro',
-                'value',
-            )
-                ->where([
-                    ['seccion_id', 5],
-                    ['mes_id', $paramsFecha->mes],
-                    ['año_id', $paramsFecha->año],
-                ]);
-
-            $dataRadar = CiParametroAtributo::select(
-                DB::raw('sum(value) as riesgo'),
-            )
-                ->where([
-                    ['seccion_id', 5],
-                    ['mes_id', $paramsFecha->mes],
-                    ['año_id', $paramsFecha->año],
-                    ['parametro_id', 2]
-                ])
-                ->groupBy('parametro_id')
-                ->first();
-
-            $dataPorcentaje = CiParametroAtributo::select(
-                DB::raw('sum(value) as porcentaje'),
-            )
-                ->where([
-                    ['seccion_id', 5],
-                    ['mes_id', $paramsFecha->mes],
-                    ['año_id', $paramsFecha->año],
-                    ['parametro_id', 1]
-                ])
-                ->groupBy('parametro_id')
-                ->first();
-        }
-
-        return response()->json([
-            'atributos' => $atributos,
-            'parametros' => $parametros,
-            'data' => $data != null && $data->exists() ? $data->get()->groupBy('atributo') : [],
-            'dataRadar' => $dataRadar->riesgo / count($atributos) ?? 0,
-            'dataPorcentaje' => $dataPorcentaje->porcentaje / count($atributos) ?? 0,
-            'garphLine' => $garphLine,
-        ]);
+        return response()->json($this->getData($request, $atributos, $parametros, 5));
     }
 
-    public function dataCompras()
+    public function dataCompras(Request $request)
     {
-        $atributos = CiAtributo::whereIn('id', [36, 37, 38, 39, 40, 41, 42])->get();
-        $parametros = CiParametro::whereIn('id', ["1", "2"])->get();
-        $data = null;
-        $dataRadar = (object)['riesgo' => 0];
+        $atributos = [36, 37, 38, 39, 40, 41, 42];
+        $parametros =  ["1", "2"];
 
-        $paramsFecha = CiParametroAtributo::select(
-            'cim.id as mes',
-            'cia.id as año'
-        )
-            ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
-            ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
-            ->orderBy('cia.año', 'desc')
-            ->orderBy('cim.id', 'desc')
-            ->where('seccion_id', 6);
-
-        if ($paramsFecha->exists()) {
-            $paramsFecha = $paramsFecha->first();
-
-            $data = CiParametroAtributo::select(
-                'atributo_id as atributo',
-                'parametro_id as parametro',
-                'value',
-            )
-                ->where([
-                    ['seccion_id', 6],
-                    ['mes_id', $paramsFecha->mes],
-                    ['año_id', $paramsFecha->año],
-                ]);
-
-            $dataRadar = CiParametroAtributo::select(
-                DB::raw('sum(value) as riesgo'),
-            )
-                ->where([
-                    ['seccion_id', 6],
-                    ['mes_id', $paramsFecha->mes],
-                    ['año_id', $paramsFecha->año],
-                    ['parametro_id', 2]
-                ])
-                ->groupBy('parametro_id')
-                ->first();
-
-            $dataGraphLine = CiParametroAtributo::select(
-                'value',
-                'cim.id as mes_id',
-                'cim.mes as mes',
-                'cia.año as año'
-
-            )
-                ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
-                ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
-                ->orderBy('cia.año', 'desc')
-                ->orderBy('cim.id', 'desc')
-                ->where([
-                    ['seccion_id', 6],
-                    ['parametro_id', 1]
-                ])
-                ->get()
-                ->groupBy(['año', 'mes']);
-
-            $garphLine = $this->getGraphLineNomina($dataGraphLine);
-        }
-
-        return response()->json([
-            'atributos' => $atributos,
-            'parametros' => $parametros,
-            'data' => $data != null && $data->exists() ? $data->get()->groupBy('atributo') : [],
-            'dataRadar' => $dataRadar->riesgo / count($atributos) ?? 0,
-            'garphLine' => $garphLine ?? [],
-        ]);
+        return response()->json($this->getData($request, $atributos, $parametros, 6));
     }
 
-    public function dataManiobras()
+    public function dataManiobras(Request $request)
     {
-        $atributos = CiAtributo::whereIn('id', [43, 44, 45, 46, 47])->get();
-        $parametros = CiParametro::whereIn('id', ["1", "2"])->get();
-        $data = null;
-        $dataRadar = (object)['riesgo' => 0];
+        $atributos = [43, 44, 45, 46, 47];
+        $parametros = ["1", "2"];
 
-        $paramsFecha = CiParametroAtributo::select(
-            'cim.id as mes',
-            'cia.id as año'
-        )
-            ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
-            ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
-            ->orderBy('cia.año', 'desc')
-            ->orderBy('cim.id', 'desc')
-            ->where('seccion_id', 7);
-
-        if ($paramsFecha->exists()) {
-            $paramsFecha = $paramsFecha->first();
-
-            $data = CiParametroAtributo::select(
-                'atributo_id as atributo',
-                'parametro_id as parametro',
-                'value',
-            )
-                ->where([
-                    ['seccion_id', 7],
-                    ['mes_id', $paramsFecha->mes],
-                    ['año_id', $paramsFecha->año],
-                ]);
-
-            $dataRadar = CiParametroAtributo::select(
-                DB::raw('sum(value) as riesgo'),
-            )
-                ->where([
-                    ['seccion_id', 7],
-                    ['mes_id', $paramsFecha->mes],
-                    ['año_id', $paramsFecha->año],
-                    ['parametro_id', 2]
-                ])
-                ->groupBy('parametro_id')
-                ->first();
-
-            $dataGraphLine = CiParametroAtributo::select(
-                'value',
-                'cim.id as mes_id',
-                'cim.mes as mes',
-                'cia.año as año'
-
-            )
-                ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
-                ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
-                ->orderBy('cia.año', 'desc')
-                ->orderBy('cim.id', 'desc')
-                ->where([
-                    ['seccion_id', 7],
-                    ['parametro_id', 1]
-                ])
-                ->get()
-                ->groupBy(['año', 'mes']);
-
-            $garphLine = $this->getGraphLineNomina($dataGraphLine);
-        }
-
-        return response()->json([
-            'atributos' => $atributos,
-            'parametros' => $parametros,
-            'data' => $data != null && $data->exists() ? $data->get()->groupBy('atributo') : [],
-            'dataRadar' => $dataRadar->riesgo / count($atributos) ?? 0,
-            'garphLine' => $garphLine ?? [],
-        ]);
+        return response()->json($this->getData($request, $atributos, $parametros, 7));
     }
 
     //Posts
@@ -933,5 +521,106 @@ class DepartamentosAuditoriaController extends Controller
             ]);
         }
         event(new SuaEvent);
+    }
+
+    //Privates 
+    private function getData($request, $atributos, $params, $seccion)
+    {
+        $atributos = CiAtributo::whereIn('id', $atributos)->get();
+        $parametros = CiParametro::whereIn('id', $params)->get();
+        $mes = null;
+        $año = null;
+        $dataRadar = 5;
+        $data = null;
+        $dataPorcentaje = 0;
+
+        if ($request->date !== null) {
+            $mes = explode('-', $request->date)[0];
+            $año = explode('-', $request->date)[1];
+        }
+
+        $paramsFecha = CiParametroAtributo::select(
+            'cim.id as mes',
+            'cia.id as año',
+            'cia.año as añoTotal'
+        )
+            ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
+            ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
+            ->orderBy('cia.año', 'desc')
+            ->orderBy('cim.id', 'desc')
+            ->where('seccion_id', $seccion)
+            ->where(function ($query) use ($request, $mes, $año) {
+                if ($request->date !== null)
+                    $query->where([['cim.id', $mes], ['cia.año', $año]]);
+            });
+
+        if ($paramsFecha->exists()) {
+            $paramsFecha = $paramsFecha->first();
+            $data = CiParametroAtributo::select(
+                'atributo_id as atributo',
+                'parametro_id as parametro',
+                'value',
+            )
+                ->where([
+                    ['seccion_id', $seccion],
+                    ['mes_id', $paramsFecha->mes],
+                    ['año_id', $paramsFecha->año],
+                ]);
+            $dataRadar = CiParametroAtributo::select(
+                DB::raw('sum(value) as riesgo'),
+            )
+                ->where([
+                    ['seccion_id', $seccion],
+                    ['mes_id', $paramsFecha->mes],
+                    ['año_id', $paramsFecha->año],
+                    ['parametro_id', 2]
+                ])
+                ->groupBy('parametro_id')
+                ->first();
+            $dataRadar = $dataRadar->riesgo != 0 ? $dataRadar->riesgo / count($atributos) : 5;
+
+            $dataPorcentaje = CiParametroAtributo::select(
+                DB::raw('sum(value) as porcentaje'),
+            )
+                ->where([
+                    ['seccion_id', $seccion],
+                    ['mes_id', $paramsFecha->mes],
+                    ['año_id', $paramsFecha->año],
+                    ['parametro_id', 1]
+                ])
+                ->groupBy('parametro_id')
+                ->first();
+            $dataPorcentaje = $dataPorcentaje->porcentaje != 0 ? $dataPorcentaje->porcentaje / count($atributos) : 0;
+        }
+
+        $dataGraphLine = CiParametroAtributo::select(
+            'value',
+            'cim.id as mes_id',
+            'cim.mes as mes',
+            'cia.año as año'
+
+        )
+            ->join('ci_meses as cim', 'cim.id', 'ci_parametro_atributos.mes_id')
+            ->join('ci_años as cia', 'cia.id', 'ci_parametro_atributos.año_id')
+            ->orderBy('cia.año', 'desc')
+            ->orderBy('cim.id', 'desc')
+            ->where([
+                ['seccion_id', $seccion],
+                ['parametro_id', 1]
+            ])
+            ->get()
+            ->groupBy(['año', 'mes']);
+
+        $garphLine = $this->getGraphLineNomina($dataGraphLine);
+
+        return [
+            'atributos' => $atributos,
+            'parametros' => $parametros,
+            'data' => $data != null ? $data->get()->groupBy('atributo') : [],
+            'garphLine' => $garphLine,
+            'dataRadar' => $dataRadar,
+            'dataPorcentaje' => $dataPorcentaje,
+            'paramsFecha' => $paramsFecha->exists() ? "{$paramsFecha->mes}-{$paramsFecha->añoTotal}" : $request->date
+        ];
     }
 }

@@ -162,7 +162,8 @@ onMounted(() => {
 });
 
 watchEffect(() => {
-    if (props.porcentaje != 0 && chart != undefined) {
+    props.porcentaje;
+    if (chart != undefined) {
         data = [
             {
                 category: "Porcentaje de cumplimiento",

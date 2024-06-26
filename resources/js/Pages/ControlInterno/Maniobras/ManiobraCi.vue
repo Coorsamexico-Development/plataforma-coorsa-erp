@@ -7,6 +7,7 @@ import RiesgoRadarNomina from "../Nominas/Partials/RiesgoRadarNomina.vue";
 import GraficaLineasNomina from "../Nominas/Partials/GraficaLineasNomina.vue";
 import ModalAddManiobra from "./Modals/ModalAddManiobra.vue";
 import Titulos from "../Partials/Titulos.vue";
+import DatePicker from "@/Components/DatePicker.vue";
 
 const props = defineProps({
     show: {
@@ -26,51 +27,76 @@ const graphLine = ref({});
 const riesgoRadar = ref(0);
 const modalCompras = ref(false);
 const position = ref();
+const date = ref(null);
 
 watchEffect(() => (props.show ? getData() : null));
 function getData() {
     axios
-        .get(route("dataManiobras"))
+        .get(route("dataManiobras", { date: date.value }))
         .then(({ data }) => {
             tabla.atributos = data.atributos;
             tabla.parametros = data.parametros;
             tabla.data = data.data;
-            Object.values(data.data).forEach((element) => {
-                switch (element[0].atributo) {
-                    case 43:
-                        graphBar.Nombre = {
-                            value: element[0].value,
-                            name: "Formato de requisicion",
-                        };
-                        break;
-                    case 44:
-                        graphBar.NSS = {
-                            value: element[0].value,
-                            name: "Correo Vo.Bo. del cliente",
-                        };
-                        break;
-                    case 45:
-                        graphBar.RFC = {
-                            value: element[0].value,
-                            name: "Estado de cuenta",
-                        };
-                        break;
-                    case 46:
-                        graphBar.Ingreso = {
-                            value: element[0].value,
-                            name: "Cuadro ventas",
-                        };
-                        break;
-                    case 47:
-                        graphBar.d = {
-                            value: element[0].value,
-                            name: "Comprobante de pago",
-                        };
-                        break;
-                }
-            });
+            if (data.data.length !== 0)
+                Object.values(data.data).forEach((element) => {
+                    switch (element[0].atributo) {
+                        case 43:
+                            graphBar.Nombre = {
+                                value: element[0].value,
+                                name: "Formato de requisicion",
+                            };
+                            break;
+                        case 44:
+                            graphBar.NSS = {
+                                value: element[0].value,
+                                name: "Correo Vo.Bo. del cliente",
+                            };
+                            break;
+                        case 45:
+                            graphBar.RFC = {
+                                value: element[0].value,
+                                name: "Estado de cuenta",
+                            };
+                            break;
+                        case 46:
+                            graphBar.Ingreso = {
+                                value: element[0].value,
+                                name: "Cuadro ventas",
+                            };
+                            break;
+                        case 47:
+                            graphBar.d = {
+                                value: element[0].value,
+                                name: "Comprobante de pago",
+                            };
+                            break;
+                    }
+                });
+            else {
+                graphBar.Nombre = {
+                    value: 0,
+                    name: "Formato de requisicion",
+                };
+                graphBar.NSS = {
+                    value: 0,
+                    name: "Correo Vo.Bo. del cliente",
+                };
+                graphBar.RFC = {
+                    value: 0,
+                    name: "Estado de cuenta",
+                };
+                graphBar.Ingreso = {
+                    value: 0,
+                    name: "Cuadro ventas",
+                };
+                graphBar.d = {
+                    value: 0,
+                    name: "Comprobante de pago",
+                };
+            }
             graphLine.value = data.garphLine;
             riesgoRadar.value = data.dataRadar;
+            date.value = data.paramsFecha;
         })
         .catch((err) => console.log(err.response ?? err));
 }
@@ -82,6 +108,18 @@ onMounted(() =>
 </script>
 <template>
     <CardCi>
+        <div class="w-fit">
+            <DatePicker
+                label="Mes visualizado"
+                :dates="date"
+                @selectDate="
+                    (e) => {
+                        date = e;
+                        getData();
+                    }
+                "
+            />
+        </div>
         <div class="flex items-center justify-between">
             <div class="grid w-8/12">
                 <div class="flex justify-between">

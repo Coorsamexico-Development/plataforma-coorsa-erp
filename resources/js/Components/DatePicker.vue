@@ -16,8 +16,7 @@ const props = defineProps({
         default: moment().subtract(1, "year"),
     },
     dates: {
-        type: Array,
-        default: null,
+        default: moment().format("MM-YYYY"),
     },
 });
 
@@ -42,6 +41,7 @@ watchEffect(() =>
             timezone="America/Mexico_City"
             model-type="M-yyyy"
             :min-date="props.minDate"
+            :max-date="moment().format('MM-YYYY')"
             :enable-time-picker="false"
             locale="es"
             class="datePicker drop-shadow-[1px_1px_2px_#B5B5B5]"

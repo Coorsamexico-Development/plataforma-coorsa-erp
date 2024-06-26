@@ -14,55 +14,65 @@ const props = defineProps({
     },
 });
 
-let uma = ref(0);
-let aguinaldo = ref(0);
-let vacaciones = ref(0);
-let deducible = ref(0);
-let salarioMinimo = ref(0);
-let factor = computed(() =>
+const uma = ref(0);
+const aguinaldo = ref(0);
+const vacaciones = ref(0);
+const deducible = ref(0);
+const salarioMinimo = ref(0);
+const factor = computed(() =>
     Number((365 + aguinaldo.value + vacaciones.value * 0.25) / 365).toFixed(4)
 );
 const diasMes = 365 / 12;
-let salarioMinimoMes = computed(
+const salarioMinimoMes = computed(
     () => salarioMinimo.value * factor.value * diasMes
 );
-let isr = ref(0);
+const isr = ref(0);
+const salarioBrutoComp = computed(() => props.form.salario_bruto);
+const valesDespensa = computed(() => {
+    var result = diasMes * uma.value * deducible.value;
+    if (salarioMinimoMes.value >= sueldoImss.value) {
+        sueldoImss.value = salarioMinimoMes.value;
+        var diff = salarioBrutoComp.value - sueldoImss.value;
+        result = diff / 3;
+    }
+    props.form.despensa = result.toFixed(2);
+    return result.toFixed(2);
+});
+const sueldoImss = computed(() => {
+    var result = (salarioBrutoComp.value - valesDespensa.value) / 1.22;
+    props.form.salario_imss = result.toFixed(2);
+    return result.toFixed(2);
+});
 
-/*Calcular salario*/
-const calculoSalario = async () => {
-    const salarioBrutoCompuesto = props.form.salario_bruto;
-    let valesDespensa = diasMes * uma.value * deducible.value;
-    let sueldoImss = (salarioBrutoCompuesto - valesDespensa) / 1.22;
-    const salarioMinimoMes = salarioMinimo * factor * diasMes;
-    let premioAsist = sueldoImss * 0.1;
-    let premioPunt = sueldoImss * 0.1;
-    const fondoAhorro = sueldoImss * 0.02;
-
-    if (salarioMinimoMes >= sueldoImss) {
-        sueldoImss = salarioMinimoMes;
-        const diff = salarioBrutoCompuesto - sueldoImss;
-        valesDespensa = diff / 3;
-        premioAsist = diff / 3;
-        premioPunt = diff / 3;
+const premioAsistPunt = computed(() => {
+    var result = sueldoImss * 0.1;
+    if (salarioMinimoMes.value >= sueldoImss.value) {
+        sueldoImss.value = salarioMinimoMes.value;
+        const diff = salarioBrutoComp.value - sueldoImss.value;
+        result = diff / 3;
     }
 
-    const salarioDiario = sueldoImss / diasMes;
-
-    props.form.salario_diario = salarioDiario.toFixed(2);
-    props.form.salario_imss = sueldoImss.toFixed(2);
-    props.form.bono_puntualidad = premioPunt.toFixed(2);
-    props.form.bono_asistencia = premioAsist.toFixed(2);
-    props.form.fondo_ahorro = fondoAhorro.toFixed(2);
-    props.form.despensa = valesDespensa.toFixed(2);
-    return true;
-};
+    props.form.bono_puntualidad = result.toFixed(2);
+    props.form.bono_asistencia = result.toFixed(2);
+    return result.toFixed(2);
+});
+const fondoAhorro = computed(() => {
+    var result = sueldoImss.value * 0.02;
+    props.form.fondo_ahorro = result.toFixed(2);
+    return result.toFixed(2);
+});
+const salarioDiario = computed(() => {
+    var result = sueldoImss.value / diasMes;
+    props.form.salario_diario = result.toFixed(2);
+    return result.toFixed(2);
+});
 
 const canEdit = computed(() => {
     return usePage().props.value.can["edit-users"];
 });
 
 const salarioDiaInt = computed(() =>
-    (props.form.salario_diario * factor.value).toFixed(2)
+    (salarioDiario.value * factor.value).toFixed(2)
 );
 
 const aportacionImss = computed(() => {
@@ -74,10 +84,20 @@ const aportacionImss = computed(() => {
 });
 
 const salarioNeto = computed(() => {
-    return (props.form.salario_imss - isr.value - aportacionImss.value).toFixed(
-        2
-    );
+    return (
+        salarioConPrestaciones.value -
+        isr.value -
+        aportacionImss.value
+    ).toFixed(2);
 });
+
+const salarioConPrestaciones = computed(
+    () =>
+        props.form.salario_imss +
+        props.form.bono_asistencia +
+        props.form.despensa +
+        props.form.bono_puntualidad
+);
 
 watchEffect(async () => {
     const { data } = await axios.post(
@@ -89,7 +109,7 @@ watchEffect(async () => {
     deducible.value = data.deducible;
     salarioMinimo.value = data.salarioMinimo;
     const { data: dataIsr } = await axios.post(
-        route("getIsrCalculado", { usuario: props.form.numero_empleado })
+        route("getIsrCalculado", { sueldoImss: salarioConPrestaciones.value })
     );
     isr.value = dataIsr;
 });
@@ -97,8 +117,8 @@ watchEffect(async () => {
 function calculoSalarioMinimo() {
     const salarioBruto = props.form.salario_bruto;
 
-    if (salarioBruto < salarioMinimoMes) {
-        props.form.salario_bruto = salarioMinimoMes.toFixed(2);
+    if (salarioBruto < salarioMinimoMes.value) {
+        props.form.salario_bruto = salarioMinimoMes.value.toFixed(2);
         calculoSalario();
     }
 }
@@ -185,7 +205,6 @@ function calculoSalarioMinimo() {
                                     v-model="props.form.salario_bruto"
                                     class="block w-full mt-1"
                                     :placeholder="formatMoney(0)"
-                                    @keyup="calculoSalario()"
                                     :min="salarioMinimoMes"
                                     @change="calculoSalarioMinimo()"
                                 />
