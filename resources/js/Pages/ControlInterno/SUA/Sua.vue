@@ -89,6 +89,12 @@ onMounted(() =>
                 <GraficaSua :data="T2.dataTable" class="" />
             </div>
         </div>
+        <div class="flex items-end justify-center">
+            <span class="font-semibold">
+                El porcentaje del monto que sobre pasa la cantidad que se debe
+                cubrir mensualmente debe ser por debajo del 8%
+            </span>
+        </div>
     </CardCi>
     <ModalEvolucionImss
         :show="modalImssShow"
