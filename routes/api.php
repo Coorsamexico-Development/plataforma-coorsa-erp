@@ -3,9 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatBotController;
-use App\Http\Controllers\Api\EmpleadoController;
+use App\Http\Controllers\NominasController;
 use App\Http\Controllers\FiniquitoController;
+use App\Http\Controllers\Api\EmpleadoController;
 use App\Http\Controllers\VariablesNominaController;
+use App\Http\Controllers\SolicitudVacacionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,4 +44,14 @@ Route::controller(ChatBotController::class)->group(function () {
 Route::controller(FiniquitoController::class)->group(function () {
     //Post
     Route::post('getIsrCalculado', 'getIsrCalculado')->name('getIsrCalculado');
+});
+
+//Ruta Nominas
+Route::controller(NominasController::class)->group(function () {
+    Route::post('getNominasByUser', 'getNominasByUser')->name('getNominasByUser');
+});
+
+//Rutas vacaciones
+Route::controller(SolicitudVacacionsController::class)->group(function () {
+    Route::post('getDataCalendarVacaciones', 'getDataCalendarVacaciones')->name('getDataCalendarVacaciones');
 });

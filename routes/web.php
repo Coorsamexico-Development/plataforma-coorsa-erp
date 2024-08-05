@@ -34,6 +34,7 @@ use App\Http\Controllers\VariablesNominaController;
 use App\Http\Controllers\PlantillasAutorizadaController;
 use App\Http\Controllers\DepartamentosAuditoriaController;
 use App\Http\Controllers\DocumentosCalificacionMesController;
+use App\Http\Controllers\SolicitudVacacionsController;
 use Illuminate\Http\Request;
 
 /*
@@ -278,15 +279,24 @@ Route::get('/finiquito', [FiniquitoController::class, 'calcularFiniquito'])->nam
 Route::get('/control-nominas', [NominasController::class, 'index'])->name('users.index');
 Route::get('/search-users', [NominasController::class, 'search'])->name('users.search');
 
-Route::get('/menu-deducciones/{id}', [NominasController::class,'deducciones'])->name('users.deducciones');
+Route::get('/menu-deducciones/{id}', [NominasController::class, 'deducciones'])->name('users.deducciones');
 Route::post('/dibujar-grafico', [NominasController::class, 'dibujarTableroRetardos'])->name('tableroRetardos');
-Route::post('/procesar-retardos', [NominasController::class,'procesarRetardos'])->name('procesarRetardos');
+Route::post('/procesar-retardos', [NominasController::class, 'procesarRetardos'])->name('procesarRetardos');
 
-// Rutas para comedor 
+// Rutas para comedor
 Route::post('/procesar-comedor', [NominasController::class, 'procesarComedor'])->name('precesarComedor');
 
 //Rutas ChatBot
 Route::controller(ChatBotController::class)->group(function () {
     //Gets
     Route::get('/chatBot', 'index')->name('chatBotIndex');
+});
+
+//Rutas Calendario de Vacaciones
+Route::controller(SolicitudVacacionsController::class)->middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('vacaciones', 'index')->name('vacaciones.index');
 });

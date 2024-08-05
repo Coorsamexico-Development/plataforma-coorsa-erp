@@ -1,22 +1,22 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watchEffect, onMounted, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import { Head, Link, usePage } from "@inertiajs/inertia-vue3";
-import { router } from "@inertiajs/inertia-vue3";
 import Banner from "@/Components/Banner.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import PaginationNominas from "../Components/PaginationNominas.vue";
-import { Fancybox } from "@fancyapps/ui/src/Fancybox/Fancybox";
+import axios from "axios";
 
 defineProps({
     title: String,
-    nominas: Object,
+    nominas: { type: Object, default: null },
 });
 
 const showingNavigationDropdown = ref(false);
+
 const months = [
     "Ene",
     "Feb",
@@ -360,6 +360,16 @@ const cambio2 = () => {
                                         >
                                             Altas P&G
                                         </DropdownLink>
+                                        <DropdownLink
+                                            v-if="
+                                                $page.props.can[
+                                                    'organigrama.show'
+                                                ]
+                                            "
+                                            :href="route('vacaciones.index')"
+                                        >
+                                            Calendario Vacaciones
+                                        </DropdownLink>
                                         <div class="border-t border-gray-100" />
                                     </template>
                                 </Dropdown>
@@ -659,7 +669,7 @@ const cambio2 = () => {
                                         </form>
                                         <div
                                             class="grid px-2 text-xs text-center border-t border-gray-100"
-                                            v-if="nominas.data != ''"
+                                            v-if="nominas"
                                         >
                                             <span
                                                 class="text-sm font-semibold border-b border-gray-400"
@@ -674,6 +684,7 @@ const cambio2 = () => {
                                                 </tr>
                                                 <tr
                                                     v-for="nomina in nominas.data"
+                                                    :key="nomina.id"
                                                 >
                                                     <td>
                                                         <a
@@ -735,7 +746,7 @@ const cambio2 = () => {
                                             </table>
                                         </div>
                                     </template>
-                                    <template #pagination>
+                                    <template #pagination v-if="nominas">
                                         <PaginationNominas
                                             :pagination="nominas"
                                         />

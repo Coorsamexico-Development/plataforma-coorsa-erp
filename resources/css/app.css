@@ -26,6 +26,7 @@
 
 :root {
     --fuentePrincipal: "Montserrat" !important;
+    --fc-today-bg-color: #56b098;
 }
 
 /*Nav*/
@@ -1618,4 +1619,54 @@ input:checked ~ .tab-content {
     .modal__title {
         text-align: left;
     }
+}
+
+/* Full Calendar */
+
+.fc .fc-multimonth-title {
+    font-size: 1.2em;
+    font-weight: 700;
+    padding: 1em 0px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.fc .fc-col-header-cell-cushion {
+    display: inline-block;
+    padding: 2px 4px;
+    text-transform: capitalize;
+}
+
+.fc .fc-day-today {
+    color: #fff;
+}
+
+.fc .fc-daygrid-day-frame:hover {
+    cursor: default;
+}
+
+.fc-h-event .fc-event-title {
+    display: inline-block;
+    left: 0px;
+    overflow: hidden;
+    right: 0px;
+    vertical-align: top;
+    text-transform: capitalize;
+    text-overflow: ellipsis;
+}
+
+.fc-daygrid-dot-event .fc-event-title {
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-weight: 700;
+    min-width: 0px;
+    overflow: hidden;
+    text-transform: capitalize;
+    text-overflow: ellipsis;
+}
+
+.fc-daygrid-dot-event .fc-event-title:hover,
+.fc-h-event .fc-event-title,
+.fc .fc-multimonth-multicol .fc-daygrid-more-link {
+    cursor: pointer;
 }
