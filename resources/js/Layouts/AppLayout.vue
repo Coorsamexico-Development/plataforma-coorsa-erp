@@ -363,7 +363,7 @@ const cambio2 = () => {
                                         <DropdownLink
                                             v-if="
                                                 $page.props.can[
-                                                    'organigrama.show'
+                                                    'vacaciones.show'
                                                 ]
                                             "
                                             :href="route('vacaciones.index')"
