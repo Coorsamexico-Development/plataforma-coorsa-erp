@@ -147,15 +147,17 @@ function getDataCalendarVacaciones() {
         .post(route("getDataCalendarVacaciones"))
         .then(({ data }) => {
             data.cumpleaños.forEach((event) => {
-                dataEvents.value.push({
-                    date: event.fecha_nacimiento,
-                    title: event.title,
-                    rrule: {
-                        freq: "yearly",
-                        dtstart: event.fecha_nacimiento,
-                    },
-                    color: "#ec2944",
-                });
+                if (event.title !== null) {
+                    dataEvents.value.push({
+                        date: event.fecha_nacimiento,
+                        title: event.title,
+                        rrule: {
+                            freq: "yearly",
+                            dtstart: event.fecha_nacimiento,
+                        },
+                        color: "#ec2944",
+                    });
+                }
             });
             data.vacaciones.forEach((event) => {
                 const fechas = JSON.parse(event.fechas);

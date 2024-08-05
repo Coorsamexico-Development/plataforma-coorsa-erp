@@ -25,6 +25,8 @@ class SolicitudVacacionsController extends Controller
             'users.fecha_nacimiento'
         )
             ->where('users.activo', 1)
+            ->whereNotNull('users.name')
+            ->distinct()
             ->get();
 
         $vacaciones = User::select(
