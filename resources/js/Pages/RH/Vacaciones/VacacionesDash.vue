@@ -6,7 +6,8 @@ import multiMonthPlugin from "@fullcalendar/multimonth";
 import esLocale from "@fullcalendar/core/locales/es";
 import { ref, watchEffect } from "vue";
 import axios from "axios";
-import DialogModalPopUp from "@/Components/DialogModalPopUp.vue";
+import DiaData from "./Modals/DiaData.vue";
+import ReporteMensual from "./Modals/ReporteMensual.vue";
 import interactionPlugin from "@fullcalendar/interaction";
 
 defineProps({
@@ -110,6 +111,7 @@ const dataEvents = ref([
     },
 ]);
 const dayShow = ref(false);
+const reporteMensShow = ref(false);
 const position = ref(null);
 const evento = ref(null);
 
@@ -132,7 +134,16 @@ let calendar = {
     headerToolbar: {
         start: "prev",
         center: "title",
-        end: "next",
+        end: "downloadReport next",
+    },
+    customButtons: {
+        downloadReport: {
+            text: "Reporte de vacaciones",
+            click: function (evt) {
+                position.value = evt.target.getBoundingClientRect();
+                reporteMensShow.value = true;
+            },
+        },
     },
     eventClick: function (info) {
         position.value = info.jsEvent.target.getBoundingClientRect();
@@ -182,37 +193,16 @@ watchEffect(() => getDataCalendarVacaciones());
         <div class="p-4">
             <FullCalendar :options="calendar" />
         </div>
-        <DialogModalPopUp
-            :show="dayShow"
+        <DiaData
             :position="position"
+            :show="dayShow"
             @close="dayShow = false"
-            maxWidth="sm"
-        >
-            <template #title>
-                <span class="text-[18px] font-semibold">{{
-                    evento.event.startStr
-                }}</span>
-            </template>
-            <template #content>
-                <ul v-if="evento.allSegs" class="capitalize">
-                    <template
-                        v-for="(item, index) in evento.allSegs"
-                        :key="index"
-                    >
-                        <li>{{ item.event.title }}</li>
-                    </template>
-                </ul>
-                <span class="capitalize" v-else>{{ evento.event.title }}</span>
-            </template>
-        </DialogModalPopUp>
+            :evento="evento"
+        />
+        <ReporteMensual
+            :position="position"
+            :show="reporteMensShow"
+            @close="reporteMensShow = false"
+        />
     </AppLayout>
 </template>
-<style scoped>
-.fc .fc-multimonth-title {
-    font-size: 1.2em;
-    font-weight: 700;
-    padding: 1em 0px;
-    text-align: center;
-    text-transform: uppercase;
-}
-</style>

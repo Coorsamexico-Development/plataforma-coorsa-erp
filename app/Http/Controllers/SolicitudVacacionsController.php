@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ReporteVacacionesExport;
 use App\Models\SolicitudVacaciones;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SolicitudVacacionsController extends Controller
 {
@@ -31,7 +33,7 @@ class SolicitudVacacionsController extends Controller
 
         $vacaciones = User::select(
             DB::raw('lower(concat("vacaciones ",users.name, " ", users.apellido_paterno, " ", users.apellido_materno)) as title'),
-            'sv.fechas'
+            'sv.fechas',
         )
             ->join('solicitud_vacacions as sv', 'sv.user_id', 'users.id')
             ->where('sv.activo', 1)
@@ -41,5 +43,15 @@ class SolicitudVacacionsController extends Controller
             'cumpleaños' => $cumpleaños,
             'vacaciones' => $vacaciones
         ]);
+    }
+
+    public function reporteVacaciones(Request $request)
+    {
+        $mes = $request->month + 1;
+        $mes = $mes < 10 ? "0{$mes}" : $mes;
+        $año = $request->year;
+        $newDate = "{$año}-{$mes}";
+
+        return Excel::download(new ReporteVacacionesExport($newDate), "reporte-{$newDate}.xlsx");
     }
 }

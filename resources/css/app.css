@@ -1670,3 +1670,8 @@ input:checked ~ .tab-content {
 .fc .fc-multimonth-multicol .fc-daygrid-more-link {
     cursor: pointer;
 }
+
+.fc .fc-button-primary {
+    background-color: #1d96f1;
+    border-color: #8ecbf8;
+}

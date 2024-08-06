@@ -54,4 +54,5 @@ Route::controller(NominasController::class)->group(function () {
 //Rutas vacaciones
 Route::controller(SolicitudVacacionsController::class)->group(function () {
     Route::post('getDataCalendarVacaciones', 'getDataCalendarVacaciones')->name('getDataCalendarVacaciones');
+    Route::get('reporteVacaciones', 'reporteVacaciones')->name('reporteVacaciones');
 });
