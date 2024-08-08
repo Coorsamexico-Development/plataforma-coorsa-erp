@@ -16,9 +16,7 @@ class ReporteVacacionesExport implements FromCollection, WithHeadings
      */
 
 
-    public function __construct(public $date)
-    {
-    }
+    public function __construct(public $date) {}
 
     public function collection()
     {
@@ -49,6 +47,7 @@ class ReporteVacacionesExport implements FromCollection, WithHeadings
                 'DiasGozar' => $diasGozar->dias,
                 'DiasPendientes' => $uv->contador,
                 'DiasSolicitados' => $user->dias_solicitados,
+                'DiasGozo' => $diasGozar->dias - $uv->contador,
             ]);
         }
         return collect($collection);
@@ -60,7 +59,7 @@ class ReporteVacacionesExport implements FromCollection, WithHeadings
             'Nombre completo',
             'Fecha Inicio',
             'Fecha Fin',
-            'Dias a Gozar',
+            'Dias con Derecho',
             'Dias Pendientes',
             'Dias Solicitados',
             'Dias Gozados'
