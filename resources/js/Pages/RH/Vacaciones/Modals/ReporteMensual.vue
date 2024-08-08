@@ -17,8 +17,6 @@ defineProps({
 
 const date = ref();
 
-watchEffect(() => console.log(date.value));
-
 defineEmits(["close"]);
 </script>
 <template>

@@ -62,7 +62,8 @@ class ReporteVacacionesExport implements FromCollection, WithHeadings
             'Fecha Fin',
             'Dias a Gozar',
             'Dias Pendientes',
-            'Dias Solicitados'
+            'Dias Solicitados',
+            'Dias Gozados'
         ];
     }
 }

@@ -117,11 +117,17 @@ const evento = ref(null);
 
 let calendar = {
     plugins: [multiMonthPlugin, rrulePlugin, interactionPlugin],
-    initialView: "multiMonthYear",
+    initialView: "multiMonthFourMonth",
     timeZone: "UTC",
     events: dataEvents.value,
-    multiMonthMaxColumns: 4,
+    multiMonthMaxColumns: 3,
     locale: esLocale,
+    views: {
+        multiMonthFourMonth: {
+            type: "multiMonth",
+            duration: { months: 6 },
+        },
+    },
     moreLinkClick: (info) => {
         position.value = info.jsEvent.target.getBoundingClientRect();
         info.event = {
@@ -157,16 +163,24 @@ function getDataCalendarVacaciones() {
     axios
         .post(route("getDataCalendarVacaciones"))
         .then(({ data }) => {
+            console.log(data);
             data.cumpleaños.forEach((event) => {
                 if (event.title !== null) {
                     dataEvents.value.push({
                         date: event.fecha_nacimiento,
-                        title: event.title,
+                        title: `Cumpleaños ${event.title}`,
                         rrule: {
                             freq: "yearly",
                             dtstart: event.fecha_nacimiento,
                         },
                         color: "#ec2944",
+                        ceco: event.ceco,
+                        puesto: event.puesto,
+                        fechaNac: event.fecha_nacimiento,
+                        profile: event.profile_photo_url,
+                        foto: event.fotografia,
+                        tipe: "1",
+                        name: event.title,
                     });
                 }
             });
@@ -174,10 +188,16 @@ function getDataCalendarVacaciones() {
                 const fechas = JSON.parse(event.fechas);
 
                 dataEvents.value.push({
-                    title: event.title,
+                    title: `Vacaciones ${event.title}`,
                     start: fechas[0],
                     end: fechas[fechas.length - 1],
                     color: "#44befa",
+                    ceco: event.ceco,
+                    puesto: event.puesto,
+                    profile: event.profile_photo_url,
+                    foto: event.fotografia,
+                    tipe: "0",
+                    name: event.title,
                 });
             });
         })

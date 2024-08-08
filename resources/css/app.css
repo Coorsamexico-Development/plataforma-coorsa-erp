@@ -1675,3 +1675,9 @@ input:checked ~ .tab-content {
     background-color: #1d96f1;
     border-color: #8ecbf8;
 }
+
+.fc .fc-toolbar-title {
+    font-size: 1.75em;
+    margin: 0px;
+    text-transform: capitalize;
+}

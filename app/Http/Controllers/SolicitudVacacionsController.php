@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ReporteVacacionesExport;
-use App\Models\SolicitudVacaciones;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -23,18 +22,32 @@ class SolicitudVacacionsController extends Controller
     public function getDataCalendarVacaciones()
     {
         $cumpleaños = User::select(
-            DB::raw('lower(concat("Cumpleaños ",users.name, " ", users.apellido_paterno, " ", users.apellido_materno)) as title'),
-            'users.fecha_nacimiento'
+            DB::raw('lower(concat(users.name, " ", users.apellido_paterno, " ", users.apellido_materno)) as title'),
+            'users.fecha_nacimiento',
+            DB::raw('concat(cecos.nombre, " ", lower(cecos.descripcion)) as ceco'),
+            DB::raw('lower(puestos.name) as puesto'),
+            'users.fotografia'
         )
+            ->join('empleados_puestos as ep', 'ep.empleado_id', 'users.id')
+            ->join('departamento_puestos as dp', 'dp.id', 'ep.dpto_puesto_id')
+            ->join('cecos', 'cecos.id', 'dp.departamento_id')
+            ->join('puestos', 'puestos.id', 'dp.puesto_id')
             ->where('users.activo', 1)
             ->whereNotNull('users.name')
             ->distinct()
             ->get();
 
         $vacaciones = User::select(
-            DB::raw('lower(concat("vacaciones ",users.name, " ", users.apellido_paterno, " ", users.apellido_materno)) as title'),
+            DB::raw('lower(concat(users.name, " ", users.apellido_paterno, " ", users.apellido_materno)) as title'),
             'sv.fechas',
+            DB::raw('concat(cecos.nombre, " ", lower(cecos.descripcion)) as ceco'),
+            DB::raw('lower(puestos.name) as puesto'),
+            'users.fotografia'
         )
+            ->join('empleados_puestos as ep', 'ep.empleado_id', 'users.id')
+            ->join('departamento_puestos as dp', 'dp.id', 'ep.dpto_puesto_id')
+            ->join('cecos', 'cecos.id', 'dp.departamento_id')
+            ->join('puestos', 'puestos.id', 'dp.puesto_id')
             ->join('solicitud_vacacions as sv', 'sv.user_id', 'users.id')
             ->where('sv.activo', 1)
             ->get();
