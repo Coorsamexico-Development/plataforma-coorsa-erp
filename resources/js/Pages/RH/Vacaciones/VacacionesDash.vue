@@ -135,7 +135,7 @@ let calendar = {
         };
         evento.value = info;
         dayShow.value = true;
-        return "day";
+        return "multiMonthFourMonth";
     },
     headerToolbar: {
         start: "prev",
@@ -156,7 +156,6 @@ let calendar = {
         evento.value = info;
         dayShow.value = true;
     },
-    dayHeaderClassNames: "dayHeaderClassNames",
 };
 
 function getDataCalendarVacaciones() {
