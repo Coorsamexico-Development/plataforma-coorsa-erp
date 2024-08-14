@@ -7,6 +7,8 @@ import { pickBy } from "lodash";
 import AnimationCard from "../../Components/AnimationCard.vue";
 import ButtonAdd from "@/Components/ButtonAdd.vue";
 import FormDocsInternosModal from "./Modals/FormDocsInternosModal.vue";
+import InputSearch from "@/Components/InputSearch.vue";
+import { filter } from "lodash";
 
 let props = defineProps({
     tipoPoliticas: {
@@ -50,7 +52,7 @@ const showFormPolitic = (typeForm, politicSelect = null) => {
 };
 
 watch(params, (newParams) => {
-    Inertia.reload({
+    Inertia.visit(route("documentos-internos.socios.index", props.seccion_id), {
         data: pickBy(newParams),
         replace: true,
         only: ["politicas"],
@@ -271,16 +273,17 @@ const updateHoverState = (isHover) => {
                     >AGREGAR DOCUMENTO</ButtonAdd
                 >
             </div>
-            <div class="documentos_view">
+            <div class="grid col-[2_/_span_5]">
+                <div class="grid py-4">
+                    <InputSearch
+                        v-model="params.search"
+                        class="px-2 py-1 flex items-center w-fit h-fit"
+                    />
+                </div>
                 <!-- Files Section -->
                 <AnimationCard>
                     <CardImage
-                        style="
-                            margin: 1.8rem;
-                            height: 20rem;
-                            width: 16rem;
-                            margin-top: 4rem;
-                        "
+                        style="height: 20rem; width: 16rem; margin: 1rem"
                         v-for="politica in politicas"
                         :key="politica.id"
                         :file="politica.pdf"
@@ -288,8 +291,7 @@ const updateHoverState = (isHover) => {
                         <div class="row">
                             <div class="col-lg-3 col-md-4">
                                 <img
-                                    class="h-48"
-                                    style="width: 50rem"
+                                    class="h-48 w-[50rem]"
                                     :src="politica.imagePolitic"
                                 />
                             </div>
@@ -308,7 +310,7 @@ const updateHoverState = (isHover) => {
                                 style="
                                     font-size: 0.9rem;
                                     font-weight: 600;
-                                    margin-left: 2rem;
+                                    margin-left: 1rem;
                                     font-family: 'Montserrat';
                                     display: block;
                                 "
@@ -321,7 +323,7 @@ const updateHoverState = (isHover) => {
                                 class="font-light text-[#1D2B4E]"
                                 style="
                                     font-size: 0.8rem;
-                                    margin-left: 2rem;
+                                    margin-left: 1rem;
                                     font-family: 'Montserrat';
                                 "
                                 >{{
@@ -344,7 +346,7 @@ const updateHoverState = (isHover) => {
                                 $page.props.can['documentos-diseño.update']
                             "
                             style="white-space: normal"
-                            class="absolute z-10 w-6 h-6 py-1 bg-white rounded-full shadow -bottom-2 -right-1 hover:bg-gray-500 hover:text-white"
+                            class="absolute z-10 w-6 h-6 py-1 bg-white rounded-full shadow -bottom-2 right-1.5 hover:bg-gray-500 hover:text-white"
                             @click="showFormPolitic('update', politica)"
                         >
                             <svg
@@ -372,4 +374,3 @@ const updateHoverState = (isHover) => {
         />
     </AppLayout>
 </template>
-<style scoped></style>

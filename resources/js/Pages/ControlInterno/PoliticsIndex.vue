@@ -269,6 +269,12 @@ const isDownload = computed((file) => {
                 >
             </div>
             <div class="documentos_view">
+                <div class="grid py-4">
+                    <InputSearch
+                        v-model="params.search"
+                        class="px-2 py-1 flex items-center w-fit h-fit"
+                    />
+                </div>
                 <!-- Files Section -->
                 <AnimationCard>
                     <CardImage
@@ -350,7 +356,7 @@ const isDownload = computed((file) => {
 
                         <div
                             v-if="$page.props.can['politics.update']"
-                            style="white-space: normal "
+                            style="white-space: normal"
                             class="z-10 w-6 h-6 py-1 text-green-700 bg-white rounded-full shadow -mt-44 -right-1 hover:bg-gray-500 hover:text-white"
                             @click="showFormPolitic('update', politica)"
                         >
@@ -481,7 +487,7 @@ const isDownload = computed((file) => {
                                         v-if="
                                             $page.props.can['politics.update']
                                         "
-                                        style="white-space: normal;"
+                                        style="white-space: normal"
                                         class="absolute z-10 w-6 h-6 py-1 text-green-700 bg-white rounded-full shadow -mt-44 -bottom-2 -right-1 hover:bg-gray-500 hover:text-white"
                                         @click="
                                             showFormPolitic('update', politica)

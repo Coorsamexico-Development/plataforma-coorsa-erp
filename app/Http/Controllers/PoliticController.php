@@ -14,6 +14,7 @@ class PoliticController extends Controller
 {
     public function index()
     {
+        /* dd(request()); */
         $tipoPoliticas = Tipopolitica::orderBy('id', 'asc')->where('seccion_id', '=', 1);
         $politicas = Politic::select(
             'politics.*',
@@ -39,9 +40,9 @@ class PoliticController extends Controller
         $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
 
         return Inertia::render('ControlInterno/PoliticsIndex', [
-            'tipoPoliticas' => fn () => $tipoPoliticas->get(),
-            'politicas' =>  fn () => $politicas->get(),
-            'filters' => fn () => request()->all(['search', 'type_politic']),
+            'tipoPoliticas' => fn() => $tipoPoliticas->get(),
+            'politicas' =>  fn() => $politicas->get(),
+            'filters' => fn() => request()->all(['search', 'type_politic']),
             'nominas' => $nominas
         ]);
     }
@@ -49,6 +50,7 @@ class PoliticController extends Controller
 
     public function docsinternos($seccion) // es solo docs internos
     {
+        /* dd($seccion); */
         $tipoPoliticas = Tipopolitica::orderBy('id', 'asc')->where('seccion_id', '=', $seccion);
         $politicas = Politic::select(
             'politics.*',
@@ -72,9 +74,9 @@ class PoliticController extends Controller
         $nominas = DB::table('nominas_empleados')->where('empleado_id', auth()->user()->id)->orderByDesc('fecha_doc')->orderByDesc('periodo')->paginate(5);
 
         return Inertia::render('ControlInterno/DocumentosInternos', [
-            'tipoPoliticas' => fn () => $tipoPoliticas->get(),
-            'politicas' =>  fn () => $politicas->get(),
-            'filters' => fn () => request()->all(['search', 'type_politic']),
+            'tipoPoliticas' => fn() => $tipoPoliticas->get(),
+            'politicas' =>  fn() => $politicas->get(),
+            'filters' => fn() => request()->all(['search', 'type_politic']),
             'nominas' => $nominas,
             'seccion_id' => $seccion
         ]);
@@ -127,109 +129,95 @@ class PoliticController extends Controller
             //'imagePolitic' => ['nullable'],
             //'pdf' => ['nullable'],
             'politic' => ['required'] //id a editar
-            */
-        ]);
+            */]);
 
         $urlImage = null;
-        if($request->has('imagePolitic'))
-        {
-          if($request['imagePolitic'] !== null)
-          {
-            $fileUrl = str_replace("https://storage.googleapis.com/" . env('GOOGLE_CLOUD_STORAGE_BUCKET'), "/", $request['imagePolitic']);
-            Storage::disk('gcs')->delete($fileUrl);
-            $fileImg = $request->file('imagePolitic');
-            $rutaImage = $fileImg->store('politics/img', 'gcs');
-            $urlImage = Storage::disk('gcs')->url($rutaImage);
-          }
+        if ($request->has('imagePolitic')) {
+            if ($request['imagePolitic'] !== null) {
+                $fileUrl = str_replace("https://storage.googleapis.com/" . env('GOOGLE_CLOUD_STORAGE_BUCKET'), "/", $request['imagePolitic']);
+                Storage::disk('gcs')->delete($fileUrl);
+                $fileImg = $request->file('imagePolitic');
+                $rutaImage = $fileImg->store('politics/img', 'gcs');
+                $urlImage = Storage::disk('gcs')->url($rutaImage);
+            }
         }
 
         $urlPdf = null;
-        if($request->has('pdf'))
-        {
-          if($request['pdf'] !== null)
-          {
-            $fileUrl = str_replace("https://storage.googleapis.com/" . env('GOOGLE_CLOUD_STORAGE_BUCKET'), "/", $request['pdf']);
-            Storage::disk('gcs')->delete($fileUrl);
+        if ($request->has('pdf')) {
+            if ($request['pdf'] !== null) {
+                $fileUrl = str_replace("https://storage.googleapis.com/" . env('GOOGLE_CLOUD_STORAGE_BUCKET'), "/", $request['pdf']);
+                Storage::disk('gcs')->delete($fileUrl);
 
-            $file = $request->file('pdf');
-            $rutaPdf = $file->store('politics/pdf', 'gcs');
-            $urlPdf = Storage::disk('gcs')->url($rutaPdf);
-          }
+                $file = $request->file('pdf');
+                $rutaPdf = $file->store('politics/pdf', 'gcs');
+                $urlPdf = Storage::disk('gcs')->url($rutaPdf);
+            }
         }
 
-        if($urlPdf !== null && $urlImage !== null)
-        {
-            $politica=  Politic::where('politics.id','=',$request['politic'])
-            ->update([
-                'namepolitica' => $request->namepolitica,
-                'descripcion' => $request->descripcion,
-                'type_politic' => $request->type_politic,
-                'autor' => $request->autor,
-                'imagePolitic' => $urlImage,
-                'pdf' => $urlPdf,
-                'empleado_id' => $request->autor,
-            ]);
-        }
-        else
-        {
-            $politica=  Politic::where('politics.id','=',$request['politic'])
-            ->update([
-                'namepolitica' => $request->namepolitica,
-                'descripcion' => $request->descripcion,
-                'type_politic' => $request->type_politic,
-                'autor' => $request->autor,
-                'empleado_id' => $request->autor,
-            ]);
+        if ($urlPdf !== null && $urlImage !== null) {
+            $politica =  Politic::where('politics.id', '=', $request['politic'])
+                ->update([
+                    'namepolitica' => $request->namepolitica,
+                    'descripcion' => $request->descripcion,
+                    'type_politic' => $request->type_politic,
+                    'autor' => $request->autor,
+                    'imagePolitic' => $urlImage,
+                    'pdf' => $urlPdf,
+                    'empleado_id' => $request->autor,
+                ]);
+        } else {
+            $politica =  Politic::where('politics.id', '=', $request['politic'])
+                ->update([
+                    'namepolitica' => $request->namepolitica,
+                    'descripcion' => $request->descripcion,
+                    'type_politic' => $request->type_politic,
+                    'autor' => $request->autor,
+                    'empleado_id' => $request->autor,
+                ]);
         }
 
-        if($urlPdf !== null)
-        {
-            $politica=  Politic::where('politics.id','=',$request['politic'])
-            ->update([
-                'namepolitica' => $request->namepolitica,
-                'descripcion' => $request->descripcion,
-                'type_politic' => $request->type_politic,
-                'autor' => $request->autor,
-                'pdf' => $urlPdf,
-                'empleado_id' => $request->autor,
-            ]);
-        }
-        else
-        {
-            $politica=  Politic::where('politics.id','=',$request['politic'])
-            ->update([
-                'namepolitica' => $request->namepolitica,
-                'descripcion' => $request->descripcion,
-                'type_politic' => $request->type_politic,
-                'autor' => $request->autor,
-                'empleado_id' => $request->autor,
-            ]);
+        if ($urlPdf !== null) {
+            $politica =  Politic::where('politics.id', '=', $request['politic'])
+                ->update([
+                    'namepolitica' => $request->namepolitica,
+                    'descripcion' => $request->descripcion,
+                    'type_politic' => $request->type_politic,
+                    'autor' => $request->autor,
+                    'pdf' => $urlPdf,
+                    'empleado_id' => $request->autor,
+                ]);
+        } else {
+            $politica =  Politic::where('politics.id', '=', $request['politic'])
+                ->update([
+                    'namepolitica' => $request->namepolitica,
+                    'descripcion' => $request->descripcion,
+                    'type_politic' => $request->type_politic,
+                    'autor' => $request->autor,
+                    'empleado_id' => $request->autor,
+                ]);
         }
 
-        if($urlImage !== null)
-        {
-            $politica=  Politic::where('politics.id','=',$request['politic'])
-            ->update([
-                'namepolitica' => $request->namepolitica,
-                'descripcion' => $request->descripcion,
-                'type_politic' => $request->type_politic,
-                'autor' => $request->autor,
-                'imagePolitic' => $urlImage,
-                'empleado_id' => $request->autor,
-            ]);
+        if ($urlImage !== null) {
+            $politica =  Politic::where('politics.id', '=', $request['politic'])
+                ->update([
+                    'namepolitica' => $request->namepolitica,
+                    'descripcion' => $request->descripcion,
+                    'type_politic' => $request->type_politic,
+                    'autor' => $request->autor,
+                    'imagePolitic' => $urlImage,
+                    'empleado_id' => $request->autor,
+                ]);
+        } else {
+            $politica =  Politic::where('politics.id', '=', $request['politic'])
+                ->update([
+                    'namepolitica' => $request->namepolitica,
+                    'descripcion' => $request->descripcion,
+                    'type_politic' => $request->type_politic,
+                    'autor' => $request->autor,
+                    'empleado_id' => $request->autor,
+                ]);
         }
-        else
-        {
-            $politica=  Politic::where('politics.id','=',$request['politic'])
-            ->update([
-                'namepolitica' => $request->namepolitica,
-                'descripcion' => $request->descripcion,
-                'type_politic' => $request->type_politic,
-                'autor' => $request->autor,
-                'empleado_id' => $request->autor,
-            ]);
-        }
-        
+
 
         return redirect()->back();
     }
