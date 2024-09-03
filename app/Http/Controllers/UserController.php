@@ -63,9 +63,8 @@ class UserController extends Controller
 
         $socialNet = [];
 
-        foreach (UserRedes::select('rs.name as red', 'user_redes.value')->join('redes_solciales as rs', 'rs.id', 'user_redes.redes_id')->where('user_redes.user_id', $dataUser->id) as $red)
-            array_push($socialNet, [$red->red => $red->value]);
-
+        foreach (UserRedes::select('rs.name as red', 'user_redes.value')->join('redes_sociales as rs', 'rs.id', 'user_redes.redes_id')->where('user_redes.user_id', $dataUser->id)->get() as $red)
+            $socialNet[strtolower($red->red)] = $red->value;
         $usuario = (object) [
             'name' => $dataUser->name,
             'puesto' => [

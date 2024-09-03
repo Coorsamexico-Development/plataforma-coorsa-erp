@@ -233,11 +233,12 @@ const position = computed(() =>
             v-if="['linkedin', 'twitter'].includes(socialNetwork.network)"
         >
             <div
-                class="flex items-center gap-[14px] px-[18px] py-[13px] border-2 border-black rounded-full"
+                class="flex items-center gap-[14px] px-[18px] py-[13px] border-2 border-black rounded-full capitalize"
             >
                 <User class="h-[20px]" />
                 <span>{{ user.name }}</span>
             </div>
+            {{ user.socialNet["LinkedIn"] }}
             <a
                 class="w-full bg-black text-white py-[11px] rounded-full text-[23px] grid place-content-center px-[2rem]"
                 target="_blank"
