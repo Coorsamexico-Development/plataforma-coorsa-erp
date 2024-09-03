@@ -55,10 +55,7 @@ class UserController extends Controller
             ->leftjoin('empleados_puestos', 'empleados_puestos.empleado_id', 'users.id')
             ->leftJoin('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
             ->leftjoin('puestos', 'dp.puesto_id', 'puestos.id')
-            ->leftjoin('cecos', 'dp.departamento_id', 'cecos.id')
-            ->leftjoin('ubicaciones', 'cecos.ubicacione_id', 'ubicaciones.id')
             ->where('users.numero_empleado', '=', $numero_empleado)
-            ->where('users.activo', '=', 1)
             ->first();
 
         $socialNet = [];
@@ -77,7 +74,7 @@ class UserController extends Controller
             ],
             'socialNet' => $socialNet,
             'foto' => $dataUser->foto_empresarial ?? $dataUser->profile_photo_path,
-            'vCard' => '/assets/vCards/Renato.vcf',
+            'vCard' => UserRedes::select('value')->where([['user_id', $dataUser->id], ['redes_id', 5]])->first()->value ?? null,
         ];
 
         return Inertia::render(

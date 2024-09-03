@@ -62,7 +62,7 @@ function changeLenguage() {
                         />
                     </div>
                     <span class="max-md:text-[23px] font-normal md:text-[28px]">
-                        Coorsa Mexico
+                        Coorsa México
                     </span>
                     <span
                         class="max-md:text-[23px] font-bold uppercase md:text-[28px]"
@@ -112,7 +112,7 @@ function changeLenguage() {
                         ></iframe>
                     </div>
                 </div>
-                <div class="gird">
+                <div class="gird" v-if="user.vCard">
                     <a
                         class="w-full bg-black text-[23px] text-white uppercase py-[11px] rounded-full grid place-content-center"
                         :href="user.vCard"

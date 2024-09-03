@@ -85,6 +85,13 @@ const position = computed(() =>
                 <LinkedIn class="w-[2rem] h-[2rem] text-white" />
             </RedSocialCirculo>
             <RedSocialCirculo
+                name="WhatsApp"
+                bgColor="bg-[#00c309]"
+                @click="clickRedSocial('whats', 'bg-[#00c309]', 'WhatsApp')"
+            >
+                <WhatsApp class="w-[2rem] h-[2rem] text-white" />
+            </RedSocialCirculo>
+            <RedSocialCirculo
                 :name="
                     lenguage === 'es'
                         ? 'Mensajes'
@@ -96,13 +103,6 @@ const position = computed(() =>
                 @click="clickRedSocial('message', 'bg-[#00bae6]', 'Message')"
             >
                 <Message class="w-[2rem] h-[2rem] text-white" />
-            </RedSocialCirculo>
-            <RedSocialCirculo
-                name="WhatsApp"
-                bgColor="bg-[#00c309]"
-                @click="clickRedSocial('whats', 'bg-[#00c309]', 'WhatsApp')"
-            >
-                <WhatsApp class="w-[2rem] h-[2rem] text-white" />
             </RedSocialCirculo>
             <RedSocialCirculo
                 name="Coorsamexico.com"

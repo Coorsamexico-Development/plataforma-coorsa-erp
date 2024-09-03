@@ -19,11 +19,29 @@ class UserRedesSeed extends Seeder
             'user_id' => 1,
             'redes_id' => 2,
             'value' => 'https://www.linkedin.com/in/renato-ortiz-coorsa/',
+            'created_at' => now(),
+            'updated_at' => now()
         ]);
         UserRedes::insert([
             'user_id' => 1075,
             'redes_id' => 2,
             'value' => 'https://www.linkedin.com/in/vania-jimenez-coorsa/',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        UserRedes::insert([
+            'user_id' => 1,
+            'redes_id' => 5,
+            'value' => 'https://storage.googleapis.com/coorsamexico_erp/vCards/Renato.vcf',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        UserRedes::insert([
+            'user_id' => 1075,
+            'redes_id' => 5,
+            'value' => 'https://storage.googleapis.com/coorsamexico_erp/vCards/Vania.vcf',
+            'created_at' => now(),
+            'updated_at' => now()
         ]);
     }
 }
