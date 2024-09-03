@@ -12,6 +12,8 @@ use Inertia\Inertia;
 
 use App\Exports\UsersExport;
 use App\Models\empleados_puesto;
+use App\Models\UserRedes;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
@@ -41,12 +43,14 @@ class UserController extends Controller
 
     public function viewCard($numero_empleado)
     {
-        $datos_User = User::select(
-            'users.*',
-            'puestos.name AS puesto_name',
-            'cecos.nombre AS cecos_name',
-            'ubicaciones.name AS ubicacion_name',
-            'ubicaciones.ubicacion_google'
+        $dataUser = User::select(
+            'users.id',
+            DB::raw('lower(users.name) as name'),
+            'puestos.name AS puesto',
+            'users.correo_empresarial as email',
+            'users.telefono_empresarial as telMex',
+            'users.foto_empresarial',
+            'users.profile_photo_path',
         )
             ->leftjoin('empleados_puestos', 'empleados_puestos.empleado_id', 'users.id')
             ->leftJoin('departamento_puestos as dp', 'dp.id', 'empleados_puestos.dpto_puesto_id')
@@ -55,12 +59,32 @@ class UserController extends Controller
             ->leftjoin('ubicaciones', 'cecos.ubicacione_id', 'ubicaciones.id')
             ->where('users.numero_empleado', '=', $numero_empleado)
             ->where('users.activo', '=', 1)
-            ->get();
+            ->first();
+
+        $socialNet = [];
+
+        foreach (UserRedes::select('rs.name as red', 'user_redes.value')->join('redes_solciales as rs', 'rs.id', 'user_redes.redes_id')->where('user_redes.user_id', $dataUser->id) as $red)
+            array_push($socialNet, [$red->red => $red->value]);
+
+        $usuario = (object) [
+            'name' => $dataUser->name,
+            'puesto' => [
+                'es' => $dataUser->puesto,
+                'eng' => ''
+            ],
+            'email' => $dataUser->email,
+            'numbers' => (object)[
+                'mex' => "+52{$dataUser->telMex}"
+            ],
+            'socialNet' => $socialNet,
+            'foto' => $dataUser->foto_empresarial ?? $dataUser->profile_photo_path,
+            'vCard' => '/assets/vCards/Renato.vcf',
+        ];
 
         return Inertia::render(
-            'CardViewUser/IndexCard',
+            'vCard/Card',
             [
-                'datos_usuario' => $datos_User
+                'user' => $usuario
             ]
         );
     }
