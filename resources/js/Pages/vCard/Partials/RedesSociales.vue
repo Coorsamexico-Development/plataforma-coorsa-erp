@@ -107,7 +107,7 @@ const position = computed(() =>
             <RedSocialCirculo
                 name="Coorsamexico.com"
                 bgColor="bg-[#d52b1d]"
-                @click="clickRedSocial('web', 'bg-[#d52b1d]', 'Bear Logist')"
+                @click="clickRedSocial('web', 'bg-[#d52b1d]', 'Coorsa México')"
             >
                 <Web class="w-[2rem] h-[2rem] text-white" />
             </RedSocialCirculo>
