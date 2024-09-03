@@ -14,7 +14,7 @@ import MexicoBandera from "@/Iconos/MexicoBandera.vue";
 import Close from "@/Iconos/Close.vue";
 import Call from "@/Iconos/Call.vue";
 import { computed, reactive, ref } from "vue";
-import { formatPhoneNumber } from "@/Utils/formatCellPhone";
+import { formatPhoneNumber } from "@/utils/formatCellPhone";
 
 defineProps({
     user: {
