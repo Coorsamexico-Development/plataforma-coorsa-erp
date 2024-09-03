@@ -62,7 +62,7 @@ function changeLenguage() {
                         />
                     </div>
                     <span class="max-md:text-[23px] font-normal md:text-[28px]">
-                        Coorsa México
+                        COORSA México
                     </span>
                     <span
                         class="max-md:text-[23px] font-bold uppercase md:text-[28px]"

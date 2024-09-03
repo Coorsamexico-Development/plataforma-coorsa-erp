@@ -107,7 +107,7 @@ const position = computed(() =>
             <RedSocialCirculo
                 name="Coorsamexico.com"
                 bgColor="bg-[#d52b1d]"
-                @click="clickRedSocial('web', 'bg-[#d52b1d]', 'Coorsa México')"
+                @click="clickRedSocial('web', 'bg-[#d52b1d]', 'COORSA México')"
             >
                 <Web class="w-[2rem] h-[2rem] text-white" />
             </RedSocialCirculo>
@@ -301,7 +301,7 @@ const position = computed(() =>
             v-if="socialNetwork.network === 'web'"
         >
             <a
-                href="https://coorsamexico.com"
+                href="https://www.coorsamexico.com"
                 class="flex items-center gap-[14px] px-[18px] py-[13px] border-2 border-black rounded-full"
                 target="_blanck"
             >
