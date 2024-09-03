@@ -20,5 +20,10 @@ class UserRedesSeed extends Seeder
             'redes_id' => 2,
             'value' => 'https://www.linkedin.com/in/renato-ortiz-coorsa/',
         ]);
+        UserRedes::insert([
+            'user_id' => 1075,
+            'redes_id' => 2,
+            'value' => 'https://www.linkedin.com/in/vania-jimenez-coorsa/',
+        ]);
     }
 }
