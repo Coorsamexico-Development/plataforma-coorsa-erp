@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
-use App\Models\Plataforma;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
-
-use App\Exports\UsersExport;
-use App\Models\empleados_puesto;
 use App\Models\UserRedes;
+use App\Models\Plataforma;
+use App\Exports\UsersExport;
+use Illuminate\Http\Request;
+
+use App\Models\empleados_puesto;
+use App\Traits\SolicitudesTrait;
+use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
@@ -66,7 +67,7 @@ class UserController extends Controller
             'name' => $dataUser->name,
             'puesto' => [
                 'es' => $dataUser->puesto,
-                'eng' => ''
+                'eng' => SolicitudesTrait::translateText($dataUser->puesto),
             ],
             'email' => $dataUser->email,
             'numbers' => (object)[

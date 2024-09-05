@@ -6,6 +6,7 @@ use App\Http\Controllers\ChatBotController;
 use App\Http\Controllers\NominasController;
 use App\Http\Controllers\FiniquitoController;
 use App\Http\Controllers\Api\EmpleadoController;
+use App\Http\Controllers\CronsController;
 use App\Http\Controllers\VariablesNominaController;
 use App\Http\Controllers\SolicitudVacacionsController;
 
@@ -54,5 +55,11 @@ Route::controller(NominasController::class)->group(function () {
 //Rutas vacaciones
 Route::controller(SolicitudVacacionsController::class)->group(function () {
     Route::post('getDataCalendarVacaciones', 'getDataCalendarVacaciones')->name('getDataCalendarVacaciones');
-    Route::get('reporteVacaciones', 'reporteVacaciones')->name('reporteVacaciones');
+    Route::post('reporteVacaciones', 'reporteVacaciones')->name('reporteVacaciones');
+});
+
+//Crons
+Route::controller(CronsController::class)->group(function () {
+    Route::post('actualizarVacaciones', 'actualizarVacaciones')->name('actualizarVacaciones');
+    Route::post('addVacaciones', 'addVacaciones')->name('addVacaciones');
 });
