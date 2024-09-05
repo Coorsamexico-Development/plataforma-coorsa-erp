@@ -35,7 +35,7 @@ class CronsController extends Controller
                 UserVacacions::updateOrCreate(
                     ['user_id' => $user->id],
                     [
-                        'dias_vacaciones_id' => $diasVacaciones->dias,
+                        'dias_vacaciones_id' => $diasVacaciones->id,
                         'contador' => $diasVacaciones->dias,
                         'activo' => 0
                     ]
