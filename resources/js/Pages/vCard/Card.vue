@@ -17,7 +17,6 @@ const widthViewPort = ref(window.innerWidth);
 const lenguage = ref("es");
 
 function changeLenguage() {
-    console.log(props.user);
     switch (lenguage.value) {
         case "es":
             lenguage.value = "eng";
