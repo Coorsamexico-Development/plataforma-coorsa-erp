@@ -310,6 +310,20 @@ const position = computed(() =>
             </a>
         </div>
 
+        <div
+            class="grid place-content-center gap-[15px]"
+            v-if="socialNetwork.network === 'service'"
+        >
+            <a
+                href="https://storage.googleapis.com/coorsamexico_erp/vCards/Brochure.pdf"
+                class="flex items-center gap-[14px] px-[18px] py-[13px] border-2 border-black rounded-full"
+                target="_blanck"
+            >
+                <Web class="h-[20px]" />
+                <span>Brochure</span>
+            </a>
+        </div>
+
         <div class="flex justify-center">
             <Imagotipo class="h-[7rem] w-[7rem]" />
         </div>
