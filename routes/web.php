@@ -56,6 +56,7 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 })->name('inicio')->middleware('guest');
+
 Route::middleware('guest')->name('password.reset.')->group(function () {
     Route::get('/reset-password-fisrt/{token}', [ResetPasswordController::class, 'create'])->name('first');
     Route::post('/reset-password-fisrt', [ResetPasswordController::class, 'update'])->name('first.update');
