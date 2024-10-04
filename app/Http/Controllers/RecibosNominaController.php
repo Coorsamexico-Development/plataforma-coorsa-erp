@@ -20,7 +20,6 @@ class RecibosNominaController extends Controller
         $request->validate([
             'doc' => 'required|mimes:zip'
         ]);
-
         try {
             DB::beginTransaction();
 
@@ -40,8 +39,10 @@ class RecibosNominaController extends Controller
 
             $files = Storage::disk('docs')->files($folder);
 
+            $correcFiles = 0;
+            $incorrectFiles = [];
             foreach ($files as $file) {
-                $noEmpleado = explode('_', explode('/', $file)[1])[0];
+                $noEmpleado = explode('-', explode('/', $file)[1])[2];
                 $user = User::where('numero_empleado', $noEmpleado)->first();
                 $extension = explode('.', $file)[1];
                 if ($extension === 'pdf') {
@@ -58,9 +59,21 @@ class RecibosNominaController extends Controller
                         ], [
                             'nomina_doc' => $pathGCS,
                         ]);
+
+                        $correcFiles += 1;
+                    } else {
+                        array_push($incorrectFiles, explode('/', $file)[1]);
                     }
                 }
             }
+
+            if ($correcFiles == 0) {
+                DB::rollBack();
+                throw ValidationException::withMessages([
+                    'message' => 'El archivo no contiene recibos o estan guardados en una carpeta'
+                ]);
+            }
+
             Storage::disk('docs')->deleteDirectory($folder);
 
             DB::commit();
@@ -71,6 +84,9 @@ class RecibosNominaController extends Controller
                 'message' => $e->getMessage()
             ]);
         }
-        return redirect()->back();
+        return response()->json([
+            'correctFiles' => $correcFiles,
+            'incorrectFiles' => $incorrectFiles
+        ]);
     }
 }

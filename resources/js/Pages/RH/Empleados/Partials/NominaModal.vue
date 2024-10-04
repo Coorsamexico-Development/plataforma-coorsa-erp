@@ -2,6 +2,9 @@
 import { useForm, Link } from "@inertiajs/inertia-vue3";
 import DialogModal from "@/Components/DialogModal.vue";
 import InputError from "@/Components/InputError.vue";
+import axios from "axios";
+import BadGoodRequest from "./BadGoodRequest.vue";
+import { reactive, ref } from "vue";
 const emit = defineEmits(["close"]);
 
 const props = defineProps({
@@ -25,36 +28,62 @@ const close = () => {
 };
 
 const form = useForm({
-    doc: "",
+    doc: "hola",
+});
+const formData = new FormData();
+const badGodShow = ref(false);
+const badGodData = reactive({
+    title: "Titulo",
+    type: null,
+    info: null,
 });
 
 const subir = () => {
-    form.transform((data) => ({
-        ...data,
-    })).post(route("nomina.upload"), {
-        onSuccess: () => close(),
-        onCancel: () => close(),
-    });
+    axios
+        .post(route("nomina.upload", formData), formData, {
+            headers: "multipart/form-data",
+            onUploadProgress: () => (form.processing = true),
+        })
+        .then(({ data }) => {
+            badGodData.title = "Subida Correcta";
+            badGodData.type = "god";
+            badGodData.info = data;
+            console.log(data);
+        })
+        .catch((err) => {
+            badGodData.title = "Error en la subida";
+            badGodData.type = "bad";
+            badGodData.info = err.response ?? err;
+            console.log(err.response ?? err);
+        })
+        .finally(() => {
+            form.processing = false;
+            badGodShow.value = true;
+            close();
+        });
 };
 </script>
 <template>
     <DialogModal :nominas="nominas" :show="show" @close="close">
         <template #title>
-            <h1 class="font-semibold text-xl">Recibos de Nomina</h1>
+            <h1 class="text-xl font-semibold">Recibos de Nomina</h1>
         </template>
         <template #content>
             <div class="p-4">
-                <div class="flex flex-col gap-2 justify-center">
+                <div class="flex flex-col justify-center gap-2">
                     <label for="documento" class="text-sm"
                         >Subir documento:
                         <span class="text-red-500">*</span></label
                     >
                     <input
                         type="file"
-                        @input="form.doc = $event.target.files[0]"
+                        @input="
+                            formData.append('doc', $event.target.files[0]);
+                            form.doc = $event.target.files[0];
+                        "
                         name="documento"
                         id="documento"
-                        class="border rounded-xl px-2 py-1 border-black text-sm"
+                        class="px-2 py-1 text-sm border border-black rounded-xl"
                     />
                     <InputError
                         :message="form.errors.doc"
@@ -74,4 +103,10 @@ const subir = () => {
             </form>
         </template>
     </DialogModal>
+
+    <BadGoodRequest
+        :show="badGodShow"
+        @close="badGodShow = false"
+        :data="badGodData"
+    />
 </template>
