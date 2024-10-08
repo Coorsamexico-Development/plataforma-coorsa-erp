@@ -42,7 +42,7 @@ class RecibosNominaController extends Controller
             $correcFiles = 0;
             $incorrectFiles = [];
             foreach ($files as $file) {
-                $noEmpleado = explode('-', explode('/', $file)[1])[2];
+                $noEmpleado = explode('_', explode('/', $file)[1])[5];
                 $user = User::where('numero_empleado', $noEmpleado)->first();
                 $extension = explode('.', $file)[1];
                 if ($extension === 'pdf') {
