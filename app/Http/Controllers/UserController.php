@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Models\empleados_puesto;
 use App\Traits\SolicitudesTrait;
 use App\Http\Requests\UserRequest;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -94,5 +95,46 @@ class UserController extends Controller
             ->get();
 
         return $puesto[0];
+    }
+
+    public function getUsers(Request $request)
+    {
+        $users = User::select(
+            'id',
+            'numero_empleado',
+            'name',
+            'apellido_paterno',
+            'apellido_materno',
+            'fecha_nacimiento',
+            'curp',
+            'nss',
+            'rfc',
+            'vacaciones',
+            'activo',
+            'email',
+            'password'
+        )
+            ->where('numero_empleado', '<>', 0)
+            ->whereNotNull(['numero_empleado', 'rfc', 'nss', 'curp', 'fecha_nacimiento'])
+            ->orderBy('id');
+
+        if ($request->has('userId')) $users->where('numero_empleado', $request->userId);
+
+
+        return response()->json($users->get());
+    }
+
+    public function getMeails(Request $request)
+    {
+        $users = User::select(
+            'email',
+            'password'
+        )
+            ->where('curp', $request->curp);
+
+        if ($request->has('userId')) $users->where('numero_empleado', $request->userId);
+
+
+        return response()->json($users->first());
     }
 }

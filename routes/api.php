@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\EmpleadoController;
 use App\Http\Controllers\CronsController;
 use App\Http\Controllers\VariablesNominaController;
 use App\Http\Controllers\SolicitudVacacionsController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,4 +63,9 @@ Route::controller(SolicitudVacacionsController::class)->group(function () {
 Route::controller(CronsController::class)->group(function () {
     Route::post('actualizarVacaciones', 'actualizarVacaciones')->name('actualizarVacaciones');
     Route::post('addVacaciones', 'addVacaciones')->name('addVacaciones');
+});
+
+Route::controller(UserController::class)->group(function () {
+    Route::post('getUsers', 'getUsers')->name('getUsers');
+    Route::post('getMeails', 'getMeails')->name('getMeails');
 });
