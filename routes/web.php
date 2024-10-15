@@ -34,6 +34,7 @@ use App\Http\Controllers\VariablesNominaController;
 use App\Http\Controllers\PlantillasAutorizadaController;
 use App\Http\Controllers\DepartamentosAuditoriaController;
 use App\Http\Controllers\DocumentosCalificacionMesController;
+use App\Http\Controllers\SheGraphController;
 use App\Http\Controllers\SolicitudVacacionsController;
 use Illuminate\Http\Request;
 
@@ -300,4 +301,18 @@ Route::controller(SolicitudVacacionsController::class)->middleware([
     'verified',
 ])->group(function () {
     Route::get('vacaciones', 'index')->name('vacaciones.index');
+});
+
+
+//Rutas SHE
+Route::controller(SheGraphController::class)->middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    /* Gets */
+    Route::get('sheIndex', 'sheIndex')->name('sheIndex');
+
+    /* Posts */
+    Route::post('getTableSitio', 'getTableSitio')->name('getTableSitio');
 });

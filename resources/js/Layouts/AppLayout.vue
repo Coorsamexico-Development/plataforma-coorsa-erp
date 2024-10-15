@@ -376,6 +376,18 @@ const cambio2 = () => {
                             </div>
                             <div
                                 class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex"
+                                v-if="$page.props.can['show.she']"
+                            >
+                                <NavLink
+                                    class="navLinks"
+                                    :href="route('sheIndex')"
+                                    :active="route().current('sheIndex')"
+                                >
+                                    SHE
+                                </NavLink>
+                            </div>
+                            <div
+                                class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex"
                             >
                                 <NavLink
                                     class="navLinks"
