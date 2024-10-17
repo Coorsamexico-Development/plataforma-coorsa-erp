@@ -74,10 +74,15 @@ onMounted(() => {
     xAxis = chart.xAxes.push(
         am5xy.DateAxis.new(root, {
             maxDeviation: 0,
+            groupData: true,
             baseInterval: {
                 timeUnit: "month",
                 count: 1,
             },
+            gridIntervals: [
+                { timeUnit: "month", count: 1 },
+                { timeUnit: "year", count: 1 },
+            ],
             renderer: xRenderer,
             tooltip: am5.Tooltip.new(root, {}),
         })
@@ -154,5 +159,5 @@ watchEffect(() => {
 });
 </script>
 <template>
-    <div ref="graphLines" class="w-full h-[40vh]"></div>
+    <div ref="graphLines" class="w-full h-[30vh]"></div>
 </template>
