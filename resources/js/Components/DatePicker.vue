@@ -18,6 +18,14 @@ const props = defineProps({
     dates: {
         default: moment().format("MM-YYYY"),
     },
+    modelType: {
+        type: Text,
+        default: "M-yyyy",
+    },
+    maxDate: {
+        type: String,
+        default: moment().format("MM-YYYY"),
+    },
 });
 
 const modelValue = ref();
@@ -30,7 +38,7 @@ watchEffect(() =>
 );
 </script>
 <template>
-    <div class="grid w-full">
+    <div class="grid">
         <label :for="id" class="uppercase ps-1 text-[13px] font-medium">
             {{ label }}
         </label>
@@ -39,9 +47,9 @@ watchEffect(() =>
             v-model="modelValue"
             month-picker
             timezone="America/Mexico_City"
-            model-type="M-yyyy"
+            :model-type="modelType"
             :min-date="props.minDate"
-            :max-date="moment().format('MM-YYYY')"
+            :max-date="maxDate"
             :enable-time-picker="false"
             locale="es"
             class="datePicker drop-shadow-[1px_1px_2px_#B5B5B5]"

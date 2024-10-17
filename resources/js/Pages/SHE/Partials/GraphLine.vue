@@ -2,13 +2,13 @@
 import * as am5 from "@amcharts/amcharts5";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch, onUnmounted } from "vue";
 import axios from "axios";
 import moment from "moment";
-import Add from "@/Iconos/Add.vue";
+import SelectInput from "@/Components/SelectInput.vue";
 
-const graphBar = ref(null);
-const emit = defineEmits(["columnClick", "addClick"]);
+const graphLines = ref(null);
+const emit = defineEmits(["columnClick"]);
 const props = defineProps({
     periodo: {
         type: String,
@@ -16,10 +16,9 @@ const props = defineProps({
     },
     ruta: {
         type: String,
-        default: "dataGraphBarDetalle",
+        default: "dataGraphLinesDetalle",
     },
     title: String,
-    graph: String,
 });
 
 let cursor;
@@ -31,8 +30,12 @@ let yAxis;
 let series;
 const first = ref(true);
 
+const filters = reactive({
+    sitio: "6",
+});
+
 onMounted(() => {
-    root = am5.Root.new(graphBar.value);
+    root = am5.Root.new(graphLines.value);
 
     root.setThemes([am5themes_Animated.new(root)]);
     root.fps = 120;
@@ -63,9 +66,9 @@ onMounted(() => {
 
 async function getDataTable() {
     const {
-        data: { series: tipos, data: datos },
+        data: { series: tipos, data: datos, sitio },
     } = await axios
-        .post(route(props.ruta, { ...props }))
+        .post(route(props.ruta, { ...filters }))
         .catch((err) => console.log(err.response));
 
     if (tipos) {
@@ -97,7 +100,6 @@ async function getDataTable() {
         yAxis = chart.yAxes.push(
             am5xy.ValueAxis.new(root, {
                 min: 0,
-                max: 100,
                 renderer: am5xy.AxisRendererY.new(root, {
                     strokeOpacity: 0.1,
                 }),
@@ -140,7 +142,7 @@ async function getDataTable() {
 
         chart.children.unshift(
             am5.Label.new(root, {
-                text: props.title,
+                text: `${props.title} ${sitio.name}`,
                 fontSize: 30,
                 fontWeight: "500",
                 textAlign: "center",
@@ -155,7 +157,7 @@ async function getDataTable() {
     }
 }
 
-watch(props, () => {
+watch(filters, () => {
     root.container.children.clear();
     chart.remove("cursor");
 
@@ -197,25 +199,37 @@ function setColorTheme() {
 
 async function makeSeries(name, fieldName, resp) {
     series = chart.series.push(
-        am5xy.ColumnSeries.new(root, {
+        am5xy.LineSeries.new(root, {
             name: name,
             xAxis: xAxis,
             yAxis: yAxis,
             valueYField: fieldName,
             valueXField: "date",
+            connect: true,
+            tooltip: am5.Tooltip.new(root, {
+                labelText: "{name}, {categoryX}: {valueY}%",
+                fill: root.interfaceColors.get("alternativeBackground"),
+            }),
         })
     );
-
-    series.columns.template.setAll({
-        tooltipText: "{name}, Calificacion: {valueY}%",
-        tooltipY: am5.percent(10),
-        paddingTop: 10,
-        strokeOpacity: 0,
+    series.strokes.template.setAll({
+        strokeWidth: 3,
+        templateField: "strokeSettings",
     });
 
     series.data.setAll(resp);
 
     series.appear();
+
+    series.bullets.push(function () {
+        let bulletCircle = am5.Circle.new(root, {
+            radius: 6,
+            fill: am5.color(0xd1256c),
+        });
+        return am5.Bullet.new(root, {
+            sprite: bulletCircle,
+        });
+    });
 
     const mes = moment();
     const año = moment().format("YYYY");
@@ -242,109 +256,51 @@ async function makeSeries(name, fieldName, resp) {
 }
 
 onMounted(() => {
-    switch (props.graph) {
-        case "sitio":
-            Echo.channel("garphSitio").listen("SheGraph", () => {
-                root.container.children.clear();
-                chart.remove("cursor");
+    Echo.channel("garphSitio").listen("SheGraph", () => {
+        root.container.children.clear();
+        chart.remove("cursor");
 
-                chart = root.container.children.push(
-                    am5xy.XYChart.new(root, {
-                        panX: false,
-                        panY: false,
-                        wheelX: "panX",
-                        wheelY: "zoomX",
-                        paddingLeft: 0,
-                        layout: root.verticalLayout,
-                    })
-                );
+        chart = root.container.children.push(
+            am5xy.XYChart.new(root, {
+                panX: false,
+                panY: false,
+                wheelX: "panX",
+                wheelY: "zoomX",
+                paddingLeft: 0,
+                layout: root.verticalLayout,
+            })
+        );
 
-                setColorTheme();
+        setColorTheme();
 
-                legend = chart.children.push(
-                    am5.Legend.new(root, {
-                        centerX: am5.p50,
-                        x: am5.p50,
-                    })
-                );
+        legend = chart.children.push(
+            am5.Legend.new(root, {
+                centerX: am5.p50,
+                x: am5.p50,
+            })
+        );
 
-                getDataTable();
-            });
-            break;
-        case "analista":
-            Echo.channel("garphAnalista").listen("SheGraph", () => {
-                root.container.children.clear();
-                chart.remove("cursor");
-
-                chart = root.container.children.push(
-                    am5xy.XYChart.new(root, {
-                        panX: false,
-                        panY: false,
-                        wheelX: "panX",
-                        wheelY: "zoomX",
-                        paddingLeft: 0,
-                        layout: root.verticalLayout,
-                    })
-                );
-
-                setColorTheme();
-
-                legend = chart.children.push(
-                    am5.Legend.new(root, {
-                        centerX: am5.p50,
-                        x: am5.p50,
-                    })
-                );
-
-                getDataTable();
-            });
-            break;
-        case "seafty":
-            Echo.channel("garphSeafty").listen("SheGraph", () => {
-                root.container.children.clear();
-                chart.remove("cursor");
-
-                chart = root.container.children.push(
-                    am5xy.XYChart.new(root, {
-                        panX: false,
-                        panY: false,
-                        wheelX: "panX",
-                        wheelY: "zoomX",
-                        paddingLeft: 0,
-                        layout: root.verticalLayout,
-                    })
-                );
-
-                setColorTheme();
-
-                legend = chart.children.push(
-                    am5.Legend.new(root, {
-                        centerX: am5.p50,
-                        x: am5.p50,
-                    })
-                );
-
-                getDataTable();
-            });
-            break;
-    }
+        getDataTable();
+    });
 });
 
 onUnmounted(() => {
     Echo.leave("garphSitio");
-    Echo.leave("garphAnalista");
-    Echo.leave("garphSeafty");
 });
 </script>
 <template>
-    <div ref="graphBar" class="w-full h-[45vh] relative">
+    <div ref="graphLines" class="w-full h-[45vh] relative">
         <div
-            class="absolute z-10 flex items-center justify-end w-full p-4 rounded-full"
+            class="absolute z-10 flex items-center justify-end w-full gap-2 p-4 rounded-full"
         >
-            <Add
-                class="h-[2rem] w-[2rem] hover:cursor-pointer active:scale-95 transition-all duration-200"
-                @click="$emit('addClick', $event)"
-            />
+            <SelectInput v-model="filters.sitio">
+                <option value="1">GDL</option>
+                <option value="2">CDU</option>
+                <option value="3">Procter</option>
+                <option value="4">Quantum</option>
+                <option value="5">Scania</option>
+                <option value="6">Corporativo</option>
+            </SelectInput>
         </div>
     </div>
 </template>

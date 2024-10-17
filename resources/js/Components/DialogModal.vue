@@ -31,7 +31,7 @@ const close = () => {
         @close="close"
     >
         <div class="px-6 py-4">
-            <div class="text-lg">
+            <div class="text-lg" v-if="$slots.title">
                 <slot name="title" />
             </div>
 
