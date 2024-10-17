@@ -344,6 +344,7 @@ onUnmounted(() => {
             <Add
                 class="h-[2rem] w-[2rem] hover:cursor-pointer active:scale-95 transition-all duration-200"
                 @click="$emit('addClick', $event)"
+                v-if="$page.props.can['edit.she']"
             />
         </div>
     </div>
