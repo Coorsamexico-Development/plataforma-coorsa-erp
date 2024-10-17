@@ -223,7 +223,7 @@ async function makeSeries(name, fieldName, resp) {
 
     series.bullets.push(function () {
         let bulletCircle = am5.Circle.new(root, {
-            radius: 6,
+            radius: 3,
             fill: am5.color(0xd1256c),
         });
         return am5.Bullet.new(root, {
