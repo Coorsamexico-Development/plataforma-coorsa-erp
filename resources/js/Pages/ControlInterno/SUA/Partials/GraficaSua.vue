@@ -36,12 +36,10 @@ onMounted(() => {
             paddingRight: 1,
         })
     );
-    cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
-    cursor.lineY.set("visible", false);
 
     xRenderer = am5xy.AxisRendererX.new(root, {
-        minGridDistance: 30,
         minorGridEnabled: true,
+        minorLabelsEnabled: true,
     });
 
     xRenderer.labels.template.setAll({
@@ -56,9 +54,17 @@ onMounted(() => {
     });
 
     xAxis = chart.xAxes.push(
-        am5xy.CategoryAxis.new(root, {
-            maxDeviation: 0.3,
-            categoryField: "mes",
+        am5xy.DateAxis.new(root, {
+            maxDeviation: 0,
+            groupData: true,
+            baseInterval: {
+                timeUnit: "month",
+                count: 1,
+            },
+            gridIntervals: [
+                { timeUnit: "month", count: 1 },
+                { timeUnit: "year", count: 1 },
+            ],
             renderer: xRenderer,
             tooltip: am5.Tooltip.new(root, {}),
         })
@@ -84,10 +90,25 @@ onMounted(() => {
             yAxis: yAxis,
             valueYField: "value",
             sequencedInterpolation: true,
-            categoryXField: "mes",
+            valueXField: "date",
             tooltip: am5.Tooltip.new(root, {
                 labelText: "{valueY}",
             }),
+        })
+    );
+
+    cursor = chart.set(
+        "cursor",
+        am5xy.XYCursor.new(root, {
+            behavior: "zoomX",
+        })
+    );
+    cursor.lineY.set("visible", false);
+
+    chart.set(
+        "scrollbarX",
+        am5.Scrollbar.new(root, {
+            orientation: "horizontal",
         })
     );
 
@@ -120,8 +141,11 @@ watchEffect(() => {
     if (props.data != 0) {
         data = [];
         props.data[5].forEach((e) => {
+            const date = new Date(e.año, e.mes - 1, 2);
+            date.setHours(0, 0, 0, 0);
+            console.log(date);
             data.push({
-                mes: e.mes,
+                date: date.getTime(),
                 value: e.value,
             });
         });
@@ -133,5 +157,5 @@ watchEffect(() => {
 });
 </script>
 <template>
-    <div ref="graphSua" class="w-full h-[45vh]"></div>
+    <div ref="graphSua" class="w-[45vw] h-[45vh]"></div>
 </template>

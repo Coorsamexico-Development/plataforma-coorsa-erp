@@ -17,7 +17,7 @@ defineProps({
 const money = [1, 2, 3, 6];
 </script>
 <template>
-    <TablaCi class="w-2/12 border-separate border-spacing-1 text-end">
+    <TablaCi class="w-1/12 border-separate border-spacing-1 text-end">
         <tbody>
             <tr>
                 <th scope="row" rowspan="1" class="text-[20px] min-w-fit w-fit">

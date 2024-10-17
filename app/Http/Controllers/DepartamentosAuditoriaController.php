@@ -75,7 +75,7 @@ class DepartamentosAuditoriaController extends Controller
         $dataT2 =
             CiDatas::select(
                 'cia.año as año',
-                'cim.mes as mes',
+                'cim.id as mes',
                 'ci_datas.value',
                 'ci_datas.atributo_id as atributo'
             )

@@ -62,8 +62,8 @@ onMounted(() =>
                 </button>
             </div>
         </div>
-        <div class="flex items-center justify-between gap-5">
-            <div class="grid w-full gap-1 justify-items-center">
+        <div class="flex items-center gap-5">
+            <div class="grid w-5/12 gap-1 justify-items-center">
                 <Titulos
                     value="Evolucion de colaboradores inactivos vs imss"
                     class="text-[20px]"
@@ -81,7 +81,7 @@ onMounted(() =>
                     </button>
                 </div>
             </div>
-            <div class="grid w-full gap-1 justify-items-center">
+            <div class="grid w-6/12 gap-1 justify-items-center">
                 <Titulos
                     value="Evolucion de colaboradores inactivos vs imss"
                     class="text-[20px]"
