@@ -93,7 +93,7 @@ function sendData() {
                     />
                 </div>
                 <div
-                    class="grid grid-cols-5 gap-2 font-semibold text-[1.3rem] text-center"
+                    class="grid grid-cols-5 gap-2 font-semibold text-[1rem] text-center"
                 >
                     <div
                         class="flex items-center justify-center col-start-2 px-2 py-1 bg-[#F4F5F9] rounded-full"
@@ -118,7 +118,7 @@ function sendData() {
                 </div>
                 <template v-for="(sitio, index) in sitios" :key="index">
                     <div
-                        class="grid grid-cols-5 gap-2 font-semibold text-[1.2rem] text-center"
+                        class="grid grid-cols-5 gap-2 font-semibold text-[1rem] text-center"
                     >
                         <div
                             class="flex items-center justify-center px-2 py-1 bg-[#F4F5F9] rounded-full"

@@ -92,7 +92,7 @@ function sendData() {
                     />
                 </div>
                 <div
-                    class="grid grid-cols-2 gap-2 font-semibold text-[1.3rem] text-center"
+                    class="grid grid-cols-2 gap-2 font-semibold text-[1rem] text-center"
                 >
                     <div
                         class="flex items-center justify-center col-start-2 px-2 py-1 bg-[#F4F5F9] rounded-full"
@@ -102,7 +102,7 @@ function sendData() {
                 </div>
                 <template v-for="(sitio, index) in sitios" :key="index">
                     <div
-                        class="grid grid-cols-2 gap-2 font-semibold text-[1.2rem] text-center"
+                        class="grid grid-cols-2 gap-2 font-semibold text-[.9rem] text-center"
                     >
                         <div
                             class="flex items-center justify-center px-2 py-1 bg-[#F4F5F9] rounded-full"
@@ -117,7 +117,7 @@ function sendData() {
         <template #footer>
             <div class="flex justify-end w-full">
                 <button
-                    class="text-[1.3rem] px-12 py-1 bg-[#1d96f1] text-white rounded-2xl hover:bg-[#72bdf6] transition-all duration-200 enabled:active:scale-95 disabled:bg-[#d7d8db]"
+                    class="text-[1rem] px-12 py-1 bg-[#1d96f1] text-white rounded-2xl hover:bg-[#72bdf6] transition-all duration-200 enabled:active:scale-95 disabled:bg-[#d7d8db]"
                     @click="sendData()"
                     :disabled="form.processing"
                 >

@@ -56,14 +56,14 @@ function showModalSitio(evt, grafica) {
             :position="position"
             @close="show = false"
             v-if="graph == 'sitios'"
-            maxWidth="5xl"
+            maxWidth="4xl"
         />
         <FormModal
             :show="show"
             :position="position"
             @close="show = false"
             v-if="graph == 'analistas'"
-            maxWidth="5xl"
+            maxWidth="md"
             rutaSeries="getAnalistas"
             rutaAdd="addAnalistaData"
         />
@@ -72,7 +72,7 @@ function showModalSitio(evt, grafica) {
             :position="position"
             @close="show = false"
             v-if="graph == 'seafty'"
-            maxWidth="5xl"
+            maxWidth="md"
             rutaSeries="getSeafty"
             rutaAdd="addSeaftyData"
         />
