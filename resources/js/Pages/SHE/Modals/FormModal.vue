@@ -59,10 +59,7 @@ function sendData() {
                 onUploadProgress: () => (form.processing = true),
             }
         )
-        .then(({ data }) => {
-            console.log(data);
-            emit("close");
-        })
+        .then(({ data }) => emit("close"))
         .catch((err) => console.log(err.response ?? err))
         .finally(() => {
             form.processing = false;
