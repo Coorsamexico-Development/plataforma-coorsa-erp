@@ -25,8 +25,9 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    rutaSeries: String,
+    table: String,
     rutaAdd: String,
+    channel: String,
 });
 
 const close = () => {
@@ -40,27 +41,28 @@ const form = useForm({
 });
 
 async function getSitios() {
-    const { data } = await axios.get(route(props.rutaSeries));
+    const { data } = await axios.post(route("getSeries", { ...props }));
     data.forEach((sitio) => {
-        form[sitio.name] = {
-            porcentaje: null,
-        };
+        form[sitio.name] = null;
     });
     sitios.value = data;
 }
 
-onMounted(() => getSitios());
+watch(props, () => (props.show ? getSitios() : null));
 
 function sendData() {
     axios
         .post(
-            route(props.rutaAdd, { ...form }),
+            route(props.rutaAdd, { ...form, ...props }),
             { ...form },
             {
                 onUploadProgress: () => (form.processing = true),
             }
         )
-        .then(({ data }) => emit("close"))
+        .then(({ data }) => {
+            console.log(data);
+            emit("close");
+        })
         .catch((err) => console.log(err.response ?? err))
         .finally(() => {
             form.processing = false;
@@ -109,7 +111,7 @@ function sendData() {
                         >
                             {{ sitio.name }}
                         </div>
-                        <TextInputShes v-model="form[sitio.name].porcentaje" />
+                        <TextInputShes v-model="form[sitio.name]" />
                     </div>
                 </template>
             </div>

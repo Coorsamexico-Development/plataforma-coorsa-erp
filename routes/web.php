@@ -312,16 +312,11 @@ Route::controller(SheGraphController::class)->middleware([
 ])->group(function () {
     /* Gets */
     Route::get('sheIndex', 'sheIndex')->name('sheIndex');
-    Route::get('getSitios', 'getSitios')->name('getSitios');
-    Route::get('getAnalistas', 'getAnalistas')->name('getAnalistas');
-    Route::get('getSeafty', 'getSeafty')->name('getSeafty');
 
     /* Posts */
-    Route::post('getTableSitio', 'getTableSitio')->name('getTableSitio');
-    Route::post('getTableAnalista', 'getTableAnalista')->name('getTableAnalista');
-    Route::post('getTableSeafty', 'getTableSeafty')->name('getTableSeafty');
-    Route::post('getTableSitioLine', 'getTableSitioLine')->name('getTableSitioLine');
-    Route::post('addSitiosData', 'addSitiosData')->name('addSitiosData');
-    Route::post('addAnalistaData', 'addAnalistaData')->name('addAnalistaData');
-    Route::post('addSeaftyData', 'addSeaftyData')->name('addSeaftyData');
+    Route::post('getTableCDUQ', 'getTableCDUQ')->name('getTableCDUQ');
+    Route::post('getSeries', 'getSeries')->name('getSeries');
+    Route::post('addSeriesSitios', 'addSeriesSitios')->name('addSeriesSitios');
+    Route::post('addCapacitacion', 'addCapacitacion')->name('addCapacitacion');
+    Route::post('addSeafty', 'addSeafty')->name('addSeafty');
 });

@@ -32,14 +32,23 @@ class SheGraph implements ShouldBroadcast
     public function broadcastOn()
     {
         switch ($this->graph) {
-            case 'sitio':
-                return new Channel('garphSitio');
+            case 'graphCDUQ':
+                return new Channel('graphCDUQ');
                 break;
-            case 'analista':
-                return new Channel('garphAnalista');
+            case 'graphCDUO':
+                return new Channel('graphCDUO');
                 break;
-            case 'seafty':
-                return new Channel('garphSeafty');
+            case 'graphWML':
+                return new Channel('graphWML');
+                break;
+            case 'graphPorcter':
+                return new Channel('graphPorcter');
+                break;
+            case 'graphCapa':
+                return new Channel('graphCapa');
+                break;
+            case 'graphSeafty':
+                return new Channel('graphSeafty');
                 break;
         }
     }

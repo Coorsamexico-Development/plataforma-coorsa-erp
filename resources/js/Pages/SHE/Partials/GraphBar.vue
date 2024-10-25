@@ -18,8 +18,13 @@ const props = defineProps({
         type: String,
         default: "dataGraphBarDetalle",
     },
+    table: {
+        type: String,
+        required: true,
+    },
     title: String,
     graph: String,
+    channel: String,
 });
 
 let cursor;
@@ -228,106 +233,36 @@ async function makeSeries(name, fieldName, resp) {
             );
     });
 
-    /* series.columns.template.events.on("click", function (ev) {
-        const date = moment(ev.target.dataItem._settings.valueX);
-
-        emit("columnClick", {
-            mes: date.format("MM"),
-            year: date.format("YYYY"),
-            sitio: ev.target.dataItem.component._settings.valueYField,
-        });
-    }); */
-
     legend.data.push(series);
 }
 
 onMounted(() => {
-    switch (props.graph) {
-        case "sitio":
-            Echo.channel("garphSitio").listen("SheGraph", () => {
-                root.container.children.clear();
-                chart.remove("cursor");
+    Echo.channel(props.channel).listen("SheGraph", () => {
+        root.container.children.clear();
+        chart.remove("cursor");
 
-                chart = root.container.children.push(
-                    am5xy.XYChart.new(root, {
-                        panX: false,
-                        panY: false,
-                        wheelX: "panX",
-                        wheelY: "zoomX",
-                        paddingLeft: 0,
-                        layout: root.verticalLayout,
-                    })
-                );
+        chart = root.container.children.push(
+            am5xy.XYChart.new(root, {
+                panX: false,
+                panY: false,
+                wheelX: "panX",
+                wheelY: "zoomX",
+                paddingLeft: 0,
+                layout: root.verticalLayout,
+            })
+        );
 
-                setColorTheme();
+        setColorTheme();
 
-                legend = chart.children.push(
-                    am5.Legend.new(root, {
-                        centerX: am5.p50,
-                        x: am5.p50,
-                    })
-                );
+        legend = chart.children.push(
+            am5.Legend.new(root, {
+                centerX: am5.p50,
+                x: am5.p50,
+            })
+        );
 
-                getDataTable();
-            });
-            break;
-        case "analista":
-            Echo.channel("garphAnalista").listen("SheGraph", () => {
-                root.container.children.clear();
-                chart.remove("cursor");
-
-                chart = root.container.children.push(
-                    am5xy.XYChart.new(root, {
-                        panX: false,
-                        panY: false,
-                        wheelX: "panX",
-                        wheelY: "zoomX",
-                        paddingLeft: 0,
-                        layout: root.verticalLayout,
-                    })
-                );
-
-                setColorTheme();
-
-                legend = chart.children.push(
-                    am5.Legend.new(root, {
-                        centerX: am5.p50,
-                        x: am5.p50,
-                    })
-                );
-
-                getDataTable();
-            });
-            break;
-        case "seafty":
-            Echo.channel("garphSeafty").listen("SheGraph", () => {
-                root.container.children.clear();
-                chart.remove("cursor");
-
-                chart = root.container.children.push(
-                    am5xy.XYChart.new(root, {
-                        panX: false,
-                        panY: false,
-                        wheelX: "panX",
-                        wheelY: "zoomX",
-                        paddingLeft: 0,
-                        layout: root.verticalLayout,
-                    })
-                );
-
-                setColorTheme();
-
-                legend = chart.children.push(
-                    am5.Legend.new(root, {
-                        centerX: am5.p50,
-                        x: am5.p50,
-                    })
-                );
-
-                getDataTable();
-            });
-            break;
-    }
+        getDataTable();
+    });
 });
 
 onUnmounted(() => {
@@ -337,7 +272,7 @@ onUnmounted(() => {
 });
 </script>
 <template>
-    <div ref="graphBar" class="w-full h-[45vh] relative">
+    <div ref="graphBar" class="w-full h-[45dvh] relative">
         <div
             class="absolute z-10 flex items-center justify-end w-full p-4 rounded-full"
         >
