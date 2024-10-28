@@ -32,30 +32,41 @@ class SheGraphController extends Controller
             ->join('tablas_campos_shes as tcs', 'tcs.id', 'data_shes.tabla_campo_id')
             ->join('campos_shes as cs', 'cs.id', 'tcs.campo_id')
             ->where('tabla_id', $request->table)
-            ->groupBy(['cs.id', 'año_mes'])
-            ->get();
+            ->groupBy(['cs.id', 'año_mes']);
 
-        $series =
-            TablasCamposShe::select(
-                'cs.name'
-            )
+        $series = TablasCamposShe::select(
+            'cs.name'
+        )
             ->join('campos_shes as cs', 'cs.id', 'tablas_campos_shes.campo_id')
-            ->where('tabla_id', $request->table)
-            ->get();
+            ->where('tabla_id', $request->table);
+
+
+        if ($request->month) {
+            $series->join('data_shes as ds', 'ds.tabla_campo_id', 'tablas_campos_shes.id')
+                ->where('ds.año_mes', 'like', "{$request->year}-{$request->month}%");
+
+            $data->where('data_shes.año_mes', 'like', "{$request->year}-{$request->month}%");
+        }
         return response()->json([
-            'data' => $data,
-            'series' => $series,
+            'data' => $data->get(),
+            'series' => $series->get(),
         ]);
     }
 
     public function getSeries(Request $request)
     {
-        return response()->json(TablasCamposShe::select(
+        $series = TablasCamposShe::select(
             'cs.name'
         )
             ->join('campos_shes as cs', 'cs.id', 'tablas_campos_shes.campo_id')
-            ->where('tabla_id', $request->table)
-            ->get());
+            ->where('tabla_id', $request->table);
+
+        if ($request->month) {
+            $series->join('data_shes as ds', 'ds.tabla_campo_id', 'tablas_campos_shes.id')
+                ->where('ds.año_mes', 'like', "{$request->year}-{$request->month}%");
+        }
+
+        return response()->json($series->get());
     }
 
     public function addSeriesSitios(Request $request): void
@@ -140,6 +151,36 @@ class SheGraphController extends Controller
             'value' => $request['Matriz repeticion de eventos'],
         ]);
 
+        event(new SheGraph($request->channel));
+    }
+
+    public function addActoIns(Request $request)
+    {
+        try {
+            $parametros = $request->parametros;
+            $values = $request->values;
+            DB::beginTransaction();
+            for ($i = 1; $i < count($request->parametros); $i++) {
+                $campo = CamposShe::updateOrCreate(['name' => $parametros[$i]], []);
+                $campo = TablasCamposShe::updateOrCreate([
+                    'tabla_id' => $request->table,
+                    'campo_id' => $campo->id,
+                ], []);
+
+                DataShe::updateOrCreate([
+                    'tabla_campo_id' => $campo->id,
+                    'año_mes' => "{$request->year}-{$request->month}-02",
+                ], [
+                    'value' => $values[$i],
+                ]);
+            }
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw ValidationException::withMessages([
+                'message' => $e->getMessage()
+            ]);
+        }
         event(new SheGraph($request->channel));
     }
 }

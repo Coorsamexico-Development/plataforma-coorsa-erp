@@ -5,6 +5,11 @@ defineProps({
     modelValue: String | Number,
     disable: Boolean,
     min: {},
+    keyPress: {
+        type: String,
+        default:
+            "if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;",
+    },
 });
 
 defineEmits(["update:modelValue"]);
@@ -25,7 +30,7 @@ defineExpose({ focus: () => input.value.focus() });
         ref="input"
         :disabled="disable"
         class="border-0 rounded-full shadow-sm outline-none focus:border-0 focus:ring-0 read-only:bg-gray-300 ps-2 bg-[#F4F5F9] text-center"
-        onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
+        :onkeypress="keyPress"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
         :min="min"

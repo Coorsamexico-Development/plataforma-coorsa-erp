@@ -319,4 +319,5 @@ Route::controller(SheGraphController::class)->middleware([
     Route::post('addSeriesSitios', 'addSeriesSitios')->name('addSeriesSitios');
     Route::post('addCapacitacion', 'addCapacitacion')->name('addCapacitacion');
     Route::post('addSeafty', 'addSeafty')->name('addSeafty');
+    Route::post('addActoIns', 'addActoIns')->name('addActoIns');
 });

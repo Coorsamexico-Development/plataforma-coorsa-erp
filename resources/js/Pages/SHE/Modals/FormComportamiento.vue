@@ -1,10 +1,12 @@
 <script setup>
 import { useForm } from "@inertiajs/inertia-vue3";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import DialogModalPopUp from "@/Components/DialogModalPopUp.vue";
 import TextInputShes from "../Partials/TextInputShes.vue";
 import DatePicker from "@/Components/DatePicker.vue";
 import moment from "moment";
+import { pickBy, throttle } from "lodash";
+import Add from "@/Iconos/Add.vue";
 
 const emit = defineEmits(["close"]);
 
@@ -25,20 +27,41 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    date: {
+        type: Object,
+        required: true,
+    },
+    table: String,
+    rutaAdd: String,
+    channel: String,
+});
+
+const filters = pickBy({
+    ...props.date,
 });
 
 const close = () => {
     emit("close");
+    form.reset();
+    cont.value = 0;
 };
 
 const sitios = ref([]);
 
 const form = useForm({
-    date: moment().format("YYYY-MM"),
+    date: props.date.full,
+    parametros: [],
+    values: [],
 });
 
+const cont = ref(0);
+
 async function getSitios() {
-    const { data } = await axios.get(route("getSitios"));
+    const { data } = await axios
+        .post(route("getSeries", { ...filters }))
+        .catch((err) => console.log(err.response ?? err));
+
+    console.log(data);
     data.forEach((sitio) => {
         form[sitio.name] = {
             ecologia: null,
@@ -55,18 +78,35 @@ onMounted(() => getSitios());
 function sendData() {
     axios
         .post(
-            route("addSitiosData", { ...form }),
+            route(props.rutaAdd, { ...form, ...props, ...filters }),
             { ...form },
             {
                 onUploadProgress: () => (form.processing = true),
             }
         )
-        .then(({ data }) => emit("close"))
+        .then(({ data }) => {
+            console.log(data);
+            emit("close");
+        })
         .catch((err) => console.log(err.response ?? err))
         .finally(() => {
             form.processing = false;
             form.reset();
         });
+}
+
+watch(
+    filters,
+    throttle(() => {
+        getSitios();
+    }),
+    100
+);
+
+function selectDate(evt) {
+    filters.full = evt;
+    filters.month = evt.split("-")[0];
+    filters.year = evt.split("-")[1];
 }
 </script>
 <template>
@@ -78,59 +118,39 @@ function sendData() {
         :position="position"
     >
         <template #title>
-            <span>Nueva Evaluacion de sitios</span>
+            <span>Comportamiento</span>
         </template>
         <template #content>
-            <div class="grid gap-2">
+            <div class="grid gap-3">
                 <div class="flex items-center justify-end">
                     <DatePicker
                         class="w-fit"
                         label="Seleccione una fecha a cargar"
                         v-model="form.date"
-                        @selectDate="(e) => (form.date = e)"
-                        modelType="yyyy-MM"
+                        @selectDate="(e) => selectDate(e)"
+                        modelType="MM-yyyy"
                         :maxDate="null"
                     />
                 </div>
-                <div
-                    class="grid grid-cols-5 gap-2 font-semibold text-[1rem] text-center"
-                >
-                    <div
-                        class="flex items-center justify-center col-start-2 px-2 py-1 bg-[#F4F5F9] rounded-full"
-                    >
-                        Ecologia
-                    </div>
-                    <div
-                        class="flex items-center justify-center px-2 py-1 bg-[#F4F5F9] rounded-full"
-                    >
-                        Salud e Higiene
-                    </div>
-                    <div
-                        class="flex items-center justify-center px-2 py-1 bg-[#F4F5F9] rounded-full"
-                    >
-                        Seguridad
-                    </div>
-                    <div
-                        class="flex items-center justify-center px-2 py-1 bg-[#F4F5F9] rounded-full"
-                    >
-                        Documental
+                <div class="grid grid-cols-2 gap-2">
+                    <template v-for="i in cont" :key="i">
+                        <TextInputShes
+                            placeholder="Parametro"
+                            v-model="form.parametros[i]"
+                            keyPress="null"
+                        />
+                        <TextInputShes
+                            placeholder="Valor"
+                            v-model="form.values[i]"
+                        />
+                    </template>
+                    <div class="col-span-2 place-self-center">
+                        <Add
+                            class="w-[2dvw] active:scale-95 hover:cursor-pointer transition-all duration-200"
+                            @click="cont += 1"
+                        />
                     </div>
                 </div>
-                <template v-for="(sitio, index) in sitios" :key="index">
-                    <div
-                        class="grid grid-cols-5 gap-2 font-semibold text-[1rem] text-center"
-                    >
-                        <div
-                            class="flex items-center justify-center px-2 py-1 bg-[#F4F5F9] rounded-full"
-                        >
-                            {{ sitio.name }}
-                        </div>
-                        <TextInputShes v-model="form[sitio.name].ecologia" />
-                        <TextInputShes v-model="form[sitio.name].salud" />
-                        <TextInputShes v-model="form[sitio.name].seguridad" />
-                        <TextInputShes v-model="form[sitio.name].documental" />
-                    </div>
-                </template>
             </div>
         </template>
         <template #footer>

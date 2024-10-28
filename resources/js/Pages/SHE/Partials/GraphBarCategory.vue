@@ -2,17 +2,22 @@
 import * as am5 from "@amcharts/amcharts5";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import * as am5plugins_exporting from "@amcharts/amcharts5/plugins/exporting";
+import { onMounted, onUpdated, ref, watch } from "vue";
 import axios from "axios";
-import moment from "moment";
+import { months } from "../../../utils/index.js";
 import Add from "@/Iconos/Add.vue";
 
 const graphBar = ref(null);
-const emit = defineEmits(["columnClick", "addClick"]);
+const emit = defineEmits(["columnClick"]);
 const props = defineProps({
     ruta: {
         type: String,
-        default: "dataGraphBarDetalle",
+        default: "getTableCDUQ",
+    },
+    filters: {
+        type: Object,
+        default: null,
     },
     table: {
         type: String,
@@ -22,14 +27,16 @@ const props = defineProps({
     channel: String,
 });
 
-let cursor;
 let root;
 let chart;
 let legend;
+let data = [];
+let xRenderer;
 let xAxis;
 let yAxis;
 let series;
 const first = ref(true);
+let cursor;
 
 onMounted(() => {
     root = am5.Root.new(graphBar.value);
@@ -43,6 +50,7 @@ onMounted(() => {
             panY: false,
             wheelX: "panX",
             wheelY: "zoomX",
+            paddingLeft: 0,
             layout: root.verticalLayout,
         })
     );
@@ -65,34 +73,39 @@ async function getDataTable() {
     const {
         data: { series: tipos, data: datos },
     } = await axios
-        .post(route(props.ruta, { ...props }))
+        .post(route(props.ruta, { ...props, ...props.filters }))
         .catch((err) => console.log(err.response));
+    console.log(datos);
+
+    data = [];
+    let value = [];
+    datos.forEach(
+        (dato) => (value[dato.tipo] = Number(dato.cantidad).toFixed(0))
+    );
+    data.push({
+        month: "Acto Inseguro",
+        ...value,
+    });
 
     if (tipos) {
+        xRenderer = am5xy.AxisRendererX.new(root, {
+            cellStartLocation: 0.1,
+            cellEndLocation: 0.9,
+            minorGridEnabled: true,
+            minGridDistance: 60,
+        });
+
         xAxis = chart.xAxes.push(
-            am5xy.DateAxis.new(root, {
-                maxDeviation: 0,
-                groupData: true,
-                baseInterval: {
-                    timeUnit: "month",
-                    count: 1,
-                },
-                gridIntervals: [
-                    { timeUnit: "month", count: 1 },
-                    { timeUnit: "year", count: 1 },
-                ],
-                renderer: am5xy.AxisRendererX.new(root, {
-                    minorGridEnabled: true,
-                    minorLabelsEnabled: true,
-                }),
+            am5xy.CategoryAxis.new(root, {
+                categoryField: "month",
+                renderer: xRenderer,
                 tooltip: am5.Tooltip.new(root, {}),
             })
         );
 
-        xAxis.set("minorDateFormats", {
-            month: "MM",
-            year: "yyyy",
-        });
+        xRenderer.grid.template.setAll({ location: 1 });
+
+        xAxis.data.setAll(data);
 
         yAxis = chart.yAxes.push(
             am5xy.ValueAxis.new(root, {
@@ -103,26 +116,11 @@ async function getDataTable() {
                 }),
             })
         );
-
         yAxis.set("numberFormat", "#'%");
 
-        tipos.forEach((serie) => {
-            let values = [];
-            datos.forEach((dato) => {
-                const date = new Date(dato.date);
-                let info = {};
-                date.setHours(0, 0, 0, 0);
-
-                if (serie.name === dato.tipo) {
-                    info[serie.name] = Number(dato.cantidad);
-                    info.date = date.getTime();
-                    values.push(info);
-                }
-            });
-
-            makeSeries(serie.name, serie.name, values);
+        tipos.forEach((tipo) => {
+            makeSeries(tipo.name, tipo.name);
         });
-
         cursor = chart.set(
             "cursor",
             am5xy.XYCursor.new(root, {
@@ -130,13 +128,6 @@ async function getDataTable() {
             })
         );
         cursor.lineY.set("visible", false);
-
-        chart.set(
-            "scrollbarX",
-            am5.Scrollbar.new(root, {
-                orientation: "horizontal",
-            })
-        );
 
         chart.children.unshift(
             am5.Label.new(root, {
@@ -150,8 +141,6 @@ async function getDataTable() {
                 paddingBottom: 0,
             })
         );
-
-        chart.appear(1000, 100);
     }
 }
 
@@ -191,78 +180,33 @@ function setColorTheme() {
             am5.color(0xf29f05),
             am5.color(0xf28705),
             am5.color(0xf23030),
-            am5.color(0x3e55b1),
         ]);
 }
 
-async function makeSeries(name, fieldName, resp) {
+function makeSeries(name, fieldName, stacked = false) {
     series = chart.series.push(
         am5xy.ColumnSeries.new(root, {
+            stacked: stacked,
             name: name,
             xAxis: xAxis,
             yAxis: yAxis,
             valueYField: fieldName,
-            valueXField: "date",
+            categoryXField: "month",
         })
     );
 
     series.columns.template.setAll({
-        tooltipText: "{name}, Calificacion: {valueY}%",
+        tooltipText: "{categoryX}, {name}: {valueY}",
         tooltipY: am5.percent(10),
         paddingTop: 10,
-        strokeOpacity: 0,
     });
 
-    series.data.setAll(resp);
+    series.data.setAll(data);
 
     series.appear();
 
-    const mes = moment();
-    const año = moment().format("YYYY");
-    series.events.once("datavalidated", function (ev) {
-        ev.target
-            .get("xAxis")
-            .zoomToDates(
-                new Date(año, mes.format("MM"), 1),
-                new Date(año, mes.format("MM"), 1)
-            );
-    });
-
     legend.data.push(series);
 }
-
-onMounted(() => {
-    Echo.channel(props.channel).listen("SheGraph", () => {
-        root.container.children.clear();
-        chart.remove("cursor");
-
-        chart = root.container.children.push(
-            am5xy.XYChart.new(root, {
-                panX: false,
-                panY: false,
-                wheelX: "panX",
-                wheelY: "zoomX",
-                paddingLeft: 0,
-                layout: root.verticalLayout,
-            })
-        );
-
-        setColorTheme();
-
-        legend = chart.children.push(
-            am5.Legend.new(root, {
-                centerX: am5.p50,
-                x: am5.p50,
-            })
-        );
-
-        getDataTable();
-    });
-});
-
-onUnmounted(() => {
-    Echo.leave(props.channel);
-});
 </script>
 <template>
     <div ref="graphBar" class="w-full h-[45dvh] relative">

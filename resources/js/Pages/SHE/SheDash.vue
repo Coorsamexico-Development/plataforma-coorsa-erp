@@ -1,10 +1,13 @@
 <script setup>
 import { reactive, ref } from "vue";
+import { months } from "../../utils/index.js";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import GraphBar from "./Partials/GraphBar.vue";
-import GraphLine from "./Partials/GraphLine.vue";
-import FormSitios from "./Modals/FormSitios.vue";
+import GraphBarCategory from "./Partials/GraphBarCategory.vue";
 import FormModal from "./Modals/FormModal.vue";
+import DatePicker from "@/Components/DatePicker.vue";
+import moment from "moment";
+import FormComportamiento from "./Modals/FormComportamiento.vue";
 
 const position = ref(null);
 const show = ref(false);
@@ -12,12 +15,24 @@ const table = ref(null);
 const rutaAdd = ref(null);
 const channel = ref(null);
 
+const date = reactive({
+    month: moment().format("MM"),
+    year: moment().format("YYYY"),
+    full: moment().format("MM-YYYY"),
+});
+
 function showModalSitio(evt, tableId, add, chanel) {
     position.value = evt.target.getBoundingClientRect();
     show.value = true;
     table.value = tableId;
     rutaAdd.value = add;
     channel.value = chanel;
+}
+
+function selectDate(evt) {
+    date.full = evt;
+    date.month = evt.split("-")[0];
+    date.year = evt.split("-")[1];
 }
 </script>
 <template>
@@ -113,6 +128,62 @@ function showModalSitio(evt, tableId, add, chanel) {
                     channel="graphSeafty"
                 />
             </div>
+            <div class="grid gap-2 lg:grid-cols-2 xl:grid-cols-3">
+                <div
+                    class="col-start-2 place-self-center text-[1.5rem] font-semibold uppercase"
+                >
+                    <span
+                        >Comportamiento
+                        <span class="font-bold">{{
+                            months[date.month - 1]
+                        }}</span>
+                    </span>
+                </div>
+                <div class="self-center col-start-3 justify-self-end">
+                    <DatePicker
+                        label="Mes visualizado"
+                        v-model="date.full"
+                        :maxDate="null"
+                        @selectDate="(e) => selectDate(e)"
+                        modelType="MM-yyyy"
+                    />
+                </div>
+                <GraphBarCategory
+                    :filters="date"
+                    table="7"
+                    title="Acto Inseguro WLM GDL"
+                    @addClick="
+                        (e) => {
+                            showModalSitio(e, 7, 'addActoIns', 'graphInsGDL');
+                        }
+                    "
+                />
+                <GraphBarCategory
+                    :filters="date"
+                    table="8"
+                    title="Acto Inseguro Procter"
+                    @addClick="
+                        (e) => {
+                            showModalSitio(
+                                e,
+                                8,
+                                'addActoIns',
+                                'graphInsProcter'
+                            );
+                        }
+                    "
+                />
+                <GraphBarCategory
+                    :filters="date"
+                    table="9"
+                    title="Acto Inseguro CDU"
+                    @addClick="
+                        (e) => {
+                            showModalSitio(e, 9, 'addActoIns', 'graphInsCdu');
+                        }
+                    "
+                />
+            </div>
         </div>
         <FormModal
             :show="show"
@@ -122,6 +193,19 @@ function showModalSitio(evt, tableId, add, chanel) {
             :table="table"
             :rutaAdd="rutaAdd"
             :channel="channel"
+            v-if="[1, 2, 3, 4, 5, 6].includes(table)"
+        />
+
+        <FormComportamiento
+            :show="show"
+            :position="position"
+            @close="show = false"
+            maxWidth="xl"
+            :table="table"
+            :rutaAdd="rutaAdd"
+            :channel="channel"
+            v-if="[7, 8, 9].includes(table)"
+            :date="date"
         />
     </AppLayout>
 </template>

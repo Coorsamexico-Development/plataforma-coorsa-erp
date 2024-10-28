@@ -50,6 +50,15 @@ class SheGraph implements ShouldBroadcast
             case 'graphSeafty':
                 return new Channel('graphSeafty');
                 break;
+            case 'graphInsGDL':
+                return new Channel('graphInsGDL');
+                break;
+            case 'graphInsProcter':
+                return new Channel('graphInsProcter');
+                break;
+            case 'graphInsCdu':
+                return new Channel('graphInsCdu');
+                break;
         }
     }
 }
