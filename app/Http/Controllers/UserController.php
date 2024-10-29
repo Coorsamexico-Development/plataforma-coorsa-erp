@@ -158,9 +158,9 @@ class UserController extends Controller
                     $corrects++;
                 } catch (Exception $e) {
                     array_push($erros, [
-                        'id' => $user->id,
-                        'user' => "{$user->name} {$user->apellido_paterno} {$user->apellido_materno}",
-                        'email' => $user->email,
+                        'id' => $user->id ?? null,
+                        'user' => "{$user->name} {$user->apellido_paterno} {$user->apellido_materno}" ?? null,
+                        'email' => $user->email ?? null,
                         'error' => $e
                     ]);
                 }
