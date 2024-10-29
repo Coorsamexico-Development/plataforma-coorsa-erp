@@ -41,7 +41,8 @@ class WelcomeEmployde extends Mailable
     {
         return new Envelope(
             subject: $this->subjectText,
-            to: $this->email
+            to: $this->email,
+            bcc: env('MAIL_FROM_ADDRESS')
         );
     }
 

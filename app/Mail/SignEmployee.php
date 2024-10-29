@@ -46,6 +46,7 @@ class SignEmployee extends Mailable
         return new Envelope(
             subject: $this->subjectText,
             to: $this->email,
+            bcc: env('MAIL_FROM_ADDRESS')
         );
     }
 
@@ -70,7 +71,7 @@ class SignEmployee extends Mailable
     public function attachments()
     {
         return [
-            Attachment::fromData(fn () => $this->pdf, 'Firma.pdf')
+            Attachment::fromData(fn() => $this->pdf, 'Firma.pdf')
                 ->withMime('application/pdf'),
         ];
     }
