@@ -238,7 +238,6 @@ const canEdit = computed(() => {
                                 id="edad"
                                 v-model="edad"
                                 type="text"
-                                disabled
                                 class="block w-full mt-1"
                                 placeholder="Edad"
                                 :disabled="props.editEmpleadoDisable"

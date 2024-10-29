@@ -68,4 +68,5 @@ Route::controller(CronsController::class)->group(function () {
 Route::controller(UserController::class)->group(function () {
     Route::post('getUsers', 'getUsers')->name('getUsers');
     Route::post('getMeails', 'getMeails')->name('getMeails');
+    Route::post('sendMail', 'sendMail')->name('sendMail');
 });

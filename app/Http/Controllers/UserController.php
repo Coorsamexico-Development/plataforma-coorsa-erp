@@ -2,21 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Role;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\UserRedes;
+use App\Mail\SignEmployee;
 use App\Models\Plataforma;
+
 use App\Exports\UsersExport;
 use Illuminate\Http\Request;
-
+use App\Mail\WelcomeEmployde;
 use App\Models\empleados_puesto;
 use App\Traits\SolicitudesTrait;
+use App\Helpers\SendResetPassword;
 use App\Http\Requests\UserRequest;
-use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -136,5 +141,41 @@ class UserController extends Controller
 
 
         return response()->json($users->first());
+    }
+
+    public function sendMail()
+    {
+        set_time_limit(0);
+        try {
+            $users = User::where('activo', 1)->get();
+            $erros = [];
+            $corrects = 0;
+
+            foreach ($users as $user) {
+                try {
+                    $sendRestPassword = new SendResetPassword();
+                    $sendRestPassword->send($user);
+                    $corrects++;
+                } catch (Exception $e) {
+                    array_push([
+                        'id' => $user->id,
+                        'user' => "{$user->name} {$user->apellido_paterno} {$user->apellido_materno}",
+                        'email' => $user->email,
+                        'error' => $e
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'status' => 200,
+                'errors' => $erros,
+                'envios correctos' => $corrects,
+            ]);
+        } catch (Exception $e) {
+            throw ValidationException::withMessages([
+                'status' => 500,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 }
