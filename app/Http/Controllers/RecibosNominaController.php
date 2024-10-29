@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WelcomeEmployde;
 use ZipArchive;
 use App\Models\User;
 use Inertia\Inertia;
@@ -10,6 +11,7 @@ use App\Models\NominasEmpleado;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
@@ -59,6 +61,14 @@ class RecibosNominaController extends Controller
                         ], [
                             'nomina_doc' => $pathGCS,
                         ]);
+
+                        Mail::send(new WelcomeEmployde(
+                            "Nomina semana {$semana}",
+                            $user->email,
+                            'https://erp.coorsamexico.com/',
+                            'Ingresar',
+                            "Se ah subido el recibo de nomina correspondiente a la semana {$semana}"
+                        ));
 
                         $correcFiles += 1;
                     } else {

@@ -14,23 +14,13 @@ class WelcomeEmployde extends Mailable
     use Queueable, SerializesModels;
 
 
-    public $email = '';
-    public $subjectText = '';
-    public $actionUrl = '';
-    public $actionText = 'INGRESAR';
-
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($subject, String $email, String $actionUrl)
-    {
-        $this->subjectText = $subject;
-        $this->email = $email;
-        $this->actionUrl = $actionUrl;
-    }
+    public function __construct(public String $subjectText, public String $email, public String $actionUrl, public $actionText = 'INGRESAR', public $messageText = null) {}
 
     /**
      * Get the message envelope.
