@@ -161,7 +161,7 @@ class UserController extends Controller
                         'id' => $user->id ?? null,
                         'user' => "{$user->name} {$user->apellido_paterno} {$user->apellido_materno}" ?? null,
                         'email' => $user->email ?? null,
-                        'error' => $e
+                        'error' => $e->getMessage()
                     ]);
                 }
             }
