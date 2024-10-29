@@ -157,7 +157,7 @@ class UserController extends Controller
                     $sendRestPassword->send($user);
                     $corrects++;
                 } catch (Exception $e) {
-                    array_push([
+                    array_push($erros, [
                         'id' => $user->id,
                         'user' => "{$user->name} {$user->apellido_paterno} {$user->apellido_materno}",
                         'email' => $user->email,
