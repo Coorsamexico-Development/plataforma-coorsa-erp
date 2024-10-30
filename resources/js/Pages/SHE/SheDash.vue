@@ -118,7 +118,7 @@ function selectDate(evt) {
                 />
                 <GraphBar
                     ruta="getTableCDUQ"
-                    title="Seafty Yard"
+                    title="Sefty Yard"
                     table="6"
                     @addClick="
                         (e) => {
