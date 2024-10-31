@@ -57,7 +57,7 @@ function selectDate(evt) {
                 />
                 <GraphBar
                     ruta="getTableCDUQ"
-                    title="CDU Operaiones"
+                    title="CDU Operaciones"
                     table="2"
                     @addClick="
                         (e) => {
@@ -118,7 +118,7 @@ function selectDate(evt) {
                 />
                 <GraphBar
                     ruta="getTableCDUQ"
-                    title="Sefty Yard"
+                    title="Yard Safety"
                     table="6"
                     @addClick="
                         (e) => {
