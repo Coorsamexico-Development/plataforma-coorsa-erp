@@ -70,13 +70,13 @@ class SheGraphController extends Controller
 
     public function addSeriesSitios(Request $request): void
     {
-        DataShe::updateOrCreate([
+        /* DataShe::updateOrCreate([
             'tabla_campo_id' => TablasCamposShe::where([['tabla_id', $request->table], ['campo_id', 1]])->first()->id,
             'año_mes' => "{$request->date}-02",
         ], [
             'value' => $request['Diciplina'],
         ]);
-
+ */
         DataShe::updateOrCreate([
             'tabla_campo_id' => TablasCamposShe::where([['tabla_id', $request->table], ['campo_id', 2]])->first()->id,
             'año_mes' => "{$request->date}-02",
