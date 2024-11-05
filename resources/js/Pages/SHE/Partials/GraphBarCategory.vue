@@ -70,12 +70,12 @@ onMounted(() => {
 });
 
 async function getDataTable() {
+    console.log(props);
     const {
         data: { series: tipos, data: datos },
     } = await axios
         .post(route(props.ruta, { ...props, ...props.filters }))
         .catch((err) => console.log(err.response));
-    console.log(datos);
 
     data = [];
     let value = [];
