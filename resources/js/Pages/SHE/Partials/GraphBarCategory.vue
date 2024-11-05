@@ -70,7 +70,6 @@ onMounted(() => {
 });
 
 async function getDataTable() {
-    console.log(props);
     const {
         data: { series: tipos, data: datos },
     } = await axios

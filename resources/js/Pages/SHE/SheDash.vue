@@ -157,6 +157,7 @@ function selectDate(evt) {
                             showModalSitio(e, 7, 'addActoIns', 'graphInsGDL');
                         }
                     "
+                    channel="graphInsGDL"
                 />
                 <GraphBarCategory
                     :filters="date"
@@ -172,6 +173,7 @@ function selectDate(evt) {
                             );
                         }
                     "
+                    channel="graphInsProcter"
                 />
                 <GraphBarCategory
                     :filters="date"
@@ -182,6 +184,7 @@ function selectDate(evt) {
                             showModalSitio(e, 9, 'addActoIns', 'graphInsCdu');
                         }
                     "
+                    channel="graphInsCdu"
                 />
             </div>
         </div>
