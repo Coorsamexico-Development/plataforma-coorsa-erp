@@ -232,4 +232,20 @@ class PoliticController extends Controller
         $politic->save();
         return redirect()->back();
     }
+
+    public function getPolitics(Request $request)
+    {
+        return response()->json(
+            Politic::select(
+                'politics.*',
+                'users.numero_empleado as userId'
+            )
+                ->join('tipopoliticas as tp', 'tp.id', 'politics.type_politic')
+                ->join('seccion_politicas as sp', 'sp.id', 'tp.seccion_id')
+                ->join('users', 'users.id', 'politics.autor')
+                ->where('sp.id', $request->seccion)
+                ->orderBy('sp.id')
+                ->get()
+        );
+    }
 }

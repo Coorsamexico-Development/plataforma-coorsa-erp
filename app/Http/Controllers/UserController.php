@@ -133,12 +133,12 @@ class UserController extends Controller
     {
         $users = User::select(
             'email',
-            'password'
+            'password',
+            'curp',
         )
             ->where('curp', $request->curp);
 
-        if ($request->has('userId')) $users->where('numero_empleado', $request->userId);
-
+        /* if ($request->has('userId')) $users->where('numero_empleado', $request->userId); */
 
         return response()->json($users->first());
     }

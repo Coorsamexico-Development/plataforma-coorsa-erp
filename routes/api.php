@@ -7,6 +7,7 @@ use App\Http\Controllers\NominasController;
 use App\Http\Controllers\FiniquitoController;
 use App\Http\Controllers\Api\EmpleadoController;
 use App\Http\Controllers\CronsController;
+use App\Http\Controllers\PoliticController;
 use App\Http\Controllers\VariablesNominaController;
 use App\Http\Controllers\SolicitudVacacionsController;
 use App\Http\Controllers\UserController;
@@ -65,8 +66,14 @@ Route::controller(CronsController::class)->group(function () {
     Route::post('addVacaciones', 'addVacaciones')->name('addVacaciones');
 });
 
+/* Rutas de usuarios */
 Route::controller(UserController::class)->group(function () {
     Route::post('getUsers', 'getUsers')->name('getUsers');
     Route::post('getMeails', 'getMeails')->name('getMeails');
     Route::post('sendMail', 'sendMail')->name('sendMail');
+});
+
+/* Rutas nueva plataforma */
+Route::controller(PoliticController::class)->group(function () {
+    Route::post('getPolitics', 'getPolitics');
 });
