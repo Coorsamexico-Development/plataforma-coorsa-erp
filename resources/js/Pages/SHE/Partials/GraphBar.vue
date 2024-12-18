@@ -119,7 +119,6 @@ async function getDataTable() {
                     values.push(info);
                 }
             });
-
             makeSeries(serie.name, serie.name, values);
         });
 
