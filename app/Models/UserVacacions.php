@@ -13,5 +13,6 @@ class UserVacacions extends Model
         'user_id',
         'dias_vacaciones_id',
         'contador',
+        'activo',
     ];
 }
