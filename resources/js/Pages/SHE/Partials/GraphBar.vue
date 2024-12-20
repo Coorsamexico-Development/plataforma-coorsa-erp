@@ -35,7 +35,6 @@ onMounted(() => {
     root = am5.Root.new(graphBar.value);
 
     root.setThemes([am5themes_Animated.new(root)]);
-    root.fps = 120;
 
     chart = root.container.children.push(
         am5xy.XYChart.new(root, {
@@ -67,6 +66,7 @@ async function getDataTable() {
     } = await axios
         .post(route(props.ruta, { ...props }))
         .catch((err) => console.log(err.response));
+    console.log(datos);
 
     if (tipos) {
         xAxis = chart.xAxes.push(
@@ -216,7 +216,7 @@ async function makeSeries(name, fieldName, resp) {
 
     series.appear();
 
-    const mes = moment();
+    /* const mes = moment();
     const año = moment().format("YYYY");
     series.events.once("datavalidated", function (ev) {
         ev.target
@@ -225,7 +225,7 @@ async function makeSeries(name, fieldName, resp) {
                 new Date(año, mes.format("MM"), 1),
                 new Date(año, mes.format("MM"), 1)
             );
-    });
+    }); */
 
     legend.data.push(series);
 }

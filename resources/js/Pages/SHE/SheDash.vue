@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { months } from "../../utils/index.js";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import GraphBar from "./Partials/GraphBar.vue";
@@ -34,6 +34,20 @@ function selectDate(evt) {
     date.month = evt.split("-")[0];
     date.year = evt.split("-")[1];
 }
+
+onMounted(() => {
+    console.log("mounted");
+    const interval = setInterval(() => {
+        countTable();
+        if (countTables.value > 8) clearInterval(interval);
+    }, 1);
+});
+
+const countTables = ref(0);
+function countTable() {
+    countTables.value++;
+    console.log(countTables.value);
+}
 </script>
 <template>
     <AppLayout title="SHE">
@@ -54,6 +68,7 @@ function selectDate(evt) {
                         }
                     "
                     channel="graphCDUQ"
+                    v-if="countTables > 0"
                 />
                 <GraphBar
                     ruta="getTableCDUQ"
@@ -70,6 +85,7 @@ function selectDate(evt) {
                         }
                     "
                     channel="graphCDUO"
+                    v-if="countTables > 1"
                 />
                 <GraphBar
                     ruta="getTableCDUQ"
@@ -81,6 +97,7 @@ function selectDate(evt) {
                         }
                     "
                     channel="graphWML"
+                    v-if="countTables > 2"
                 />
                 <GraphBar
                     ruta="getTableCDUQ"
@@ -97,6 +114,7 @@ function selectDate(evt) {
                         }
                     "
                     channel="graphPorcter"
+                    v-if="countTables > 3"
                 />
             </div>
             <div class="grid gap-2 lg:grid-cols-2">
@@ -115,6 +133,7 @@ function selectDate(evt) {
                         }
                     "
                     channel="graphCapa"
+                    v-if="countTables > 4"
                 />
                 <GraphBar
                     ruta="getTableCDUQ"
@@ -126,6 +145,7 @@ function selectDate(evt) {
                         }
                     "
                     channel="graphSeafty"
+                    v-if="countTables > 5"
                 />
             </div>
             <div class="grid gap-2 lg:grid-cols-2 xl:grid-cols-3">
@@ -158,6 +178,7 @@ function selectDate(evt) {
                         }
                     "
                     channel="graphInsGDL"
+                    v-if="countTables > 6"
                 />
                 <GraphBarCategory
                     :filters="date"
@@ -174,6 +195,7 @@ function selectDate(evt) {
                         }
                     "
                     channel="graphInsProcter"
+                    v-if="countTables > 7"
                 />
                 <GraphBarCategory
                     :filters="date"
@@ -185,6 +207,7 @@ function selectDate(evt) {
                         }
                     "
                     channel="graphInsCdu"
+                    v-if="countTables > 8"
                 />
             </div>
         </div>
