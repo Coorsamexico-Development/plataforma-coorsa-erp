@@ -23,7 +23,6 @@ class SheGraphController extends Controller
 
     public function getTableCDUQ(Request $request)
     {
-        dump('Start');
         $data = DataShe::select(
             'cs.name as tipo',
             DB::raw('sum(data_shes.value) as cantidad'),
@@ -47,7 +46,6 @@ class SheGraphController extends Controller
 
             $data->where('data_shes.año_mes', 'like', "{$request->year}-{$request->month}%");
         }
-        dump('End');
         return response()->json([
             'data' => $data->get(),
             'series' => $series->get(),
