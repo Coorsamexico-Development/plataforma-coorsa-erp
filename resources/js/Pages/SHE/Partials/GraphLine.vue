@@ -92,9 +92,10 @@ async function getDataTable() {
             })
         );
 
+        // Formatos de fecha para etiquetas menores en el eje X
         xAxis.set("minorDateFormats", {
+            day: "dd",
             month: "MM",
-            year: "yyyy",
         });
 
         yAxis = chart.yAxes.push(

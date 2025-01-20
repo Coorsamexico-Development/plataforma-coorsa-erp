@@ -140,7 +140,7 @@ class DepartamentosAuditoriaController extends Controller
 
     public function dataBajas(Request $request)
     {
-        $atributos = [27, 28, 29, 30, 31, 32, 33, 34, 35];
+        $atributos = [27, 28, 29, 30, 31, 32, 33, 34, 35, 48, 49];
         $parametros = ["1", "2", "3"];
 
         return response()->json($this->getData($request, $atributos, $parametros, 5));
@@ -401,9 +401,11 @@ class DepartamentosAuditoriaController extends Controller
             'DocCorr.*' => ['required'],
             'ClasRies.*' => ['required'],
             'FormAuth.*' => ['required'],
+            'FormBajasEv.*' => ['required'],
+            'correoBajasEv.*' => ['required'],
         ]);
 
-        $values = [$request->nombre, $request->rfc, $request->curp, $request->alta, $request->envTyF, $request->RnPRH, $request->DocCorr, $request->ClasRies, $request->FormAuth];
+        $values = [$request->nombre, $request->rfc, $request->curp, $request->alta, $request->envTyF, $request->RnPRH, $request->DocCorr, $request->ClasRies, $request->FormAuth, $request->FormBajasEv, $request->correoBajasEv];
 
         $mes = explode("-", $request->fecha)[0];
         $año = CiAño::where('año', explode("-", $request->fecha)[1])->first();

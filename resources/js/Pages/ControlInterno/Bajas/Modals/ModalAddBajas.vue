@@ -86,6 +86,18 @@ const dataValues = useForm({
         riesgo: null,
         calificacion: null,
     },
+    FormBajasEv: {
+        id: 49,
+        porcentaje: null,
+        riesgo: null,
+        calificacion: null,
+    },
+    correoBajasEv: {
+        id: 48,
+        porcentaje: null,
+        riesgo: null,
+        calificacion: null,
+    },
 });
 
 function subirSua() {
@@ -368,6 +380,83 @@ function subirSua() {
                                 @input="
                                     (e) =>
                                         (dataValues.ClasRies.calificacion = e)
+                                "
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between gap-2">
+                    <div class="grid font-medium">
+                        <span class="text-[18px]">
+                            Correo para solicitud de bajas eventuales
+                        </span>
+                        <div class="flex items-center justify-between gap-2">
+                            <TextInputWhitLabel
+                                label="Rango Porcentual"
+                                id="pago"
+                                onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
+                                :value="dataValues.pago"
+                                @input="
+                                    (e) =>
+                                        (dataValues.correoBajasEv.porcentaje =
+                                            e)
+                                "
+                            />
+                            <TextInputWhitLabel
+                                label="Riesgo Inherente"
+                                id="pagar"
+                                onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
+                                :value="dataValues.pagar"
+                                @input="
+                                    (e) => (dataValues.correoBajasEv.riesgo = e)
+                                "
+                            />
+                            <TextInputWhitLabel
+                                label="Calificacion"
+                                id="pagar"
+                                onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
+                                :value="dataValues.pagar"
+                                @input="
+                                    (e) =>
+                                        (dataValues.correoBajasEv.calificacion =
+                                            e)
+                                "
+                            />
+                        </div>
+                    </div>
+                    <div class="grid font-medium">
+                        <span class="text-[18px]">
+                            Formato de bajas eventuales
+                        </span>
+                        <div class="flex items-center justify-between gap-2">
+                            <TextInputWhitLabel
+                                label="Rango Porcentual"
+                                id="pago"
+                                onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
+                                :value="dataValues.pago"
+                                @input="
+                                    (e) =>
+                                        (dataValues.FormBajasEv.porcentaje = e)
+                                "
+                            />
+                            <TextInputWhitLabel
+                                label="Riesgo Inherente"
+                                id="pagar"
+                                onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
+                                :value="dataValues.pagar"
+                                @input="
+                                    (e) => (dataValues.FormBajasEv.riesgo = e)
+                                "
+                            />
+                            <TextInputWhitLabel
+                                label="Calificacion"
+                                id="pagar"
+                                onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;"
+                                :value="dataValues.pagar"
+                                @input="
+                                    (e) =>
+                                        (dataValues.FormBajasEv.calificacion =
+                                            e)
                                 "
                             />
                         </div>
