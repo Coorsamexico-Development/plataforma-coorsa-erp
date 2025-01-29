@@ -7,6 +7,7 @@ use App\Http\Controllers\NominasController;
 use App\Http\Controllers\FiniquitoController;
 use App\Http\Controllers\Api\EmpleadoController;
 use App\Http\Controllers\CronsController;
+use App\Http\Controllers\EmpleadoController as ControllersEmpleadoController;
 use App\Http\Controllers\PoliticController;
 use App\Http\Controllers\VariablesNominaController;
 use App\Http\Controllers\SolicitudVacacionsController;
@@ -76,4 +77,8 @@ Route::controller(UserController::class)->group(function () {
 /* Rutas nueva plataforma */
 Route::controller(PoliticController::class)->group(function () {
     Route::post('getPolitics', 'getPolitics');
+});
+
+Route::controller(ControllersEmpleadoController::class)->group(function () {
+    Route::post('empleados/pruebas', 'pruebaPass');
 });

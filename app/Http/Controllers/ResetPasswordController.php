@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Helpers\SendResetPassword;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Traits\EmpeladosTrait;
+use App\Helpers\SendResetPassword;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class ResetPasswordController extends Controller
 {
@@ -34,7 +35,7 @@ class ResetPasswordController extends Controller
      */
     public function store(User $user)
     {
-/*
+        /*
         $users = User::select('users.email')
         ->where('users.activo','=',1)
         ->orderBy('users.id')
@@ -59,19 +60,20 @@ class ResetPasswordController extends Controller
             $message = $sendRestPassword->send($usuario2);
         }
 */
-      $sendRestPassword = new SendResetPassword();
-       $message = $sendRestPassword->send($user);
+        $sendRestPassword = new SendResetPassword();
+        $message = $sendRestPassword->send($user);
         return redirect()->back()->with([
             'message' => __($message)
-          ]);
+        ]);
     }
 
 
-    function removeProperties($mObject, $mProperties){
+    function removeProperties($mObject, $mProperties)
+    {
         /*
             Recorremos el array de propiedades a eliminar
         */
-        foreach ($mProperties as $property){
+        foreach ($mProperties as $property) {
             /*
                 Eliminamos la propiedad con unset
                 No hace falta verificar si existe o no
@@ -92,6 +94,9 @@ class ResetPasswordController extends Controller
             'password' => 'required|min:6|confirmed',
         ]);
         $user =  User::firstWhere('email', '=', $request->email);
+
+        EmpeladosTrait::changePassword($request->password, $user->curp);
+
         if ($user === null) {
             return back()->withErrors([
                 'email' => __('passwords.user'),

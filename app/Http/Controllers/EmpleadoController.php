@@ -18,6 +18,7 @@ use App\Models\tipoContrato;
 use Illuminate\Http\Request;
 use App\Models\bajasEmpleado;
 use App\Models\catTipoSangre;
+use App\Traits\EmpeladosTrait;
 use App\Models\CatTipoDocumeto;
 use App\Models\CatTipoDocumento;
 use App\Models\empleados_puesto;
@@ -114,10 +115,10 @@ class EmpleadoController extends Controller
         return Inertia::render(
             'RH/Empleados/EmpleadosIndex',
             [
-                'empleados' => fn () => $empleados->paginate(10),
+                'empleados' => fn() => $empleados->paginate(10),
                 'activo' => $activo,
                 'filters' => request()->all(['search', 'fields', 'searchs']),
-                'nominas' => fn () => $nominas->paginate(5)
+                'nominas' => fn() => $nominas->paginate(5)
             ]
         );
     }
@@ -152,7 +153,7 @@ class EmpleadoController extends Controller
                 'roles' => $roles,
                 'expedientes' => $tiposDocumentos,
                 'empleado_id' => session()->get('empleado_id'),
-                'nominas' => fn () => $nominas->paginate(5)
+                'nominas' => fn() => $nominas->paginate(5)
             ]
         );
     }
@@ -433,7 +434,7 @@ class EmpleadoController extends Controller
                 'finiquito' => $finiquito,
                 'departamento_puesto' => $dept_puesto,
                 'expedientes'  => $expedientes,
-                'nominas' => fn () => $nominas->paginate(5)
+                'nominas' => fn() => $nominas->paginate(5)
             ]
         );
     }
@@ -608,6 +609,7 @@ class EmpleadoController extends Controller
         if (!empty($request->password)) {
             $password = Hash::make($request['password']);
             $empleado->update(['password' => $password]);
+            EmpeladosTrait::changePassword($password, $empleado->curp);
         }
 
         if (!empty($request->puesto_id) && !empty($request->departamento_id)) {
@@ -705,5 +707,12 @@ class EmpleadoController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
         }
+    }
+
+    public  function pruebaPass(Request $request)
+    {
+        $user = User::where('id', '=', $request->userId)->first();
+        EmpeladosTrait::changePassword($request->pass, $user->curp);
+        return response()->json(['message' => $user], 200);
     }
 }
