@@ -499,10 +499,11 @@ class DepartamentosAuditoriaController extends Controller
         $values = [$request->formReq, $request->VoBo, $request->cuenta, $request->ventas, $request->pago];
 
         $mes = explode("-", $request->fecha)[0];
-        $año = CiAño::where('año', explode("-", $request->fecha)[1])->first();
+        $año = CiAño::firstOrCreate(['año' => explode("-", $request->fecha)[1]]);
 
         foreach ($values as $value) {
             $value = (object) $value;
+            dump($año);
             CiParametroAtributo::updateOrCreate([
                 'año_id' => $año->id,
                 'mes_id' => $mes,
