@@ -3,37 +3,43 @@ ARG UID=1000
 ARG GID=1000
 
 ENV TZ=UTC
-RUN apk add --update bash libpng-dev libxml2-dev zip unzip curl sqlite supervisor npm libzip-dev
-RUN npm install -g npm@latest
-RUN apk add --no-cache nginx wget
-RUN docker-php-ext-install mysqli pdo pdo_mysql zip gd
 
-RUN mkdir -p /run/nginx
+RUN apk add --no-cache \
+    bash \
+    curl \
+    libpng-dev \
+    libxml2-dev \
+    libzip-dev \
+    nginx \
+    npm \
+    sqlite \
+    supervisor \
+    unzip \
+    wget \
+    zip && \
+    npm install -g npm@latest && \
+    docker-php-ext-install \
+    gd \
+    mysqli \
+    pdo \
+    pdo_mysql \
+    zip && \
+    mkdir -p /run/nginx /app
 
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/php.ini /usr/local/etc/php/php.ini
 
-RUN mkdir -p /app
 COPY . /app
-# COPY ./src /app
 
-RUN sh -c "wget http://getcomposer.org/composer.phar && chmod a+x composer.phar && mv composer.phar /usr/local/bin/composer"
-RUN cd /app && \
-    /usr/local/bin/composer install --ignore-platform-reqs --optimize-autoloader --no-dev
+RUN wget -q -O /usr/local/bin/composer http://getcomposer.org/composer.phar && \
+    chmod +x /usr/local/bin/composer && \
+    cd /app && \
+    composer install --ignore-platform-reqs --optimize-autoloader --no-dev && \
+    php artisan route:clear && \
+    php artisan cache:clear && \
+    php artisan storage:link && \
+    npm ci && \
+    npm run build && \
+    chown -R www-data: /app
 
-RUN cd /app && \
-    php artisan route:clear
-RUN cd /app && \
-    php artisan cache:clear
-RUN cd /app && \
-    php artisan storage:link
-RUN cd /app && \
-    /usr/local/bin/npm ci
-RUN cd /app && \
-    /usr/local/bin/npm run build
-
-
-
-RUN chown -R www-data: /app
-
-CMD sh /app/docker/startup.sh
+CMD ["sh", "/app/docker/startup.sh"]
