@@ -85,7 +85,7 @@
                             </div>
                         </div>
                         <div
-                            class="h-[1vh] hover:cursor-grab active:cursor-grabbing"
+                            class="h-[3dvh] hover:cursor-grab active:cursor-grabbing"
                         ></div>
                         <div style="border-bottom: none">
                             <div
