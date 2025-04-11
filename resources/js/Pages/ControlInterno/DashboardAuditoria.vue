@@ -119,6 +119,9 @@ const menu = ref(0);
                 <BajasCI v-if="menu === 5" :show="menu === 5" />
                 <ComprasCi v-if="menu === 6" :show="menu === 6" />
                 <ManiobraCi v-if="menu === 7" :show="menu === 7" />
+                <NextTime v-if="menu === 8" :show="menu === 8" />
+                <NextTime v-if="menu === 9" :show="menu === 9" />
+                <NextTime v-if="menu === 10" :show="menu === 10" />
             </div>
         </section>
     </AppLayout>
