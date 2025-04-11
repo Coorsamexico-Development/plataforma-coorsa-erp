@@ -47,6 +47,26 @@ defineEmits(["menu"]);
                     <ButtonDashCI value="Maniobras" @click="$emit('menu', 7)" />
                     <div></div>
                 </div>
+                <div class="grid place-content-center">
+                    <ButtonDashCI value="Seguros" @click="$emit('menu', 8)" />
+                    <div></div>
+                </div>
+                <div class="grid place-content-center">
+                    <ButtonDashCI
+                        value="Mantenimientos"
+                        @click="$emit('menu', 9)"
+                    />
+                    <div></div>
+                </div>
+            </div>
+            <div class="grid grid-cols-3">
+                <div class="grid place-content-center">
+                    <ButtonDashCI
+                        value="Operativo"
+                        @click="$emit('menu', 10)"
+                    />
+                    <div></div>
+                </div>
             </div>
         </div>
     </CardCi>

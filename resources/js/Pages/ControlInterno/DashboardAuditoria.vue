@@ -90,6 +90,21 @@ const menu = ref(0);
                     @click="menu = 7"
                     :disabled="menu === 7"
                 />
+                <BotonCi
+                    value="Seguros"
+                    @click="menu = 8"
+                    :disabled="menu === 8"
+                />
+                <BotonCi
+                    value="Mantenimientos"
+                    @click="menu = 9"
+                    :disabled="menu === 9"
+                />
+                <BotonCi
+                    value="Operativo"
+                    @click="menu = 10"
+                    :disabled="menu === 10"
+                />
             </div>
             <div class="w-11/12">
                 <DahsboardCi
