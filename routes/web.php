@@ -273,6 +273,7 @@ Route::controller(DepartamentosAuditoriaController::class)->middleware([
     Route::post('addBajas', 'addBajas')->name('addBajas');
     Route::post('addCompras', 'addCompras')->name('addCompras');
     Route::post('addManiobra', 'addManiobra')->name('addManiobra');
+    Route::post('saveDocument', 'saveDocument')->name('saveDocument');
 });
 
 Route::get('/finiquito', [FiniquitoController::class, 'calcularFiniquito'])->name('calcularFiniquito');

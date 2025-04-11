@@ -11,6 +11,7 @@ import AltasCi from "./Altas/AltasCi.vue";
 import BajasCI from "./Bajas/BajasCI.vue";
 import ComprasCi from "./Compras/ComprasCi.vue";
 import ManiobraCi from "./Maniobras/ManiobraCi.vue";
+import OperativoCI from "./Operativo/OperativoCI.vue";
 
 defineProps({
     nominas: {
@@ -91,7 +92,7 @@ const menu = ref(0);
                     :disabled="menu === 7"
                 />
                 <BotonCi
-                    value="Seguros"
+                    value="Operativo"
                     @click="menu = 8"
                     :disabled="menu === 8"
                 />
@@ -101,7 +102,7 @@ const menu = ref(0);
                     :disabled="menu === 9"
                 />
                 <BotonCi
-                    value="Operativo"
+                    value="Seguros"
                     @click="menu = 10"
                     :disabled="menu === 10"
                 />
@@ -119,7 +120,7 @@ const menu = ref(0);
                 <BajasCI v-if="menu === 5" :show="menu === 5" />
                 <ComprasCi v-if="menu === 6" :show="menu === 6" />
                 <ManiobraCi v-if="menu === 7" :show="menu === 7" />
-                <NextTime v-if="menu === 8" :show="menu === 8" />
+                <OperativoCI v-if="menu === 8" :show="menu === 8" />
                 <NextTime v-if="menu === 9" :show="menu === 9" />
                 <NextTime v-if="menu === 10" :show="menu === 10" />
             </div>

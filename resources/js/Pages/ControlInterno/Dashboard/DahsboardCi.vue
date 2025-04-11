@@ -48,7 +48,7 @@ defineEmits(["menu"]);
                     <div></div>
                 </div>
                 <div class="grid place-content-center">
-                    <ButtonDashCI value="Seguros" @click="$emit('menu', 8)" />
+                    <ButtonDashCI value="Operativo" @click="$emit('menu', 8)" />
                     <div></div>
                 </div>
                 <div class="grid place-content-center">
@@ -61,10 +61,7 @@ defineEmits(["menu"]);
             </div>
             <div class="grid grid-cols-3">
                 <div class="grid place-content-center">
-                    <ButtonDashCI
-                        value="Operativo"
-                        @click="$emit('menu', 10)"
-                    />
+                    <ButtonDashCI value="Seguros" @click="$emit('menu', 10)" />
                     <div></div>
                 </div>
             </div>

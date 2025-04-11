@@ -2,27 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\SuaEvent;
+use Exception;
 use App\Models\User;
 use Inertia\Inertia;
-use App\Models\Rubro;
-use App\Models\Proceso;
-use App\Models\CalfRubroMe;
-use App\Models\CiAtributo;
 use App\Models\CiAño;
+use App\Models\Rubro;
+use Mockery\Undefined;
 use App\Models\CiDatas;
+use App\Models\Proceso;
+use App\Events\SuaEvent;
+use App\Models\CiAtributo;
+use App\Models\CalfRubroMe;
 use App\Models\CiParametro;
-use App\Models\CiParametroAtributo;
+use Illuminate\Support\Str;
 use App\Models\DocumentosMe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\DepartamentosAuditoria;
+use App\Models\CiParametroAtributo;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Support\Facades\Broadcast;
+use App\Models\DepartamentosAuditoria;
 use Illuminate\Support\Facades\Storage;
-use Mockery\Undefined;
 
+use Illuminate\Support\Facades\Broadcast;
 use function PHPUnit\Framework\returnSelf;
+use Illuminate\Validation\ValidationException;
 
 class DepartamentosAuditoriaController extends Controller
 {
@@ -524,6 +527,33 @@ class DepartamentosAuditoriaController extends Controller
             ]);
         }
         event(new SuaEvent);
+    }
+
+    public function saveDocument(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $file = $request->file('file');
+            $pathFile = Storage::disk('gcs')->url(Storage::disk('gcs')->put("ControlInterno/Operativo", $file));
+
+            CiDatas::create([
+                'año_id' => date('Y'),
+                'mes_id' => date('m'),
+                'atributo_id' => 50,
+                'value' => $pathFile,
+                'seccion_id' => 8,
+            ]);
+
+            DB::commit();
+            return back();
+        } catch (Exception $e) {
+            DB::rollBack();
+            dd($e->getMessage());
+            throw ValidationException::withMessages([
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     //Privates 
