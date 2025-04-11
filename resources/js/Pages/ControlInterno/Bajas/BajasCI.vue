@@ -154,6 +154,7 @@ onMounted(() =>
         <div class="w-fit">
             <DatePicker
                 label="Mes visualizado"
+                :minDate="null"
                 :dates="date"
                 @selectDate="
                     (e) => {

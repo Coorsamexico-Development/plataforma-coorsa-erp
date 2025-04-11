@@ -132,6 +132,7 @@ onMounted(() =>
             <DatePicker
                 label="Mes visualizado"
                 :dates="date"
+                :minDate="null"
                 @selectDate="
                     (e) => {
                         date = e;
