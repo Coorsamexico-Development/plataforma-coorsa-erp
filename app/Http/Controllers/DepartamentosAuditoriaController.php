@@ -563,7 +563,7 @@ class DepartamentosAuditoriaController extends Controller
         $parametros = CiParametro::whereIn('id', $params)->get();
         $mes = null;
         $año = null;
-        $dataRadar = 5;
+        $dataRadar = 0;
         $data = null;
         $dataPorcentaje = 0;
 

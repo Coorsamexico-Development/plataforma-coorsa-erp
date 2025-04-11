@@ -97,6 +97,7 @@ function getData() {
             graphLine.value = data.garphLine;
             riesgoRadar.value = data.dataRadar;
             date.value = data.paramsFecha;
+            console.log(data.dataRadar);
         })
         .catch((err) => console.log(err.response ?? err));
 }
