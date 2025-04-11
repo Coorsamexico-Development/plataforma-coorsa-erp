@@ -82,3 +82,5 @@ Route::controller(PoliticController::class)->group(function () {
 Route::controller(EmpleadoController::class)->group(function () {
     Route::post('empleados/pruebas', 'pruebaPass');
 });
+
+/*  */
