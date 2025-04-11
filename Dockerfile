@@ -32,8 +32,6 @@ RUN cd /app && \
 RUN cd /app && \
     /usr/local/bin/npm run build
 
-
-
 RUN chown -R www-data: /app
 
 CMD sh /app/docker/startup.sh
