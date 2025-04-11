@@ -580,7 +580,7 @@ class DepartamentosAuditoriaController extends Controller
                 ])
                 ->groupBy('parametro_id')
                 ->first();
-            $dataRadar = $dataRadar->riesgo != 0 ? $dataRadar->riesgo / count($atributos) : 5;
+            $dataRadar = $dataRadar->riesgo / count($atributos);
 
             $dataPorcentaje = CiParametroAtributo::select(
                 DB::raw('sum(value) as porcentaje'),
