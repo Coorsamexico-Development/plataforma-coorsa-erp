@@ -45,6 +45,7 @@
                                 v-for="input in node.inputs"
                                 :key="node.id + ':' + input"
                             >
+                                <!--  -->
                                 <port
                                     ref="port"
                                     class="w-full hover:bg-[#8EEAB0]"
